@@ -152,7 +152,7 @@
 
           <p class="text-center mt-2">
             <span>Already have an account?</span>
-            <b-link :to="{name:'auth-login-v2'}">
+            <b-link :to="{name:'auth-login'}">
               <span>&nbsp;Sign in instead</span>
             </b-link>
           </p>

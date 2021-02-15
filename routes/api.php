@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Usuarios;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,11 +21,18 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::group(['prefix' => 'auth'], function () {
-    Route::post('login', [AuthController::class, 'login']);
-    Route::post('register', [AuthController::class, 'register']);
+  Route::post('login', [AuthController::class, 'login'])->name('login');
+  Route::post('register', [AuthController::class, 'register']);
 
-    Route::group(['middleware' => 'auth:sanctum'], function() {
-      Route::get('logout', [AuthController::class, 'logout']);
-      Route::get('user', [AuthController::class, 'user']);
-    });
+  Route::post('refresh-token', [AuthController::class, 'refreshToken']);
+  Route::group(['middleware' => 'auth:sanctum'], function() {
+    Route::get('logout', [AuthController::class, 'logout']);
+    Route::get('user', [AuthController::class, 'user']);
+  });
+});
+
+Route::group(['prefix' => 'admin','middleware' => 'auth:sanctum'], function() {
+  
+      Route::resource('usuarios', Usuarios::class);
+      
 });

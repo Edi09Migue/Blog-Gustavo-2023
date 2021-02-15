@@ -122,5 +122,35 @@ class AuthController extends Controller
 
     }
 
+    /**
+     * Refresh User token (Reresh the token)
+    *
+    * @return [string] message
+    */
+    public function refreshToken(Request $request)
+    {
+
+        $user = auth('sanctum')->user();
+
+        if($user){
+
+            $refreshToken = $request->refreshToken;
+
+            $token = $user->currentAccessToken();
+
+            return response()->json([
+                'accessToken' =>$token,
+                'userData' => $user,
+                'token_type' => 'Bearer',
+            ]);
+        }else{
+            return response()->json([
+                'error' => 'Invalid refresh token'
+            ],401);
+        }
+
+
+    }
+
 
 }

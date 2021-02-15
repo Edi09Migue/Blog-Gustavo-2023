@@ -15,7 +15,7 @@
       <!-- Header -->
       <div class="d-flex justify-content-between align-items-center content-sidebar-header px-2 py-1">
         <h5 class="mb-0">
-          Add New User
+          {{ $t('Add New')}}
         </h5>
 
         <feather-icon
@@ -110,7 +110,7 @@
             </b-form-group>
           </validation-provider>
 
-          <!-- Company -->
+          <!-- Contact -->
           <validation-provider
             #default="validationContext"
             name="Contact"
@@ -137,7 +137,6 @@
           <validation-provider
             #default="validationContext"
             name="Company"
-            rules="required"
           >
             <b-form-group
               label="Company"
@@ -270,6 +269,8 @@ import countries from '@/@fake-db/data/other/countries'
 import store from '@/store'
 
 export default {
+  methods: {
+  },
   components: {
     BSidebar,
     BForm,

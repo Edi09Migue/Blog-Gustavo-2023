@@ -30,12 +30,13 @@ export default [
         },
     },
     {
-        path: '/pages/authentication/register-v2',
-        name: 'auth-register-v2',
-        component: () => import('@/views/pages/authentication/Register-v2.vue'),
-        meta: {
-            layout: 'full',
-        },
+      path: '/forgot-password',
+      name: 'auth-forgot-password',
+      component: () => import('@/views/pages/authentication/ForgotPassword-v2.vue'),
+      meta: {
+        layout: 'full',
+        resource: 'Auth',
+      },
     },
     // *===============================================---*
     // *--------- USER ---- ---------------------------------------*
