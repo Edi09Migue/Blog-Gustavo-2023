@@ -6,26 +6,34 @@ export default {
   getters: {},
   mutations: {},
   actions: {
-    fetchUsers(ctx, queryParams) {
+    fetchRoles(ctx, queryParams) {
       return new Promise((resolve, reject) => {
         axios
-          .get('/api/admin/usuarios', { params: queryParams })
+          .get('/api/admin/roles', { params: queryParams })
           .then(response => resolve(response))
           .catch(error => reject(error))
       })
     },
-    fetchUser(ctx, { id }) {
+    fetchRole(ctx, { id }) {
       return new Promise((resolve, reject) => {
         axios
-          .get(`/api/admin/usuarios/${id}`)
+          .get(`/api/admin/roles/${id}`)
           .then(response => resolve(response))
           .catch(error => reject(error))
       })
     },
-    addUser(ctx, userData) {
+    fetchPermisos(ctx, { id }) {
       return new Promise((resolve, reject) => {
         axios
-          .post('/api/admin/usuarios', { user: userData })
+          .get(`/api/admin/permisos`)
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
+    addRole(ctx, roleData) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post('/api/admin/roles', { role: roleData })
           .then(response => resolve(response))
           .catch(error => reject(error))
       })

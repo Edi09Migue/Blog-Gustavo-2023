@@ -46,7 +46,7 @@
             rules="required"
           >
             <b-form-group
-              label="Full Name"
+              :label="$t('Full Name')"
               label-for="full-name"
             >
               <b-form-input
@@ -71,7 +71,7 @@
             rules="required|alpha-num"
           >
             <b-form-group
-              label="Username"
+              :label="$t('Username')"
               label-for="username"
             >
               <b-form-input
@@ -94,7 +94,7 @@
             rules="required|email"
           >
             <b-form-group
-              label="Email"
+              :label="$t('Email')"
               label-for="email"
             >
               <b-form-input
@@ -117,7 +117,7 @@
             rules="required"
           >
             <b-form-group
-              label="Contact"
+              :label="$t('Phone')"
               label-for="contact"
             >
               <b-form-input
@@ -139,7 +139,7 @@
             name="Company"
           >
             <b-form-group
-              label="Company"
+              :label="$t('Company')"
               label-for="company"
             >
               <b-form-input
@@ -162,7 +162,7 @@
             rules="required"
           >
             <b-form-group
-              label="Country"
+              :label="$t('Country')"
               label-for="country"
               :state="getValidationState(validationContext)"
             >
@@ -186,7 +186,7 @@
             rules="required"
           >
             <b-form-group
-              label="User Role"
+              :label="$t('User Role')"
               label-for="user-role"
               :state="getValidationState(validationContext)"
             >
@@ -197,31 +197,6 @@
                 :reduce="val => val.value"
                 :clearable="false"
                 input-id="user-role"
-              />
-              <b-form-invalid-feedback :state="getValidationState(validationContext)">
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Plan -->
-          <validation-provider
-            #default="validationContext"
-            name="Plan"
-            rules="required"
-          >
-            <b-form-group
-              label="Plan"
-              label-for="plan"
-              :state="getValidationState(validationContext)"
-            >
-              <v-select
-                v-model="userData.currentPlan"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="planOptions"
-                :reduce="val => val.value"
-                :clearable="false"
-                input-id="plan"
               />
               <b-form-invalid-feedback :state="getValidationState(validationContext)">
                 {{ validationContext.errors[0] }}
@@ -297,10 +272,6 @@ export default {
       required: true,
     },
     roleOptions: {
-      type: Array,
-      required: true,
-    },
-    planOptions: {
       type: Array,
       required: true,
     },

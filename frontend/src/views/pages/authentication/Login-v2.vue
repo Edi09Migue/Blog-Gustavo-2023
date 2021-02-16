@@ -246,7 +246,7 @@ export default {
     validationForm() {
       this.$refs.loginForm.validate().then(success => {
         if (success) {
-          this.$http.post('/auth/login', {
+          this.$http.post('/api/auth/login', {
               email: this.userEmail,
               password: this.password,
             })
@@ -276,6 +276,8 @@ export default {
                 })
               })
               .catch(error => {
+                console.log('error');
+                console.log(error);
                 this.$refs.loginForm.setErrors(error.response.data.error)
               })
           })

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\Permisos;
+use App\Http\Controllers\Admin\Roles;
 use App\Http\Controllers\Admin\Usuarios;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
@@ -24,15 +26,19 @@ Route::group(['prefix' => 'auth'], function () {
   Route::post('login', [AuthController::class, 'login'])->name('login');
   Route::post('register', [AuthController::class, 'register']);
 
-  Route::post('refresh-token', [AuthController::class, 'refreshToken']);
-  Route::group(['middleware' => 'auth:sanctum'], function() {
+  Route::group(['middleware' => 'auth:api'], function() {
     Route::get('logout', [AuthController::class, 'logout']);
     Route::get('user', [AuthController::class, 'user']);
   });
 });
 
-Route::group(['prefix' => 'admin','middleware' => 'auth:sanctum'], function() {
+Route::group(['prefix' => 'admin','middleware' => 'auth:api'], function() {
   
       Route::resource('usuarios', Usuarios::class);
+      Route::post('usuarios/validate/username',[Usuarios::class,'isUniqueUsername']);
+      Route::post('usuarios/validate/email',[Usuarios::class,'isUniqueEmail']);
+  
+      Route::apiResource('roles',Roles::class);
+      Route::apiResource('permisos',Permisos::class);
       
 });

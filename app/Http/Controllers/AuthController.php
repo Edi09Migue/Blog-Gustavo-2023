@@ -3,87 +3,83 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-     /**
-    * Create user
-    *
-    * @param  [string] name
-    * @param  [string] email
-    * @param  [string] password
-    * @param  [string] password_confirmation
-    * @return [string] message
-    */
+    /**
+     * Create user
+     *
+     * @param  [string] name
+     * @param  [string] email
+     * @param  [string] password
+     * @param  [string] password_confirmation
+     * @return [string] message
+     */
     public function register(Request $request)
     {
         $request->validate([
+            'username' => 'required|string|unique:users',
             'name' => 'required|string',
-            'email'=>'required|string|unique:users',
-            'password'=>'required|string',
-            'c_password' => 'required|same:password'
+            'email' => 'required|string|email|unique:users',
+            'password' => 'required|string|',
+            'c_password' => 'required|same:password',
         ]);
 
         $user = new User([
-            'name'  => $request->name,
+            'username' => $request->username,
+            'name' => $request->name,
             'email' => $request->email,
-            'password' => bcrypt($request->password),
+            'password' => bcrypt($request->password)
         ]);
-
-        if($user->save()){
-            $tokenResult = $user->createToken('Personal Access Token');
-            $token = $tokenResult->plainTextToken;
-
+        if ($user->save()) {
             return response()->json([
-            'message' => 'Successfully created user!',
-            'accessToken'=> $token,
-            ],201);
-        }
-        else{
-            return response()->json(['error'=>'Provide proper details']);
+                'message' => 'Successfully created user!'
+            ], 201);
+        } else {
+            return response()->json(['error' => 'Provide proper details']);
         }
     }
 
     /**
      * Login user and create token
-    *
-    * @param  [string] email
-    * @param  [string] password
-    * @param  [boolean] remember_me
-    */
-
+     *
+     * @param  [string] email
+     * @param  [string] password
+     * @param  [boolean] remember_me
+     * @return [string] access_token
+     * @return [string] token_type
+     * @return [string] expires_at
+     */
     public function login(Request $request)
     {
         $request->validate([
-        'email' => 'required|string|email',
-        'password' => 'required|string',
-        'remember_me' => 'boolean'
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+            'remember_me' => 'boolean'
         ]);
-
-        $credentials = request(['email','password']);
-        if(!Auth::attempt($credentials))
-        {
-        return response()->json([
-            'message' => 'Unauthorized'
-        ],401);
-        }
-
+        $credentials = request(['email', 'password']);
+        if (!Auth::attempt($credentials))
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
-        $token = $tokenResult->plainTextToken;
+        $token = $tokenResult->token;
+        if ($request->remember_me)
+            $token->expires_at = Carbon::now()->addWeeks(1);
+        $token->save();
 
         //TODO::definir permisos de usuario
         $abilities = [
-            ['action'=>'manage','subject'=>'all']
+        ['action'=>'manage','subject'=>'all']
         ];
-        $user->ability = $abilities;
-
+        $user->ability = $user->allPermissions;
+        
         //TODO::guardar nombre completo
         $user->fullName = $user->name;
-        //TODO:: guardar username
-        $user->username = $user->name;
         //TODO:: definir rol de usuario
         $user->role = $user->role;
 
@@ -91,9 +87,12 @@ class AuthController extends Controller
         $user->extras=['eCommerceCartItemsCount'=>6];
 
         return response()->json([
-            'accessToken' =>$token,
-            'userData' => $user,
+            'accessToken' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
+            'userData' => $user,
+            'expires_at' => Carbon::parse(
+                $tokenResult->token->expires_at
+            )->toDateTimeString()
         ]);
     }
 
@@ -104,7 +103,10 @@ class AuthController extends Controller
     */
     public function user(Request $request)
     {
-        return response()->json($request->user());
+        $user = $request->user();
+        $user->allPermissions =$user->allPermissions;
+        
+        return response()->json($user);
     }
 
     /**
@@ -114,43 +116,9 @@ class AuthController extends Controller
     */
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
-
+        $request->user()->token()->revoke();
         return response()->json([
         'message' => 'Successfully logged out'
         ]);
-
     }
-
-    /**
-     * Refresh User token (Reresh the token)
-    *
-    * @return [string] message
-    */
-    public function refreshToken(Request $request)
-    {
-
-        $user = auth('sanctum')->user();
-
-        if($user){
-
-            $refreshToken = $request->refreshToken;
-
-            $token = $user->currentAccessToken();
-
-            return response()->json([
-                'accessToken' =>$token,
-                'userData' => $user,
-                'token_type' => 'Bearer',
-            ]);
-        }else{
-            return response()->json([
-                'error' => 'Invalid refresh token'
-            ],401);
-        }
-
-
-    }
-
-
 }

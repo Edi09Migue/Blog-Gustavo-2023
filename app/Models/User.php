@@ -6,7 +6,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+
+use Laravel\Passport\HasApiTokens;
 
 use Spatie\Permission\Traits\HasRoles;
 
@@ -50,8 +51,23 @@ class User extends Authenticatable
     public function userInfo(){
         return $this->hasOne(UserInfo::class,'id','id');
     }
+
     public function getRoleAttribute(){
         return 'admin';
+    }
+
+    public function getAllPermissionsAttribute(){
+        $permisos = [];
+        
+        foreach($this->getAllPermissions() as $permiso){
+            $permiso=[
+                'action'=> $permiso->name,
+                'subject' => 'all'
+            ];
+            $permisos[]= $permiso;
+        }
+
+        return $permisos;
     }
 
     /**

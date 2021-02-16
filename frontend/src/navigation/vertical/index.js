@@ -13,12 +13,16 @@ export default [
     header: 'Staff & Security',
   },
   {
-    title: 'User',
+    title: 'Users',
     icon: 'UserIcon',
     children: [
       {
         title: 'List',
         route: 'apps-users-list',
+      },
+      {
+        title: 'Roles',
+        route: 'apps-roles-list',
       },
       {
         title: 'View',

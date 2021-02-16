@@ -261,7 +261,7 @@ export default {
       this.$refs.registerForm.validate().then(success => {
         if (success) {
 
-          this.$http.post('/auth/register', {
+          this.$http.post('/api/auth/register', {
               name: this.username,
               email: this.userEmail,
               password: this.password,

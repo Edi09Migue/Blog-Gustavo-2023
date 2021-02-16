@@ -47,6 +47,16 @@ export default [
       component: () => import('@/views/apps/staff/user/users-list/UsersList.vue'),
     },
     {
+      path: '/apps/roles/list',
+      name: 'apps-roles-list',
+      component: () => import('@/views/apps/staff/role/roles-list/RolesList.vue'),
+    },
+    {
+      path: '/apps/roles/create',
+      name: 'apps-roles-create',
+      component: () => import('@/views/apps/staff/role/role-create/RoleCreate.vue'),
+    },
+    {
       path: '/apps/users/view/:id',
       name: 'apps-users-view',
       component: () => import('@/views/apps/staff/user/users-view/UsersView.vue'),

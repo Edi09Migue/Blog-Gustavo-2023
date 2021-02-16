@@ -1,0 +1,93 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Permission;
+
+class Permisos extends Controller
+{
+    var $datos;
+
+    public function index(){
+    	$permisos = Permission::all();
+    	return response()->json($permisos);
+    }
+    
+    /**
+     * Crea un Rol con sus respectivos permisos
+     * @param  Request
+     * @return [type]
+     */
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'name' => 'required|unique:permissions',
+            'guard_name' => 'required',
+            'group_key' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return response()->json([
+                'status' => false,
+                'data' => $errors,
+                'msg' => $errors->first('name')
+            ]);    
+        }
+
+        $permiso = Permission::create([
+            'name'          => $request->name,
+            'guard_name'    => $request->guard_name,
+            'group_key'     => $request->group_key
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'data' => $permiso,
+            'msg' => $permiso->name.' creado!'
+        ]);
+    }
+
+    /**
+     * Editar rol y sus respectivos permisos
+     * @param  [integer] 
+     * @param  Request
+     * @return [type]
+     */
+    public function update($id, Request $request)
+    {
+        //Updating Role
+        $permiso = Permission::findOrFail($id);
+
+        $permiso->update([
+            'name'          => $request->name,
+            'guard_name'    => $request->guard_name,
+            'group_key'     => $request->group_key
+        ]);
+
+        return response()->json([
+            'status' => TRUE,
+            'data' => $permiso,
+            'msg' => $permiso->name.' actualizado!'
+        ]);
+    }
+
+    /**
+     * @param  Toma el id de un Rol y lo elimina con sus respectivos permisos
+     */
+    public function destroy($id, Request $request)
+    {
+        $permiso = Permission::find($id);
+        $permiso->delete();
+
+        return response()->json([
+            'status'=>TRUE,
+            'id' =>$id,
+            'msg' => $permiso->name.' eliminado!'
+        ]);
+    }
+}

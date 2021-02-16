@@ -1,24 +1,6 @@
 <template>
 
   <div>
-
-    <user-list-add-new
-      :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
-      :role-options="roleOptions"
-      :plan-options="planOptions"
-      @refetch-data="refetchData"
-    />
-
-    <!-- Filters -->
-    <users-list-filters
-      :role-filter.sync="roleFilter"
-      :plan-filter.sync="planFilter"
-      :status-filter.sync="statusFilter"
-      :role-options="roleOptions"
-      :plan-options="planOptions"
-      :status-options="statusOptions"
-    />
-
     <!-- Table Container Card -->
     <b-card
       no-body
@@ -60,9 +42,9 @@
               />
               <b-button
                 variant="primary"
-                @click="isAddNewUserSidebarActive = true"
+                :to="{ name: 'apps-roles-create'}"
               >
-                <span class="text-nowrap">Add User</span>
+                <span class="text-nowrap">{{ $t('Add') }} {{ $t('Role') }}</span>
               </b-button>
             </div>
           </b-col>
@@ -73,7 +55,7 @@
       <b-table
         ref="refUserListTable"
         class="position-relative"
-        :items="fetchUsers"
+        :items="fetchRoles"
         responsive
         :fields="tableColumns"
         primary-key="id"
@@ -83,50 +65,19 @@
         :sort-desc.sync="isSortDirDesc"
       >
 
-        <!-- Column: User -->
-        <template #cell(user)="data">
-          <b-media vertical-align="center">
-            <template #aside>
-              <b-avatar
-                size="32"
-                :src="data.item.avatar"
-                :text="avatarText(data.item.fullName)"
-                :variant="`light-${resolveUserRoleVariant(data.item.role)}`"
-                :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
-              />
-            </template>
-            <b-link
-              :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
-              class="font-weight-bold d-block text-nowrap"
-            >
-              {{ data.item.fullName }}
-            </b-link>
-            <small class="text-muted">@{{ data.item.username }}</small>
-          </b-media>
-        </template>
+       
 
         <!-- Column: Role -->
-        <template #cell(role)="data">
+        <template #cell(name)="data">
           <div class="text-nowrap">
             <feather-icon
-              :icon="resolveUserRoleIcon(data.item.role)"
+              :icon="resolveUserRoleIcon(data.item.name)"
               size="18"
               class="mr-50"
-              :class="`text-${resolveUserRoleVariant(data.item.role)}`"
+              :class="`text-${resolveUserRoleVariant(data.item.name)}`"
             />
-            <span class="align-text-top text-capitalize">{{ data.item.role }}</span>
+            <span class="align-text-top text-capitalize">{{ data.item.name }}</span>
           </div>
-        </template>
-
-        <!-- Column: Status -->
-        <template #cell(status)="data">
-          <b-badge
-            pill
-            :variant="`light-${resolveUserStatusVariant(data.item.status)}`"
-            class="text-capitalize"
-          >
-            {{ data.item.status }}
-          </b-badge>
         </template>
 
         <!-- Column: Actions -->
@@ -220,16 +171,12 @@ import vSelect from 'vue-select'
 import store from '@/store'
 import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
-import UsersListFilters from './UsersListFilters.vue'
-import useUsersList from './useUsersList'
-import userStoreModule from '../userStoreModule'
-import UserListAddNew from './UserListAddNew.vue'
+import useRolesList from './useRolesList'
+import roleStoreModule from '../roleStoreModule'
+
 
 export default {
   components: {
-    UsersListFilters,
-    UserListAddNew,
-
     BCard,
     BRow,
     BCol,
@@ -247,10 +194,10 @@ export default {
     vSelect,
   },
   setup() {
-    const USER_APP_STORE_MODULE_NAME = 'app-user'
+    const USER_APP_STORE_MODULE_NAME = 'app-role'
 
     // Register module
-    if (!store.hasModule(USER_APP_STORE_MODULE_NAME)) store.registerModule(USER_APP_STORE_MODULE_NAME, userStoreModule)
+    if (!store.hasModule(USER_APP_STORE_MODULE_NAME)) store.registerModule(USER_APP_STORE_MODULE_NAME, roleStoreModule)
 
     // UnRegister on leave
     onUnmounted(() => {
@@ -259,29 +206,9 @@ export default {
 
     const isAddNewUserSidebarActive = ref(false)
 
-    const roleOptions = [
-      { label: 'Admin', value: 'admin' },
-      { label: 'Author', value: 'author' },
-      { label: 'Editor', value: 'editor' },
-      { label: 'Maintainer', value: 'maintainer' },
-      { label: 'Subscriber', value: 'subscriber' },
-    ]
-
-    const planOptions = [
-      { label: 'Basic', value: 'basic' },
-      { label: 'Company', value: 'company' },
-      { label: 'Enterprise', value: 'enterprise' },
-      { label: 'Team', value: 'team' },
-    ]
-
-    const statusOptions = [
-      { label: 'Pending', value: 'pending' },
-      { label: 'Active', value: 'active' },
-      { label: 'Inactive', value: 'inactive' },
-    ]
 
     const {
-      fetchUsers,
+      fetchRoles,
       tableColumns,
       perPage,
       currentPage,
@@ -299,18 +226,14 @@ export default {
       resolveUserRoleIcon,
       resolveUserStatusVariant,
 
-      // Extra Filters
-      roleFilter,
-      planFilter,
-      statusFilter,
-    } = useUsersList()
+    } = useRolesList()
 
     return {
 
       // Sidebar
       isAddNewUserSidebarActive,
 
-      fetchUsers,
+      fetchRoles,
       tableColumns,
       perPage,
       currentPage,
@@ -329,16 +252,6 @@ export default {
       // UI
       resolveUserRoleVariant,
       resolveUserRoleIcon,
-      resolveUserStatusVariant,
-
-      roleOptions,
-      planOptions,
-      statusOptions,
-
-      // Extra Filters
-      roleFilter,
-      planFilter,
-      statusFilter,
     }
   },
 }
