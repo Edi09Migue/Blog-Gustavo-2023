@@ -52,9 +52,17 @@ export default [
       component: () => import('@/views/apps/staff/role/roles-list/RolesList.vue'),
     },
     {
+      path: '/apps/roles/edit/:id',
+      name: 'apps-roles-edit',
+      component: () => import('@/views/apps/staff/role/role-edit/RoleEdit.vue'),
+    },
+    {
       path: '/apps/roles/create',
       name: 'apps-roles-create',
       component: () => import('@/views/apps/staff/role/role-create/RoleCreate.vue'),
+      meta:{
+        navActiveLink: 'apps-roles-list',
+      }
     },
     {
       path: '/apps/users/view/:id',

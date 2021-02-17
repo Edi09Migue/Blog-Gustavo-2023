@@ -1,10 +1,10 @@
 <template>
-  <component :is="userData === undefined ? 'div' : 'b-card'">
+  <component :is="roleData === undefined ? 'div' : 'b-card'">
 
     <!-- Alert: No item found -->
     <b-alert
       variant="danger"
-      :show="userData === undefined"
+      :show="roleData === undefined"
     >
       <h4 class="alert-heading">
         Error fetching user data
@@ -21,103 +21,290 @@
       </div>
     </b-alert>
 
-    <b-tabs
-      v-if="userData"
-      pills
-    >
+     <validation-observer #default="{ handleSubmit }" ref="refFormObserver">
+            <!-- User Info: Input Fields -->
+            <b-form
+                @submit.prevent="handleSubmit(onSubmit)"
+                @reset.prevent="resetForm"
+            >
+                <b-row>
+                    <!-- Field: Name -->
+                    <b-col cols="12" md="6">
+                        <validation-provider
+                            #default="validationContext"
+                            name="Name"
+                            rules="required|alpha|unique_username"
+                        >
+                            <b-form-group :label="$t('Name')" label-for="name">
+                                <b-form-input
+                                    id="name"
+                                    v-model="roleData.name"
+                                    autofocus
+                                    :state="
+                                        getValidationState(validationContext)
+                                    "
+                                    trim
+                                    placeholder="role_name"
+                                />
+                                <b-form-invalid-feedback>
+                                    {{ validationContext.errors[0] }}
+                                </b-form-invalid-feedback>
+                            </b-form-group>
+                        </validation-provider>
+                    </b-col>
 
-      <!-- Tab: Account -->
-      <b-tab active>
-        <template #title>
-          <feather-icon
-            icon="UserIcon"
-            size="16"
-            class="mr-0 mr-sm-50"
-          />
-          <span class="d-none d-sm-inline">Account</span>
-        </template>
-        <user-edit-tab-account
-          :user-data="userData"
-          class="mt-2 pt-75"
-        />
-      </b-tab>
+                    <!-- Field: Guard Name -->
+                    <b-col cols="12" md="6">
+                        <validation-provider
+                            #default="validationContext"
+                            name="guard_name"
+                            rules="required"
+                        >
+                            <b-form-group
+                                :label="$t('Guard Name')"
+                                label-for="guard_name"
+                            >
+                                <b-form-input
+                                    id="guard_name"
+                                    v-model="roleData.guard_name"
+                                    :state="
+                                        getValidationState(validationContext)
+                                    "
+                                    trim
+                                />
+                                <b-form-invalid-feedback>
+                                    {{ validationContext.errors[0] }}
+                                </b-form-invalid-feedback>
+                            </b-form-group>
+                        </validation-provider>
+                    </b-col>
 
-      <!-- Tab: Information -->
-      <b-tab>
-        <template #title>
-          <feather-icon
-            icon="InfoIcon"
-            size="16"
-            class="mr-0 mr-sm-50"
-          />
-          <span class="d-none d-sm-inline">Information</span>
-        </template>
-        <user-edit-tab-information class="mt-2 pt-75" />
-      </b-tab>
+                    <!-- Field: Description -->
+                    <b-col cols="12" md="12">
+                        <b-form-group
+                            :label="$t('Description')"
+                            label-for="description"
+                        >
+                            <b-form-input
+                                id="description"
+                                v-model="roleData.description"
+                                type="text"
+                            />
+                        </b-form-group>
+                    </b-col>
+                </b-row>
 
-      <!-- Tab: Social -->
-      <b-tab>
-        <template #title>
-          <feather-icon
-            icon="Share2Icon"
-            size="16"
-            class="mr-0 mr-sm-50"
-          />
-          <span class="d-none d-sm-inline">Social</span>
-        </template>
-        <user-edit-tab-social class="mt-2 pt-75" />
-      </b-tab>
-    </b-tabs>
+                <!-- PERMISSION TABLE -->
+                <b-card no-body class="border mt-1">
+                    <b-card-header class="p-1">
+                        <b-card-title class="font-medium-2">
+                            <feather-icon icon="LockIcon" size="18" />
+                            <span class="align-middle ml-50">{{
+                                $t("Permissions")
+                            }}</span>
+                        </b-card-title>
+                    </b-card-header>
+
+                    <div class="block overflow-x-auto">
+                        <b-card
+                            v-for="(group, groupName) in permisosAgrupados"
+                            :key="groupName"
+                        >
+                            <b-card-title v-text="groupName"></b-card-title>
+
+                            <b-row class="demo-alignment">
+                                <!-- Field: Description -->
+                                <b-col
+                                    v-for="permission in group"
+                                    :key="permission.id"
+                                    cols="12"
+                                    md="3"
+                                >
+                                    <b-form-group>
+                                        <b-form-checkbox
+                                          v-model="roleData.permissions"
+                                            :id="'permiso' + permission.id"
+                                            :name="'permiso' + permission.id"
+                                            :value="permission.id"
+                                        >
+                                            {{ permission.name }}
+                                        </b-form-checkbox>
+                                    </b-form-group>
+                                </b-col>
+                            </b-row>
+                        </b-card>
+                    </div>
+                </b-card>
+
+                <!-- Action Buttons -->
+                <b-button
+                    variant="primary"
+                    class="mb-1 mb-sm-0 mr-0 mr-sm-1"
+                    type="submit"
+                    :block="$store.getters['app/currentBreakPoint'] === 'xs'"
+                >
+                    {{ $t("Save Changes") }}
+                </b-button>
+                <b-button
+                    variant="outline-secondary"
+                    type="reset"
+                    :block="$store.getters['app/currentBreakPoint'] === 'xs'"
+                >
+                    {{ $t("Reset") }}
+                </b-button>
+            </b-form>
+        </validation-observer>
   </component>
 </template>
 
 <script>
 import {
-  BTab, BTabs, BCard, BAlert, BLink,
+     BButton,
+    BRow,
+    BCol,
+    BForm,
+    BCardHeader,
+    BCardTitle,
+    BFormGroup,
+    BFormInput,
+    BFormCheckbox,
+    BFormInvalidFeedback,
+  BCard, BAlert, BLink,
 } from 'bootstrap-vue'
 import { ref, onUnmounted } from '@vue/composition-api'
 import router from '@/router'
 import store from '@/store'
-import userStoreModule from '../userStoreModule'
-import UserEditTabAccount from './UserEditTabAccount.vue'
-import UserEditTabInformation from './UserEditTabInformation.vue'
-import UserEditTabSocial from './UserEditTabSocial.vue'
+import roleStoreModule from '../roleStoreModule'
+
+import { extend, ValidationProvider, ValidationObserver } from "vee-validate";
+import { required, alpha } from "@validations";
+import formValidation from "@core/comp-functions/forms/form-validation";
+
 
 export default {
   components: {
-    BTab,
-    BTabs,
     BCard,
     BAlert,
     BLink,
+    BButton,
+    BRow,
+    BCol,
+    BForm,
+    BFormGroup,
+    BFormInput,
+    BFormCheckbox,
+    BCardHeader,
+    BCardTitle,
+    BFormInvalidFeedback,
+    // Form Validation
+    ValidationProvider,
+    ValidationObserver
 
-    UserEditTabAccount,
-    UserEditTabInformation,
-    UserEditTabSocial,
   },
+  
+    data() {
+        return {
+            permisosList: []
+        };
+    },
+  methods: {
+        groupBy(array, key) {
+            const result = {};
+            array.forEach(item => {
+                if (!result[item[key]]) {
+                    result[item[key]] = [];
+                }
+                result[item[key]].push(item);
+            });
+            return result;
+        },
+        loadPermisos() {
+            var me = this;
+            store
+                .dispatch("app-role/fetchPermisos", {})
+                .then(response => {
+                    me.permisosList = response.data;
+                })
+                .catch(error => {
+                    console.log("error fetchPermisos");
+                    console.log(error);
+                    // if (error.response.status === 404) {
+                    //   console.log(error);
+                    //   //me.permisosList = []
+                    // }
+                });
+        },
+        validateRemoteField(field, value){
+          return store.dispatch('app-role/validateUnique',{ field: field, value: value }).then((response) => {
+            return {
+            valid: response.data.valid,
+            data: {
+              message: response.data.msg
+            }
+            };
+          });
+        },
+    },
+    computed: {
+        permisosAgrupados() {
+            return this.groupBy(this.permisosList, "group_key");
+        }
+    },
+    mounted() {
+        this.loadPermisos();
+        
+        const isUniqueUsername = (value) => {
+          return this.validateRemoteField('name',value);
+        };
+        extend('unique_username', {
+          validate: isUniqueUsername,
+          message: (field, params) => {
+            return `${params._value_} ya esta siendo utilizado.`;
+          }
+        });
+        
+    },
   setup() {
-    const userData = ref(null)
+    const roleData = ref(null)
 
-    const USER_APP_STORE_MODULE_NAME = 'app-user'
+    const USER_APP_STORE_MODULE_NAME = 'app-role'
 
     // Register module
-    if (!store.hasModule(USER_APP_STORE_MODULE_NAME)) store.registerModule(USER_APP_STORE_MODULE_NAME, userStoreModule)
+    if (!store.hasModule(USER_APP_STORE_MODULE_NAME)) store.registerModule(USER_APP_STORE_MODULE_NAME, roleStoreModule)
 
     // UnRegister on leave
     onUnmounted(() => {
       if (store.hasModule(USER_APP_STORE_MODULE_NAME)) store.unregisterModule(USER_APP_STORE_MODULE_NAME)
     })
 
-    store.dispatch('app-user/fetchUser', { id: router.currentRoute.params.id })
-      .then(response => { userData.value = response.data })
+    store.dispatch('app-role/fetchRole', { id: router.currentRoute.params.id })
+      .then(response => {
+        console.log('respuesta');
+        console.log(response);
+        console.log(response.data);
+        console.log(response.data.data);
+        roleData.value = response.data.data
+        
+        })
       .catch(error => {
+        console.log('error');
+        console.log(error);
         if (error.response.status === 404) {
-          userData.value = undefined
+          roleData.value = undefined
         }
       })
 
+        const {
+            refFormObserver,
+            getValidationState
+        } = formValidation();
+
     return {
-      userData,
+      roleData,
+
+      refFormObserver,
+      getValidationState,
+            
     }
   },
 }

@@ -40,5 +40,12 @@
   "Roles": "Roles",
   "Permissions": "Permisos",
   "Save Changes": "Guardar Cambios",
-  "Reset": "Resetear"
+  "Reset": "Resetear",
+  "Created At": "Creado el",
+  "Actions" : "Acciones",
+  "Are you sure": "Estás seguro?",
+  "Wont Able To Revert": "No podras revertir esto!",
+  "Yes delete it":"Si, eliminarlo!",
+  "Cancel":"Cancelar",
+  "Deleted" : "Eliminado!"
 }

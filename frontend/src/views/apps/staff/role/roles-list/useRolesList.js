@@ -14,10 +14,10 @@ export default function useUsersList() {
 
   // Table Handlers
   const tableColumns = [
-    { key: 'name', sortable: true , label:$t('Name') },
+    { key: 'name', sortable: true },
     { key: 'guard_name', sortable: true },
-    { key: 'created_at', sortable: true, label:$t('Created At') },
-    { key: 'actions' , label:$t('Actions') },
+    { key: 'created_at', sortable: true },
+    { key: 'actions' },
   ]
   const perPage = ref(10)
   const totalUsers = ref(0)
@@ -26,9 +26,7 @@ export default function useUsersList() {
   const searchQuery = ref('')
   const sortBy = ref('id')
   const isSortDirDesc = ref(true)
-  const roleFilter = ref(null)
-  const planFilter = ref(null)
-  const statusFilter = ref(null)
+
 
   const dataMeta = computed(() => {
     const localItemsCount = refUserListTable.value ? refUserListTable.value.localItems.length : 0
@@ -43,7 +41,7 @@ export default function useUsersList() {
     refUserListTable.value.refresh()
   }
 
-  watch([currentPage, perPage, searchQuery, roleFilter, planFilter, statusFilter], () => {
+  watch([currentPage, perPage, searchQuery], () => {
     refetchData()
   })
 
@@ -74,6 +72,40 @@ export default function useUsersList() {
       })
   }
 
+  const removeTask = function(id) {
+
+      this.$swal({
+        title: this.$t('Are you sure'),
+        text: this.$t("Wont Able To Revert"),
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: this.$t('Yes delete it'),
+        cancelButtonText: this.$t('Cancel'),
+        customClass: {
+          confirmButton: 'btn btn-primary',
+          cancelButton: 'btn btn-outline-danger ml-1',
+        },
+        buttonsStyling: false,
+      }).then(result => {
+        if (result.value) {
+          store.dispatch('app-role/removeRole', id )
+          .then(() => {
+            // eslint-disable-next-line no-use-before-define
+            this.$swal({
+              icon: 'success',
+              title: this.$t('Deleted'),
+              text: this.$t('Item Deleted'),
+              customClass: {
+                confirmButton: 'btn btn-success',
+              },
+            })
+            refetchData()
+          })
+        }
+      })
+    
+  }
+
   // *===============================================---*
   // *--------- UI ---------------------------------------*
   // *===============================================---*
@@ -88,16 +120,18 @@ export default function useUsersList() {
   }
 
   const resolveUserRoleIcon = role => {
-    if (role === 'subscriber') return 'UserIcon'
-    if (role === 'author') return 'SettingsIcon'
+    if (role === 'suscriptor') return 'UserIcon'
+    if (role === 'autor') return 'SettingsIcon'
     if (role === 'maintainer') return 'DatabaseIcon'
     if (role === 'editor') return 'Edit2Icon'
     if (role === 'admin') return 'ServerIcon'
+    if (role === 'superadmin') return 'ServerIcon'
     return 'UserIcon'
   }
 
   return {
     fetchRoles,
+    removeTask,
     tableColumns,
     perPage,
     currentPage,
@@ -113,9 +147,5 @@ export default function useUsersList() {
     resolveUserRoleIcon,
     refetchData,
 
-    // Extra Filters
-    roleFilter,
-    planFilter,
-    statusFilter,
   }
 }

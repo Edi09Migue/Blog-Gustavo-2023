@@ -39,6 +39,7 @@ Route::group(['prefix' => 'admin','middleware' => 'auth:api'], function() {
       Route::post('usuarios/validate/email',[Usuarios::class,'isUniqueEmail']);
   
       Route::apiResource('roles',Roles::class);
+      Route::post('roles/validate/{field}',[Roles::class,'isUniqueField']);
       Route::apiResource('permisos',Permisos::class);
       
 });

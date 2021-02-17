@@ -13,19 +13,20 @@ class Roles extends Controller
     var $datos;
 
      /**
-     * Muestra el Listado de los Roles del Sistema
+     * Devuelve el Listado de los Roles del Sistema paginados, ordenados y filtrados
      */
     public function index(Request $request)
     {
         $query = $request->has('q') ? $request->q : "";
         $perPage = $request->has('perPage') ? $request->perPage : 10;
         $sortBy = $request->has('sortBy') ? $request->sortBy : "id";
-        $sortDesc = $request->has('sortDesc') ? $request->sortDesc : true;
+        $sortDesc = $request->has('sortDesc') ? $request->sortDesc : "true";
 
+        
         $roles = Role::where('name','like',"%$query%")
-                        ->orderBy($sortBy,$sortDesc?'desc':'asc')
-                        ->paginate($request->perPage);
-
+                        ->orderBy($sortBy,$sortDesc=="true"?'desc':'asc')
+                        ->paginate($perPage);
+        
         $roles->each(function($r){
             $r->permisos = $r->permissions->count();
             unset($r->permissions);
@@ -57,8 +58,8 @@ class Roles extends Controller
      */
     public function store(Request $request)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             $role = Role::create([
                 'name'          => $request->name,
                 'guard_name'    => $request->guard_name,
@@ -67,7 +68,7 @@ class Roles extends Controller
             if ($request->has('permissions')) {
                 $role->syncPermissions($request->permissions);
             }
-            DB::commit();
+            // DB::commit();
 
             return response()->json([
                 'status' => true,
@@ -75,14 +76,14 @@ class Roles extends Controller
                 'msg' => 'Rol creado correctamente!'
             ]);
 
-        } catch (Exception $e) {
-            DB::rollback();
-            return response()->json([
-                'status' => false,
-                'data' => $role,
-                'msg' => 'Error al crear rol!'
-            ]);
-        }
+        // } catch (Exception $e) {
+        //     DB::rollback();
+        //     return response()->json([
+        //         'status' => false,
+        //         'data' => [],
+        //         'msg' => 'Error al crear rol!'
+        //     ]);
+        // }
     }
 
     /**
@@ -133,6 +134,19 @@ class Roles extends Controller
             'status'=>TRUE,
             'id' =>$id,
             'msg' => 'Rol eliminado correctamente!'
+        ]);
+    }
+
+            
+    /**
+     * Devuelve TRUE si el campo esta disponible
+     */
+    public function isUniqueField($field, Request $request){
+        $existe = Role::where($field,$request->value)->count();
+        return response()->json([
+            'status' => true,
+            'valid' => ($existe==0),
+            'msg' =>  $request->value. ($existe!=0 ? ' ya esta siendo utilizado por otro rol' : ' esta disponible')
         ]);
     }
 }

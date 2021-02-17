@@ -100,13 +100,13 @@
               <span class="align-middle ml-50">{{ $t('Details') }}</span>
             </b-dropdown-item>
 
-            <b-dropdown-item :to="{ name: 'apps-users-edit', params: { id: data.item.id } }">
+            <b-dropdown-item :to="{ name: 'apps-roles-edit', params: { id: data.item.id } }">
               <feather-icon icon="EditIcon" />
               <span class="align-middle ml-50">{{ $t('Edit') }}</span>
             </b-dropdown-item>
 
-            <b-dropdown-item>
-              <feather-icon icon="TrashIcon" />
+            <b-dropdown-item @click="removeTask(data.item.id)">
+              <feather-icon icon="TrashIcon"  />
               <span class="align-middle ml-50">{{ $t('Delete') }}</span>
             </b-dropdown-item>
           </b-dropdown>
@@ -204,11 +204,9 @@ export default {
       if (store.hasModule(USER_APP_STORE_MODULE_NAME)) store.unregisterModule(USER_APP_STORE_MODULE_NAME)
     })
 
-    const isAddNewUserSidebarActive = ref(false)
-
-
     const {
       fetchRoles,
+      removeTask,
       tableColumns,
       perPage,
       currentPage,
@@ -229,10 +227,7 @@ export default {
     } = useRolesList()
 
     return {
-
-      // Sidebar
-      isAddNewUserSidebarActive,
-
+      removeTask,
       fetchRoles,
       tableColumns,
       perPage,

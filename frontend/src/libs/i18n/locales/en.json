@@ -42,5 +42,11 @@
   "Save Changes": "Save Changes",
   "Reset": "Reset",
   "Created At": "Created At",
-  "Actions" : "Actions"
+  "Actions" : "Actions",
+  "Are you sure": "Are you sure?",
+  "Wont Able To Revert": "You won't be able to revert this!",
+  "Yes delete it":"Yes, delete it",
+  "Cancel":"Cancel",
+  "Deleted" : "Deleted",
+  "Item Deleted" : "Your file has been deleted."
 }
