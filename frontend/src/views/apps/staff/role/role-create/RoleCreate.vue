@@ -46,6 +46,7 @@
                             >
                                 <b-form-input
                                     id="guard_name"
+                                    readonly
                                     v-model="roleData.guard_name"
                                     :state="
                                         getValidationState(validationContext)
@@ -102,7 +103,7 @@
                                 >
                                     <b-form-group>
                                         <b-form-checkbox
-                                          v-model="roleData.permissions"
+                                            v-model="roleData.permissions"
                                             :id="'permiso' + permission.id"
                                             :name="'permiso' + permission.id"
                                             :value="permission.id"
@@ -151,17 +152,21 @@ import {
     BFormCheckbox,
     BFormInvalidFeedback
 } from "bootstrap-vue";
-import { extend, ValidationProvider, ValidationObserver } from "vee-validate";
-import { required, alpha } from "@validations";
-import formValidation from "@core/comp-functions/forms/form-validation";
-import { useRouter } from '@core/utils/utils'
-import { useToast } from 'vue-toastification/composition'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { ref, onUnmounted } from "@vue/composition-api";
 import store from "@/store";
 import roleStoreModule from "../roleStoreModule";
+import { useRouter } from '@core/utils/utils'
+//T
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import { useToast } from 'vue-toastification/composition'
+//Form validations
+import formValidation from "@core/comp-functions/forms/form-validation";
+import { extend, ValidationProvider, ValidationObserver } from "vee-validate";
+import { required, alpha } from "@validations";
 
 export default {
+  created () {
+  },
     components: {
         BButton,
         BRow,
@@ -255,7 +260,7 @@ export default {
         };
         const roleData = ref(JSON.parse(JSON.stringify(blankRoleData)));
         const resetRoleData = () => {
-            userData.value = JSON.parse(JSON.stringify(blankUserData));
+            roleData.value = JSON.parse(JSON.stringify(blankRoleData));
         };
 
         const USER_APP_STORE_MODULE_NAME = "app-role";
@@ -278,7 +283,7 @@ export default {
                     component: ToastificationContent,
                     position: 'top-right',
                     props: {
-                      title: `Rol creado`,
+                      title: `Creado!`,
                       icon: 'CoffeeIcon',
                       variant: 'success',
                       text: `Rol ${response.data.data.name}. Creado correctamente!`,

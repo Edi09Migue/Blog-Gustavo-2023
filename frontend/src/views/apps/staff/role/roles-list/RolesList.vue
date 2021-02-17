@@ -18,7 +18,7 @@
             md="6"
             class="d-flex align-items-center justify-content-start mb-1 mb-md-0"
           >
-            <label>Show</label>
+            <label>{{ $t('Show') }}</label>
             <v-select
               v-model="perPage"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -26,7 +26,7 @@
               :clearable="false"
               class="per-page-selector d-inline-block mx-50"
             />
-            <label>entries</label>
+            <label>{{ $t('Entries') }}</label>
           </b-col>
 
           <!-- Search -->
@@ -38,7 +38,7 @@
               <b-form-input
                 v-model="searchQuery"
                 class="d-inline-block mr-1"
-                placeholder="Search..."
+                :placeholder="$t('Search')+'...'"
               />
               <b-button
                 variant="primary"
@@ -77,6 +77,11 @@
               :class="`text-${resolveUserRoleVariant(data.item.name)}`"
             />
             <span class="align-text-top text-capitalize">{{ data.item.name }}</span>
+          </div>
+        </template>
+        <template #cell(created_at)="data">
+          <div class="text-nowrap">
+            {{ formatDate(data.item.created_at, { month: 'short', day: 'numeric', year: 'numeric'}) }}
           </div>
         </template>
 
@@ -121,7 +126,7 @@
             sm="6"
             class="d-flex align-items-center justify-content-center justify-content-sm-start"
           >
-            <span class="text-muted">Showing {{ dataMeta.from }} to {{ dataMeta.to }} of {{ dataMeta.of }} entries</span>
+            <span class="text-muted">{{ $t('Showing') }} {{ dataMeta.from }} to {{ dataMeta.to }} of {{ dataMeta.of }} {{ $t('Entries') }}</span>
           </b-col>
           <!-- Pagination -->
           <b-col
@@ -170,9 +175,10 @@ import {
 import vSelect from 'vue-select'
 import store from '@/store'
 import { ref, onUnmounted } from '@vue/composition-api'
-import { avatarText } from '@core/utils/filter'
+import { avatarText, formatDate } from '@core/utils/filter'
 import useRolesList from './useRolesList'
 import roleStoreModule from '../roleStoreModule'
+
 
 
 export default {
@@ -243,6 +249,7 @@ export default {
 
       // Filter
       avatarText,
+      formatDate,
 
       // UI
       resolveUserRoleVariant,

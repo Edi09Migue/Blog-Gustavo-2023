@@ -16,6 +16,7 @@
       "action": "Action"
     }
   },
+  "Home" : "Home",
   "Staff & Security" : "Staff & Security",
   "Add New": "Add New",
   "Add": "Add",
@@ -48,5 +49,9 @@
   "Yes delete it":"Yes, delete it",
   "Cancel":"Cancel",
   "Deleted" : "Deleted",
-  "Item Deleted" : "Your file has been deleted."
+  "Item Deleted" : "Your item has been deleted.",
+  "Show" : "Show",
+  "Showing" : "Showing",
+  "Entries": "Entries",
+  "Search": "Search"
 }

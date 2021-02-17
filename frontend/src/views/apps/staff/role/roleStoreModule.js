@@ -46,6 +46,14 @@ export default {
           .catch(error => reject(error))
       })
     },
+    updateRole(ctx, roleData) {
+      return new Promise((resolve, reject) => {
+        axios
+          .put(`/api/admin/roles/${roleData.value.id}`, roleData.value)
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
     removeRole(ctx, roleId) {
       return new Promise((resolve, reject) => {
         axios

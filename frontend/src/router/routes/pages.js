@@ -55,6 +55,9 @@ export default [
       path: '/apps/roles/edit/:id',
       name: 'apps-roles-edit',
       component: () => import('@/views/apps/staff/role/role-edit/RoleEdit.vue'),
+      meta:{
+        navActiveLink: 'apps-roles-list',
+      }
     },
     {
       path: '/apps/roles/create',

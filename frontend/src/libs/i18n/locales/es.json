@@ -16,6 +16,7 @@
       "action": "Action"
     }
   },
+  "Home" : "Inicio",
   "Staff & Security" : "Personal & Seguridad",
   "Add New": "Crear Nuevo",
   "Add": "Crear",
@@ -47,5 +48,9 @@
   "Wont Able To Revert": "No podras revertir esto!",
   "Yes delete it":"Si, eliminarlo!",
   "Cancel":"Cancelar",
-  "Deleted" : "Eliminado!"
+  "Deleted" : "Eliminado!",
+  "Item Deleted" : "Tu registro ha sido eliminado!",
+  "Show" : "Mostrar",
+  "Entries": "Registros",
+  "Search": "Buscar"
 }

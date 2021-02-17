@@ -63,6 +63,7 @@ class Roles extends Controller
             $role = Role::create([
                 'name'          => $request->name,
                 'guard_name'    => $request->guard_name,
+                'description'    => $request->description,
             ]);
 
             if ($request->has('permissions')) {
@@ -99,10 +100,13 @@ class Roles extends Controller
             //Updating Role
             $role = Role::findOrFail($id);
 
-            $role->update(['name' => $request->name]);
+            $role->update([
+                'name' => $request->name,
+                'description' => $request->description,
+                ]);
 
-            if ($request->has('permissions')) {
-                $role->syncPermissions($request->permissions);
+            if ($request->has('permissionsIDs')) {
+                $role->syncPermissions($request->permissionsIDs);
             }
 
             DB::commit();

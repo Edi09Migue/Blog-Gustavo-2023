@@ -7,21 +7,24 @@
       :show="roleData === undefined"
     >
       <h4 class="alert-heading">
-        Error fetching user data
+        Error fetching role data
       </h4>
       <div class="alert-body">
-        No user found with this user id. Check
+        No role found with this role id. Check
         <b-link
           class="alert-link"
-          :to="{ name: 'apps-users-list'}"
+          :to="{ name: 'apps-roles-list'}"
         >
-          User List
+          Roles List
         </b-link>
-        for other users.
+        for other roles.
       </div>
     </b-alert>
 
-     <validation-observer #default="{ handleSubmit }" ref="refFormObserver">
+     <validation-observer 
+          #default="{ handleSubmit }"
+          v-if="roleData"
+          ref="refFormObserver">
             <!-- User Info: Input Fields -->
             <b-form
                 @submit.prevent="handleSubmit(onSubmit)"
@@ -66,6 +69,7 @@
                             >
                                 <b-form-input
                                     id="guard_name"
+                                    readonly
                                     v-model="roleData.guard_name"
                                     :state="
                                         getValidationState(validationContext)
@@ -122,7 +126,7 @@
                                 >
                                     <b-form-group>
                                         <b-form-checkbox
-                                          v-model="roleData.permissions"
+                                          v-model="roleData.permissionsIDs"
                                             :id="'permiso' + permission.id"
                                             :name="'permiso' + permission.id"
                                             :value="permission.id"
@@ -148,9 +152,11 @@
                 <b-button
                     variant="outline-secondary"
                     type="reset"
+                    
+                    :to="{ name: 'apps-roles-list'}"
                     :block="$store.getters['app/currentBreakPoint'] === 'xs'"
                 >
-                    {{ $t("Reset") }}
+                    {{ $t("Cancel") }}
                 </b-button>
             </b-form>
         </validation-observer>
@@ -169,13 +175,18 @@ import {
     BFormInput,
     BFormCheckbox,
     BFormInvalidFeedback,
-  BCard, BAlert, BLink,
+    BCard,
+    BAlert,
+    BLink
 } from 'bootstrap-vue'
 import { ref, onUnmounted } from '@vue/composition-api'
-import router from '@/router'
 import store from '@/store'
+import { useRouter } from '@core/utils/utils'
 import roleStoreModule from '../roleStoreModule'
-
+//Toasts
+import { useToast } from 'vue-toastification/composition'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+//Form validatiom
 import { extend, ValidationProvider, ValidationObserver } from "vee-validate";
 import { required, alpha } from "@validations";
 import formValidation from "@core/comp-functions/forms/form-validation";
@@ -183,9 +194,8 @@ import formValidation from "@core/comp-functions/forms/form-validation";
 
 export default {
   components: {
-    BCard,
     BAlert,
-    BLink,
+    BCard,
     BButton,
     BRow,
     BCol,
@@ -195,6 +205,7 @@ export default {
     BFormCheckbox,
     BCardHeader,
     BCardTitle,
+    BLink,
     BFormInvalidFeedback,
     // Form Validation
     ValidationProvider,
@@ -204,7 +215,7 @@ export default {
   
     data() {
         return {
-            permisosList: []
+            permisosList: [],
         };
     },
   methods: {
@@ -237,7 +248,7 @@ export default {
         validateRemoteField(field, value){
           return store.dispatch('app-role/validateUnique',{ field: field, value: value }).then((response) => {
             return {
-            valid: response.data.valid,
+            valid: this.originalName != value ? response.data.valid : true,
             data: {
               message: response.data.msg
             }
@@ -266,6 +277,10 @@ export default {
     },
   setup() {
     const roleData = ref(null)
+    const originalName = ref("")
+        // Use toast
+    const toast = useToast()
+    const {route, router } = useRouter()
 
     const USER_APP_STORE_MODULE_NAME = 'app-role'
 
@@ -279,11 +294,9 @@ export default {
 
     store.dispatch('app-role/fetchRole', { id: router.currentRoute.params.id })
       .then(response => {
-        console.log('respuesta');
-        console.log(response);
-        console.log(response.data);
-        console.log(response.data.data);
         roleData.value = response.data.data
+        originalName.value = roleData.value.name
+        roleData.value.permissionsIDs = roleData.value.permissions.map(p=>p.id)
         
         })
       .catch(error => {
@@ -294,6 +307,30 @@ export default {
         }
       })
 
+    const onSubmit = () => {
+      store.dispatch("app-role/updateRole", roleData).then((response) => {
+        router.replace({ name: 'apps-roles-list'})
+          .then(() => {
+            toast({
+              component: ToastificationContent,
+              position: 'top-right',
+              props: {
+                title: `Actualizado`,
+                icon: 'CoffeeIcon',
+                variant: 'success',
+                text: `Rol ${response.data.data.name}. Actualizdo correctamente!`,
+              },
+            })
+          })
+          .catch(error => {
+            console.log('error');
+            console.log(error);
+            this.$refs.loginForm.setErrors(error.response.data.error)
+          })
+
+      });
+  };
+
         const {
             refFormObserver,
             getValidationState
@@ -301,10 +338,11 @@ export default {
 
     return {
       roleData,
+      onSubmit,
 
       refFormObserver,
       getValidationState,
-            
+      originalName
     }
   },
 }
