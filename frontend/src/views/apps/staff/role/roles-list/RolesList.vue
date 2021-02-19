@@ -61,7 +61,7 @@
         primary-key="id"
         :sort-by.sync="sortBy"
         show-empty
-        empty-text="No matching records found"
+        :empty-text="$t('Empty Table')"
         :sort-desc.sync="isSortDirDesc"
       >
 

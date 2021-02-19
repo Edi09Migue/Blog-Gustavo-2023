@@ -40,6 +40,7 @@
   "Role": "Role",
   "Roles": "Roles",
   "Permissions": "Permissions",
+  "Permission": "Permission",
   "Save Changes": "Save Changes",
   "Reset": "Reset",
   "Created At": "Created At",
@@ -53,5 +54,7 @@
   "Show" : "Show",
   "Showing" : "Showing",
   "Entries": "Entries",
-  "Search": "Search"
+  "Search": "Search",
+  "Empty Table":"No matching records found",
+  "Group Key": "Group Key"
 }

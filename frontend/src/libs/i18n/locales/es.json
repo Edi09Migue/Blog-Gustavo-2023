@@ -40,6 +40,7 @@
   "Role": "Rol",
   "Roles": "Roles",
   "Permissions": "Permisos",
+  "Permission": "Permiso",
   "Save Changes": "Guardar Cambios",
   "Reset": "Resetear",
   "Created At": "Creado el",
@@ -51,6 +52,9 @@
   "Deleted" : "Eliminado!",
   "Item Deleted" : "Tu registro ha sido eliminado!",
   "Show" : "Mostrar",
+  "Showing" : "Mostrando",
   "Entries": "Registros",
-  "Search": "Buscar"
+  "Search": "Buscar",
+  "Empty Table":"No se encontraron registros",
+  "Group Key": "Key Grupo"
 }

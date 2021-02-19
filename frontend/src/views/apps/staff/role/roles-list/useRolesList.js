@@ -1,12 +1,14 @@
 import { ref, watch, computed } from '@vue/composition-api'
 import store from '@/store'
 import { title } from '@core/utils/filter'
+import { useUtils as useI18nUtils } from '@core/libs/i18n'
 
 // Notification
 import { useToast } from 'vue-toastification/composition'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default function useUsersList() {
+  const { t } = useI18nUtils()
   // Use toast
   const toast = useToast()
 
@@ -14,10 +16,10 @@ export default function useUsersList() {
 
   // Table Handlers
   const tableColumns = [
-    { key: 'name', sortable: true },
-    { key: 'guard_name', sortable: true },
-    { key: 'created_at', sortable: true },
-    { key: 'actions' },
+    { key: 'name', sortable: true, label: t('Rol') },
+    { key: 'guard_name', sortable: true, label: t('Guard Name')  },
+    { key: 'created_at', sortable: true, label: t('Created At')  },
+    { key: 'actions' , label: t('Actions') },
   ]
   const perPage = ref(10)
   const totalUsers = ref(0)

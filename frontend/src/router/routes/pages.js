@@ -47,17 +47,19 @@ export default [
       component: () => import('@/views/apps/staff/user/users-list/UsersList.vue'),
     },
     {
+      path: '/apps/users/view/:id',
+      name: 'apps-users-view',
+      component: () => import('@/views/apps/staff/user/users-view/UsersView.vue'),
+    },
+    {
+      path: '/apps/users/edit/:id',
+      name: 'apps-users-edit',
+      component: () => import('@/views/apps/staff/user/users-edit/UsersEdit.vue'),
+    },
+    {
       path: '/apps/roles/list',
       name: 'apps-roles-list',
       component: () => import('@/views/apps/staff/role/roles-list/RolesList.vue'),
-    },
-    {
-      path: '/apps/roles/edit/:id',
-      name: 'apps-roles-edit',
-      component: () => import('@/views/apps/staff/role/role-edit/RoleEdit.vue'),
-      meta:{
-        navActiveLink: 'apps-roles-list',
-      }
     },
     {
       path: '/apps/roles/create',
@@ -68,13 +70,16 @@ export default [
       }
     },
     {
-      path: '/apps/users/view/:id',
-      name: 'apps-users-view',
-      component: () => import('@/views/apps/staff/user/users-view/UsersView.vue'),
+      path: '/apps/roles/edit/:id',
+      name: 'apps-roles-edit',
+      component: () => import('@/views/apps/staff/role/role-edit/RoleEdit.vue'),
+      meta:{
+        navActiveLink: 'apps-roles-list',
+      }
     },
     {
-      path: '/apps/users/edit/:id',
-      name: 'apps-users-edit',
-      component: () => import('@/views/apps/staff/user/users-edit/UsersEdit.vue'),
+      path: '/apps/permissions/list',
+      name: 'apps-permissions-list',
+      component: () => import('@/views/apps/staff/permission/permissions-list/PermissionsList.vue'),
     },
 ]

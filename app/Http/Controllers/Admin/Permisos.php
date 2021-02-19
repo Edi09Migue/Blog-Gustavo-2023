@@ -12,9 +12,22 @@ class Permisos extends Controller
 {
     var $datos;
 
-    public function index(){
-    	$permisos = Permission::all();
-    	return response()->json($permisos);
+    public function index(Request $request){
+        $query = $request->has('q') ? $request->q : "";
+        $perPage = $request->has('perPage') ? $request->perPage : 10;
+        $sortBy = $request->has('sortBy') ? $request->sortBy : "id";
+        $sortDesc = $request->has('sortDesc') ? $request->sortDesc : "true";
+
+        
+        $permisos = Permission::where('name','like',"%$query%")
+                        ->orderBy($sortBy,$sortDesc=="true"?'desc':'asc')
+                        ->paginate($perPage);
+
+    	
+    	return response()->json([
+            'items' => $permisos->items(),
+            'total' => $permisos->count()
+        ]);
     }
     
     /**
@@ -88,6 +101,20 @@ class Permisos extends Controller
             'status'=>TRUE,
             'id' =>$id,
             'msg' => $permiso->name.' eliminado!'
+        ]);
+    }
+
+    
+            
+    /**
+     * Devuelve TRUE si el campo esta disponible
+     */
+    public function isUniqueField($field, Request $request){
+        $existe = Permission::where($field,$request->value)->count();
+        return response()->json([
+            'status' => true,
+            'valid' => ($existe==0),
+            'msg' =>  $request->value. ($existe!=0 ? ' ya esta siendo utilizado por otro rol' : ' esta disponible')
         ]);
     }
 }

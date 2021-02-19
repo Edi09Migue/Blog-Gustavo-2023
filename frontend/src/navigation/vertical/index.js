@@ -25,6 +25,10 @@ export default [
         route: 'apps-roles-list',
       },
       {
+        title: 'Permissions',
+        route: 'apps-permissions-list',
+      },
+      {
         title: 'View',
         route: { name: 'apps-users-view', params: { id: 21 } },
       },
