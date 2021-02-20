@@ -22,10 +22,36 @@ export default {
           .catch(error => reject(error))
       })
     },
+    validateUnique(ctx, value) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`/api/admin/usuarios/validate/${value.field}`, {
+              value: value.value
+          })
+          .then(response => resolve(response))
+          .catch(error => reject(error));
+      });
+    },
     addUser(ctx, userData) {
       return new Promise((resolve, reject) => {
         axios
-          .post('/api/admin/usuarios', { user: userData })
+          .post('/api/admin/usuarios',  userData )
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
+    updateUser(ctx, userData) {
+      return new Promise((resolve, reject) => {
+        axios
+          .put(`/api/admin/usuarios/${userData.value.id}`, userData.value)
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
+    removeUser(ctx, userId) {
+      return new Promise((resolve, reject) => {
+        axios
+          .delete(`/api/admin/usuarios/${userId}`)
           .then(response => resolve(response))
           .catch(error => reject(error))
       })

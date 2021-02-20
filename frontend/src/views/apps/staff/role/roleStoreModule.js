@@ -22,10 +22,10 @@ export default {
           .catch(error => reject(error))
       })
     },
-    fetchPermisos(ctx, { id }) {
+    fetchPermisos(ctx) {
       return new Promise((resolve, reject) => {
         axios
-          .get(`/api/admin/permisos`)
+          .get(`/api/admin/permisos/dropdownOptions`)
           .then(response => resolve(response))
           .catch(error => reject(error))
       })

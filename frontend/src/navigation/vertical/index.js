@@ -13,11 +13,11 @@ export default [
     header: 'Staff & Security',
   },
   {
-    title: 'Users',
+    title: 'Security',
     icon: 'UserIcon',
     children: [
       {
-        title: 'List',
+        title: 'Users',
         route: 'apps-users-list',
       },
       {
@@ -27,15 +27,7 @@ export default [
       {
         title: 'Permissions',
         route: 'apps-permissions-list',
-      },
-      {
-        title: 'View',
-        route: { name: 'apps-users-view', params: { id: 21 } },
-      },
-      {
-        title: 'Edit',
-        route: { name: 'apps-users-edit', params: { id: 21 } },
-      },
+      }
     ],
   },
 ]

@@ -56,5 +56,10 @@
   "Entries": "Entries",
   "Search": "Search",
   "Empty Table":"No matching records found",
-  "Group Key": "Group Key"
+  "Group Key": "Group Key",
+  "Security" : "Security",
+  "Filters":"Filters",
+  "Status":"Status",
+  "Error":"Error",
+  "Password":"Password"
 }

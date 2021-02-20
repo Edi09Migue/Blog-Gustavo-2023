@@ -2,7 +2,7 @@
   <b-card no-body>
     <b-card-header class="pb-50">
       <h5>
-        Filters
+        {{ $t('Filters') }}
       </h5>
     </b-card-header>
     <b-card-body>
@@ -12,7 +12,7 @@
           md="4"
           class="mb-md-0 mb-2"
         >
-          <label>Role</label>
+          <label>{{ $t('Role') }}</label>
           <v-select
             :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
             :value="roleFilter"
@@ -42,7 +42,7 @@
           md="4"
           class="mb-md-0 mb-2"
         >
-          <label>Status</label>
+          <label>{{ $t('Status') }}</label>
           <v-select
             :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
             :value="statusFilter"

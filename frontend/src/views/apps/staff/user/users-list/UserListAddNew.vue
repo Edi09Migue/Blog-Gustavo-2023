@@ -51,7 +51,7 @@
             >
               <b-form-input
                 id="full-name"
-                v-model="userData.fullName"
+                v-model="userData.name"
                 autofocus
                 :state="getValidationState(validationContext)"
                 trim
@@ -68,7 +68,7 @@
           <validation-provider
             #default="validationContext"
             name="Username"
-            rules="required|alpha-num"
+            rules="required|alpha-num|unique_name"
           >
             <b-form-group
               :label="$t('Username')"
@@ -87,11 +87,35 @@
             </b-form-group>
           </validation-provider>
 
+          <!-- Username -->
+          <validation-provider
+            #default="validationContext"
+            name="Password"
+            rules="required|min:8"
+          >
+            <b-form-group
+              :label="$t('Password')"
+              label-for="password"
+            >
+              <b-form-input
+                id="password"
+                type="password"
+                v-model="userData.password"
+                :state="getValidationState(validationContext)"
+                trim
+              />
+
+              <b-form-invalid-feedback>
+                {{ validationContext.errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </validation-provider>
+
           <!-- Email -->
           <validation-provider
             #default="validationContext"
             name="Email"
-            rules="required|email"
+            rules="required|email|unique_email"
           >
             <b-form-group
               :label="$t('Email')"
@@ -204,6 +228,18 @@
             </b-form-group>
           </validation-provider>
 
+          <b-alert
+            variant="danger"
+            show
+            v-show="errorServer"
+          >
+            <h4 class="alert-heading">
+              {{ $t('Error') }}
+            </h4>
+            <div class="alert-body">
+              <span>{{ errorServer }}</span>
+            </div>
+          </b-alert>
           <!-- Form Actions -->
           <div class="d-flex mt-2">
             <b-button
@@ -212,7 +248,7 @@
               class="mr-2"
               type="submit"
             >
-              Add
+            {{ userData.id ? $t('Edit') : $t('Add') }}
             </b-button>
             <b-button
               v-ripple.400="'rgba(186, 191, 199, 0.15)'"
@@ -220,7 +256,7 @@
               variant="outline-secondary"
               @click="hide"
             >
-              Cancel
+              {{ $t('Cancel') }}
             </b-button>
           </div>
 
@@ -232,12 +268,14 @@
 
 <script>
 import {
-  BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
+  BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton, BAlert
 } from 'bootstrap-vue'
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { extend, ValidationProvider, ValidationObserver } from 'vee-validate'
 import { ref } from '@vue/composition-api'
 import { required, alphaNum, email } from '@validations'
 import formValidation from '@core/comp-functions/forms/form-validation'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import { useToast } from 'vue-toastification/composition'
 import Ripple from 'vue-ripple-directive'
 import vSelect from 'vue-select'
 import countries from '@/@fake-db/data/other/countries'
@@ -253,6 +291,7 @@ export default {
     BFormInput,
     BFormInvalidFeedback,
     BButton,
+    BAlert,
     vSelect,
 
     // Form Validation
@@ -281,13 +320,50 @@ export default {
       required,
       alphaNum,
       email,
-      countries,
+      countries
     }
   },
+  methods:{
+    validateRemoteField(field, value){
+      return store.dispatch('app-user/validateUnique',{ field: field, value: value }).then((response) => {
+        return {
+        valid:  response.data.valid,
+        data: {
+          message: response.data.msg
+        }
+        };
+      });
+    },
+  },
+  mounted(){
+    const isUniqueName = (value) => {
+      return this.validateRemoteField('username',value);
+    };
+    extend('unique_name', {
+      validate: isUniqueName,
+      message: (field, params) => {
+        return `${params._value_} ya esta siendo utilizado.`;
+      }
+    });
+    const isUniqueEmail = (value) => {
+      return this.validateRemoteField('email',value);
+    };
+    extend('unique_email', {
+      validate: isUniqueEmail,
+      message: (field, params) => {
+        return `${params._value_} ya esta siendo utilizado.`;
+      }
+    });
+  },
   setup(props, { emit }) {
+    // Use toast
+    const toast = useToast()
+
+    const errorServer = ref(null)
     const blankUserData = {
-      fullName: '',
+      name: '',
       username: '',
+      password: '',
       email: '',
       role: null,
       currentPlan: null,
@@ -299,13 +375,33 @@ export default {
     const userData = ref(JSON.parse(JSON.stringify(blankUserData)))
     const resetuserData = () => {
       userData.value = JSON.parse(JSON.stringify(blankUserData))
+      errorServer.value = null
     }
 
     const onSubmit = () => {
       store.dispatch('app-user/addUser', userData.value)
-        .then(() => {
-          emit('refetch-data')
-          emit('update:is-add-new-user-sidebar-active', false)
+        .then((response) => {
+          if(response.data.status){
+            emit('refetch-data')
+            emit('update:is-add-new-user-sidebar-active', false)
+
+             toast({
+                component: ToastificationContent,
+                position: 'top-right',
+                props: {
+                  title: `Creado!`,
+                  icon: 'CoffeeIcon',
+                  variant: 'success',
+                  text: `User ${response.data.data.username}. Creado correctamente!`,
+                },
+              })
+          }else{
+            errorServer.value = response.data.msg
+          }
+        })
+        .catch((error) => {
+          console.log('error');
+          console.log(error);
         })
     }
 
@@ -322,6 +418,7 @@ export default {
       refFormObserver,
       getValidationState,
       resetForm,
+      errorServer
     }
   },
 }

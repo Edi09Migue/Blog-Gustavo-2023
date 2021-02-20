@@ -36,7 +36,7 @@
             md="6"
             class="d-flex align-items-center justify-content-start mb-1 mb-md-0"
           >
-            <label>Show</label>
+            <label>{{ $t('Show') }}</label>
             <v-select
               v-model="perPage"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -44,7 +44,7 @@
               :clearable="false"
               class="per-page-selector d-inline-block mx-50"
             />
-            <label>entries</label>
+            <label>{{ $t('Entries') }}</label>
           </b-col>
 
           <!-- Search -->
@@ -56,13 +56,13 @@
               <b-form-input
                 v-model="searchQuery"
                 class="d-inline-block mr-1"
-                placeholder="Search..."
+                :placeholder="$t('Search')+'...'"
               />
               <b-button
                 variant="primary"
                 @click="isAddNewUserSidebarActive = true"
               >
-                <span class="text-nowrap">Add User</span>
+                <span class="text-nowrap">{{ $t('Add') }} {{ $t('User') }}</span>
               </b-button>
             </div>
           </b-col>
@@ -79,7 +79,7 @@
         primary-key="id"
         :sort-by.sync="sortBy"
         show-empty
-        empty-text="No matching records found"
+        :empty-text="$t('Empty Table')"
         :sort-desc.sync="isSortDirDesc"
       >
 
@@ -90,7 +90,7 @@
               <b-avatar
                 size="32"
                 :src="data.item.avatar"
-                :text="avatarText(data.item.fullName)"
+                :text="avatarText(data.item.name)"
                 :variant="`light-${resolveUserRoleVariant(data.item.role)}`"
                 :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
               />
@@ -99,7 +99,7 @@
               :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
-              {{ data.item.fullName }}
+              {{ data.item.name }}
             </b-link>
             <small class="text-muted">@{{ data.item.username }}</small>
           </b-media>
@@ -154,7 +154,7 @@
               <span class="align-middle ml-50">{{ $t('Edit') }}</span>
             </b-dropdown-item>
 
-            <b-dropdown-item>
+            <b-dropdown-item  @click="removeUser(data.item.id)">
               <feather-icon icon="TrashIcon" />
               <span class="align-middle ml-50">{{ $t('Delete') }}</span>
             </b-dropdown-item>
@@ -170,7 +170,7 @@
             sm="6"
             class="d-flex align-items-center justify-content-center justify-content-sm-start"
           >
-            <span class="text-muted">Showing {{ dataMeta.from }} to {{ dataMeta.to }} of {{ dataMeta.of }} entries</span>
+            <span class="text-muted">{{ $t('Showing') }} {{ dataMeta.from }} to {{ dataMeta.to }} of {{ dataMeta.of }} {{ $t('Entries') }}</span>
           </b-col>
           <!-- Pagination -->
           <b-col
@@ -293,6 +293,7 @@ export default {
       isSortDirDesc,
       refUserListTable,
       refetchData,
+      removeUser,
 
       // UI
       resolveUserRoleVariant,
@@ -322,6 +323,7 @@ export default {
       isSortDirDesc,
       refUserListTable,
       refetchData,
+      removeUser,
 
       // Filter
       avatarText,

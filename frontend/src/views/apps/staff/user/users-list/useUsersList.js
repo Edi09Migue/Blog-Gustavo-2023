@@ -1,12 +1,14 @@
 import { ref, watch, computed } from '@vue/composition-api'
 import store from '@/store'
 import { title } from '@core/utils/filter'
+import { useUtils as useI18nUtils } from '@core/libs/i18n'
 
 // Notification
 import { useToast } from 'vue-toastification/composition'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default function useUsersList() {
+  const { t } = useI18nUtils()
   // Use toast
   const toast = useToast()
 
@@ -14,17 +16,17 @@ export default function useUsersList() {
 
   // Table Handlers
   const tableColumns = [
-    { key: 'user', sortable: true },
-    { key: 'email', sortable: true },
-    { key: 'role', sortable: true },
+    { key: 'user', sortable: true, label: t('User') },
+    { key: 'email', sortable: true, label: t('Email') },
+    { key: 'role', sortable: true, label: t('Role') },
     {
       key: 'currentPlan',
       label: 'Plan',
       formatter: title,
       sortable: true,
     },
-    { key: 'status', sortable: true },
-    { key: 'actions' },
+    { key: 'status', sortable: true , label: t('Status')},
+    { key: 'actions' , label: t('Actions') },
   ]
   const perPage = ref(10)
   const totalUsers = ref(0)
@@ -84,6 +86,39 @@ export default function useUsersList() {
       })
   }
 
+  const removeUser = function(id ) {
+
+      this.$swal({
+        title: this.$t('Are you sure'),
+        text: this.$t("Wont Able To Revert"),
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: this.$t('Yes delete it'),
+        cancelButtonText: this.$t('Cancel'),
+        customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-outline-danger ml-1',
+        },
+        buttonsStyling: false,
+    }).then(result => {
+        if (result.value) {
+        store.dispatch('app-user/removeUser', id )
+        .then(() => {
+            this.$swal({
+            icon: 'success',
+            title: this.$t('Deleted'),
+            text: this.$t('Item Deleted'),
+            customClass: {
+                confirmButton: 'btn btn-success',
+            },
+            })
+            refetchData()
+        })
+        }
+    })
+
+  }
+
   // *===============================================---*
   // *--------- UI ---------------------------------------*
   // *===============================================---*
@@ -125,6 +160,7 @@ export default function useUsersList() {
     sortBy,
     isSortDirDesc,
     refUserListTable,
+    removeUser,
 
     resolveUserRoleVariant,
     resolveUserRoleIcon,

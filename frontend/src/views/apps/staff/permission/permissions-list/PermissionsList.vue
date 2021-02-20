@@ -173,6 +173,9 @@ import vSelect from 'vue-select'
 import store from '@/store'
 import { ref, onUnmounted } from '@vue/composition-api'
 import { formatDate } from '@core/utils/filter'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import { useToast } from 'vue-toastification/composition'
+
 import usePermissionsList from './usePermissionsList'
 import permissionStoreModule from '../permissionStoreModule'
 import PermissionListAddNew from './PermissionListAddNew.vue'
@@ -202,6 +205,9 @@ export default {
         if (store.hasModule(USER_APP_STORE_MODULE_NAME)) store.unregisterModule(USER_APP_STORE_MODULE_NAME)
         })
 
+            // Use toast
+        const toast = useToast()
+
         
         const isAddNewItemSidebarActive = ref(false)
 
@@ -220,8 +226,31 @@ export default {
 
         const addPermission = val => {
             store.dispatch('app-permission/addPermission', val)
-                .then(() => {
-                    refetchData()
+                .then((response) => {
+                    if(response.data.status){
+                        toast({
+                            component: ToastificationContent,
+                            position: 'top-right',
+                            props: {
+                            title: `Creado!`,
+                            icon: 'CoffeeIcon',
+                            variant: 'success',
+                            text: `Permiso ${response.data.data.name}. Creado correctamente!`,
+                            },
+                        })
+                        refetchData()
+                    }else{
+                        toast({
+                            component: ToastificationContent,
+                            position: 'top-right',
+                            props: {
+                            title: `Error!`,
+                            icon: 'CoffeeIcon',
+                            variant: 'warning',
+                            text: `${response.data.msg}`,
+                            },
+                        })
+                    }
                 })
         }
         const removePermission = function(id ) {

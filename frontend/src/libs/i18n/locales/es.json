@@ -55,6 +55,11 @@
   "Showing" : "Mostrando",
   "Entries": "Registros",
   "Search": "Buscar",
-  "Empty Table":"No se encontraron registros",
-  "Group Key": "Key Grupo"
+  "Empty Table": "No se encontraron registros",
+  "Group Key": "Key Grupo",
+  "Security" : "Seguridad",
+  "Filters": "Filtros",
+  "Status": "Estado",
+  "Error": "Error",
+  "Password":"Contraseña"
 }

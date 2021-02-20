@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class Usuarios extends Controller
 {
@@ -49,6 +50,22 @@ class Usuarios extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(),[
+            'username' => 'required|unique:users',
+            'email' => 'required|unique:users',
+            'name' => 'required',
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return response()->json([
+                'status' => false,
+                'data' => $errors,
+                'msg' => $errors->first()
+            ]);    
+        }
+        
         DB::beginTransaction();
         try {
             

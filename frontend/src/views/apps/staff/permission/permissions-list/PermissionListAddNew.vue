@@ -109,7 +109,19 @@
               </b-form-invalid-feedback>
             </b-form-group>
           </validation-provider>
-
+          
+          <b-alert
+            variant="danger"
+            show
+            v-show="errorServer"
+          >
+            <h4 class="alert-heading">
+              {{ $t('Error') }}
+            </h4>
+            <div class="alert-body">
+              <span>{{ errorServer }}</span>
+            </div>
+          </b-alert>
           <!-- Form Actions -->
           <div class="d-flex mt-2">
             <b-button
@@ -118,7 +130,7 @@
               class="mr-2"
               type="submit"
             >
-              {{ $t('Add') }}
+              {{ permissionData.id ? $t('Edit') : $t('Add') }}
             </b-button>
             <b-button
               v-ripple.400="'rgba(186, 191, 199, 0.15)'"
@@ -138,7 +150,7 @@
 
 <script>
 import {
-  BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton,
+  BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton, BAlert
 } from 'bootstrap-vue'
 import { extend, ValidationProvider, ValidationObserver } from 'vee-validate'
 import { ref, watch, toRefs } from '@vue/composition-api'
@@ -158,6 +170,7 @@ export default {
     BFormInput,
     BFormInvalidFeedback,
     BButton,
+    BAlert,
 
     // Form Validation
     ValidationProvider,
@@ -215,10 +228,12 @@ export default {
   },
   setup(props, { emit }) {
     const originalName = ref("")
+    const errorServer = ref(null)
     const permissionData = ref(JSON.parse(JSON.stringify(props.permission)))
     const resetPermissionData = () => {
       permissionData.value = JSON.parse(JSON.stringify(props.permission))
       originalName.value = permissionData.value.name
+      errorServer.value = null
     }
     var propiedades =toRefs(props)
     watch(propiedades.permission, () => {
@@ -250,7 +265,8 @@ export default {
       getValidationState,
       resetForm,
       clearForm,
-      originalName
+      originalName,
+      errorServer
     }
   },
 }

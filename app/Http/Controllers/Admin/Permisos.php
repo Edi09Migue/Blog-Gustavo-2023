@@ -12,6 +12,9 @@ class Permisos extends Controller
 {
     var $datos;
 
+    /**
+     * Devuelve el listado de permisos paginado
+     */
     public function index(Request $request){
         $query = $request->has('q') ? $request->q : "";
         $perPage = $request->has('perPage') ? $request->perPage : 10;
@@ -28,6 +31,15 @@ class Permisos extends Controller
             'items' => $permisos->items(),
             'total' => $permisos->count()
         ]);
+    }
+
+    /**
+     * 
+     */
+    public function dropdownOptions(){
+        $permisos = Permission::select('id','name','group_key')->get();
+
+        return response()->json($permisos);
     }
     
     /**

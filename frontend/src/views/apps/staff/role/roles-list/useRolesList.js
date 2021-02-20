@@ -16,7 +16,7 @@ export default function useUsersList() {
 
   // Table Handlers
   const tableColumns = [
-    { key: 'name', sortable: true, label: t('Rol') },
+    { key: 'name', sortable: true, label: t('Role') },
     { key: 'guard_name', sortable: true, label: t('Guard Name')  },
     { key: 'created_at', sortable: true, label: t('Created At')  },
     { key: 'actions' , label: t('Actions') },
