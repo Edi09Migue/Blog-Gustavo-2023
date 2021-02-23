@@ -41,6 +41,7 @@
                 :placeholder="$t('Search')+'...'"
               />
               <b-button
+                v-if="$can('crear', 'roles')"
                 variant="primary"
                 :to="{ name: 'apps-roles-create'}"
               >
@@ -105,12 +106,16 @@
               <span class="align-middle ml-50">{{ $t('Details') }}</span>
             </b-dropdown-item>
 
-            <b-dropdown-item :to="{ name: 'apps-roles-edit', params: { id: data.item.id } }">
+            <b-dropdown-item
+              v-if="$can('editar', 'roles')"
+             :to="{ name: 'apps-roles-edit', params: { id: data.item.id } }">
               <feather-icon icon="EditIcon" />
               <span class="align-middle ml-50">{{ $t('Edit') }}</span>
             </b-dropdown-item>
 
-            <b-dropdown-item @click="removeTask(data.item.id)">
+            <b-dropdown-item
+              v-if="$can('eliminar', 'roles')"
+              @click="removeTask(data.item.id)">
               <feather-icon icon="TrashIcon"  />
               <span class="align-middle ml-50">{{ $t('Delete') }}</span>
             </b-dropdown-item>

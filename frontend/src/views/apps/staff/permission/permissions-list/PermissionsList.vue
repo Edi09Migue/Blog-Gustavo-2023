@@ -91,12 +91,16 @@
                     />
                     </template>
 
-                    <b-dropdown-item @click="handleTaskClick(data.item)">
+                    <b-dropdown-item 
+                        v-if="$can('editar', 'permisos')"
+                    @click="handleTaskClick(data.item)">
                     <feather-icon icon="EditIcon" />
                     <span class="align-middle ml-50">{{ $t('Edit') }}</span>
                     </b-dropdown-item>
 
-                    <b-dropdown-item  @click="removePermission(data.item.id)">
+                    <b-dropdown-item  
+                        v-if="$can('eliminar', 'permisos')"
+                    @click="removePermission(data.item.id)">
                     <feather-icon icon="TrashIcon"  />
                     <span class="align-middle ml-50">{{ $t('Delete') }}</span>
                     </b-dropdown-item>

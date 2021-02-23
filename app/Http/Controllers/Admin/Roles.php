@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 
 class Roles extends Controller
@@ -38,6 +39,10 @@ class Roles extends Controller
         ]);
     }
 
+    /**
+     * Devuelve los datos y los permisos de un rol
+     * @param int $id //Clave primaria del rol
+     */
     public function show($id){
         $role = Role::findOrFail($id);
 
@@ -58,8 +63,22 @@ class Roles extends Controller
      */
     public function store(Request $request)
     {
-        // DB::beginTransaction();
-        // try {
+        $validator = Validator::make($request->all(),[
+            'name' => 'required|unique:roles|max:255',
+            'guard_name' => 'required|max:255'
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return response()->json([
+                'status' => false,
+                'data' => $errors,
+                'msg' => $errors->first()
+            ]);    
+        }
+        
+        DB::beginTransaction();
+        try {
             $role = Role::create([
                 'name'          => $request->name,
                 'guard_name'    => $request->guard_name,
@@ -69,7 +88,7 @@ class Roles extends Controller
             if ($request->has('permissions')) {
                 $role->syncPermissions($request->permissions);
             }
-            // DB::commit();
+             DB::commit();
 
             return response()->json([
                 'status' => true,
@@ -77,14 +96,14 @@ class Roles extends Controller
                 'msg' => 'Rol creado correctamente!'
             ]);
 
-        // } catch (Exception $e) {
-        //     DB::rollback();
-        //     return response()->json([
-        //         'status' => false,
-        //         'data' => [],
-        //         'msg' => 'Error al crear rol!'
-        //     ]);
-        // }
+         } catch (Exception $e) {
+             DB::rollback();
+             return response()->json([
+                 'status' => false,
+                 'data' => [],
+                 'msg' => 'Error al crear rol!'
+             ]);
+        }
     }
 
     /**

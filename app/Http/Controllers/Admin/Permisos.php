@@ -61,7 +61,7 @@ class Permisos extends Controller
             return response()->json([
                 'status' => false,
                 'data' => $errors,
-                'msg' => $errors->first('name')
+                'msg' => $errors->first()
             ]);    
         }
 

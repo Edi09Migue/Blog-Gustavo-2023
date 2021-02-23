@@ -13,7 +13,7 @@
                         <validation-provider
                             #default="validationContext"
                             name="Name"
-                            rules="required|alpha|unique_username"
+                            rules="required|alpha|max:255|unique_username"
                         >
                             <b-form-group :label="$t('Name')" label-for="name">
                                 <b-form-input
@@ -38,7 +38,7 @@
                         <validation-provider
                             #default="validationContext"
                             name="guard_name"
-                            rules="required"
+                            rules="required|max:255"
                         >
                             <b-form-group
                                 :label="$t('Guard Name')"
@@ -117,6 +117,18 @@
                     </div>
                 </b-card>
 
+                <b-alert
+                    variant="danger"
+                    show
+                    v-show="errorServer"
+                >
+                    <h4 class="alert-heading">
+                    {{ $t('Error') }}
+                    </h4>
+                    <div class="alert-body">
+                    <span>{{ errorServer }}</span>
+                    </div>
+                </b-alert>
                 <!-- Action Buttons -->
                 <b-button
                     variant="primary"
@@ -150,7 +162,8 @@ import {
     BCardHeader,
     BCardTitle,
     BFormCheckbox,
-    BFormInvalidFeedback
+    BFormInvalidFeedback,
+    BAlert
 } from "bootstrap-vue";
 import { ref, onUnmounted } from "@vue/composition-api";
 import store from "@/store";
@@ -162,7 +175,7 @@ import { useToast } from 'vue-toastification/composition'
 //Form validations
 import formValidation from "@core/comp-functions/forms/form-validation";
 import { extend, ValidationProvider, ValidationObserver } from "vee-validate";
-import { required, alpha } from "@validations";
+import { required, alpha, max } from "@validations";
 
 export default {
   created () {
@@ -178,6 +191,7 @@ export default {
         BCardHeader,
         BCardTitle,
         BFormCheckbox,
+        BAlert,
 
         BFormInvalidFeedback,
 
@@ -187,7 +201,10 @@ export default {
     },
     data() {
         return {
-            permisosList: []
+            permisosList: [],
+            required,
+            alpha,
+            max
         };
     },
     methods: {
@@ -252,6 +269,8 @@ export default {
         const toast = useToast()
         const { route, router } = useRouter()
 
+        const errorServer = ref(null)
+
         const blankRoleData = {
             name: "",
             guard_name: "web",
@@ -261,6 +280,7 @@ export default {
         const roleData = ref(JSON.parse(JSON.stringify(blankRoleData)));
         const resetRoleData = () => {
             roleData.value = JSON.parse(JSON.stringify(blankRoleData));
+            errorServer.value = null
         };
 
         const USER_APP_STORE_MODULE_NAME = "app-role";
@@ -277,26 +297,29 @@ export default {
 
         const onSubmit = () => {
             store.dispatch("app-role/addRole", roleData).then((response) => {
-              router.replace({ name: 'apps-roles-list'})
-                .then(() => {
-                  toast({
-                    component: ToastificationContent,
-                    position: 'top-right',
-                    props: {
-                      title: `Creado!`,
-                      icon: 'CoffeeIcon',
-                      variant: 'success',
-                      text: `Rol ${response.data.data.name}. Creado correctamente!`,
-                    },
-                  })
-                })
-                .catch(error => {
-                  console.log('error');
-                  console.log(error);
-                  this.$refs.loginForm.setErrors(error.response.data.error)
-                })
-
-            });
+                if(response.data.status){
+                    router.replace({ name: 'apps-roles-list'})
+                        .then(() => {
+                            toast({
+                                component: ToastificationContent,
+                                position: 'top-right',
+                                props: {
+                                title: `Creado!`,
+                                icon: 'CoffeeIcon',
+                                variant: 'success',
+                                text: `Rol ${response.data.data.name}. Creado correctamente!`,
+                                },
+                            })
+                        })
+                }else{
+                    errorServer.value = response.data.msg
+                }
+            })
+            .catch(error => {
+                console.log('error')
+                console.log(error)
+                this.$refs.loginForm.setErrors(error.response.data.error)
+            })
         };
 
         const {
@@ -311,7 +334,8 @@ export default {
 
             refFormObserver,
             getValidationState,
-            resetForm
+            resetForm,
+            errorServer
         };
     }
 };

@@ -139,6 +139,19 @@
                         </b-card>
                     </div>
                 </b-card>
+                
+                <b-alert
+                    variant="danger"
+                    show
+                    v-show="errorServer"
+                >
+                    <h4 class="alert-heading">
+                    {{ $t('Error') }}
+                    </h4>
+                    <div class="alert-body">
+                    <span>{{ errorServer }}</span>
+                    </div>
+                </b-alert>
 
                 <!-- Action Buttons -->
                 <b-button
@@ -282,6 +295,8 @@ export default {
     const toast = useToast()
     const {route, router } = useRouter()
 
+    const errorServer = ref(null)
+
     const USER_APP_STORE_MODULE_NAME = 'app-role'
 
     // Register module
@@ -309,25 +324,29 @@ export default {
 
     const onSubmit = () => {
       store.dispatch("app-role/updateRole", roleData).then((response) => {
-        router.replace({ name: 'apps-roles-list'})
-          .then(() => {
-            toast({
-              component: ToastificationContent,
-              position: 'top-right',
-              props: {
-                title: `Actualizado`,
-                icon: 'CoffeeIcon',
-                variant: 'success',
-                text: `Rol ${response.data.data.name}. Actualizdo correctamente!`,
-              },
-            })
-          })
-          .catch(error => {
-            console.log('error');
-            console.log(error);
-            this.$refs.loginForm.setErrors(error.response.data.error)
-          })
+        if(response.data.status){
+          router.replace({ name: 'apps-roles-list'})
+            .then(() => {
+              toast({
+                component: ToastificationContent,
+                position: 'top-right',
+                props: {
+                  title: `Actualizado`,
+                  icon: 'CoffeeIcon',
+                  variant: 'success',
+                  text: `Rol ${response.data.data.name}. Actualizdo correctamente!`,
+                },
+              })
 
+            })
+            .catch(error => {
+              console.log('error');
+              console.log(error);
+              this.$refs.loginForm.setErrors(error.response.data.error)
+            })
+        }else{
+            errorServer.value = response.data.msg
+        }
       });
   };
 
@@ -342,7 +361,8 @@ export default {
 
       refFormObserver,
       getValidationState,
-      originalName
+      originalName,
+      errorServer
     }
   },
 }
