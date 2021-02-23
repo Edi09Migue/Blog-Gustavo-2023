@@ -59,6 +59,7 @@
                 :placeholder="$t('Search')+'...'"
               />
               <b-button
+               v-if="$can('crear', 'usuarios')"
                 variant="primary"
                 @click="isAddNewUserSidebarActive = true"
               >
@@ -149,12 +150,16 @@
               <span class="align-middle ml-50">{{ $t('Details') }}</span>
             </b-dropdown-item>
 
-            <b-dropdown-item :to="{ name: 'apps-users-edit', params: { id: data.item.id } }">
+            <b-dropdown-item
+              v-if="$can('editar', 'usuarios')"
+             :to="{ name: 'apps-users-edit', params: { id: data.item.id } }">
               <feather-icon icon="EditIcon" />
               <span class="align-middle ml-50">{{ $t('Edit') }}</span>
             </b-dropdown-item>
 
-            <b-dropdown-item  @click="removeUser(data.item.id)">
+            <b-dropdown-item 
+              v-if="$can('eliminar', 'usuarios')"
+             @click="removeUser(data.item.id)">
               <feather-icon icon="TrashIcon" />
               <span class="align-middle ml-50">{{ $t('Delete') }}</span>
             </b-dropdown-item>
@@ -259,13 +264,27 @@ export default {
 
     const isAddNewUserSidebarActive = ref(false)
 
-    const roleOptions = [
-      { label: 'Admin', value: 'admin' },
-      { label: 'Author', value: 'author' },
-      { label: 'Editor', value: 'editor' },
-      { label: 'Maintainer', value: 'maintainer' },
-      { label: 'Subscriber', value: 'subscriber' },
-    ]
+    const roleOptions = ref([])
+
+    const fetchRoles = (ctx, callback) =>{
+      store.dispatch('app-user/fetchRoles')
+        .then(response => {
+          roleOptions.value = response.data.map(r=> { return {value:r.id.toString(), label:r.name }})
+        })
+        .catch(() => {
+          toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Error fetching roles list',
+              icon: 'AlertTriangleIcon',
+              variant: 'danger',
+            },
+          })
+        })
+    }
+
+    fetchRoles()
+    
 
     const planOptions = [
       { label: 'Basic', value: 'basic' },
@@ -312,6 +331,7 @@ export default {
       isAddNewUserSidebarActive,
 
       fetchUsers,
+      
       tableColumns,
       perPage,
       currentPage,
@@ -324,6 +344,7 @@ export default {
       refUserListTable,
       refetchData,
       removeUser,
+      roleOptions,
 
       // Filter
       avatarText,

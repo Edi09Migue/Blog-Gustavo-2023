@@ -141,6 +141,15 @@ class Roles extends Controller
         ]);
     }
 
+    /**
+     * Devuelve el id, nombre y grupo de todos los permisos 
+     * por lo general para usarlos en un componente dropdown
+     */
+    public function dropdownOptions(){
+        $permisos = Role::select('id','name')->get();
+
+        return response()->json($permisos);
+    }
             
     /**
      * Devuelve TRUE si el campo esta disponible

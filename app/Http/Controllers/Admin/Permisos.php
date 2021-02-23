@@ -34,7 +34,8 @@ class Permisos extends Controller
     }
 
     /**
-     * 
+     * Devuelve el id, nombre y grupo de todos los permisos 
+     * por lo general para usarlos en un componente dropdown
      */
     public function dropdownOptions(){
         $permisos = Permission::select('id','name','group_key')->get();

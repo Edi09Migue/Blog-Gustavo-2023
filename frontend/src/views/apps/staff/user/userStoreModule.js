@@ -22,6 +22,14 @@ export default {
           .catch(error => reject(error))
       })
     },
+    fetchRoles(ctx) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get('/api/admin/roles/dropdownOptions')
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
     validateUnique(ctx, value) {
       return new Promise((resolve, reject) => {
         axios

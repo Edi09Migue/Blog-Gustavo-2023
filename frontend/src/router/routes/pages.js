@@ -38,6 +38,39 @@ export default [
         resource: 'Auth',
       },
     },
+    {
+      path: '/pages/miscellaneous/coming-soon',
+      name: 'misc-coming-soon',
+      component: () => import('@/views/pages/miscellaneous/ComingSoon.vue'),
+      meta: {
+        layout: 'full',
+      },
+    },
+    {
+      path: '/pages/miscellaneous/not-authorized',
+      name: 'misc-not-authorized',
+      component: () => import('@/views/pages/miscellaneous/NotAuthorized.vue'),
+      meta: {
+        layout: 'full',
+        resource: 'Auth',
+      },
+    },
+    {
+      path: '/pages/miscellaneous/under-maintenance',
+      name: 'misc-under-maintenance',
+      component: () => import('@/views/pages/miscellaneous/UnderMaintenance.vue'),
+      meta: {
+        layout: 'full',
+      },
+    },
+    {
+      path: '/pages/miscellaneous/error',
+      name: 'misc-error',
+      component: () => import('@/views/pages/miscellaneous/Error.vue'),
+      meta: {
+        layout: 'full',
+      },
+    },
     // *===============================================---*
     // *--------- USER ---- ---------------------------------------*
     // *===============================================---*
@@ -45,6 +78,10 @@ export default [
       path: '/apps/users/list',
       name: 'apps-users-list',
       component: () => import('@/views/apps/staff/user/users-list/UsersList.vue'),
+      meta:{
+        action: 'listar',
+        resource: 'usuarios'
+      }
     },
     {
       path: '/apps/users/view/:id',
@@ -55,11 +92,19 @@ export default [
       path: '/apps/users/edit/:id',
       name: 'apps-users-edit',
       component: () => import('@/views/apps/staff/user/users-edit/UsersEdit.vue'),
+      meta:{
+        action: 'editar',
+        resource: 'usuarios'
+      }
     },
     {
       path: '/apps/roles/list',
       name: 'apps-roles-list',
       component: () => import('@/views/apps/staff/role/roles-list/RolesList.vue'),
+      meta:{
+        action: 'listar',
+        resource: 'roles'
+      }
     },
     {
       path: '/apps/roles/create',
@@ -67,6 +112,8 @@ export default [
       component: () => import('@/views/apps/staff/role/role-create/RoleCreate.vue'),
       meta:{
         navActiveLink: 'apps-roles-list',
+        action: 'crear',
+        resource: 'roles'
       }
     },
     {
@@ -75,11 +122,17 @@ export default [
       component: () => import('@/views/apps/staff/role/role-edit/RoleEdit.vue'),
       meta:{
         navActiveLink: 'apps-roles-list',
+        action: 'editar',
+        resource: 'roles'
       }
     },
     {
       path: '/apps/permissions/list',
       name: 'apps-permissions-list',
       component: () => import('@/views/apps/staff/permission/permissions-list/PermissionsList.vue'),
+      meta:{
+        action: 'listar',
+        resource: 'permisos'
+      }
     },
 ]

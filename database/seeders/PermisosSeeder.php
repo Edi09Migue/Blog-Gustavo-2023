@@ -24,7 +24,11 @@ class PermisosSeeder extends Seeder
         $suscriptor = Role::create(['name' => 'suscriptor']);
 
         //
-        $p_listar_configs = Permission::create(['name' => 'manage','group_key'=>'Generales']);
+        $p_listar_configs = Permission::create(['name' => 'manage-all','group_key'=>'Generales']);
+        $p_read_auth = Permission::create(['name' => 'read-Auth','group_key'=>'Generales']);
+        
+        $p_dashboard_user = Permission::create(['name' => 'ver-dashboard_user','group_key'=>'Generales']);
+        $p_dashboard_editor = Permission::create(['name' => 'ver-dashboard_editor','group_key'=>'Generales']);
 
         //Configuraciones
         $p_listar_configs = Permission::create(['name' => 'listar-configs','group_key'=>'Generales']);
@@ -53,9 +57,23 @@ class PermisosSeeder extends Seeder
             $superadmin->givePermissionTo($permiso);
             $admin->givePermissionTo($permiso);
         }
+        $editor->givePermissionTo($p_listar_usuarios);
+
+        $cliente->givePermissionTo($p_dashboard_user);
+        $autor->givePermissionTo($p_dashboard_user);
+        $editor->givePermissionTo($p_dashboard_user);
+        $suscriptor->givePermissionTo($p_dashboard_user);
+        
+        $cliente->givePermissionTo($p_read_auth);
+        $autor->givePermissionTo($p_read_auth);
+        $editor->givePermissionTo($p_read_auth);
+        $suscriptor->givePermissionTo($p_read_auth);
 
         $user_superadmin = User::find(1);
         $user_superadmin->assignRole('admin');
+
+        $user_editor = User::find(2);
+        $user_editor->assignRole('editor');
 
     }
 }

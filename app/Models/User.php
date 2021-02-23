@@ -48,23 +48,39 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'role'
+    ];
+
     public function userInfo(){
         return $this->hasOne(UserInfo::class,'id','id');
     }
 
+    /**
+     * Devuel el nombre del primer rol del Usuario
+     */
     public function getRoleAttribute(){
-        return 'admin';
+        if($this->roles()->count()>0){
+            return $this->roles()->first()->name;
+        }
+        return 'Sin rol';
     }
 
+    /**
+     * Devuelve todos los permisos del usuario
+     */
     public function getAllPermissionsAttribute(){
         $permisos = [];
         
         foreach($this->getAllPermissions() as $permiso){
-            $permiso=[
-                'action'=> $permiso->name,
-                'subject' => 'all'
-            ];
-            $permisos[]= $permiso;
+            $p = explode('-',$permiso->name);
+            if(count($p)==2){
+                $permiso=[
+                    'action'=> $p[0],
+                    'subject' => $p[1]
+                ];
+                $permisos[]= $permiso;
+            }
         }
 
         return $permisos;

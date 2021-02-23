@@ -77,9 +77,9 @@ class Usuarios extends Controller
             }
             $usuario->save();
             
-            if ($request->has('rol')) {
-                //$usuario->assignRole($request->rol);
-                $usuario->syncRoles($request->roles_id);
+            if ($request->has('role')) {
+                $usuario->assignRole($request->role);
+                //$usuario->syncRoles($request->roles_id);
             }
 
             DB::commit();

@@ -278,7 +278,7 @@ export default {
               .catch(error => {
                 console.log('error');
                 console.log(error);
-                this.$refs.loginForm.setErrors(error.response.data.error)
+                this.$refs.loginForm.setErrors(error)
               })
           })
         }

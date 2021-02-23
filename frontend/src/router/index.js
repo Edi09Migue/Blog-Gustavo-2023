@@ -20,6 +20,8 @@ const router = new VueRouter({
       name: 'home',
       component: () => import('@/views/Home.vue'),
       meta: {
+        action: 'ver',
+        resource: 'dashboard_user',
         pageTitle: 'Home',
         breadcrumb: [
           {
@@ -34,6 +36,8 @@ const router = new VueRouter({
       name: 'second-page',
       component: () => import('@/views/SecondPage.vue'),
       meta: {
+        action: 'ver',
+        resource: 'dashboard_user',
         pageTitle: 'Second Page',
         breadcrumb: [
           {
