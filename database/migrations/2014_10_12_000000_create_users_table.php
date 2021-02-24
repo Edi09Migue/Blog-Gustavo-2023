@@ -33,14 +33,25 @@ class CreateUsersTable extends Migration
             $table->foreign('id')->references('id')->on('users')
             ->onDelete('cascade');
          
+            $table->string('empresa')->nullable();
+
             $table->string('birthdate')->nullable();
             $table->string('telefono')->nullable();
             $table->string('website')->nullable();
             $table->string('idioma')->nullable();
             $table->enum('genero',['male','female'])->nullable();
             $table->string('contact_options')->nullable();
+
             $table->string('pais')->nullable();
+            $table->string('provincia')->nullable();
+            $table->string('ciudad')->nullable();
+            $table->string('postalcode')->nullable();
+            $table->string('direccion_principal')->nullable();
+            $table->string('direccion_secundaria')->nullable();
+
             $table->json('social')->nullable();
+            
+            $table->timestamps();
         });
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -76,6 +77,12 @@ class Usuarios extends Controller
                 $usuario->avatar = parent::uploadAvatar($request->avatar,'avatar_'.$request->username,'/images/profiles/');
             }
             $usuario->save();
+
+            $info = new UserInfo([
+                'id' => $usuario->id,
+            ]);
+            $info->fill($request->all());
+            $info->save();
             
             if ($request->has('role')) {
                 $usuario->assignRole($request->role);
@@ -132,7 +139,7 @@ class Usuarios extends Controller
     public function show($id)
     {
         $usuario = User::findOrFail($id);
-        
+        $usuario->userInfo;
         return response()->json($usuario);
     }
 
@@ -171,6 +178,12 @@ class Usuarios extends Controller
         //     $usuario->persona->save();
         // }
 
+        $info = UserInfo::firstOrNew([
+            'id' => $usuario->id
+        ]);
+        
+        $info->fill($request->user_info);
+        $info->save();
 
         if ($request->has('rol')) {
             $usuario->syncRoles([$request->rol]);

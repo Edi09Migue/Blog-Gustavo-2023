@@ -87,6 +87,9 @@ export default [
       path: '/apps/users/view/:id',
       name: 'apps-users-view',
       component: () => import('@/views/apps/staff/user/users-view/UsersView.vue'),
+      meta:{
+        navActiveLink: 'apps-users-list',
+      }
     },
     {
       path: '/apps/users/edit/:id',
@@ -94,7 +97,8 @@ export default [
       component: () => import('@/views/apps/staff/user/users-edit/UsersEdit.vue'),
       meta:{
         action: 'editar',
-        resource: 'usuarios'
+        resource: 'usuarios',
+        navActiveLink: 'apps-users-list',
       }
     },
     {

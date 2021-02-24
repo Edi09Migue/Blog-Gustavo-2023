@@ -142,11 +142,11 @@
           >
             <b-form-group
               :label="$t('Phone')"
-              label-for="contact"
+              label-for="telefono"
             >
               <b-form-input
-                id="contact"
-                v-model="userData.contact"
+                id="telefono"
+                v-model="userData.telefono"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -187,15 +187,15 @@
           >
             <b-form-group
               :label="$t('Country')"
-              label-for="country"
+              label-for="pais"
               :state="getValidationState(validationContext)"
             >
               <v-select
-                v-model="userData.country"
+                v-model="userData.pais"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 :options="countries"
                 :clearable="false"
-                input-id="country"
+                input-id="pais"
               />
               <b-form-invalid-feedback :state="getValidationState(validationContext)">
                 {{ validationContext.errors[0] }}
@@ -368,8 +368,8 @@ export default {
       role: null,
       currentPlan: null,
       company: '',
-      country: '',
-      contact: '',
+      pais: '',
+      telefono: '',
     }
 
     const userData = ref(JSON.parse(JSON.stringify(blankUserData)))

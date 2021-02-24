@@ -163,9 +163,7 @@
                     {{ $t("Save Changes") }}
                 </b-button>
                 <b-button
-                    variant="outline-secondary"
-                    type="reset"
-                    
+                    variant="outline-secondary"                    
                     :to="{ name: 'apps-roles-list'}"
                     :block="$store.getters['app/currentBreakPoint'] === 'xs'"
                 >
@@ -225,12 +223,11 @@ export default {
     ValidationObserver
 
   },
-  
-    data() {
-        return {
-            permisosList: [],
-        };
-    },
+  data() {
+      return {
+          permisosList: [],
+      };
+  },
   methods: {
         groupBy(array, key) {
             const result = {};
@@ -348,7 +345,7 @@ export default {
             errorServer.value = response.data.msg
         }
       });
-  };
+    };
 
         const {
             refFormObserver,

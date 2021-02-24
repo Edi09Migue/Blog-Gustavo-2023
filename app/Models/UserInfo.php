@@ -18,13 +18,22 @@ class UserInfo extends Model
      */
     protected $fillable = [
         'id',
+        'empresa',
+        
         'birthdate',
         'telefono',
         'website',
         'idioma',
         'genero',
         'contact_options',
+
         'pais',
+        'provincia',
+        'ciudad',
+        'postalcode',
+        'direccion_principal',
+        'direccion_secundaria',
+
         'social',
     ];
 

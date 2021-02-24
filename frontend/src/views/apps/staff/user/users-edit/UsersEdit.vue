@@ -34,7 +34,7 @@
             size="16"
             class="mr-0 mr-sm-50"
           />
-          <span class="d-none d-sm-inline">Account</span>
+          <span class="d-none d-sm-inline">{{ $t('Account') }}</span>
         </template>
         <user-edit-tab-account
           :user-data="userData"
@@ -50,9 +50,9 @@
             size="16"
             class="mr-0 mr-sm-50"
           />
-          <span class="d-none d-sm-inline">Information</span>
+          <span class="d-none d-sm-inline">{{ $t('Information') }}</span>
         </template>
-        <user-edit-tab-information class="mt-2 pt-75" />
+        <user-edit-tab-information :user-data="userData" class="mt-2 pt-75" />
       </b-tab>
 
       <!-- Tab: Social -->
@@ -63,7 +63,7 @@
             size="16"
             class="mr-0 mr-sm-50"
           />
-          <span class="d-none d-sm-inline">Social</span>
+          <span class="d-none d-sm-inline">{{ $t('Social') }}</span>
         </template>
         <user-edit-tab-social class="mt-2 pt-75" />
       </b-tab>

@@ -45,5 +45,26 @@
   "Filters":"Filters",
   "Status":"Status",
   "Error":"Error",
-  "Password":"Password"
+  "Password":"Password",
+  "Update": "Update",
+  "Account": "Account",
+  "Information": "Information",
+  "Social": "Social",
+  "Personal Information":"Personal Information",
+  "Birth Date":"Birth Date",
+  "Language":"Language",
+  "Genre":"Genero",
+  "Contact Options":"Contact Options",
+  "Address":"Address",
+  "Main Address":"Main Address",
+  "Secondary Address":"Secondary Address",
+  "Website":"Website",
+  "Gender":"Gender",
+  "City":"City",
+  "State":"State",
+  "Postcode":"Postcode",
+  "Message":"Message",
+  "Male":"Male",
+  "Female":"Female"
+  
 }
