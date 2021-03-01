@@ -140,6 +140,7 @@ class Usuarios extends Controller
     {
         $usuario = User::findOrFail($id);
         $usuario->userInfo;
+        $usuario->permisos = $usuario->getAllPermissions();
         return response()->json($usuario);
     }
 

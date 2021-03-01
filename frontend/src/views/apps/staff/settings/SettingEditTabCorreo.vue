@@ -38,6 +38,65 @@
                 />
               </b-form-group>
             </b-col>
+            <!-- Field: Puerto -->
+            <b-col
+              cols="12"
+              md="6"
+              lg="4"
+            >
+              <validation-provider
+                    #default="validationContext"
+                    name="puerto_smtp"
+                    rules="integer"
+                >
+                  <b-form-group
+                    :label="$t('Port')"
+                    label-for="puerto_smtp"
+                  >
+                    <b-form-input
+                      id="puerto_smtp"
+                      v-model="configDataLocal.puerto_smtp"
+                      :state="getValidationState(validationContext)"
+                    />
+                     <b-form-invalid-feedback>
+                        {{ validationContext.errors[0] }}
+                    </b-form-invalid-feedback>
+                  </b-form-group>
+              </validation-provider>
+            </b-col>
+            <!-- Field: Seguridad -->
+            <b-col
+              cols="12"
+              md="6"
+              lg="4"
+            >
+              <validation-provider
+                    #default="validationContext"
+                    name="encryption_smtp"
+                    rules="required"
+                >
+                  <b-form-group
+                    :label="$t('Encryption')"
+                    label-for="encryption_smtp"
+                  >
+                  <v-select
+                    v-model="configDataLocal.encryption_smtp"
+                    :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                    :options="encryptionOptions"
+                    label="text"
+                    value="value"
+                    :clearable="false"
+                      :state="getValidationState(validationContext)"
+                    input-id="encryption_smtp"
+                  />
+                    
+                     <b-form-invalid-feedback>
+                        {{ validationContext.errors[0] }}
+                    </b-form-invalid-feedback>
+                  </b-form-group>
+              </validation-provider>
+            </b-col>
+
           </b-row>
           <b-row>
 
@@ -85,33 +144,6 @@
                     <b-form-input
                       id="password_smtp"
                       v-model="configDataLocal.password_smtp"
-                      type="password"
-                      :state="getValidationState(validationContext)"
-                    />
-                     <b-form-invalid-feedback>
-                        {{ validationContext.errors[0] }}
-                    </b-form-invalid-feedback>
-                  </b-form-group>
-              </validation-provider>
-            </b-col>
-            <!-- Field: Puerto -->
-            <b-col
-              cols="12"
-              md="6"
-              lg="4"
-            >
-              <validation-provider
-                    #default="validationContext"
-                    name="puerto_smtp"
-                    rules="integer"
-                >
-                  <b-form-group
-                    :label="$t('Port')"
-                    label-for="puerto_smtp"
-                  >
-                    <b-form-input
-                      id="puerto_smtp"
-                      v-model="configDataLocal.puerto_smtp"
                       type="password"
                       :state="getValidationState(validationContext)"
                     />
@@ -190,6 +222,7 @@ export default {
      this.configDataLocal.user_smtp = this.findValue('user_smtp')
      this.configDataLocal.password_smtp = this.findValue('password_smtp')
      this.configDataLocal.puerto_smtp = this.findValue('puerto_smtp')
+     this.configDataLocal.encryption_smtp = this.findValue('encryption_smtp')
   },
   data(){
     return{
@@ -209,6 +242,7 @@ export default {
       user_smtp: '',
       password_smtp: '',
       puerto_smtp: '',
+      encryption_smtp: '',
     })
     const toast = useToast()
     const {route, router } = useRouter()
@@ -243,12 +277,9 @@ export default {
        })
     };
 
-     const languageOptions = [
-      { text: t('English'), value: 'english' },
-      { text: t('Spanish'), value: 'spanish' },
-      { text: t('French'), value: 'french' },
-      { text: t('Russian'), value: 'russian' },
-      { text: t('German'), value: 'german' },
+     const encryptionOptions = [
+      { text: 'SSL', value: 'ssl' },
+      { text: 'TLS', value: 'tls' },
     ]
 
     const {
@@ -260,7 +291,7 @@ export default {
       
       onSubmit,
 
-      languageOptions,
+      encryptionOptions,
 
       refFormObserver,
       getValidationState,

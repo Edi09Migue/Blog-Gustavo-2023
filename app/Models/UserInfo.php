@@ -27,6 +27,8 @@ class UserInfo extends Model
         'genero',
         'contact_options',
 
+        'bio',
+        
         'pais',
         'provincia',
         'ciudad',

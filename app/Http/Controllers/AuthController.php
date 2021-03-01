@@ -67,8 +67,9 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         if (!Auth::attempt($credentials))
             return response()->json([
-                'message' => 'Unauthorized'
-            ], 401);
+                'status' => false,
+                'message' => 'Usuario o contraseña incorrectos'
+            ]);
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
@@ -91,6 +92,7 @@ class AuthController extends Controller
         $user->extras=['eCommerceCartItemsCount'=>6];
 
         return response()->json([
+            'status' => true,
             'accessToken' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
             'userData' => $user,
@@ -108,6 +110,7 @@ class AuthController extends Controller
     public function user(Request $request)
     {
         $user = $request->user();
+        $user->userInfo;
         $user->allPermissions =$user->allPermissions;
         
         return response()->json($user);
@@ -142,6 +145,9 @@ class AuthController extends Controller
                     : response()->json(['email' => __($status)]);
     }
 
+    /**
+     * Toma el email, la nueva contraseña y el token enviado al correo del usuario
+     */
     public function resetPasswordPost(Request $request){
         $request->validate([
             'token' => 'required',
@@ -163,7 +169,7 @@ class AuthController extends Controller
         );
     
         return $status == Password::PASSWORD_RESET
-                    ? redirect()->route('login')->with('status', __($status))
-                    : back()->withErrors(['email' => [__($status)]]);
+                    ? response()->json('status', __($status))
+                    : response()->json(['email' => [__($status)]]);
     }
 }

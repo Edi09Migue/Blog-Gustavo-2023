@@ -65,7 +65,7 @@
                   #default="{ errors }"
                   name="Password"
                   vid="Password"
-                  rules="required|password"
+                  rules="required|min:6"
                 >
                   <b-input-group
                     class="input-group-merge"
@@ -139,7 +139,7 @@
           </validation-observer>
 
           <p class="text-center mt-2">
-            <b-link :to="{name:'auth-login-v2'}">
+            <b-link :to="{name:'auth-login'}">
               <feather-icon icon="ChevronLeftIcon" /> {{ $t('Back to login') }}
             </b-link>
           </p>
@@ -159,6 +159,7 @@ import {
 } from 'bootstrap-vue'
 import { required } from '@validations'
 import store from '@/store/index'
+import router from '@/router'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
@@ -184,6 +185,7 @@ export default {
       userEmail: '',
       cPassword: '',
       password: '',
+      token:'',
       sideImg: require('@/assets/images/pages/reset-password-v2.svg'),
       // validation
       required,
@@ -222,19 +224,38 @@ export default {
     validationForm() {
       this.$refs.simpleRules.validate().then(success => {
         if (success) {
-          this.$toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Form Submitted',
-              icon: 'EditIcon',
-              variant: 'success',
-            },
+          this.$http.post('/api/auth/reset-password-user', {
+              email: this.userEmail,
+              password: this.password,
+              password_confirmation: this.cPassword,
+              token: this.token
+            })
+          .then(response => {
+            console.log(response);
+            console.log(response.data);
+            console.log(response.data.status);
+            if(response.data.status){
+              this.$toast({
+                component: ToastificationContent,
+                props: {
+                  title: 'Form Submitted',
+                  icon: 'EditIcon',
+                  variant: 'success',
+                },
+              })
+            }
           })
+
         }
       })
     },
 
   },
+  mounted(){
+    this.token = router.currentRoute.params.token
+    this.userEmail =  router.currentRoute.query.email
+    
+  }
 }
 </script>
 

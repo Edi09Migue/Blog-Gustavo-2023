@@ -53,7 +53,7 @@
           cols="12"
           lg="6"
         >
-          <!-- <user-view-user-permissions-card /> -->
+          <user-view-user-permissions-card :user-data="userData" />
         </b-col>
       </b-row>
 
@@ -74,6 +74,7 @@ import userStoreModule from '../userStoreModule'
 import UserViewUserInfoCard from './UserViewUserInfoCard.vue'
 import UserViewUserPlanCard from './UserViewUserPlanCard.vue'
 import UserViewUserTimelineCard from './UserViewUserTimelineCard.vue'
+import UserViewUserPermissionsCard from './UserViewUserPermissionsCard.vue'
 
 
 export default {
@@ -87,7 +88,7 @@ export default {
     UserViewUserInfoCard,
     UserViewUserPlanCard,
     UserViewUserTimelineCard,
-
+    UserViewUserPermissionsCard
   },
   setup() {
     const userData = ref(null)

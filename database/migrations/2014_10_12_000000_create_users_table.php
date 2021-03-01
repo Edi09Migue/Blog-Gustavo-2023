@@ -41,6 +41,8 @@ class CreateUsersTable extends Migration
             $table->string('idioma')->nullable();
             $table->enum('genero',['male','female'])->nullable();
             $table->string('contact_options')->nullable();
+            
+            $table->text('bio')->nullable();
 
             $table->string('pais')->nullable();
             $table->string('provincia')->nullable();

@@ -20,7 +20,7 @@
           <b-img
             fluid
             :src="imgUrl"
-            alt="Login V2"
+            alt="Login"
           />
         </div>
       </b-col>
@@ -123,6 +123,19 @@
                 </b-form-checkbox>
               </b-form-group>
 
+              <b-alert
+                variant="danger"
+                show
+                v-show="errorServer"
+              >
+                <h4 class="alert-heading">
+                  {{ $t('Error') }}
+                </h4>
+                <div class="alert-body">
+                  <span>{{ errorServer }}</span>
+                </div>
+              </b-alert>
+
               <!-- submit buttons -->
               <b-button
                 type="submit"
@@ -188,7 +201,8 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import {
-  BRow, BCol, BLink, BFormGroup, BFormInput, BInputGroupAppend, BInputGroup, BFormCheckbox, BCardText, BCardTitle, BImg, BForm, BButton,
+  BRow, BCol, BLink, BFormGroup, BFormInput, BInputGroupAppend, BInputGroup, 
+  BFormCheckbox, BCardText, BCardTitle, BImg, BForm, BButton, BAlert
 } from 'bootstrap-vue'
 import useJwt from '@/auth/jwt/useJwt'
 import { required, email } from '@validations'
@@ -213,6 +227,7 @@ export default {
     BImg,
     BForm,
     BButton,
+    BAlert,
     VuexyLogo,
     ValidationProvider,
     ValidationObserver,
@@ -223,6 +238,7 @@ export default {
       status: '',
       password: '',
       userEmail: '',
+      errorServer: null,
       sideImg: require('@/assets/images/pages/login-v2.svg'),
       // validation rulesimport store from '@/store/index'
       required,
@@ -251,35 +267,40 @@ export default {
               password: this.password,
             })
           .then(response => {
-            const { userData } = response.data
-            useJwt.setToken(response.data.accessToken)
-            useJwt.setRefreshToken(response.data.refreshToken)
-            localStorage.setItem('userData', JSON.stringify(userData))
-            this.$ability.update(userData.ability)
+            if(response.data.status){
+              const { userData } = response.data
+                useJwt.setToken(response.data.accessToken)
+                useJwt.setRefreshToken(response.data.refreshToken)
+                localStorage.setItem('userData', JSON.stringify(userData))
+                this.$ability.update(userData.ability)
+  
+                // ? This is just for demo purpose as well.
+                // ? Because we are showing eCommerce app's cart items count in navbar
+                //this.$store.commit('app-ecommerce/UPDATE_CART_ITEMS_COUNT', userData.extras.eCommerceCartItemsCount)
+  
+                // ? This is just for demo purpose. Don't think CASL is role based in this case, we used role in if condition just for ease
+                this.$router.replace(getHomeRouteForLoggedInUser(userData.role))
+                  .then(() => {
+                    this.$toast({
+                      component: ToastificationContent,
+                      position: 'top-right',
+                      props: {
+                        title: `Welcome ${userData.fullName || userData.username}`,
+                        icon: 'CoffeeIcon',
+                        variant: 'success',
+                        text: `You have successfully logged in as ${userData.role}. Now you can start to explore!`,
+                      },
+                    })
+                  })
 
-            // ? This is just for demo purpose as well.
-            // ? Because we are showing eCommerce app's cart items count in navbar
-            //this.$store.commit('app-ecommerce/UPDATE_CART_ITEMS_COUNT', userData.extras.eCommerceCartItemsCount)
-
-            // ? This is just for demo purpose. Don't think CASL is role based in this case, we used role in if condition just for ease
-            this.$router.replace(getHomeRouteForLoggedInUser(userData.role))
-              .then(() => {
-                this.$toast({
-                  component: ToastificationContent,
-                  position: 'top-right',
-                  props: {
-                    title: `Welcome ${userData.fullName || userData.username}`,
-                    icon: 'CoffeeIcon',
-                    variant: 'success',
-                    text: `You have successfully logged in as ${userData.role}. Now you can start to explore!`,
-                  },
-                })
-              })
-              .catch(error => {
-                console.log('error');
-                console.log(error);
-                this.$refs.loginForm.setErrors(error)
-              })
+            }else{
+              this.errorServer = response.data.message
+            }
+          })
+          .catch(error => {
+            console.log('error');
+            console.log(error);
+            this.$refs.loginForm.setErrors(error)
           })
         }
       })

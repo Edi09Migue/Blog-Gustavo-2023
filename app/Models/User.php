@@ -52,7 +52,8 @@ class User extends Authenticatable
     ];
 
     protected $appends = [
-        'role'
+        'role',
+        'creado'
     ];
 
     public function userInfo(){
@@ -85,7 +86,6 @@ class User extends Authenticatable
                 $permisos[]= $permiso;
             }
         }
-
         return $permisos;
     }
 
@@ -94,5 +94,12 @@ class User extends Authenticatable
      */
     public function getAvatarURLAttribute(){
         return asset('images/profiles/'.($this->avatar? $this->avatar:'avatar.png'));
+    }
+
+    /**
+     * Devuelve la fecha de creación del usaurio
+     */
+    public function getCreadoAttribute(){
+        return $this->created_at->format('M, d Y');
     }
 }

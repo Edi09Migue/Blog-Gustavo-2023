@@ -118,14 +118,14 @@ class ConfiguracionesSeeder extends Seeder
         //Configuraciones SMTP
         $config = new Configuracion();
         $config->key = "servidor_smtp";
-        $config->value = "gmal";
+        $config->value = "smtp.googlemail.com";
         $config->tipo = "string";
         $config->group_key = "correo";
         $config->save();
 
         $config = new Configuracion();
         $config->key = "user_smtp";
-        $config->value = "test";
+        $config->value = "jagusy@gmail.com";
         $config->tipo = "string";
         $config->group_key = "correo";
         $config->save();
@@ -139,8 +139,15 @@ class ConfiguracionesSeeder extends Seeder
         
         $config = new Configuracion();
         $config->key = "puerto_smtp";
-        $config->value = "678";
+        $config->value = "465";
         $config->tipo = "int";
+        $config->group_key = "correo";
+        $config->save();
+        
+        $config = new Configuracion();
+        $config->key = "encryption_smtp";
+        $config->value = "ssl";
+        $config->tipo = "string";
         $config->group_key = "correo";
         $config->save();
     }

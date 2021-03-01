@@ -103,5 +103,9 @@
   "Reset Password Description":"Your new password must be different from previously used passwords",
   "Set New Password":"Set New Password",
   "New Password":"New Password",
-  "Confirm Password":"Confirm Password"
+  "Confirm Password":"Confirm Password",
+  "Permission according to roles":"Permission according to roles",
+  "Encryption":"Encryption",
+  "about":"About",
+  "joined":"joined"
 }

@@ -56,7 +56,7 @@ export default [
       },
     },
     {
-      path: '/reset-password',
+      path: '/reset-password/:token',
       name: 'auth-reset-password',
       component: () => import('@/views/pages/authentication/ResetPassword-v2.vue'),
       meta: {
@@ -129,6 +129,40 @@ export default [
         resource: 'usuarios',
         navActiveLink: 'apps-users-list',
       }
+    },
+    {
+      path: '/account-settings',
+      name: 'pages-account-setting',
+      component: () => import('@/views/pages/account-setting/AccountSetting.vue'),
+      meta: {
+        pageTitle: 'Account Settings',
+        breadcrumb: [
+          {
+            text: 'Pages',
+          },
+          {
+            text: 'Account Settings',
+            active: true,
+          },
+        ],
+      },
+    },
+    {
+      path: '/profile',
+      name: 'pages-profile',
+      component: () => import('@/views/pages/profile/Profile.vue'),
+      meta: {
+        pageTitle: 'Profile',
+        breadcrumb: [
+          {
+            text: 'Pages',
+          },
+          {
+            text: 'Profile',
+            active: true,
+          },
+        ],
+      },
     },
     // *===============================================---*
     // *--------- ROLES ----------------------------------*

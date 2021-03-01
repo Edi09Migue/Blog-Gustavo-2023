@@ -30,10 +30,7 @@ Route::group(['prefix' => 'auth'], function () {
   Route::post('register', [AuthController::class, 'register']);
   
   Route::post('reset-password', [AuthController::class, 'resetPassword']);
-
-  Route::get('/reset-password/{token}', function ($token) {
-      return  $token;
-  })->middleware('guest')->name('password.reset');
+  Route::post('reset-password-user', [AuthController::class, 'resetPasswordPost']);
 
   Route::group(['middleware' => 'auth:api'], function() {
     Route::get('logout', [AuthController::class, 'logout']);

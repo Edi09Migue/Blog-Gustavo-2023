@@ -15,3 +15,8 @@ use App\Http\Controllers\ApplicationController;
 */
 
 Route::get('/{any}', [ApplicationController::class, 'index'])->where('any', '.*');
+
+
+Route::get('/reset-password/{token}', function ($token) {
+    return  $token;
+})->name('password.reset');

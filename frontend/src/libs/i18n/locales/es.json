@@ -103,6 +103,10 @@
   "Reset Password Description":"Su nueva contraseña debe ser diferente de las contraseñas utilizadas anteriormente",
   "Set New Password":"Establecer nueva contraseña",
   "New Password":"Nueva contraseña",
-  "Confirm Password":"Confirmar contraseña"
+  "Confirm Password":"Confirmar contraseña",
+  "Permission according to roles":"Permisos de acuerdo al rol",
+  "Encryption":"Encriptación",
+  "about":"Bio",
+  "joined":"Registrado"
 
 }
