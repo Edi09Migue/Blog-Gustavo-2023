@@ -6,19 +6,18 @@
       <template #aside>
         <b-avatar
           ref="previewEl"
-          :src="userDataLocal
+          :src="configDataLocal
           .avatar"
-          :text="avatarText(userDataLocal
+          :text="avatarText(configDataLocal
           .name)"
-          :variant="`light-${resolveUserRoleVariant(userDataLocal
-          .role)}`"
+          variant="light-primary"
           size="90px"
           rounded
         />
       </template>
       <h4 class="mb-1">
-        {{ userDataLocal
-        .name }}
+        {{ configDataLocal
+        .company_name }}
       </h4>
       <div class="d-flex flex-wrap">
         <b-button
@@ -53,7 +52,7 @@
     
      <validation-observer 
           #default="{ handleSubmit }"
-          v-if="userDataLocal
+          v-if="configDataLocal
           "
           ref="refFormObserver">
         <!-- User Info: Input Fields -->
@@ -63,24 +62,24 @@
         >
           <b-row>
 
-            <!-- Field: Username -->
+            <!-- Field: Company -->
             <b-col
               cols="12"
-              md="4"
+              md="6"
             >
               <validation-provider
                       #default="validationContext"
-                      name="Name"
-                      rules="required|alpha-num|unique_username|max:255"
+                      name="company_name"
+                      rules="required|max:255"
                   >
                   <b-form-group
-                    :label="$t('Username')"
-                    label-for="username"
+                    :label="$t('Company')"
+                    label-for="company_name"
                   >
                     <b-form-input
-                      id="username"
-                      v-model="userDataLocal
-                      .username"
+                      id="company_name"
+                      v-model="configDataLocal
+                      .company_name"
                       :state="getValidationState(validationContext)"
                     />
                     <b-form-invalid-feedback>
@@ -90,24 +89,24 @@
               </validation-provider>
             </b-col>
 
-            <!-- Field: Full Name -->
+            <!-- Field: Short Name -->
             <b-col
               cols="12"
-              md="4"
+              md="6"
             >
                 <validation-provider
                         #default="validationContext"
-                        name="guard_name"
+                        name="company_shortname"
                         rules="required|max:255"
                     >
                   <b-form-group
-                    :label="$t('Name')"
-                    label-for="full-name"
+                    :label="$t('Short Name')"
+                    label-for="company_shortname"
                   >
                     <b-form-input
-                      id="full-name"
-                      v-model="userDataLocal
-                      .name"
+                      id="company_shortname"
+                      v-model="configDataLocal
+                      .company_shortname"
                       :state="getValidationState(validationContext)"
                       trim
                     />
@@ -118,6 +117,53 @@
                 </validation-provider>
             </b-col>
 
+            <!-- Field: Slogan -->
+            <b-col
+              cols="12"
+              md="6"
+            >
+                <validation-provider
+                        #default="validationContext"
+                        name="slogan"
+                        rules="required|max:255"
+                    >
+                  <b-form-group
+                    :label="$t('Slogan')"
+                    label-for="slogan"
+                  >
+                    <b-form-input
+                      id="slogan"
+                      v-model="configDataLocal
+                      .slogan"
+                      :state="getValidationState(validationContext)"
+                      trim
+                    />
+                    <b-form-invalid-feedback>
+                        {{ validationContext.errors[0] }}
+                    </b-form-invalid-feedback>
+                  </b-form-group>
+                </validation-provider>
+            </b-col>
+
+
+
+            <!-- Field: Ruc -->
+            <b-col
+              cols="12"
+              md="6"
+            >
+              <b-form-group
+                :label="$t('RUC')"
+                label-for="ruc"
+              >
+                <b-form-input
+                  id="ruc"
+                  v-model="configDataLocal.ruc"
+                />
+              </b-form-group>
+            </b-col>
+
+
             <!-- Field: Email -->
             <b-col
               cols="12"
@@ -126,7 +172,7 @@
             <validation-provider
                     #default="validationContext"
                     name="email"
-                    rules="required|email|max:255|unique_email"
+                    rules="required|email|max:255"
                 >
                   <b-form-group
                     :label="$t('Email')"
@@ -134,7 +180,7 @@
                   >
                     <b-form-input
                       id="email"
-                      v-model="userDataLocal
+                      v-model="configDataLocal
                       .email"
                       type="email"
                       :state="getValidationState(validationContext)"
@@ -146,70 +192,31 @@
               </validation-provider>
             </b-col>
 
-            <!-- Field: Status -->
+            <!-- Field: Phone -->
             <b-col
               cols="12"
               md="4"
             >
-              <b-form-group
-                :label="$t('Status')"
-                label-for="user-status"
-              >
-                <v-select
-                  v-model="userDataLocal
-                  .status"
-                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                  :options="statusOptions"
-                  :reduce="val => val.value"
-                  :clearable="false"
-                  input-id="user-status"
-                />
-              </b-form-group>
-            </b-col>
-
-            <!-- Field: Role -->
-            <b-col
-              cols="12"
-              md="4"
-            >
-              <validation-provider
-                  #default="validationContext"
-                  name="user-role"
-                  rules="required"
+            <validation-provider
+                    #default="validationContext"
+                    name="email"
+                    rules="required|max:255"
                 >
                   <b-form-group
-                    :label="$t('Role')"
-                    label-for="user-role"
-                    :state="getValidationState(validationContext)"
+                    :label="$t('Phone')"
+                    label-for="email"
                   >
-                    <v-select
-                      v-model="userDataLocal
-                      .role"
-                      :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                      :options="roleOptions"
-                      :reduce="val => val.value"
-                      :clearable="false"
-                      input-id="user-role"
+                    <b-form-input
+                      id="email"
+                      v-model="configDataLocal
+                      .telefono"
+                      :state="getValidationState(validationContext)"
                     />
+                    <b-form-invalid-feedback>
+                        {{ validationContext.errors[0] }}
+                    </b-form-invalid-feedback>
                   </b-form-group>
               </validation-provider>
-            </b-col>
-
-            <!-- Field: Email -->
-            <b-col
-              cols="12"
-              md="4"
-            >
-              <b-form-group
-                :label="$t('Company')"
-                label-for="empresa"
-              >
-                <b-form-input
-                  id="empresa"
-                  v-model="userDataLocal
-                  .user_info.empresa"
-                />
-              </b-form-group>
             </b-col>
 
           </b-row>
@@ -246,7 +253,6 @@ import { useRouter } from '@core/utils/utils'
 import store from '@/store'
 import { useInputImageRenderer } from '@core/comp-functions/forms/form-utils'
 import { ref } from '@vue/composition-api'
-import useUsersList from '../users-list/useUsersList'
 //Toasts
 import { useToast } from 'vue-toastification/composition'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
@@ -287,93 +293,43 @@ export default {
     }
   },
   methods:{
-    validateRemoteField(field, value){
-      return store.dispatch('app-user/validateUnique',{ field: field, value: value }).then((response) => {
-        var res = false
-        if(field=="username"){
-          res = this.originalUsername!= value ? response.data.valid : true
-        }else{
-          res = this.originalEmail!= value ? response.data.valid : true
-        }
-        return {
-          valid:  res,
-          data: {
-            message: response.data.msg
-          }
-        };
-      });
-    },
+    findValue(key){
+      var setting = this.settingsData.find(s=>s.key==key)
+      return typeof setting !=="undefined" ? setting.value : ''
+    }
   },
   mounted() {
-      const isUniqueUsername = (value) => {
-        return this.validateRemoteField('username',value);
-      };
-      extend('unique_username', {
-        validate: isUniqueUsername,
-        message: (field, params) => {
-          return `${params._value_} ya esta siendo utilizado.`;
-        }
-      });
-      
-      const isUniqueEmail = (value) => {
-        return this.validateRemoteField('email',value);
-      };
-      extend('unique_email', {
-        validate: isUniqueEmail,
-        message: (field, params) => {
-          return `${params._value_} ya esta siendo utilizado.`;
-        }
-      });
-      
+    this.configDataLocal.company_name = this.findValue('company_name')
+    this.configDataLocal.company_shortname = this.findValue('company_shortname')
+    this.configDataLocal.slogan = this.findValue('slogan')
+    this.configDataLocal.ruc = this.findValue('ruc')
+    this.configDataLocal.email = this.findValue('email')
+    this.configDataLocal.telefono = this.findValue('telefono')
+    this.configDataLocal.fax = this.findValue('fax')
+    this.configDataLocal.direccion = this.findValue('direccion')
   },
   props: {
-    userData: {
-      type: Object,
+    settingsData: {
+      type: Array,
       required: true,
     },
   },
   setup(props) {
-    const { resolveUserRoleVariant } = useUsersList()
 
-
-    const originalUsername = ref("")
-    const originalEmail = ref("")
-    const userDataLocal = ref(JSON.parse(JSON.stringify(props.userData)))
-    originalUsername.value = props.userData.username
-    originalEmail.value = props.userData.email
+    const configDataLocal = ref({
+      company_name: '',
+      company_shortname: '',
+      slogan: '',
+      ruc: '',
+      email: '',
+      telefono: '',
+      fax: '',
+      direccion: '',
+    })
     const toast = useToast()
     const {route, router } = useRouter()
 
     const errorServer = ref(null)
-    
-
-    const roleOptions = ref([])
-
-    const fetchRoles = (ctx, callback) =>{
-      store.dispatch('app-user/fetchRoles')
-        .then(response => {
-          roleOptions.value = response.data.map(r=> { return {value:r.id.toString(), label:r.name }})
-        })
-        .catch(() => {
-          toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Error fetching roles list',
-              icon: 'AlertTriangleIcon',
-              variant: 'danger',
-            },
-          })
-        })
-    }
-
-
-    fetchRoles()
-
-    const statusOptions = [
-      { label: 'Pending', value: 'pending' },
-      { label: 'Active', value: 'active' },
-      { label: 'Inactive', value: 'inactive' },
-    ]
 
     // ? Demo Purpose => Update image on click of update
     const refInputEl = ref(null)
@@ -381,15 +337,14 @@ export default {
 
     const { inputImageRenderer } = useInputImageRenderer(refInputEl, base64 => {
       // eslint-disable-next-line no-param-reassign
-      props.userData.avatar = base64
+      props.settingsData.avatar = base64
     })
 
     const onSubmit = () => {
-      store.dispatch("app-user/updateUser", userDataLocal
+      store.dispatch("app-setting/updateUser", configDataLocal
       ).then((response) => {
         if(response.data.status){
-          router.replace({ name: 'apps-users-list'})
-            .then(() => {
+
               toast({
                 component: ToastificationContent,
                 position: 'top-right',
@@ -397,20 +352,18 @@ export default {
                   title: `Actualizado`,
                   icon: 'CoffeeIcon',
                   variant: 'success',
-                  text: `Usuario ${response.data.data.name}. Actualizdo correctamente!`,
+                  text: `Configuraciones ${response.data.data.name}. Actualizdo correctamente!`,
                 },
               })
-
-            })
-            .catch(error => {
-              console.log('error');
-              console.log(error);
-              this.$refs.loginForm.setErrors(error.response.data.error)
-            })
         }else{
             errorServer.value = response.data.msg
         }
-      });
+      })
+      .catch(error => {
+          console.log('error');
+          console.log(error);
+          this.$refs.loginForm.setErrors(error.response.data.error)
+       })
     };
 
     const {
@@ -419,10 +372,7 @@ export default {
     } = formValidation();    
 
     return {
-      resolveUserRoleVariant,
       avatarText,
-      roleOptions,
-      statusOptions,
 
       //  ? Demo - Update Image on click of update button
       refInputEl,
@@ -433,10 +383,8 @@ export default {
 
       refFormObserver,
       getValidationState,
-      originalUsername,
-      originalEmail,
       errorServer,
-      userDataLocal
+      configDataLocal
     }
   },
 }

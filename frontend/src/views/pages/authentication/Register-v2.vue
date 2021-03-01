@@ -7,7 +7,7 @@
         <vuexy-logo />
 
         <h2 class="brand-text text-primary ml-1">
-          Vuexy
+          Santana
         </h2>
       </b-link>
       <!-- /Brand logo-->
@@ -145,22 +145,22 @@
                 type="submit"
                 @click.prevent="register"
               >
-                Sign up
+                {{ $t('Sign Up') }}
               </b-button>
             </b-form>
           </validation-observer>
 
           <p class="text-center mt-2">
-            <span>Already have an account?</span>
+            <span>{{ $t('Already have an account') }}?</span>
             <b-link :to="{name:'auth-login'}">
-              <span>&nbsp;Sign in instead</span>
+              <span>&nbsp;{{ $t('Sign in instead') }}</span>
             </b-link>
           </p>
 
           <!-- divider -->
           <div class="divider my-2">
             <div class="divider-text">
-              or
+              {{ $t('or') }}
             </div>
           </div>
 

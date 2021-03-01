@@ -6,7 +6,7 @@
       <b-link class="brand-logo">
         <vuexy-logo />
         <h2 class="brand-text text-primary ml-1">
-          Vuexy
+          Santana
         </h2>
       </b-link>
       <!-- /Brand logo-->
@@ -41,10 +41,10 @@
             title-tag="h2"
             class="font-weight-bold mb-1"
           >
-            Welcome to Vuexy! 👋
+            {{ $t('Welcome to') }} SANTANA core! 👋
           </b-card-title>
           <b-card-text class="mb-2">
-            Please sign-in to your account and start the adventure
+            {{ $t('Please sign-in') }}
           </b-card-text>
 
           <!-- form -->
@@ -55,7 +55,7 @@
             >
               <!-- email -->
               <b-form-group
-                label="Email"
+                :label="$t('Email')"
                 label-for="login-email"
               >
                 <validation-provider
@@ -77,9 +77,9 @@
               <!-- forgot password -->
               <b-form-group>
                 <div class="d-flex justify-content-between">
-                  <label for="login-password">Password</label>
+                  <label for="login-password">{{ $t('Password') }}</label>
                   <b-link :to="{name:'auth-forgot-password'}">
-                    <small>Forgot Password?</small>
+                    <small>{{ $t('Forgot Password') }}?</small>
                   </b-link>
                 </div>
                 <validation-provider
@@ -119,7 +119,7 @@
                   v-model="status"
                   name="checkbox-1"
                 >
-                  Remember Me
+                  {{ $t('Remember Me') }}
                 </b-form-checkbox>
               </b-form-group>
 
@@ -130,22 +130,22 @@
                 block
                 @click="validationForm"
               >
-                Sign in
+                {{ $t('Sign In') }}
               </b-button>
             </b-form>
           </validation-observer>
 
           <b-card-text class="text-center mt-2">
-            <span>New on our platform? </span>
+            <span>{{ $t('New on our platform') }}? </span>
             <b-link :to="{name:'auth-register'}">
-              <span>&nbsp;Create an account</span>
+              <span>&nbsp;{{ $t('Create an account') }}</span>
             </b-link>
           </b-card-text>
 
           <!-- divider -->
           <div class="divider my-2">
             <div class="divider-text">
-              or
+              {{ $t('or') }}
             </div>
           </div>
 

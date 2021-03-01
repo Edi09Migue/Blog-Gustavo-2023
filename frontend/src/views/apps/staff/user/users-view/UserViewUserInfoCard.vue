@@ -27,16 +27,18 @@
             </div>
             <div class="d-flex flex-wrap">
               <b-button
+                v-if="$can('editar', 'usuarios')"
                 :to="{ name: 'apps-users-edit', params: { id: userData.id } }"
                 variant="primary"
               >
-                Edit
+                {{ $t('Edit') }}
               </b-button>
               <b-button
+                v-if="$can('eliminar', 'usuarios')"
                 variant="outline-danger"
                 class="ml-1"
               >
-                Delete
+                {{ $t('Delete') }}
               </b-button>
             </div>
           </div>
@@ -94,7 +96,7 @@
                 icon="UserIcon"
                 class="mr-75"
               />
-              <span class="font-weight-bold">Username</span>
+              <span class="font-weight-bold">{{ $t('Username') }}</span>
             </th>
             <td class="pb-50">
               {{ userData.username }}
@@ -106,10 +108,10 @@
                 icon="CheckIcon"
                 class="mr-75"
               />
-              <span class="font-weight-bold">Status</span>
+              <span class="font-weight-bold">{{ $t('Status') }}</span>
             </th>
             <td class="pb-50 text-capitalize">
-              {{ userData.status }}
+              {{ userData.estado }}
             </td>
           </tr>
           <tr>
@@ -118,7 +120,7 @@
                 icon="StarIcon"
                 class="mr-75"
               />
-              <span class="font-weight-bold">Role</span>
+              <span class="font-weight-bold">{{ $t('Role') }}</span>
             </th>
             <td class="pb-50 text-capitalize">
               {{ userData.role }}
@@ -130,10 +132,10 @@
                 icon="FlagIcon"
                 class="mr-75"
               />
-              <span class="font-weight-bold">Country</span>
+              <span class="font-weight-bold">{{ $t('Country') }}</span>
             </th>
             <td class="pb-50">
-              {{ userData.country }}
+              {{ userData.user_info.pais }}
             </td>
           </tr>
           <tr>
@@ -142,10 +144,10 @@
                 icon="PhoneIcon"
                 class="mr-75"
               />
-              <span class="font-weight-bold">Contact</span>
+              <span class="font-weight-bold">{{ $t('Phone') }}</span>
             </th>
             <td>
-              {{ userData.contact }}
+              {{ userData.user_info.telefono }}
             </td>
           </tr>
         </table>

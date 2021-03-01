@@ -7,7 +7,7 @@
         <vuexy-logo />
 
         <h2 class="brand-text text-primary ml-1">
-          Vuexy
+          Santana
         </h2>
       </b-link>
       <!-- /Brand logo-->
@@ -21,7 +21,7 @@
           <b-img
             fluid
             :src="imgUrl"
-            alt="Forgot password V2"
+            alt="Forgot password"
           />
         </div>
       </b-col>
@@ -42,10 +42,10 @@
             title-tag="h2"
             class="font-weight-bold mb-1"
           >
-            Forgot Password? 🔒
+            {{ $t('Forgot Password') }}? 🔒
           </b-card-title>
           <b-card-text class="mb-2">
-            Enter your email and we'll send you instructions to reset your password
+            {{ $t('Forgot Password Instructions') }}
           </b-card-text>
 
           <!-- form -->
@@ -74,19 +74,33 @@
                 </validation-provider>
               </b-form-group>
 
+              
+              <b-alert
+                variant="danger"
+                show
+                v-show="errorServer"
+              >
+                <h4 class="alert-heading">
+                  {{ $t('Error') }}
+                </h4>
+                <div class="alert-body">
+                  <span>{{ errorServer }}</span>
+                </div>
+              </b-alert>
+
               <b-button
                 type="submit"
                 variant="primary"
                 block
               >
-                Send reset link
+                {{ $t('Send reset link') }}
               </b-button>
             </b-form>
           </validation-observer>
 
           <p class="text-center mt-2">
             <b-link :to="{name:'auth-login'}">
-              <feather-icon icon="ChevronLeftIcon" /> Back to login
+              <feather-icon icon="ChevronLeftIcon" /> {{ $t('Back to login') }}
             </b-link>
           </p>
         </b-col>
@@ -101,7 +115,7 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import {
-  BRow, BCol, BLink, BCardTitle, BCardText, BImg, BForm, BFormGroup, BFormInput, BButton,
+  BRow, BCol, BLink, BCardTitle, BCardText, BImg, BForm, BFormGroup, BFormInput, BButton, BAlert
 } from 'bootstrap-vue'
 import { required, email } from '@validations'
 import store from '@/store/index'
@@ -120,6 +134,7 @@ export default {
     BFormInput,
     BCardTitle,
     BCardText,
+    BAlert,
     ValidationProvider,
     ValidationObserver,
   },
@@ -127,6 +142,7 @@ export default {
     return {
       userEmail: '',
       sideImg: require('@/assets/images/pages/forgot-password-v2.svg'),
+      errorServer:null,
       // validation
       required,
       email,
@@ -145,15 +161,28 @@ export default {
   methods: {
     validationForm() {
       this.$refs.simpleRules.validate().then(success => {
-        if (success) {
-          this.$toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Form Submitted',
-              icon: 'EditIcon',
-              variant: 'success',
-            },
-          })
+      if (success) {
+          this.$http.post('/api/auth/reset-password', {
+              email: this.userEmail,
+            })
+          .then(response => {
+            console.log(response);
+            console.log(response.data);
+            console.log(response.data.status);
+            if(response.data.status){
+              this.$toast({
+                component: ToastificationContent,
+                props: {
+                  title: 'Form Submitted',
+                  icon: 'EditIcon',
+                  variant: 'success',
+                },
+              })
+            }else{
+              this.errorServer = response.data.email
+            }
+        })
+
         }
       })
     },

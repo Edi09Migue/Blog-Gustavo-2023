@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Configuraciones;
 use App\Http\Controllers\Admin\Permisos;
 use App\Http\Controllers\Admin\Roles;
 use App\Http\Controllers\Admin\Usuarios;
@@ -22,9 +23,17 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+Route::get('settings',[Configuraciones::class,'mainSettings']);
+
 Route::group(['prefix' => 'auth'], function () {
   Route::post('login', [AuthController::class, 'login'])->name('login');
   Route::post('register', [AuthController::class, 'register']);
+  
+  Route::post('reset-password', [AuthController::class, 'resetPassword']);
+
+  Route::get('/reset-password/{token}', function ($token) {
+      return  $token;
+  })->middleware('guest')->name('password.reset');
 
   Route::group(['middleware' => 'auth:api'], function() {
     Route::get('logout', [AuthController::class, 'logout']);
@@ -45,5 +54,9 @@ Route::group(['prefix' => 'admin','middleware' => 'auth:api'], function() {
       Route::get('permisos/dropdownOptions',[Permisos::class, 'dropdownOptions']);
       Route::apiResource('permisos',Permisos::class);
       Route::post('permisos/validate/{field}',[Permisos::class,'isUniqueField']);
+      
+      
+      Route::apiResource('configs',Configuraciones::class);
+      Route::post('configs/validate/{field}',[Configuraciones::class,'isUniqueField']);
       
 });

@@ -38,7 +38,7 @@
           xl="3"
           lg="4"
         >
-          <user-view-user-plan-card />
+          <!-- <user-view-user-plan-card /> -->
         </b-col>
       </b-row>
 
@@ -53,7 +53,7 @@
           cols="12"
           lg="6"
         >
-          <user-view-user-permissions-card />
+          <!-- <user-view-user-permissions-card /> -->
         </b-col>
       </b-row>
 
@@ -74,7 +74,7 @@ import userStoreModule from '../userStoreModule'
 import UserViewUserInfoCard from './UserViewUserInfoCard.vue'
 import UserViewUserPlanCard from './UserViewUserPlanCard.vue'
 import UserViewUserTimelineCard from './UserViewUserTimelineCard.vue'
-import UserViewUserPermissionsCard from './UserViewUserPermissionsCard.vue'
+
 
 export default {
   components: {
@@ -87,7 +87,6 @@ export default {
     UserViewUserInfoCard,
     UserViewUserPlanCard,
     UserViewUserTimelineCard,
-    UserViewUserPermissionsCard,
 
   },
   setup() {

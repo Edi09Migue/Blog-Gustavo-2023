@@ -9,6 +9,23 @@ export default [
         action: 'read',
       },
     },
+    // *===============================================---*
+    // *--------- AUTH -----------------------------------*
+    // *===============================================---*
+    {
+      path: '/dashboard',
+      name: 'dashboard-editor',
+      component: () => import('@/views/DashboardEditor.vue'),
+      meta: {
+        layout: 'full',
+        resource: 'dashboard_editor',
+        action: 'ver',
+        redirectIfLoggedIn: true,
+      },
+    },
+    // *===============================================---*
+    // *--------- AUTH -----------------------------------*
+    // *===============================================---*
     {
       path: '/login',
       name: 'auth-login',
@@ -38,6 +55,18 @@ export default [
         resource: 'Auth',
       },
     },
+    {
+      path: '/reset-password',
+      name: 'auth-reset-password',
+      component: () => import('@/views/pages/authentication/ResetPassword-v2.vue'),
+      meta: {
+        layout: 'full',
+        resource: 'Auth',
+      },
+    },
+    // *===============================================---*
+    // *--------- GENERALES ------------------------------*
+    // *===============================================---*
     {
       path: '/pages/miscellaneous/coming-soon',
       name: 'misc-coming-soon',
@@ -101,6 +130,9 @@ export default [
         navActiveLink: 'apps-users-list',
       }
     },
+    // *===============================================---*
+    // *--------- ROLES ----------------------------------*
+    // *===============================================---*
     {
       path: '/apps/roles/list',
       name: 'apps-roles-list',
@@ -130,6 +162,9 @@ export default [
         resource: 'roles'
       }
     },
+    // *===============================================---*
+    // *--------- PERMISOS -------------------------------*
+    // *===============================================---*
     {
       path: '/apps/permissions/list',
       name: 'apps-permissions-list',
@@ -137,6 +172,18 @@ export default [
       meta:{
         action: 'listar',
         resource: 'permisos'
+      }
+    },
+    // *===============================================---*
+    // *--------- SETTINGS -------------------------------*
+    // *===============================================---*
+    {
+      path: '/apps/settings/list',
+      name: 'apps-settings-list',
+      component: () => import('@/views/apps/staff/settings/SettingsList.vue'),
+      meta:{
+        action: 'listar',
+        resource: 'configuraciones'
       }
     },
 ]

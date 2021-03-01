@@ -7,7 +7,7 @@ export default [
     resource: 'dashboard_user'
   },
   {
-    title: 'Second Page',
+    title: 'Dashboard User',
     route: 'second-page',
     icon: 'FileIcon',
     action: 'ver',
@@ -46,5 +46,12 @@ export default [
         resource: 'permisos'
       }
     ],
+  },
+  {
+    title: 'Settings',
+    route: 'apps-settings-list',
+    icon: 'SettingsIcon',
+    action: 'listar',
+    resource: 'configuraciones'
   },
 ]

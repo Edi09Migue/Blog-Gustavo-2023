@@ -296,7 +296,8 @@
 
 <script>
 import {
-  BRow, BCol, BForm, BFormGroup, BFormInput, BFormRadioGroup, BFormCheckboxGroup, BButton, BFormInvalidFeedback
+  BRow, BCol, BForm, BFormGroup, BFormInput, BFormRadioGroup, 
+  BFormCheckboxGroup, BButton, BFormInvalidFeedback
 } from 'bootstrap-vue'
 import flatPickr from 'vue-flatpickr-component'
 import { ref } from '@vue/composition-api'
@@ -316,8 +317,8 @@ import formValidation from "@core/comp-functions/forms/form-validation"
 
 export default {
   components: {
-    BRow, BCol, BForm, BFormGroup, flatPickr, BFormInput, vSelect, BFormRadioGroup, BFormCheckboxGroup, BButton,
-        BFormInvalidFeedback,
+    BRow, BCol, BForm, BFormGroup, flatPickr, BFormInput, vSelect, 
+    BFormRadioGroup, BFormCheckboxGroup, BButton, BFormInvalidFeedback,
 
     // Form Validation
     ValidationProvider,
