@@ -325,6 +325,7 @@ export default {
       telefono: '',
       fax: '',
       direccion: '',
+      grupo:"general"
     })
     const toast = useToast()
     const {route, router } = useRouter()
@@ -352,7 +353,7 @@ export default {
                   title: `Actualizado`,
                   icon: 'CoffeeIcon',
                   variant: 'success',
-                  text: `Configuraciones ${response.data.data.name}. Actualizdo correctamente!`,
+                  text: `Configuraciones Generales. Actualizadas correctamente!`,
                 },
               })
         }else{

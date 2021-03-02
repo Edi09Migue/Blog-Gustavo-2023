@@ -22,6 +22,14 @@ export default {
           .catch(error => reject(error))
       })
     },
+    fetchLoggedUser(ctx ) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`/api/auth/user`)
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
     fetchRoles(ctx) {
       return new Promise((resolve, reject) => {
         axios
@@ -52,6 +60,14 @@ export default {
       return new Promise((resolve, reject) => {
         axios
           .put(`/api/admin/usuarios/${userData.value.id}`, userData.value)
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
+    updateUserPassword(ctx, userData) {
+      return new Promise((resolve, reject) => {
+        axios
+          .put(`/api/admin/usuario/${userData.id}/updatePassword`, userData)
           .then(response => resolve(response))
           .catch(error => reject(error))
       })

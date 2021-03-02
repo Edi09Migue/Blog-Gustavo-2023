@@ -13,6 +13,14 @@ export default {
                     .then(response => resolve(response))
                     .catch(error => reject(error));
             });
-        }
+        },
+        updateConfigs(ctx, configData) {
+            return new Promise((resolve, reject) => {
+              axios
+                .put(`/api/admin/configs/${configData.value.grupo}`, configData.value)
+                .then(response => resolve(response))
+                .catch(error => reject(error))
+            })
+          },
     }
 };

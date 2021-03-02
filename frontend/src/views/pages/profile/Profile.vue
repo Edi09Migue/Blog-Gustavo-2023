@@ -47,8 +47,10 @@ export default {
           header: {
             avatar: require('@/assets/images/portrait/small/avatar-s-2.jpg'),
             username: 'Kitty Allanson',
+            name: 'Kitty Allanson',
             designation: 'UI/UX Designer',
             coverImg: require('@/assets/images/profile/user-uploads/timeline.jpg'),
+            id:-1
           },
           userAbout: {
             about: 'Tart I love sugar plum I love oat cake. Sweet ⭐️ roll caramels I love jujubes. Topping cake wafer.',
@@ -66,10 +68,12 @@ export default {
       console.log(res);
       console.log(res.data);
         //header
+       this.profileData.header.id = res.data.id
        this.profileData.header.username = res.data.username
+       this.profileData.header.name = res.data.name
        this.profileData.header.designation = res.data.role
         //userAbout
-      //  this.profileData.userAbout.about = res.data.bio
+        this.profileData.userAbout.about = res.data.user_info.bio
         this.profileData.userAbout.joined = res.data.creado
         this.profileData.userAbout.email = res.data.email
         this.profileData.userAbout.website = res.data.user_info.website

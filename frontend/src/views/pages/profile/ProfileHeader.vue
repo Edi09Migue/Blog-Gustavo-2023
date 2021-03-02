@@ -20,10 +20,10 @@
         <!-- profile title -->
         <div class="profile-title ml-3">
           <h2 class="text-white">
-            {{ headerData.username }}
+            {{ headerData.name }}
           </h2>
           <p class="text-white">
-            {{ headerData.designation }}
+            {{ headerData.username }}
           </p>
         </div>
         <!--/ profile title -->
@@ -106,6 +106,8 @@
             <!-- edit buttons -->
             <template #tabs-end>
               <b-button
+                :to="{ name: 'pages-account-setting' }"
+                v-if="headerData.id==userData.id"
                 variant="primary"
                 class="ml-auto"
               >
@@ -146,6 +148,11 @@ export default {
   },
   directives: {
     Ripple,
+  },
+  data(){
+    return {
+      userData: JSON.parse(localStorage.getItem('userData')),
+    }
   },
   props: {
     headerData: {

@@ -11,7 +11,7 @@
           >
             <b-form-textarea
               id="bio-area"
-              v-model="localOptions.bio"
+              v-model="localOptions.user_info.bio"
               rows="4"
               placeholder="Your bio data here..."
             />
@@ -23,10 +23,10 @@
         <b-col md="6">
           <b-form-group
             label-for="example-datepicker"
-            label="Birth date"
+            :label="$t('Birth date')"
           >
             <flat-pickr
-              v-model="localOptions.dob"
+              v-model="localOptions.user_info.birthdate"
               class="form-control"
               name="date"
               placeholder="Birth date"
@@ -39,11 +39,11 @@
         <b-col md="6">
           <b-form-group
             label-for="countryList"
-            label="Country"
+            :label="$t('Country')"
           >
             <v-select
               id="countryList"
-              v-model="localOptions.country"
+              v-model="localOptions.user_info.pais"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               label="title"
               :options="countryOption"
@@ -56,11 +56,11 @@
         <b-col md="6">
           <b-form-group
             label-for="website"
-            label="Website"
+            :label="$t('Website')"
           >
             <b-form-input
               id="website"
-              v-model="localOptions.website"
+              v-model="localOptions.user_info.website"
               placeholder="Website address"
             />
           </b-form-group>
@@ -71,11 +71,11 @@
         <b-col md="6">
           <b-form-group
             label-for="phone"
-            label="Phone"
+            :label="$t('Phone')"
           >
             <cleave
               id="phone"
-              v-model="localOptions.phone"
+              v-model="localOptions.user_info.telefono"
               class="form-control"
               :raw="false"
               :options="clevePhone"
@@ -91,7 +91,7 @@
             variant="primary"
             class="mt-1 mr-1"
           >
-            Save changes
+            {{ $t('Save Changes') }}
           </b-button>
           <b-button
             v-ripple.400="'rgba(186, 191, 199, 0.15)'"
@@ -100,7 +100,7 @@
             variant="outline-secondary"
             @click.prevent="resetForm"
           >
-            Reset
+            {{ $t('Reset') }}
           </b-button>
         </b-col>
       </b-row>

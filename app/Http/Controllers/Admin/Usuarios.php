@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class Usuarios extends Controller
@@ -197,6 +198,45 @@ class Usuarios extends Controller
             'data' => $usuario,
             'msg' => $usuario->username.' actualizado!'
         ]);
+    }
+
+    public function updatePassword(Request $request, $id){
+
+        $user = User::find($id);
+
+        $validator = Validator::make($request->all(),[
+            'old_password'          => 'required',
+            'password'              => 'required|min:6',
+            'password_confirmation' => 'required|same:password'
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return response()->json([
+                'status' => false,
+                'data' => $errors,
+                'msg' => $errors->first()
+            ]);    
+        }
+
+        if (Hash::check($request->old_password, $user->password)) {
+        
+            $user->password = Hash::make($request->password);
+            $user->save();
+        }else{
+            return response()->json([
+                'status' => false,
+                'data' => $user,
+                'msg' => 'Contraseña antigua incorrecta!'
+            ]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $user,
+            'msg' => $user->username.' actualizado!'
+        ]);
+     
     }
 
     /**

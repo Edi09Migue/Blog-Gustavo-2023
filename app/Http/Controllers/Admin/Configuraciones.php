@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Configuracion;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class Configuraciones extends Controller
@@ -13,7 +14,7 @@ class Configuraciones extends Controller
     var $datos;
 
     /**
-     * Devuelve el listado de permisos paginado
+     * Devuelve el listado de configuraciones paginado
      */
     public function index(Request $request){
         $query = $request->has('q') ? $request->q : "";
@@ -22,19 +23,19 @@ class Configuraciones extends Controller
         $sortDesc = $request->has('sortDesc') ? $request->sortDesc : "true";
 
         
-        $permisos = Configuracion::where('key','like',"%$query%")
+        $configuraciones = Configuracion::where('key','like',"%$query%")
                         ->orderBy($sortBy,$sortDesc=="true"?'desc':'asc')
                         ->paginate($perPage);
 
     	
     	return response()->json([
-            'items' => $permisos->items(),
-            'total' => $permisos->count()
+            'items' => $configuraciones->items(),
+            'total' => $configuraciones->count()
         ]);
     }
     
     /**
-     * Crea un Rol con sus respectivos permisos
+     * Crea una variable de configuracion
      * @param  Request
      * @return [type]
      */
@@ -65,27 +66,61 @@ class Configuraciones extends Controller
     }
 
     /**
-     * Editar rol y sus respectivos permisos
-     * @param  [integer] 
+     * Actualiza un grupo de configuraciones
+     * @param  [string] 
      * @param  Request
      * @return [type]
      */
-    public function update($id, Request $request)
+    public function update($grupo, Request $request)
     {
-        //Updating Role
-        $permiso = Configuracion::findOrFail($id);
+        switch($grupo){
+            case 'correo':
+                $valores = $request->only([
+                    'servidor_smtp','user_smtp','password_smtp',
+                    'puerto_smtp','encryption_smtp',
+                ]);
+                Config::set('mail.mailers.smtp.host', $request->servidor_smtp);
+                Config::set('mail.mailers.smtp.username', $request->user_smtp);
+                Config::set('mail.mailers.smtp.password', $request->password_smtp);
+                Config::set('mail.mailers.smtp.port', $request->puerto_smtp);
+                Config::set('mail.mailers.smtp.encryption', $request->encryption_smtp);
+            
+            break;
+            case 'general':
+                $valores = $request->only([
+                    'company_name','company_shortname','slogan',
+                    'ruc','email','telefono','fax','direccion'
+                ]);
 
-        $permiso->fill($request->all());
+                break;
+            case 'sistema':
+                $valores = $request->only([
+                    'formato_fecha','iva','decimales',
+                    'idioma','en_mantenimiento',
+                ]);
+                break;
+            default:
+            $valores=[];
+            break;
+        }
+
+        foreach($valores as $key => $value){
+            $setting = Configuracion::where('key',$key)->first();
+
+            $setting->value = $value;
+
+            $setting->save();
+        }
 
         return response()->json([
             'status' => TRUE,
-            'data' => $permiso,
-            'msg' => $permiso->name.' actualizado!'
+            'data' => count($valores).' configuraciones',
+            'msg' => 'Configs actualizadas!'
         ]);
     }
 
     /**
-     * @param  Toma el id de un Rol y lo elimina con sus respectivos permisos
+     * @param  Toma el id de un Rol y lo elimina con sus respectivos configuraciones
      */
     public function destroy($id, Request $request)
     {

@@ -6,11 +6,11 @@
         class="ml-25"
         href="https://1.envato.market/pixinvent_portfolio"
         target="_blank"
-      >Pixinvent</b-link>
+      >SANTANA</b-link>
       <span class="d-none d-sm-inline-block">, All rights Reserved</span>
     </span>
 
-    <span class="float-md-right d-none d-md-block">Hand-crafted &amp; Made with
+    <span class="float-md-right d-none d-md-block">Hecho a mano  &amp; con 
       <feather-icon
         icon="HeartIcon"
         size="21"

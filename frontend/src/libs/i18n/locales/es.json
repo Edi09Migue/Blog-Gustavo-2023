@@ -14,6 +14,7 @@
   "Guard Name": "Guard Name",
   "Description": "Descripción",
   "Email": "Email",
+  "email": "email",
   "Username": "Username",
   "Phone": "Teléfono",
   "Company": "Empresa",
@@ -59,6 +60,7 @@
   "Main Address":"Dirección Principal",
   "Secondary Address":"Dirección Secundaria",
   "Website":"Website",
+  "website":"website",
   "Gender":"Genero",
   "City":"Ciudad",
   "State":"Provincia",
@@ -68,6 +70,7 @@
   "Female":"Femenino",
   "Settings":"Configuraciones",
   "General Settings":"Configuraciones Generales",
+  "General":"General",
   "SMTP":"SMTP",
   "System":"Sistema",
   "Short Name":"Nombre Corto",
@@ -102,11 +105,15 @@
   "Reset Password":"Restaurar Contraseña",
   "Reset Password Description":"Su nueva contraseña debe ser diferente de las contraseñas utilizadas anteriormente",
   "Set New Password":"Establecer nueva contraseña",
+  "Old Password":"Antigua contraseña",
   "New Password":"Nueva contraseña",
   "Confirm Password":"Confirmar contraseña",
   "Permission according to roles":"Permisos de acuerdo al rol",
   "Encryption":"Encriptación",
   "about":"Bio",
-  "joined":"Registrado"
+  "joined":"Registrado",
+  "Notifications":"Notificaciones",
+  "Change":"Cambiar",
+  "Birth date":"Fecha de nacimiento"
 
 }

@@ -190,7 +190,7 @@ import { ref } from '@vue/composition-api'
 import vSelect from 'vue-select'
 import { useRouter } from '@core/utils/utils'
 import store from '@/store'
-import { useUtils as useI18nUtils } from '@core/libs/i18n'
+
 
 //Toasts
 import { useToast } from 'vue-toastification/composition'
@@ -243,16 +243,16 @@ export default {
       password_smtp: '',
       puerto_smtp: '',
       encryption_smtp: '',
+      grupo:"correo"
     })
     const toast = useToast()
     const {route, router } = useRouter()
 
     const errorServer = ref(null)
     
-    const { t } = useI18nUtils()
     
     const onSubmit = () => {
-      store.dispatch("app-setting/updateUser", configDataLocal
+      store.dispatch("app-setting/updateConfigs", configDataLocal
       ).then((response) => {
         if(response.data.status){
 
@@ -263,7 +263,7 @@ export default {
                   title: `Actualizado`,
                   icon: 'CoffeeIcon',
                   variant: 'success',
-                  text: `Correo ${response.data.data.name}. Actualizdo correctamente!`,
+                  text: `Configuraciones de Correo. Actualizadas correctamente!`,
                 },
               })
         }else{

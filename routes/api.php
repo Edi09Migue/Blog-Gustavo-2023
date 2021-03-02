@@ -42,6 +42,7 @@ Route::group(['prefix' => 'admin','middleware' => 'auth:api'], function() {
   
       Route::resource('usuarios', Usuarios::class);
       Route::post('usuarios/validate/username',[Usuarios::class,'isUniqueUsername']);
+      Route::put('usuario/{id}/updatePassword',[Usuarios::class,'updatePassword']);
       Route::post('usuarios/validate/email',[Usuarios::class,'isUniqueEmail']);
   
       Route::get('roles/dropdownOptions',[Roles::class,'dropdownOptions']);
