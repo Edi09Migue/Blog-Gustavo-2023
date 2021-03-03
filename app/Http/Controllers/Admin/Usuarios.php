@@ -75,7 +75,7 @@ class Usuarios extends Controller
             $usuario->password = bcrypt($request->password);
             if($request->has('avatar') && !is_null($request->avatar))
             {
-                $usuario->avatar = parent::uploadAvatar($request->avatar,'avatar_'.$request->username,'/images/profiles/');
+                $usuario->avatar = parent::uploadAvatar($request->avatar,'/images/profiles/');
             }
             $usuario->save();
 
@@ -86,8 +86,8 @@ class Usuarios extends Controller
             $info->save();
             
             if ($request->has('role')) {
-                $usuario->assignRole($request->role);
-                //$usuario->syncRoles($request->roles_id);
+                $usuario->assignRole($request->role);//asigno un solo rol
+                //$usuario->syncRoles($request->roles_id);//asigno varios roles
             }
 
             DB::commit();
@@ -166,7 +166,7 @@ class Usuarios extends Controller
     public function update(Request $request, $id)
     {
         $usuario = User::find($id);
-        $usuario->fill($request->all());
+        $usuario->fill($request->except(['avatar']));
         
         if($request->has('password')){
             $usuario->password = bcrypt($request->password);
@@ -174,11 +174,10 @@ class Usuarios extends Controller
         
         //$usuario->persona->fill($request->all('persona')['persona']);
         
-        // if($request->has('avatar') && !is_null($request->avatar))
-        // {
-        //     $usuario->persona->avatar = parent::uploadAvatar($request->avatar,'avatar_'.$usuario->username,'/images/profiles/');
-        //     $usuario->persona->save();
-        // }
+        if($request->has('avatar') && !is_null($request->avatar))
+        {
+            $usuario->avatar = parent::uploadAvatar($request->avatar,'/images/profiles/');
+        }
 
         $info = UserInfo::firstOrNew([
             'id' => $usuario->id
@@ -192,6 +191,9 @@ class Usuarios extends Controller
         }
         //$persona->save();
         $usuario->save();
+
+        //TODO::añadir solo si se esta editando desde el perfil del usuario
+        $usuario->ability = $usuario->allPermissions;
 
         return response()->json([
             'status' => true,

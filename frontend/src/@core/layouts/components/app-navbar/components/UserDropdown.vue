@@ -13,7 +13,8 @@
       </div>
       <b-avatar
         size="40"
-        :src="userData.avatar"
+        :src="userData.avatarURL"
+        :text="avatarText(userData.fullName)"
         variant="light-primary"
         badge
         class="badge-minimal"

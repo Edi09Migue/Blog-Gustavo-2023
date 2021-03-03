@@ -38,7 +38,8 @@
             size="40"
             variant="light-primary"
             badge
-            :src="require('@/assets/images/avatars/13-small.png')"
+            :src="userData.avatarURL"
+            :text="avatarText(userData.fullName)"
             class="badge-minimal"
             badge-variant="success"
           />

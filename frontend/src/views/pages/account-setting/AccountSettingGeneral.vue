@@ -5,11 +5,13 @@
     <b-media no-body>
       <b-media-aside>
         <b-link>
-          <b-img
+          <b-avatar
             ref="previewEl"
+            :src="profileFile"
+            :text="avatarText(optionsLocal.name)"
+            variant="light-primary"
+            size="90px"
             rounded
-            :src="optionsLocal.avatar"
-            height="80"
           />
         </b-link>
         <!--/ avatar -->
@@ -22,18 +24,17 @@
           variant="primary"
           size="sm"
           class="mb-75 mr-75"
-          @click="$refs.refInputEl.$el.click()"
+          @click="$refs.refInputEl.click()"
         >
           {{ $t('Update') }}
+          <input
+            ref="refInputEl"
+            type="file"
+            accept=".jpg, .png, .gif"
+            class="d-none"
+            @input="inputImageRenderer"
+          />
         </b-button>
-        <b-form-file
-          ref="refInputEl"
-          v-model="profileFile"
-          accept=".jpg, .png, .gif"
-          :hidden="true"
-          plain
-          @input="inputImageRenderer"
-        />
         <!--/ upload button -->
 
         <!-- reset -->
@@ -46,7 +47,7 @@
           {{ $t('Delete') }}
         </b-button>
         <!--/ reset -->
-        <b-card-text>Allowed JPG, GIF or PNG. Max size of 800kB</b-card-text>
+        <b-card-text>Allowed JPG, SVG or PNG. Max size of 800kB</b-card-text>
       </b-media-body>
     </b-media>
     <!--/ media -->
@@ -192,10 +193,12 @@
 <script>
 import {
   BFormFile, BButton, BForm, BFormGroup, BFormInput, BRow, BCol, BAlert, BCard, BCardText, BMedia, BMediaAside, BMediaBody, BLink, BImg,
+  BAvatar,
   //Form validation
   BFormInvalidFeedback
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
+import { avatarText } from '@core/utils/filter'
 import { useInputImageRenderer } from '@core/comp-functions/forms/form-utils'
 import { ref } from '@vue/composition-api'
 
@@ -224,6 +227,7 @@ export default {
     BCard,
     BCardText,
     BMedia,
+    BAvatar,
     BMediaAside,
     BMediaBody,
     BLink,
@@ -247,7 +251,6 @@ export default {
   },
   data() {
     return {
-      profileFile: null,
       required,
       alpha,
       alphaNum,
@@ -303,6 +306,7 @@ export default {
     const {route, router } = useRouter()
 
     const refInputEl = ref(null)
+    const profileFile = ref(null)
     const previewEl = ref(null)
     const optionsLocal = ref(null)
     const errorServer = ref(null)
@@ -311,13 +315,16 @@ export default {
     const originalEmail = ref("")
     originalUsername.value = props.generalData.username
     originalEmail.value = props.generalData.email
-
+    profileFile.value = props.generalData.avatarURL
     optionsLocal.value = JSON.parse(JSON.stringify(props.generalData))
+    optionsLocal.value.avatar = null
 
     //const { inputImageRenderer } = useInputImageRenderer(refInputEl, previewEl)
     const { inputImageRenderer } = useInputImageRenderer(refInputEl, base64 => {
       console.log('image');
       console.log(base64);
+      profileFile.value = base64
+      optionsLocal.value.avatar = base64
     })
 
 
@@ -327,6 +334,9 @@ export default {
         if(response.data.status){
           router.replace({ name: 'pages-profile'})
             .then(() => {
+              console.log('response.data.data');
+              console.log(response.data.data);
+              localStorage.setItem('userData', JSON.stringify(response.data.data))
               toast({
                 component: ToastificationContent,
                 position: 'top-right',
@@ -356,8 +366,10 @@ export default {
     } = formValidation();    
 
     return {
+      avatarText,
       refInputEl,
       previewEl,
+      profileFile,
       inputImageRenderer,
       optionsLocal,
 

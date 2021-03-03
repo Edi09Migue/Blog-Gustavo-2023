@@ -10,11 +10,13 @@
     <div class="position-relative">
       <div class="profile-img-container d-flex align-items-center">
         <div class="profile-img">
-          <b-img
+          <b-avatar
             :src="headerData.avatar"
+            :text="avatarText(headerData.name)"
+            :alt="headerData.name"
+            size="115px"
+            variant="light-primary"
             rounded
-            fluid
-            alt="profile photo"
           />
         </div>
         <!-- profile title -->
@@ -131,9 +133,11 @@
 
 <script>
 import {
-  BCard, BImg, BNavbar, BNavbarToggle, BCollapse, BTabs, BNavItem, BButton,
+  BCard, BImg, BNavbar, BNavbarToggle, BCollapse, BTabs, BNavItem, BButton,BAvatar
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
+
+import { avatarText } from '@core/utils/filter'
 
 export default {
   components: {
@@ -145,6 +149,7 @@ export default {
     BNavbarToggle,
     BCollapse,
     BImg,
+    BAvatar
   },
   directives: {
     Ripple,
@@ -160,5 +165,10 @@ export default {
       default: () => {},
     },
   },
+  setup(){
+    return {
+      avatarText
+    }
+  }
 }
 </script>

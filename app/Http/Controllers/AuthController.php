@@ -77,16 +77,7 @@ class AuthController extends Controller
             $token->expires_at = Carbon::now()->addWeeks(1);
         $token->save();
 
-        //TODO::definir permisos de usuario
-        $abilities = [
-        ['action'=>'manage','subject'=>'all']
-        ];
         $user->ability = $user->allPermissions;
-        
-        //TODO::guardar nombre completo
-        $user->fullName = $user->name;
-        //TODO:: definir rol de usuario
-        $user->role = $user->role;
 
         //TODO:: vericar campos adicionales de user
         $user->extras=['eCommerceCartItemsCount'=>6];

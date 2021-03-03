@@ -45,7 +45,7 @@ export default {
     return {
        profileData: {
           header: {
-            avatar: require('@/assets/images/portrait/small/avatar-s-2.jpg'),
+            avatar: require('@/assets/images/portrait/small/avatar-s-1.png'),
             username: 'Kitty Allanson',
             name: 'Kitty Allanson',
             designation: 'UI/UX Designer',
@@ -72,6 +72,7 @@ export default {
        this.profileData.header.username = res.data.username
        this.profileData.header.name = res.data.name
        this.profileData.header.designation = res.data.role
+       this.profileData.header.avatar = res.data.avatarURL
         //userAbout
         this.profileData.userAbout.about = res.data.user_info.bio
         this.profileData.userAbout.joined = res.data.creado

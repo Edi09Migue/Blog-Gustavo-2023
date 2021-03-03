@@ -52,10 +52,15 @@ class User extends Authenticatable
     ];
 
     protected $appends = [
+        'fullName',
         'role',
-        'creado'
+        'creado',
+        'avatarURL'
     ];
 
+    /**
+     * Devuelve la información complementaria de un usuario
+     */
     public function userInfo(){
         return $this->hasOne(UserInfo::class,'id','id');
     }
@@ -93,7 +98,7 @@ class User extends Authenticatable
      * Devuelve la URL completa del avatar del usuario
      */
     public function getAvatarURLAttribute(){
-        return asset('images/profiles/'.($this->avatar? $this->avatar:'avatar.png'));
+        return $this->avatar ? asset('images/profiles/'.$this->avatar) :'';
     }
 
     /**
@@ -101,5 +106,12 @@ class User extends Authenticatable
      */
     public function getCreadoAttribute(){
         return $this->created_at->format('M, d Y');
+    }
+
+    /**
+     * Devuelve el nombre completo del usuaio
+     */
+    public function getFullNameAttribute(){
+        return $this->name;
     }
 }
