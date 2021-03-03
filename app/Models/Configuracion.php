@@ -16,6 +16,7 @@ class Configuracion extends Model
         'descripcion',
         'group_key'
     ];
+    
 
     /**
      * Devuelve el valor de una configuracion por su key
@@ -26,5 +27,17 @@ class Configuracion extends Model
     public function scopeValor($query,$key){
         $setting = $query->where('key',$key)->first();
         return $setting ? $setting->value: "";
+    }
+
+    /**
+     * Devuelve la URL completa de la iamgen 
+     * si la configuracion es de tipo 'image'
+     */
+    public function getImageUrlAttribute(){
+        $path="";
+        if($this->tipo=="image"){
+            $path = asset("images/uploads/".$this->value);
+        }
+        return $path;
     }
 }

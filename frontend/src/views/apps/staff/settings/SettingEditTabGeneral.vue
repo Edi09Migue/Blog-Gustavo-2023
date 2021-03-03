@@ -7,7 +7,7 @@
         <b-avatar
           ref="previewEl"
           :src="configDataLocal
-          .avatar"
+          .logoUrl"
           :text="avatarText(configDataLocal
           .name)"
           variant="light-primary"
@@ -296,9 +296,15 @@ export default {
     findValue(key){
       var setting = this.settingsData.find(s=>s.key==key)
       return typeof setting !=="undefined" ? setting.value : ''
+    },
+    findSetting(key){
+      var setting = this.settingsData.find(s=>s.key==key)
+      return typeof setting !=="undefined" ? setting : ''
     }
   },
   mounted() {
+    this.configDataLocal.logo = null
+    this.configDataLocal.logoUrl = this.findSetting('logo').imageUrl
     this.configDataLocal.company_name = this.findValue('company_name')
     this.configDataLocal.company_shortname = this.findValue('company_shortname')
     this.configDataLocal.slogan = this.findValue('slogan')
@@ -317,6 +323,8 @@ export default {
   setup(props) {
 
     const configDataLocal = ref({
+      logo: '',
+      logoUrl: '',
       company_name: '',
       company_shortname: '',
       slogan: '',
@@ -338,11 +346,14 @@ export default {
 
     const { inputImageRenderer } = useInputImageRenderer(refInputEl, base64 => {
       // eslint-disable-next-line no-param-reassign
-      props.settingsData.avatar = base64
+      configDataLocal.value.logo = base64
+      configDataLocal.value.logoUrl = base64
+      console.log('base64');
+      console.log(base64);
     })
 
     const onSubmit = () => {
-      store.dispatch("app-setting/updateUser", configDataLocal
+      store.dispatch("app-setting/updateConfigs", configDataLocal
       ).then((response) => {
         if(response.data.status){
 

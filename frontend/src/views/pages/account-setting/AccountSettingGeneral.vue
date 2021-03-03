@@ -314,7 +314,11 @@ export default {
 
     optionsLocal.value = JSON.parse(JSON.stringify(props.generalData))
 
-    const { inputImageRenderer } = useInputImageRenderer(refInputEl, previewEl)
+    //const { inputImageRenderer } = useInputImageRenderer(refInputEl, previewEl)
+    const { inputImageRenderer } = useInputImageRenderer(refInputEl, base64 => {
+      console.log('image');
+      console.log(base64);
+    })
 
 
     const onSubmit = () => {

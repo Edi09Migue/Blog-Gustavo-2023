@@ -27,7 +27,10 @@ class Configuraciones extends Controller
                         ->orderBy($sortBy,$sortDesc=="true"?'desc':'asc')
                         ->paginate($perPage);
 
-    	
+        //Genero el campo imageUrl para las configuraciones de tipo 'image'
+    	$configuraciones->filter(function($c){ return $c->tipo=="image";})
+                        ->each(function($c){$c->imageUrl= $c->imageUrl;});
+
     	return response()->json([
             'items' => $configuraciones->items(),
             'total' => $configuraciones->count()
@@ -79,6 +82,7 @@ class Configuraciones extends Controller
                     'servidor_smtp','user_smtp','password_smtp',
                     'puerto_smtp','encryption_smtp',
                 ]);
+                //Sobre-escribo el archivo de configuraciones del mail
                 Config::set('mail.mailers.smtp.host', $request->servidor_smtp);
                 Config::set('mail.mailers.smtp.username', $request->user_smtp);
                 Config::set('mail.mailers.smtp.password', $request->password_smtp);
@@ -91,6 +95,12 @@ class Configuraciones extends Controller
                     'company_name','company_shortname','slogan',
                     'ruc','email','telefono','fax','direccion'
                 ]);
+
+                if($request->has('logo') && !is_null($request->logo))
+                {
+                    $img_url = parent::uploadAvatar($request->logo,'/images/uploads/');
+                    $valores['logo'] = $img_url;
+                }
 
                 break;
             case 'sistema':

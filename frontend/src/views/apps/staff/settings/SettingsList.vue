@@ -7,17 +7,10 @@
       :show="settingsData === undefined"
     >
       <h4 class="alert-heading">
-        Error fetching user data
+        Error fetching configs data
       </h4>
       <div class="alert-body">
-        No user found with this user id. Check
-        <b-link
-          class="alert-link"
-          :to="{ name: 'apps-users-list'}"
-        >
-          User List
-        </b-link>
-        for other users.
+        Try a full page reload (ctrl + f5) or check server log
       </div>
     </b-alert>
 

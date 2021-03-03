@@ -39,6 +39,16 @@ class UserInfo extends Model
         'social',
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'social' => 'json',
+    ];
+
+
     public function user(){
         return $this->belongsTo(User::class);
     }
