@@ -7,7 +7,7 @@
         href="https://1.envato.market/pixinvent_portfolio"
         target="_blank"
       >SANTANA</b-link>
-      <span class="d-none d-sm-inline-block">, All rights Reserved</span>
+      <span class="d-none d-sm-inline-block">, {{ $t('All rights Reserved') }}</span>
     </span>
 
     <span class="float-md-right d-none d-md-block">Hecho a mano  &amp; con 

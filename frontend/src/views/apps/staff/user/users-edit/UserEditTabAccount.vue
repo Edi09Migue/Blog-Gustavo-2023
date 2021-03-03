@@ -6,8 +6,7 @@
       <template #aside>
         <b-avatar
           ref="previewEl"
-          :src="userDataLocal
-          .avatar"
+          :src="profileFile"
           :text="avatarText(userDataLocal
           .name)"
           :variant="`light-${resolveUserRoleVariant(userDataLocal
@@ -338,7 +337,12 @@ export default {
 
     const originalUsername = ref("")
     const originalEmail = ref("")
+    const profileFile = ref(null)
     const userDataLocal = ref(JSON.parse(JSON.stringify(props.userData)))
+
+    profileFile.value = props.userData.avatarURL
+    userDataLocal.value.avatar = null
+
     originalUsername.value = props.userData.username
     originalEmail.value = props.userData.email
     const toast = useToast()
@@ -380,8 +384,8 @@ export default {
     const previewEl = ref(null)
 
     const { inputImageRenderer } = useInputImageRenderer(refInputEl, base64 => {
-      // eslint-disable-next-line no-param-reassign
-      props.userData.avatar = base64
+      profileFile.value = base64
+      userDataLocal.value.avatar = base64
     })
 
     const onSubmit = () => {
@@ -422,6 +426,7 @@ export default {
       resolveUserRoleVariant,
       avatarText,
       roleOptions,
+      profileFile,
       statusOptions,
 
       //  ? Demo - Update Image on click of update button
