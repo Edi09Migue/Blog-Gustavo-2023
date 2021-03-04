@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -140,11 +141,21 @@ class AuthController extends Controller
      * Toma el email, la nueva contraseña y el token enviado al correo del usuario
      */
     public function resetPasswordPost(Request $request){
-        $request->validate([
+
+        $validator = Validator::make($request->all(),[
             'token' => 'required',
             'email' => 'required|email',
             'password' => 'required|min:8|confirmed',
         ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return response()->json([
+                'status' => false,
+                'data' => $errors,
+                'msg' => $errors->first()
+            ]);    
+        }
     
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
@@ -160,7 +171,7 @@ class AuthController extends Controller
         );
     
         return $status == Password::PASSWORD_RESET
-                    ? response()->json('status', __($status))
-                    : response()->json(['email' => [__($status)]]);
+                    ? response()->json(['status'=> __($status)])
+                    : response()->json(['msg' => [__($status)]]);
     }
 }

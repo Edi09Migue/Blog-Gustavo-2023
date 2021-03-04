@@ -85,6 +85,7 @@
           <b-dropdown-divider />
 
           <b-dropdown-item
+            v-if="$can('editar','perfil_user')"
             :to="{ name: 'pages-account-setting' }"
             link-class="d-flex align-items-center"
           >

@@ -127,6 +127,20 @@
                 </validation-provider>
               </b-form-group>
 
+              
+              <b-alert
+                variant="danger"
+                show
+                v-show="errorServer"
+              >
+                <h4 class="alert-heading">
+                  {{ $t('Error') }}
+                </h4>
+                <div class="alert-body">
+                  <span>{{ errorServer }}</span>
+                </div>
+              </b-alert>
+
               <!-- submit button -->
               <b-button
                 block
@@ -155,7 +169,7 @@
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import {
-  BRow, BCol, BCardTitle, BCardText, BForm, BFormGroup, BInputGroup, BInputGroupAppend, BLink, BFormInput, BButton, BImg,
+  BRow, BCol, BCardTitle, BCardText, BForm, BFormGroup, BInputGroup, BInputGroupAppend, BLink, BFormInput, BButton, BImg, BAlert
 } from 'bootstrap-vue'
 import { required } from '@validations'
 import store from '@/store/index'
@@ -176,6 +190,7 @@ export default {
     BInputGroup,
     BLink,
     BFormInput,
+    BAlert,
     BInputGroupAppend,
     ValidationProvider,
     ValidationObserver,
@@ -186,6 +201,7 @@ export default {
       cPassword: '',
       password: '',
       token:'',
+      errorServer:null,
       sideImg: require('@/assets/images/pages/reset-password-v2.svg'),
       // validation
       required,
@@ -235,14 +251,19 @@ export default {
             console.log(response.data);
             console.log(response.data.status);
             if(response.data.status){
-              this.$toast({
-                component: ToastificationContent,
-                props: {
-                  title: 'Form Submitted',
-                  icon: 'EditIcon',
-                  variant: 'success',
-                },
+              this.$router.replace({ name: 'auth-login'})
+              .then(() => {
+                  this.$toast({
+                    component: ToastificationContent,
+                    props: {
+                      title: 'Contraseña actualizada',
+                      icon: 'EditIcon',
+                      variant: 'success',
+                    },
+                  })
               })
+            }else{
+              this.errorServer = response.data.msg
             }
           })
 

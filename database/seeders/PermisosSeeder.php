@@ -27,6 +27,9 @@ class PermisosSeeder extends Seeder
         $p_listar_configs = Permission::create(['name' => 'manage-all','group_key'=>'Generales']);
         $p_read_auth = Permission::create(['name' => 'read-Auth','group_key'=>'Generales']);
         
+        $p_ver_perfil_user = Permission::create(['name' => 'ver-perfil_user','group_key'=>'Generales']);
+        $p_editar_perfil_user = Permission::create(['name' => 'editar-perfil_user','group_key'=>'Generales']);
+
         $p_dashboard_user = Permission::create(['name' => 'ver-dashboard_user','group_key'=>'Generales']);
         $p_dashboard_editor = Permission::create(['name' => 'ver-dashboard_editor','group_key'=>'Generales']);
 
@@ -57,21 +60,29 @@ class PermisosSeeder extends Seeder
             $superadmin->givePermissionTo($permiso);
             $admin->givePermissionTo($permiso);
         }
+        
+        //permisos para editor
         $editor->givePermissionTo($p_listar_usuarios);
 
-        $cliente->givePermissionTo($p_dashboard_user);
-        $autor->givePermissionTo($p_dashboard_user);
-        $editor->givePermissionTo($p_dashboard_user);
-        $suscriptor->givePermissionTo($p_dashboard_user);
+        //permisos para todos los roles
+        $permisos_globales = [
+            $p_dashboard_user,
+            $p_read_auth,
+            $p_ver_perfil_user,
+            $p_editar_perfil_user
+        ];
+        foreach($permisos_globales as $p){
+            $cliente->givePermissionTo($p);
+            $autor->givePermissionTo($p);
+            $editor->givePermissionTo($p);
+            $suscriptor->givePermissionTo($p);
+        }
         
-        $cliente->givePermissionTo($p_read_auth);
-        $autor->givePermissionTo($p_read_auth);
-        $editor->givePermissionTo($p_read_auth);
-        $suscriptor->givePermissionTo($p_read_auth);
-
+        //USER 1 con rol de admin
         $user_superadmin = User::find(1);
         $user_superadmin->assignRole('admin');
 
+        //USER 2 con rol de editor
         $user_editor = User::find(2);
         $user_editor->assignRole('editor');
 

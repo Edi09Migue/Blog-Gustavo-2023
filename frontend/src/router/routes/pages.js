@@ -135,6 +135,8 @@ export default [
       name: 'pages-account-setting',
       component: () => import('@/views/pages/account-setting/AccountSetting.vue'),
       meta: {
+        action:'editar',
+        resource: 'perfil_user',
         pageTitle: 'Account Settings',
         breadcrumb: [
           {
@@ -152,6 +154,8 @@ export default [
       name: 'pages-profile',
       component: () => import('@/views/pages/profile/Profile.vue'),
       meta: {
+        action:'ver',
+        resource: 'perfil_user',
         pageTitle: 'Profile',
         breadcrumb: [
           {

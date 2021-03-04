@@ -88,9 +88,20 @@
                 </div>
               </b-alert>
 
+              <b-alert
+                variant="success"
+                show
+                v-show="successServer"
+              >
+                <div class="alert-body">
+                  <span>{{ successServer }}</span>
+                </div>
+              </b-alert>
+
               <b-button
                 type="submit"
                 variant="primary"
+                :disabled="procesando"
                 block
               >
                 {{ $t('Send reset link') }}
@@ -143,6 +154,8 @@ export default {
       userEmail: '',
       sideImg: require('@/assets/images/pages/forgot-password-v2.svg'),
       errorServer:null,
+      successServer:null,
+      procesando:false,
       // validation
       required,
       email,
@@ -162,22 +175,23 @@ export default {
     validationForm() {
       this.$refs.simpleRules.validate().then(success => {
       if (success) {
+        this.procesando=true
           this.$http.post('/api/auth/reset-password', {
               email: this.userEmail,
             })
           .then(response => {
-            console.log(response);
-            console.log(response.data);
-            console.log(response.data.status);
+            this.procesando=false
             if(response.data.status){
+              this.successServer=response.data.status
               this.$toast({
                 component: ToastificationContent,
                 props: {
-                  title: 'Form Submitted',
+                  title: 'Revisa tu correo electrónico',
                   icon: 'EditIcon',
                   variant: 'success',
                 },
               })
+
             }else{
               this.errorServer = response.data.email
             }

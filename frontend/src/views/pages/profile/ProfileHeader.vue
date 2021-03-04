@@ -109,7 +109,7 @@
             <template #tabs-end>
               <b-button
                 :to="{ name: 'pages-account-setting' }"
-                v-if="headerData.id==userData.id"
+                v-if="headerData.id==userData.id && $can('editar','perfil_user')"
                 variant="primary"
                 class="ml-auto"
               >
@@ -117,7 +117,7 @@
                   icon="EditIcon"
                   class="d-block d-md-none"
                 />
-                <span class="font-weight-bold d-none d-md-block">Edit</span>
+                <span class="font-weight-bold d-none d-md-block">{{ $t('Edit') }}</span>
               </b-button>
             </template>
             <!-- edit buttons -->
