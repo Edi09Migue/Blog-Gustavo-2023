@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -57,6 +58,20 @@ class User extends Authenticatable
         'creado',
         'avatarURL'
     ];
+
+
+    /**
+ * Send a password reset notification to the user.
+ *
+ * @param  string  $token
+ * @return void
+ */
+public function sendPasswordResetNotification($token)
+{
+    $url = route('password.reset',['token'=>$token,'email'=>$this->email]);
+
+    $this->notify(new ResetPasswordNotification($url));
+}
 
     /**
      * Devuelve la información complementaria de un usuario

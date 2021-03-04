@@ -52,6 +52,27 @@ class ConfiguracionesSeeder extends Seeder
         $config->save();
 
         $config = new Configuracion();
+        $config->key = "facebook";
+        $config->value = "https://www.facebook.com";
+        $config->tipo = "string";
+        $config->group_key = "general";
+        $config->save();
+
+        $config = new Configuracion();
+        $config->key = "instagram";
+        $config->value = "https://www.instagram.com";
+        $config->tipo = "string";
+        $config->group_key = "general";
+        $config->save();
+
+        $config = new Configuracion();
+        $config->key = "twitter";
+        $config->value = "https://www.instagram.com";
+        $config->tipo = "string";
+        $config->group_key = "general";
+        $config->save();
+
+        $config = new Configuracion();
         $config->key = "email";
         $config->value = "sistemas@santana.ec";
         $config->tipo = "string";

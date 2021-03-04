@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Notifications\ResetPasswordNotification;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
@@ -173,5 +174,17 @@ class AuthController extends Controller
         return $status == Password::PASSWORD_RESET
                     ? response()->json(['status'=> __($status)])
                     : response()->json(['msg' => [__($status)]]);
+    }
+
+    /**
+     * Devuelve la vista del email enviado para restaurar contraseña
+     */
+    public function testResetPasswordEmail(){
+
+        $user = User::find(1);
+        $url = route('password.reset','1234');
+
+        return (new ResetPasswordNotification($url))
+                    ->toMail($user);
     }
 }
