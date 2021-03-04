@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Notifications\ResetPasswordNotification;
+use App\Notifications\WelcomeNotification;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
@@ -174,6 +175,17 @@ class AuthController extends Controller
         return $status == Password::PASSWORD_RESET
                     ? response()->json(['status'=> __($status)])
                     : response()->json(['msg' => [__($status)]]);
+    }
+
+    /**
+     * Devuelve la vista del email enviado de bienvenida
+     */
+    public function testWelcomeEmail(){
+
+        $user = User::find(1);
+
+        return (new WelcomeNotification())
+                    ->toMail($user);
     }
 
     /**

@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('settings',[Configuraciones::class,'mainSettings']);
 
 Route::get('/testResetPasswordEmail',[AuthController::class,'testResetPasswordEmail']);
+Route::get('/testWelcomeEmail',[AuthController::class,'testWelcomeEmail']);
 
 Route::group(['prefix' => 'auth'], function () {
   Route::post('login', [AuthController::class, 'login'])->name('login');

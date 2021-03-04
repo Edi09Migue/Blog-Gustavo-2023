@@ -13,7 +13,7 @@
       td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: "Segoe UI", sans-serif; mso-line-height-rule: exactly;}
     </style>
   <![endif]-->
-    <title>Reset your Password</title>
+    <title>Bienvenido a  {{ $company_shortname }} 👋</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700" rel="stylesheet" media="screen">
     <style>
       .hover-underline:hover {
@@ -56,6 +56,10 @@
       }
 
       @media (max-width: 600px) {
+        .sm-leading-32 {
+          line-height: 32px !important;
+        }
+
         .sm-px-24 {
           padding-left: 24px !important;
           padding-right: 24px !important;
@@ -74,8 +78,8 @@
   </head>
 
   <body style="margin: 0; padding: 0; width: 100%; word-break: break-word; -webkit-font-smoothing: antialiased; --bg-opacity: 1; background-color: #eceff1; background-color: rgba(236, 239, 241, var(--bg-opacity));">
-    <div style="display: none;">Se recibió una solicitud para restablecer la contraseña de su cuenta {{ $company_shortname }}</div>
-    <div role="article" aria-roledescription="email" aria-label="Restaurar Contraseña" lang="en">
+    <div style="display: none;">Nos complace darle la bienvenida a {{ $company_shortname }}</div>
+    <div role="article" aria-roledescription="email" aria-label="Welcome to {{ $company_shortname }} 👋" lang="es">
       <table style="font-family: Montserrat, -apple-system, 'Segoe UI', sans-serif; width: 100%;" width="100%" cellpadding="0" cellspacing="0" role="presentation">
         <tr>
           <td align="center" style="--bg-opacity: 1; background-color: #eceff1; background-color: rgba(236, 239, 241, var(--bg-opacity)); font-family: Montserrat, -apple-system, 'Segoe UI', sans-serif;" bgcolor="rgba(236, 239, 241, var(--bg-opacity))">
@@ -92,25 +96,34 @@
                   <table style="font-family: 'Montserrat',Arial,sans-serif; width: 100%;" width="100%" cellpadding="0" cellspacing="0" role="presentation">
                     <tr>
                       <td class="sm-px-24" style="--bg-opacity: 1; background-color: #ffffff; background-color: rgba(255, 255, 255, var(--bg-opacity)); border-radius: 4px; font-family: Montserrat, -apple-system, 'Segoe UI', sans-serif; font-size: 14px; line-height: 24px; padding: 48px; text-align: left; --text-opacity: 1; color: #626262; color: rgba(98, 98, 98, var(--text-opacity));" bgcolor="rgba(255, 255, 255, var(--bg-opacity))" align="left">
-                        <p style="font-weight: 600; font-size: 18px; margin-bottom: 0;">{{ trans('passwords.Hey') }}</p>
+                        <p style="font-weight: 600; font-size: 18px; margin-bottom: 0;">Hola</p>
                         <p style="font-weight: 700; font-size: 20px; margin-top: 0; --text-opacity: 1; color: #ff5850; color: rgba(255, 88, 80, var(--text-opacity));">{{ $user->name }}!</p>
-                        <p style="margin: 0 0 24px;">
-                        Se recibió una solicitud para restablecer la contraseña de su cuenta 
-                          <span style="font-weight: 600;">{{ $company_shortname }}</span> - 
-                          <a href="mailto:{{ $user->email }}" class="hover-underline" style="--text-opacity: 1; color: #7367f0; color: rgba(115, 103, 240, var(--text-opacity)); text-decoration: none;">{{ $user->email }}</a>.
+                        <p class="sm-leading-32" style="font-weight: 600; font-size: 20px; margin: 0 0 24px; --text-opacity: 1; color: #263238; color: rgba(38, 50, 56, var(--text-opacity));">
+                          🏆 {{ $slogan }}!
                         </p>
-                        <p style="margin: 0 0 24px;">Utilice este enlace para restablecer su contraseña e iniciar sesión .</p>
-                        <a href="{{ $url }}" style="display: block; font-size: 14px; line-height: 100%; margin-bottom: 24px; --text-opacity: 1; color: #7367f0; color: rgba(115, 103, 240, var(--text-opacity)); text-decoration: none;">{{ $url }}</a>
+                        <a href="{{ url('/') }}">
+                          <img src="{{ asset('images/item.jpg') }}" width="500" alt="{{ $company_shortname }}" style="border: 0; max-width: 100%; line-height: 100%; vertical-align: middle;">
+                        </a>
+                        <p style="margin: 24px 0;">
+                          <span style="font-weight: 600;">{{ $company_shortname }}</span>
+                          es el panel de administración desarrollado a medida, para administrar su negocio 🤩
+                        </p>
+                        <p style="font-weight: 500; font-size: 16px; margin-bottom: 0;">Como puedo usar {{ $company_shortname }}?</p>
+                        <ul style="margin-bottom: 24px;">
+                          <li>
+                            {{ $company_shortname }} le permite gestionar diferentes roles, usuarios y permisos
+                          </li>
+                          <li>
+                            ...
+                          </li>
+                        </ul>
                         <table style="font-family: 'Montserrat',Arial,sans-serif;" cellpadding="0" cellspacing="0" role="presentation">
                           <tr>
                             <td style="mso-padding-alt: 16px 24px; --bg-opacity: 1; background-color: #7367f0; background-color: rgba(115, 103, 240, var(--bg-opacity)); border-radius: 4px; font-family: Montserrat, -apple-system, 'Segoe UI', sans-serif;" bgcolor="rgba(115, 103, 240, var(--bg-opacity))">
-                              <a href="{{ $url }}" style="display: block; font-weight: 600; font-size: 14px; line-height: 100%; padding: 16px 24px; --text-opacity: 1; color: #ffffff; color: rgba(255, 255, 255, var(--text-opacity)); text-decoration: none;">Restablecer Contraseña &rarr;</a>
+                              <a href="{{ url('/') }}" style="display: block; font-weight: 600; font-size: 14px; line-height: 100%; padding: 16px 24px; --text-opacity: 1; color: #ffffff; color: rgba(255, 255, 255, var(--text-opacity)); text-decoration: none;">Explorar {{ $company_name }} &rarr;</a>
                             </td>
                           </tr>
                         </table>
-                        <p style="margin: 24px 0;">
-                          <span style="font-weight: 600;">Nota:</span> Este enlace es válido por 1 hora desde el momento en que fue enviado y se puede utilizar para cambiar su contraseña solo una vez.
-                        </p>
                         <table style="font-family: 'Montserrat',Arial,sans-serif; width: 100%;" width="100%" cellpadding="0" cellspacing="0" role="presentation">
                           <tr>
                             <td style="font-family: 'Montserrat',Arial,sans-serif; padding-top: 32px; padding-bottom: 32px;">
@@ -119,10 +132,10 @@
                           </tr>
                         </table>
                         <p style="margin: 0 0 16px;">
-                            ¿No está seguro de por qué recibió este correo electrónico? Por favor
+                          ¿No está seguro de por qué recibió este correo electrónico? Por favor
                           <a href="mailto:{{ $email }}" class="hover-underline" style="--text-opacity: 1; color: #7367f0; color: rgba(115, 103, 240, var(--text-opacity)); text-decoration: none;"> déjenos saber</a>.
                         </p>
-                        <p style="margin: 0 0 16px;">Gracias, <br>{{ $company_shortname }}</p>
+                        <p style="margin: 0 0 16px;">Gracias, <br>{{ $company_name }}</p>
                       </td>
                     </tr>
                     <tr>

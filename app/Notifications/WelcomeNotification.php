@@ -8,21 +8,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ResetPasswordNotification extends Notification
+class WelcomeNotification extends Notification
 {
     use Queueable;
-
-    var $url;
-
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($url)
+    public function __construct()
     {
-        $this->url = $url;
+        //
     }
 
     /**
@@ -45,13 +42,12 @@ class ResetPasswordNotification extends Notification
     public function toMail($notifiable)
     {
         $app_name = Configuracion::valor('company_shortname');
-        
+
         return (new MailMessage)
-            ->subject('Restaurar contraseña -'.$app_name)
-            ->markdown('mail.password_reset',
-                        ['url'=>$this->url,
-                        'user'=>$notifiable]
-                    );
+        ->subject('Bienvenido a '.$app_name)
+        ->markdown('mail.welcome',
+            ['user'=>$notifiable]
+        );
     }
 
     /**
