@@ -16,14 +16,14 @@ export default function useUsersList() {
 
   // Table Handlers
   const tableColumns = [
-    { key: 'user', sortable: true, label: t('User') },
+    { key: 'name', sortable: true, label: t('User') },
     { key: 'email', sortable: true, label: t('Email') },
-    { key: 'role', sortable: true, label: t('Role') },
+    { key: 'role', sortable: false, label: t('Role') },
     {
       key: 'currentPlan',
       label: 'Plan',
       formatter: title,
-      sortable: true,
+      sortable: false,
     },
     { key: 'estado', sortable: true , label: t('Status')},
     { key: 'actions' , label: t('Actions') },
@@ -66,7 +66,7 @@ export default function useUsersList() {
         sortDesc: isSortDirDesc.value,
         role: roleFilter.value,
         plan: planFilter.value,
-        status: statusFilter.value,
+        estado: statusFilter.value,
       })
       .then(response => {
         const { users, total } = response.data

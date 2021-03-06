@@ -35,6 +35,7 @@
               </b-button>
               <b-button
                 v-if="$can('eliminar', 'usuarios')"
+                @click="removeUser(userData.id)"
                 variant="outline-danger"
                 class="ml-1"
               >
@@ -174,8 +175,9 @@ export default {
     },
   },
   setup() {
-    const { resolveUserRoleVariant } = useUsersList()
+    const { resolveUserRoleVariant, removeUser } = useUsersList()
     return {
+      removeUser,
       avatarText,
       resolveUserRoleVariant,
     }

@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             PermisosSeeder::class,
             ConfiguracionesSeeder::class,
+
+            FakeUsersSeeder::class,
         ]);
     }
 }

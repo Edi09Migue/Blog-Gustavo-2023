@@ -122,5 +122,8 @@
   "Birth date":"Fecha de nacimiento",
   "All rights Reserved":"Todos los derechos reservados",
   "Profile":"Perfil",
-  "Account Settings": "Configuraciones de cuenta"
+  "Account Settings": "Configuraciones de cuenta",
+  "Pending":"Pendiente",
+  "Active":"Activo",
+  "Inactive":"Inactivo"
 }

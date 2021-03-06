@@ -85,7 +85,7 @@
       >
 
         <!-- Column: User -->
-        <template #cell(user)="data">
+        <template #cell(name)="data">
           <b-media vertical-align="center">
             <template #aside>
               <b-avatar
@@ -223,6 +223,7 @@ import {
 } from 'bootstrap-vue'
 import vSelect from 'vue-select'
 import store from '@/store'
+import { useUtils as useI18nUtils } from '@core/libs/i18n'
 import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
 import UsersListFilters from './UsersListFilters.vue'
@@ -231,6 +232,8 @@ import userStoreModule from '../userStoreModule'
 import UserListAddNew from './UserListAddNew.vue'
 
 export default {
+  watch: {
+  },
   components: {
     UsersListFilters,
     UserListAddNew,
@@ -262,6 +265,7 @@ export default {
       if (store.hasModule(USER_APP_STORE_MODULE_NAME)) store.unregisterModule(USER_APP_STORE_MODULE_NAME)
     })
 
+    const { t } = useI18nUtils()
     const isAddNewUserSidebarActive = ref(false)
 
     const roleOptions = ref([])
@@ -294,9 +298,9 @@ export default {
     ]
 
     const statusOptions = [
-      { label: 'Pending', value: 'pendiente' },
-      { label: 'Active', value: 'activo' },
-      { label: 'Inactive', value: 'inactivo' },
+      { label: t('Pending'), value: 'pendiente' },
+      { label: t('Active'), value: 'activo' },
+      { label: t('Inactive'), value: 'inactivo' },
     ]
 
     const {

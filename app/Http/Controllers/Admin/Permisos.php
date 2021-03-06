@@ -29,7 +29,7 @@ class Permisos extends Controller
     	
     	return response()->json([
             'items' => $permisos->items(),
-            'total' => $permisos->count()
+            'total' => $permisos->total()
         ]);
     }
 

@@ -35,7 +35,7 @@ class Roles extends Controller
 
         return response()->json([
             'roles' => $roles->items(),
-            'total' => $roles->count()
+            'total' => $roles->total()
         ]);
     }
 

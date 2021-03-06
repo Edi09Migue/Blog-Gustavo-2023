@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class Usuarios extends Controller
@@ -21,17 +22,39 @@ class Usuarios extends Controller
     public function index(Request $request)
     {
         
-        //Filtros para usuarios
+        DB::enableQueryLog();
+        //Filtros para query
         $query = $request->has('q') ? $request->q : "";
         $perPage = $request->has('perPage') ? $request->perPage : 10;
         $sortBy = $request->has('sortBy') ? $request->sortBy : "id";
-        $sortDesc = $request->has('sortDesc') ? $request->sortDesc : true;
+        $sortDesc = $request->has('sortDesc') ? ($request->sortDesc=="true" ? true : false) : false;
         
-        //Obtengo los usuarios filtrados y ordenados
+        //Obtengo una instancia de Usuarios para el query
+        $usuarios = User::query();
         
-        $usuarios = User::where('email','like',"%$query%")
-                        ->orWhere('name','like',"%$query%")
-                        ->orWhere('username','like',"%$query%")
+        //Filtro para Estado
+        $estado = $request->has('estado') ? $request->estado : '';
+        if($estado!='') {
+            $usuarios = $usuarios->where('estado',$estado);
+        }
+        //Filtro para Rol
+        $role = $request->has('role') ? $request->role : '';
+        if($role!='') {
+            $usuarios = $usuarios->where(function($q) use($role){
+                $q->whereIn('id',function($sq) use($role){
+                    $sq->select('model_id');
+                    $sq->from('model_has_roles');
+                    $sq->where('role_id',$role);
+                });
+            });
+        }
+
+        //Filtros basicos, orden y paginacion
+        $usuarios = $usuarios->where(function($q) use($query){
+                            $q->where('email','like',"%$query%")
+                            ->orWhere('name','like',"%$query%")
+                            ->orWhere('username','like',"%$query%");
+                        })
                         ->orderBy($sortBy,$sortDesc?'desc':'asc')
                         ->paginate($perPage);
 
@@ -39,9 +62,10 @@ class Usuarios extends Controller
             $u->avatar = $u->avatarURL;
         });
         
+        Log::info(DB::getQueryLog()); 
         return response()->json([
             'users' => $usuarios->items(),
-            'total'=>$usuarios->count()
+            'total'=>$usuarios->total()
         ]);
     }
 
@@ -112,7 +136,8 @@ class Usuarios extends Controller
      * Devuelve TRUE si el Username esta disponible
      */
     public function isUniqueUsername(Request $request){
-        $existe = User::where('username',$request->value)->count();
+        //$existe = User::where('username',$request->value)->count();
+        $existe = User::whereRaw("BINARY `username`= ?", [$request->value])->count();
         return response()->json([
             'status' => true,
             'valid' => ($existe==0),
