@@ -64,10 +64,18 @@ export default {
           .catch(error => reject(error))
       })
     },
+    updateProfile(ctx, userData) {
+      return new Promise((resolve, reject) => {
+        axios
+          .put(`/api/admin/profile/update`, userData.value)
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
     updateUserPassword(ctx, userData) {
       return new Promise((resolve, reject) => {
         axios
-          .put(`/api/admin/usuario/${userData.id}/updatePassword`, userData)
+          .put(`/api/admin/profile/updatePassword`, userData)
           .then(response => resolve(response))
           .catch(error => reject(error))
       })

@@ -53,10 +53,10 @@
             icon="UserIcon"
             class="mr-50"
           />
-          <span>Profile</span>
+          <span>{{ $t('Profile') }}</span>
         </b-dropdown-item>
 
-        <b-dropdown-item link-class="d-flex align-items-center">
+        <!-- <b-dropdown-item link-class="d-flex align-items-center">
           <feather-icon
             size="16"
             icon="MailIcon"
@@ -81,7 +81,7 @@
             class="mr-50"
           />
           <span>Chat</span>
-        </b-dropdown-item>
+        </b-dropdown-item> -->
           <b-dropdown-divider />
 
           <b-dropdown-item
@@ -94,7 +94,7 @@
               icon="SettingsIcon"
               class="mr-50"
             />
-            <span>Settings</span>
+            <span>{{ $t('Settings') }}</span>
           </b-dropdown-item>
 
         <b-dropdown-divider />

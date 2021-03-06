@@ -73,6 +73,7 @@ export default {
        this.profileData.header.name = res.data.name
        this.profileData.header.designation = res.data.role
        this.profileData.header.avatar = res.data.avatarURL
+       this.profileData.header.coverImg = res.data.user_info.portadaURL
         //userAbout
         this.profileData.userAbout.about = res.data.user_info.bio
         this.profileData.userAbout.joined = res.data.creado

@@ -37,7 +37,7 @@
         icon="UserIcon"
         class="mr-50"
       />
-      <span>Profile</span>
+      <span>{{ $t('Profile') }}</span>
     </b-dropdown-item>
     <b-dropdown-item
       :to="{ name: 'apps-email' }"
@@ -84,7 +84,7 @@
         icon="SettingsIcon"
         class="mr-50"
       />
-      <span>Settings</span>
+      <span>{{ $t('Settings') }}</span>
     </b-dropdown-item>
     <b-dropdown-item
       :to="{ name: 'pages-pricing' }"

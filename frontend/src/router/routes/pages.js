@@ -109,7 +109,17 @@ export default [
       component: () => import('@/views/apps/staff/user/users-list/UsersList.vue'),
       meta:{
         action: 'listar',
-        resource: 'usuarios'
+        resource: 'usuarios',
+        pageTitle: 'Listado de Usuarios',
+        breadcrumb: [
+          {
+            text: 'Security',
+          },
+          {
+            text: 'Users',
+            active: true,
+          },
+        ],
       }
     },
     {
@@ -118,6 +128,20 @@ export default [
       component: () => import('@/views/apps/staff/user/users-view/UsersView.vue'),
       meta:{
         navActiveLink: 'apps-users-list',
+        pageTitle: 'Detalles Usuario',
+        breadcrumb: [
+          {
+            text: 'Security',
+          },
+          {
+            text: 'Users',
+            to:{ 'name' : 'apps-users-list' }
+          },
+          {
+            text: 'Details',
+            active: true,
+          },
+        ],
       }
     },
     {
@@ -128,6 +152,20 @@ export default [
         action: 'editar',
         resource: 'usuarios',
         navActiveLink: 'apps-users-list',
+        pageTitle: 'Edición usuario',
+        breadcrumb: [
+          {
+            text: 'Security',
+          },
+          {
+            text: 'Users',
+            to:{ 'name' : 'apps-users-list' }
+          },
+          {
+            text: 'Editing',
+            active: true,
+          },
+        ],
       }
     },
     {
@@ -140,7 +178,7 @@ export default [
         pageTitle: 'Account Settings',
         breadcrumb: [
           {
-            text: 'Pages',
+            text: 'Profile',
           },
           {
             text: 'Account Settings',
@@ -159,9 +197,6 @@ export default [
         pageTitle: 'Profile',
         breadcrumb: [
           {
-            text: 'Pages',
-          },
-          {
             text: 'Profile',
             active: true,
           },
@@ -177,7 +212,17 @@ export default [
       component: () => import('@/views/apps/staff/role/roles-list/RolesList.vue'),
       meta:{
         action: 'listar',
-        resource: 'roles'
+        resource: 'roles',
+        pageTitle: 'Listado de Roles',
+        breadcrumb: [
+          {
+            text: 'Security',
+          },
+          {
+            text: 'Roles',
+            active: true,
+          },
+        ],
       }
     },
     {
@@ -187,7 +232,45 @@ export default [
       meta:{
         navActiveLink: 'apps-roles-list',
         action: 'crear',
-        resource: 'roles'
+        resource: 'roles',
+        pageTitle: 'Nuevo Rol',
+        breadcrumb: [
+          {
+            text: 'Security',
+          },
+          {
+            text: 'Roles',
+            to:{ 'name' : 'apps-roles-list' }
+          },
+          {
+            text: 'Creating',
+            active: true
+          }
+        ],
+      }
+    },
+    {
+      path: '/apps/roles/view/:id',
+      name: 'apps-roles-view',
+      component: () => import('@/views/apps/staff/role/role-view/RoleView.vue'),
+      meta:{
+        navActiveLink: 'apps-roles-list',
+        action: 'listar',
+        resource: 'roles',
+        pageTitle: 'Detalles rol',
+        breadcrumb: [
+          {
+            text: 'Security',
+          },
+          {
+            text: 'Roles',
+            to:{ 'name' : 'apps-roles-list' }
+          },
+          {
+            text: 'Details',
+            active: true
+          }
+        ]
       }
     },
     {
@@ -197,7 +280,21 @@ export default [
       meta:{
         navActiveLink: 'apps-roles-list',
         action: 'editar',
-        resource: 'roles'
+        resource: 'roles',
+        pageTitle: 'Edición rol',
+        breadcrumb: [
+          {
+            text: 'Security',
+          },
+          {
+            text: 'Roles',
+            to:{ 'name' : 'apps-roles-list' }
+          },
+          {
+            text: 'Editing',
+            active: true
+          }
+        ]
       }
     },
     // *===============================================---*
@@ -209,7 +306,17 @@ export default [
       component: () => import('@/views/apps/staff/permission/permissions-list/PermissionsList.vue'),
       meta:{
         action: 'listar',
-        resource: 'permisos'
+        resource: 'permisos',
+        pageTitle: 'Listado de Permisos',
+        breadcrumb: [
+          {
+            text: 'Security',
+          },
+          {
+            text: 'Permissions',
+            active: true,
+          },
+        ],
       }
     },
     // *===============================================---*
@@ -221,7 +328,14 @@ export default [
       component: () => import('@/views/apps/staff/settings/SettingsList.vue'),
       meta:{
         action: 'listar',
-        resource: 'configuraciones'
+        resource: 'configuraciones',
+        pageTitle: 'Configuraciones Generales',
+        breadcrumb: [
+          {
+            text: 'Settings',
+            active: true,
+          },
+        ],
       }
     },
 ]

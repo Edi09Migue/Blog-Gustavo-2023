@@ -25,7 +25,7 @@ export default function useUsersList() {
       formatter: title,
       sortable: true,
     },
-    { key: 'status', sortable: true , label: t('Status')},
+    { key: 'estado', sortable: true , label: t('Status')},
     { key: 'actions' , label: t('Actions') },
   ]
   const perPage = ref(10)
@@ -142,9 +142,9 @@ export default function useUsersList() {
   }
 
   const resolveUserStatusVariant = status => {
-    if (status === 'pending') return 'warning'
-    if (status === 'active') return 'success'
-    if (status === 'inactive') return 'secondary'
+    if (status === 'pendiente') return 'warning'
+    if (status === 'activo') return 'success'
+    if (status === 'inactivo') return 'secondary'
     return 'primary'
   }
 

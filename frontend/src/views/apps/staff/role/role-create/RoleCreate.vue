@@ -145,6 +145,13 @@
                 >
                     {{ $t("Reset") }}
                 </b-button>
+                <b-button
+                    variant="outline-secondary"                    
+                    :to="{ name: 'apps-roles-list'}"
+                    :block="$store.getters['app/currentBreakPoint'] === 'xs'"
+                >
+                    {{ $t("Cancel") }}
+                </b-button>
             </b-form>
         </validation-observer>
     </component>

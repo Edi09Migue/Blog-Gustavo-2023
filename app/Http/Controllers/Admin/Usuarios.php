@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class Usuarios extends Controller
@@ -31,8 +30,10 @@ class Usuarios extends Controller
         //Obtengo los usuarios filtrados y ordenados
         
         $usuarios = User::where('email','like',"%$query%")
+                        ->orWhere('name','like',"%$query%")
+                        ->orWhere('username','like',"%$query%")
                         ->orderBy($sortBy,$sortDesc?'desc':'asc')
-                        ->paginate($request->perPage);
+                        ->paginate($perPage);
 
         $usuarios->each(function($u){
             $u->avatar = $u->avatarURL;
@@ -172,8 +173,6 @@ class Usuarios extends Controller
             $usuario->password = bcrypt($request->password);
         }
         
-        //$usuario->persona->fill($request->all('persona')['persona']);
-        
         if($request->has('avatar') && !is_null($request->avatar))
         {
             $usuario->avatar = parent::uploadAvatar($request->avatar,'/images/profiles/');
@@ -186,59 +185,16 @@ class Usuarios extends Controller
         $info->fill($request->user_info);
         $info->save();
 
-        if ($request->has('rol')) {
-            $usuario->syncRoles([$request->rol]);
+        if ($request->has('role')) {
+            $usuario->syncRoles([$request->role]);
         }
-        //$persona->save();
         $usuario->save();
-
-        //TODO::añadir solo si se esta editando desde el perfil del usuario
-        $usuario->ability = $usuario->allPermissions;
 
         return response()->json([
             'status' => true,
             'data' => $usuario,
             'msg' => $usuario->username.' actualizado!'
         ]);
-    }
-
-    public function updatePassword(Request $request, $id){
-
-        $user = User::find($id);
-
-        $validator = Validator::make($request->all(),[
-            'old_password'          => 'required',
-            'password'              => 'required|min:6',
-            'password_confirmation' => 'required|same:password'
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            return response()->json([
-                'status' => false,
-                'data' => $errors,
-                'msg' => $errors->first()
-            ]);    
-        }
-
-        if (Hash::check($request->old_password, $user->password)) {
-        
-            $user->password = Hash::make($request->password);
-            $user->save();
-        }else{
-            return response()->json([
-                'status' => false,
-                'data' => $user,
-                'msg' => 'Contraseña antigua incorrecta!'
-            ]);
-        }
-
-        return response()->json([
-            'status' => true,
-            'data' => $user,
-            'msg' => $user->username.' actualizado!'
-        ]);
-     
     }
 
     /**

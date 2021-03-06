@@ -329,7 +329,7 @@ export default {
 
 
     const onSubmit = () => {
-      store.dispatch("app-user/updateUser", optionsLocal
+      store.dispatch("app-user/updateProfile", optionsLocal
       ).then((response) => {
         if(response.data.status){
           router.replace({ name: 'pages-profile'})

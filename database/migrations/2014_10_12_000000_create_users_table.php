@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
 
             $table->string('avatar')->nullable();
             $table->string('username')->unique();
-            $table->integer('estado')->default(0);
+            $table->enum('estado',['pendiente','activo','inactivo'])->default('activo');
             
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
@@ -34,6 +34,7 @@ class CreateUsersTable extends Migration
             ->onDelete('cascade');
          
             $table->string('empresa')->nullable();
+            $table->string('portada')->nullable();
 
             $table->string('birthdate')->nullable();
             $table->string('telefono')->nullable();

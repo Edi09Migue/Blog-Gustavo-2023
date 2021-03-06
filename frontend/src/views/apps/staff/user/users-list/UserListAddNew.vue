@@ -55,7 +55,7 @@
                 autofocus
                 :state="getValidationState(validationContext)"
                 trim
-                placeholder="John Doe"
+                placeholder="Ej: John Doe"
               />
 
               <b-form-invalid-feedback>
@@ -78,6 +78,7 @@
                 id="username"
                 v-model="userData.username"
                 :state="getValidationState(validationContext)"
+                placeholder="Ej: jhonDoe90"
                 trim
               />
 
@@ -87,7 +88,7 @@
             </b-form-group>
           </validation-provider>
 
-          <!-- Username -->
+          <!-- Password -->
           <validation-provider
             #default="validationContext"
             name="Password"
@@ -102,7 +103,7 @@
                 type="password"
                 v-model="userData.password"
                 :state="getValidationState(validationContext)"
-                trim
+                placeholder="********"
               />
 
               <b-form-invalid-feedback>
@@ -125,6 +126,7 @@
                 id="email"
                 v-model="userData.email"
                 :state="getValidationState(validationContext)"
+                placeholder='Ej: jhondoe@gmail.com'
                 trim
               />
 
@@ -144,11 +146,14 @@
               :label="$t('Phone')"
               label-for="telefono"
             >
-              <b-form-input
+              <cleave
                 id="telefono"
                 v-model="userData.telefono"
                 :state="getValidationState(validationContext)"
-                trim
+                class="form-control"
+                :raw="false"
+                :options="clevePhone"
+                placeholder="Ej: 09812345678"
               />
 
               <b-form-invalid-feedback>
@@ -170,6 +175,7 @@
                 id="company"
                 v-model="userData.company"
                 :state="getValidationState(validationContext)"
+                placeholder='Ej: SANTANA eCORP'
                 trim
               />
 
@@ -196,6 +202,7 @@
                 :options="countries"
                 :clearable="false"
                 input-id="pais"
+                :placeholder="$t('Select Country')"
               />
               <b-form-invalid-feedback :state="getValidationState(validationContext)">
                 {{ validationContext.errors[0] }}
@@ -221,6 +228,7 @@
                 :reduce="val => val.value"
                 :clearable="false"
                 input-id="user-role"
+                :placeholder="$t('Select Role')"
               />
               <b-form-invalid-feedback :state="getValidationState(validationContext)">
                 {{ validationContext.errors[0] }}
@@ -276,10 +284,13 @@ import { required, alphaNum, email } from '@validations'
 import formValidation from '@core/comp-functions/forms/form-validation'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { useToast } from 'vue-toastification/composition'
+import Cleave from 'vue-cleave-component'
 import Ripple from 'vue-ripple-directive'
 import vSelect from 'vue-select'
 import countries from '@/@fake-db/data/other/countries'
 import store from '@/store'
+
+import 'cleave.js/dist/addons/cleave-phone.us'
 
 export default {
   methods: {
@@ -293,6 +304,7 @@ export default {
     BButton,
     BAlert,
     vSelect,
+    Cleave,
 
     // Form Validation
     ValidationProvider,
@@ -320,7 +332,11 @@ export default {
       required,
       alphaNum,
       email,
-      countries
+      countries,
+      clevePhone: {
+        phone: true,
+        phoneRegionCode: 'US',
+      },
     }
   },
   methods:{
@@ -392,7 +408,7 @@ export default {
                   title: `Creado!`,
                   icon: 'CoffeeIcon',
                   variant: 'success',
-                  text: `User ${response.data.data.username}. Creado correctamente!`,
+                  text: `Usuario ${response.data.data.username}. Creado correctamente!`,
                 },
               })
           }else{

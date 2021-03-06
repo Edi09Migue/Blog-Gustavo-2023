@@ -19,6 +19,7 @@ class UserInfo extends Model
     protected $fillable = [
         'id',
         'empresa',
+        'portada',
         
         'birthdate',
         'telefono',
@@ -39,6 +40,10 @@ class UserInfo extends Model
         'social',
     ];
 
+    protected $appends = [
+        'portadaURL'
+    ];
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -51,5 +56,12 @@ class UserInfo extends Model
 
     public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Devuelve la URL completa de la imagen de portada del usuario
+     */
+    public function getportadaURLAttribute(){
+        return asset('images/profiles/'. ($this->portada ? $this->portada :'timeline.jpg'));
     }
 }

@@ -81,6 +81,7 @@
                       v-model="userDataLocal
                       .username"
                       :state="getValidationState(validationContext)"
+                      placeholder="Ej: JohnDoe90"
                     />
                     <b-form-invalid-feedback>
                         {{ validationContext.errors[0] }}
@@ -108,6 +109,7 @@
                       v-model="userDataLocal
                       .name"
                       :state="getValidationState(validationContext)"
+                      placeholder="Ej: John Doe"
                       trim
                     />
                     <b-form-invalid-feedback>
@@ -137,6 +139,7 @@
                       .email"
                       type="email"
                       :state="getValidationState(validationContext)"
+                      placeholder="Ej: jhon@gmail.com"
                     />
                     <b-form-invalid-feedback>
                         {{ validationContext.errors[0] }}
@@ -156,7 +159,7 @@
               >
                 <v-select
                   v-model="userDataLocal
-                  .status"
+                  .estado"
                   :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                   :options="statusOptions"
                   :reduce="val => val.value"
@@ -207,6 +210,7 @@
                   id="empresa"
                   v-model="userDataLocal
                   .user_info.empresa"
+                  placeholder='Ej: SANTANA eCORP'
                 />
               </b-form-group>
             </b-col>
@@ -374,9 +378,9 @@ export default {
     fetchRoles()
 
     const statusOptions = [
-      { label: 'Pending', value: 'pending' },
-      { label: 'Active', value: 'active' },
-      { label: 'Inactive', value: 'inactive' },
+      { label: 'Pending', value: 'pendiente' },
+      { label: 'Active', value: 'activo' },
+      { label: 'Inactive', value: 'inactivo' },
     ]
 
     // ? Demo Purpose => Update image on click of update

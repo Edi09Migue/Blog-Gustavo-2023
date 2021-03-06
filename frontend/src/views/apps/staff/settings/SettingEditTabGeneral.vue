@@ -220,6 +220,67 @@
             </b-col>
 
           </b-row>
+
+          <b-row>
+            <b-col cols="12">
+              <div class="d-flex align-items-center mb-2">
+                <feather-icon
+                  icon="LinkIcon"
+                  size="18"
+                />
+                <h4 class="mb-0 ml-75">
+                  Social Links
+                </h4>
+              </div>
+            </b-col>
+
+            <!-- twitter -->
+            <b-col md="6">
+              <b-form-group
+                label-for="account-twitter"
+                label="Twitter"
+              >
+                <b-form-input
+                  id="account-twitter"
+                  v-model="configDataLocal.twitter_url"
+                  placeholder="Add link"
+                />
+              </b-form-group>
+            </b-col>
+            <!--/ twitter -->
+
+            <!-- facebook -->
+            <b-col md="6">
+              <b-form-group
+                label-for="account-facebook"
+                label="Facebook"
+              >
+                <b-form-input
+                  id="account-facebook"
+                  v-model="configDataLocal.facebook_url"
+                  placeholder="Add link"
+                />
+              </b-form-group>
+            </b-col>
+            <!--/ facebook -->
+
+
+            <!-- instagram -->
+            <b-col md="6">
+              <b-form-group
+                label="Instagram"
+                label-for="account-instagram"
+              >
+                <b-form-input
+                  id="account-instagram"
+                  v-model="configDataLocal.instagram_url"
+                  placeholder="Add link"
+                />
+              </b-form-group>
+            </b-col>
+            <!--/ instagram -->
+          </b-row>
+
           <!-- Action Buttons -->
           <b-button
             variant="primary"
@@ -313,6 +374,9 @@ export default {
     this.configDataLocal.telefono = this.findValue('telefono')
     this.configDataLocal.fax = this.findValue('fax')
     this.configDataLocal.direccion = this.findValue('direccion')
+    this.configDataLocal.facebook_url = this.findValue('facebook_url')
+    this.configDataLocal.twitter_url = this.findValue('twitter_url')
+    this.configDataLocal.instagram_url = this.findValue('instagram_url')
   },
   props: {
     settingsData: {
@@ -333,6 +397,9 @@ export default {
       telefono: '',
       fax: '',
       direccion: '',
+      facebook_url: '',
+      twitter_url: '',
+      instagram_url: '',
       grupo:"general"
     })
     const toast = useToast()

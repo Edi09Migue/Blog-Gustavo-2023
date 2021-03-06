@@ -16,6 +16,7 @@ import {
 } from 'vee-validate/dist/rules'
 import ar from 'vee-validate/dist/locale/ar.json'
 import en from 'vee-validate/dist/locale/en.json'
+import es from 'vee-validate/dist/locale/es.json'
 
 // eslint-disable-next-line object-curly-newline
 import { validatorPositive, validatorUrlValidator, validatorPassword, validatorCreditCard } from './validators'
@@ -70,33 +71,46 @@ export const url = extend('url', {
   message: 'URL is invalid',
 })
 
-// Install English and Arabic localizations.
-localize({
-  en: {
-    messages: en.messages,
-    names: {
-      email: 'Email',
-      password: 'Password',
-    },
-    fields: {
-      password: {
-        min: '{_field_} is too short, you want to get hacked?',
-      },
-    },
-  },
-  ar: {
-    messages: ar.messages,
-    names: {
-      email: 'البريد الإلكتروني',
-      password: 'كلمة السر',
-    },
-    fields: {
-      password: {
-        min: 'كلمة السر قصيرة جداً سيتم اختراقك',
-      },
-    },
-  },
-})
+// Install es language as default.
+localize('es',es)
+// localize({
+//   es: {
+//     messages: es.messages,
+//     names: {
+//       email: 'Email',
+//       password: 'Contraseña',
+//     },
+//     fields: {
+//       password: {
+//         min: '{_field_} es demasiado corto, quieres ser hackeado?',
+//       },
+//     },
+//   },
+//   en: {
+//     messages: en.messages,
+//     names: {
+//       email: 'Email',
+//       password: 'Password',
+//     },
+//     fields: {
+//       password: {
+//         min: '{_field_} is too short, you want to get hacked?',
+//       },
+//     },
+//   },
+//   ar: {
+//     messages: ar.messages,
+//     names: {
+//       email: 'البريد الإلكتروني',
+//       password: 'كلمة السر',
+//     },
+//     fields: {
+//       password: {
+//         min: 'كلمة السر قصيرة جداً سيتم اختراقك',
+//       },
+//     },
+//   },
+// })
 // ////////////////////////////////////////////////////////
 // NOTE:
 // Quasar validation for reference only

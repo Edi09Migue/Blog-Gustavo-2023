@@ -120,13 +120,13 @@
         </template>
 
         <!-- Column: Status -->
-        <template #cell(status)="data">
+        <template #cell(estado)="data">
           <b-badge
             pill
-            :variant="`light-${resolveUserStatusVariant(data.item.status)}`"
+            :variant="`light-${resolveUserStatusVariant(data.item.estado)}`"
             class="text-capitalize"
           >
-            {{ data.item.status }}
+            {{ data.item.estado }}
           </b-badge>
         </template>
 
@@ -294,9 +294,9 @@ export default {
     ]
 
     const statusOptions = [
-      { label: 'Pending', value: 'pending' },
-      { label: 'Active', value: 'active' },
-      { label: 'Inactive', value: 'inactive' },
+      { label: 'Pending', value: 'pendiente' },
+      { label: 'Active', value: 'activo' },
+      { label: 'Inactive', value: 'inactivo' },
     ]
 
     const {

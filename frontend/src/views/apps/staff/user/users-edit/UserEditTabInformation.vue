@@ -52,9 +52,13 @@
                 :label="$t('Phone')"
                 label-for="telefono"
               >
-                <b-form-input
+                <cleave
                   id="telefono"
                   v-model="userDataInfo.user_info.telefono"
+                  class="form-control"
+                  :raw="false"
+                  :options="clevePhone"
+                  placeholder="Ej: 09812345678"
                 />
               </b-form-group>
             </b-col>
@@ -78,6 +82,7 @@
                       id="website"
                       v-model="userDataInfo.user_info.website"
                       :state="getValidationState(validationContext)"
+                      placeholder="Ej: https://www.santana.ec"
                     />
                      <b-form-invalid-feedback>
                         {{ validationContext.errors[0] }}
@@ -300,6 +305,7 @@ import {
   BFormCheckboxGroup, BButton, BFormInvalidFeedback
 } from 'bootstrap-vue'
 import flatPickr from 'vue-flatpickr-component'
+import Cleave from 'vue-cleave-component'
 import { ref } from '@vue/composition-api'
 import vSelect from 'vue-select'
 import { useRouter } from '@core/utils/utils'
@@ -314,12 +320,13 @@ import { extend, ValidationProvider, ValidationObserver } from "vee-validate";
 import { url} from "@validations"
 import formValidation from "@core/comp-functions/forms/form-validation"
 
+import 'cleave.js/dist/addons/cleave-phone.us'
 
 export default {
   components: {
     BRow, BCol, BForm, BFormGroup, flatPickr, BFormInput, vSelect, 
     BFormRadioGroup, BFormCheckboxGroup, BButton, BFormInvalidFeedback,
-
+    Cleave,
     // Form Validation
     ValidationProvider,
     ValidationObserver
@@ -327,7 +334,11 @@ export default {
   },
   data(){
     return{
-      url
+      url,
+      clevePhone: {
+        phone: true,
+        phoneRegionCode: 'US',
+      },
     }
   },
   props: {

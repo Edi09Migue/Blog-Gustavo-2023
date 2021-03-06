@@ -93,7 +93,8 @@ class Configuraciones extends Controller
             case 'general':
                 $valores = $request->only([
                     'company_name','company_shortname','slogan',
-                    'ruc','email','telefono','fax','direccion'
+                    'ruc','email','telefono','fax','direccion',
+                    'facebook_url','twitter_url','instagram_url'
                 ]);
 
                 if($request->has('logo') && !is_null($request->logo))

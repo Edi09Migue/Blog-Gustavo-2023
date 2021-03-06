@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Configuraciones;
 use App\Http\Controllers\Admin\Permisos;
 use App\Http\Controllers\Admin\Roles;
+use App\Http\Controllers\Admin\UserProfileCtrl;
 use App\Http\Controllers\Admin\Usuarios;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
@@ -45,8 +46,10 @@ Route::group(['prefix' => 'admin','middleware' => 'auth:api'], function() {
   
       Route::resource('usuarios', Usuarios::class);
       Route::post('usuarios/validate/username',[Usuarios::class,'isUniqueUsername']);
-      Route::put('usuario/{id}/updatePassword',[Usuarios::class,'updatePassword']);
       Route::post('usuarios/validate/email',[Usuarios::class,'isUniqueEmail']);
+      
+      Route::put('profile/updatePassword',[UserProfileCtrl::class,'updatePassword']);
+      Route::put('profile/update',[UserProfileCtrl::class,'update']);
   
       Route::get('roles/dropdownOptions',[Roles::class,'dropdownOptions']);
       Route::apiResource('roles',Roles::class);
