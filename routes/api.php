@@ -6,6 +6,10 @@ use App\Http\Controllers\Admin\Roles;
 use App\Http\Controllers\Admin\UserProfileCtrl;
 use App\Http\Controllers\Admin\Usuarios;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Geo\Cantones;
+use App\Http\Controllers\Geo\Paises;
+use App\Http\Controllers\Geo\Parroquias;
+use App\Http\Controllers\Geo\Provincias;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -63,4 +67,19 @@ Route::group(['prefix' => 'admin','middleware' => 'auth:api'], function() {
       Route::apiResource('configs',Configuraciones::class);
       Route::post('configs/validate/{field}',[Configuraciones::class,'isUniqueField']);
       
-});
+      
+      //Rutas geo
+      Route::get('paises/dropdownOptions',[Paises::class,'dropdownOptions']);
+      Route::apiResource('paises',Paises::class,['only'=>['index']]);
+      
+      Route::get('provincias/dropdownOptions',[Provincias::class,'dropdownOptions']);
+      Route::apiResource('provincias',Provincias::class,['only'=>['index']]);
+      
+      Route::get('cantones/dropdownOptions',[Cantones::class,'dropdownOptions']);
+      Route::apiResource('cantones',Cantones::class,['only'=>['index']]);
+      
+      Route::get('parroquias/dropdownOptions',[Parroquias::class,'dropdownOptions']);
+      Route::apiResource('parroquias',Parroquias::class,['only'=>['index']]);
+      
+      
+    });

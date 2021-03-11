@@ -20,6 +20,11 @@ class DatabaseSeeder extends Seeder
             ConfiguracionesSeeder::class,
 
             FakeUsersSeeder::class,
+
+            PaisesSeeder::class,
+            ProvinciasSeeder::class,
+            CantonesSeeder::class,
+            ParroquiasSeeder::class,
         ]);
     }
 }
