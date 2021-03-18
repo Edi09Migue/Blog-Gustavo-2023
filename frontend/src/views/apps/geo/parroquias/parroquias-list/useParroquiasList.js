@@ -17,7 +17,7 @@ export default function useParroquiasList() {
   // Table Handlers
   const tableColumns = [
     { key: 'nombre', sortable: true, label: t('Name') },
-    { key: 'slogan', sortable: true, label: t('Slogan') },
+    { key: 'provincia', sortable: false, label: t('Province') },
     { key: 'canton', sortable: false, label: t('Canton') },
     { key: 'estado', sortable: true , label: t('Status')},
     { key: 'actions' , label: t('Actions') },
@@ -29,8 +29,8 @@ export default function useParroquiasList() {
   const searchQuery = ref('')
   const sortBy = ref('id')
   const isSortDirDesc = ref(true)
-  const roleFilter = ref(null)
-  const planFilter = ref(null)
+  const provinciaFilter = ref(null)
+  const cantonFilter = ref(null)
   const statusFilter = ref(null)
 
   const dataMeta = computed(() => {
@@ -46,7 +46,7 @@ export default function useParroquiasList() {
     refParroquiaListTable.value.refresh()
   }
 
-  watch([currentPage, perPage, searchQuery, roleFilter, planFilter, statusFilter], () => {
+  watch([currentPage, perPage, searchQuery, provinciaFilter, cantonFilter, statusFilter], () => {
     refetchData()
   })
 
@@ -58,8 +58,8 @@ export default function useParroquiasList() {
         page: currentPage.value,
         sortBy: sortBy.value,
         sortDesc: isSortDirDesc.value,
-        role: roleFilter.value,
-        plan: planFilter.value,
+        provincia: provinciaFilter.value,
+        canton: cantonFilter.value,
         estado: statusFilter.value,
       })
       .then(response => {
@@ -72,7 +72,7 @@ export default function useParroquiasList() {
         toast({
           component: ToastificationContent,
           props: {
-            title: 'Error fetching users list',
+            title: 'Error fetching parroquias list',
             icon: 'AlertTriangleIcon',
             variant: 'danger',
           },
@@ -117,24 +117,6 @@ export default function useParroquiasList() {
   // *--------- UI ---------------------------------------*
   // *===============================================---*
 
-  const resolveParroquiaRoleVariant = role => {
-    if (role === 'subscriber') return 'primary'
-    if (role === 'author') return 'warning'
-    if (role === 'maintainer') return 'success'
-    if (role === 'editor') return 'info'
-    if (role === 'admin') return 'danger'
-    return 'primary'
-  }
-
-  const resolveParroquiaRoleIcon = role => {
-    if (role === 'subscriber') return 'ParroquiaIcon'
-    if (role === 'author') return 'SettingsIcon'
-    if (role === 'maintainer') return 'DatabaseIcon'
-    if (role === 'editor') return 'Edit2Icon'
-    if (role === 'admin') return 'ServerIcon'
-    return 'ParroquiaIcon'
-  }
-
   const resolveParroquiaStatusVariant = status => {
     if (status === 'pendiente') return 'warning'
     if (status === 'activo') return 'success'
@@ -156,14 +138,12 @@ export default function useParroquiasList() {
     refParroquiaListTable,
     removeParroquia,
 
-    resolveParroquiaRoleVariant,
-    resolveParroquiaRoleIcon,
     resolveParroquiaStatusVariant,
     refetchData,
 
     // Extra Filters
-    roleFilter,
-    planFilter,
+    provinciaFilter,
+    cantonFilter,
     statusFilter,
   }
 }

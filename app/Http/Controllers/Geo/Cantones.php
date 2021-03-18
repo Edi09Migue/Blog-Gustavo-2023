@@ -50,8 +50,14 @@ class Cantones extends Controller
      * Devuelve el id, nombre, gid0 y gid1 de todas las cantones
      * por lo general para usarlos en un componente dropdown
      */
-    public function dropdownOptions(){
-        $cantones = Canton::select('id','nombre','gid0','gid1','gid2')->get();
+    public function dropdownOptions(Request $request){
+        $cantones = Canton::select('id','nombre','gid0','gid1','gid2');
+        
+        //en caso de querer solo los cantones de una provincia
+        if($request->has('gid1'))
+            $cantones = $cantones->where('gid1',$request->gid1);
+
+        $cantones = $cantones->get();
 
         return response()->json($cantones);
     }

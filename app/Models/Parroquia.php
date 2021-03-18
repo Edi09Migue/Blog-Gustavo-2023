@@ -28,11 +28,14 @@ class Parroquia extends Model
         'slug',
         'engtype',
         'descripcion',
-        'bandera_url',
+        'zipcode',
         'imagen',
         'icono',
+        'estado',
+        'orden',
+        'bandera_url',
         'escudo_url',
-        'zipcode',
+
         'minx',
         'miny',
         'maxx',
@@ -42,8 +45,7 @@ class Parroquia extends Model
         'zoom',
         'pitch',
         'bearing',
-        'estado',
-        'orden'
+        
     ];
 
     public $timestamps = false;
@@ -72,6 +74,13 @@ class Parroquia extends Model
      */
     public function canton(){
         return $this->belongsTo(Canton::class,'gid2','gid2');
+    }
+    
+    /**
+     * Cantón al que pertenece la parroquía
+     */
+    public function provincia(){
+        return $this->canton->provincia;
     }
 
     /**
@@ -238,6 +247,6 @@ class Parroquia extends Model
      * Devuelve la URL completa de la imagen de portada del lugar
      */
     public function getURLAttribute(){
-        return route('parroquia',$this->slug);
+        return '';
     }
 }

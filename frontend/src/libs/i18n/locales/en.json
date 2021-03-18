@@ -124,5 +124,17 @@
   "Account Settings": "Account Settings",
   "Pending":"Pending",
   "Active":"Active",
-  "Inactive":"Inactive"
+  "Inactive":"Inactive",
+  "Territory":"Territory",
+  "Provinces":"Provinces",
+  "Province":"Province",
+  "Cantons":"Cantons",
+  "Canton":"Canton",
+  "Parishes":"Parishes",
+  "Parishe":"Parishe",
+  "Location":"Location",
+  "Multimedia":"Multimedia",
+  "Zipcode":"Zipcode",
+  "Extent":"Extent",
+  "Orientation":"Orientation"
 }

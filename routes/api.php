@@ -79,7 +79,7 @@ Route::group(['prefix' => 'admin','middleware' => 'auth:api'], function() {
       Route::apiResource('cantones',Cantones::class,['only'=>['index']]);
       
       Route::get('parroquias/dropdownOptions',[Parroquias::class,'dropdownOptions']);
-      Route::apiResource('parroquias',Parroquias::class,['only'=>['index']]);
+      Route::apiResource('parroquias',Parroquias::class,['except'=>['destroy']]);
       
       
     });

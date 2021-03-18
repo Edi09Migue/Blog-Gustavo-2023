@@ -21,6 +21,16 @@ export default [
     resource: 'dashboard_editor'
   },
   {
+    header: 'Territory',
+  },
+  {
+    title: 'Parishes',
+    route: 'geo-parroquias-list',
+    icon: 'FileIcon',
+    action: 'listar',
+    resource: 'parroquias'
+  },
+  {
     header: 'Staff & Security',
   },
   {

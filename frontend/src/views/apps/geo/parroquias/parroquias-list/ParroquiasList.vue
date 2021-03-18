@@ -2,20 +2,20 @@
 
   <div>
 
-    <user-list-add-new
+    <!-- <user-list-add-new
       :is-add-new-user-sidebar-active.sync="isAddNewParroquiaSidebarActive"
-      :role-options="roleOptions"
+      :role-options="cantonesOptions"
       :plan-options="planOptions"
       @refetch-data="refetchData"
-    />
+    /> -->
 
     <!-- Filters -->
-    <users-list-filters
-      :role-filter.sync="roleFilter"
-      :plan-filter.sync="planFilter"
+    <parroquias-list-filters
+      :canton-filter.sync="cantonFilter"
+      :provincia-filter.sync="provinciaFilter"
       :status-filter.sync="statusFilter"
-      :role-options="roleOptions"
-      :plan-options="planOptions"
+      :cantones-options="cantonesOptions"
+      :provincias-options="provinciasOptions"
       :status-options="statusOptions"
     />
 
@@ -63,7 +63,7 @@
                 variant="primary"
                 @click="isAddNewParroquiaSidebarActive = true"
               >
-                <span class="text-nowrap">{{ $t('Add') }} {{ $t('Parroquia') }}</span>
+                <span class="text-nowrap">{{ $t('Add') }} {{ $t('Parishe') }}</span>
               </b-button>
             </div>
           </b-col>
@@ -85,37 +85,37 @@
       >
 
         <!-- Column: Parroquia -->
-        <template #cell(name)="data">
+        <template #cell(nombre)="data">
           <b-media vertical-align="center">
             <template #aside>
               <b-avatar
                 size="32"
                 :src="data.item.avatar"
                 :text="avatarText(data.item.name)"
-                :variant="`light-${resolveParroquiaRoleVariant(data.item.role)}`"
-                :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
+                :to="{ name: 'geo-parroquias-view', params: { id: data.item.id } }"
               />
             </template>
             <b-link
-              :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
+              :to="{ name: 'geo-parroquias-view', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
-              {{ data.item.name }}
+              {{ data.item.nombre }}
             </b-link>
-            <small class="text-muted">@{{ data.item.username }}</small>
+            <small class="text-muted">@{{ data.item.nombre_corto }}</small>
           </b-media>
         </template>
 
-        <!-- Column: Role -->
-        <template #cell(role)="data">
+        <!-- Column: Canton -->
+        <template #cell(canton)="data">
           <div class="text-nowrap">
-            <feather-icon
-              :icon="resolveParroquiaRoleIcon(data.item.role)"
-              size="18"
-              class="mr-50"
-              :class="`text-${resolveParroquiaRoleVariant(data.item.role)}`"
-            />
-            <span class="align-text-top text-capitalize">{{ data.item.role }}</span>
+            <span class="align-text-top text-capitalize">{{ data.item.canton.nombre }}</span>
+          </div>
+        </template>
+
+        <!-- Column: Provinicia -->
+        <template #cell(provincia)="data">
+          <div class="text-nowrap">
+            <span class="align-text-top text-capitalize">{{ data.item.provincia.nombre }}</span>
           </div>
         </template>
 
@@ -145,14 +145,14 @@
                 class="align-middle text-body"
               />
             </template>
-            <b-dropdown-item :to="{ name: 'apps-users-view', params: { id: data.item.id } }">
+            <b-dropdown-item :to="{ name: 'geo-parroquias-view', params: { id: data.item.id } }">
               <feather-icon icon="FileTextIcon" />
               <span class="align-middle ml-50">{{ $t('Details') }}</span>
             </b-dropdown-item>
 
             <b-dropdown-item
               v-if="$can('editar', 'usuarios')"
-             :to="{ name: 'apps-users-edit', params: { id: data.item.id } }">
+             :to="{ name: 'geo-parroquias-edit', params: { id: data.item.id } }">
               <feather-icon icon="EditIcon" />
               <span class="align-middle ml-50">{{ $t('Edit') }}</span>
             </b-dropdown-item>
@@ -229,14 +229,14 @@ import { avatarText } from '@core/utils/filter'
 import ParroquiasListFilters from './ParroquiasListFilters.vue'
 import useParroquiasList from './useParroquiasList'
 import geoStoreModule from './../../geoStoreModule'
-import ParroquiaListAddNew from './ParroquiaListAddNew.vue'
+// import ParroquiaListAddNew from './ParroquiaListAddNew.vue'
 
 export default {
   watch: {
   },
   components: {
     ParroquiasListFilters,
-    ParroquiaListAddNew,
+    // ParroquiaListAddNew,
 
     BCard,
     BRow,
@@ -268,12 +268,33 @@ export default {
     const { t } = useI18nUtils()
     const isAddNewParroquiaSidebarActive = ref(false)
 
-    const roleOptions = ref([])
+    const provinciasOptions = ref([])
+
+    const fetchProvincias = (ctx, callback) =>{
+      store.dispatch('app-geo/fetchProvinciasOptions')
+        .then(response => {
+          provinciasOptions.value = response.data.map(r=> { return {value:r.id.toString(), label:r.nombre }})
+        })
+        .catch(() => {
+          toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Error fetching roles list',
+              icon: 'AlertTriangleIcon',
+              variant: 'danger',
+            },
+          })
+        })
+    }
+
+    fetchProvincias()
+
+    const cantonesOptions = ref([])
 
     const fetchCantones = (ctx, callback) =>{
       store.dispatch('app-geo/fetchCantonesOptions')
         .then(response => {
-          roleOptions.value = response.data.map(r=> { return {value:r.id.toString(), label:r.nombre }})
+          cantonesOptions.value = response.data.map(r=> { return {value:r.id.toString(), label:r.nombre }})
         })
         .catch(() => {
           toast({
@@ -289,16 +310,7 @@ export default {
 
     fetchCantones()
     
-
-    const planOptions = [
-      { label: 'Basic', value: 'basic' },
-      { label: 'Company', value: 'company' },
-      { label: 'Enterprise', value: 'enterprise' },
-      { label: 'Team', value: 'team' },
-    ]
-
     const statusOptions = [
-      { label: t('Pending'), value: 'pendiente' },
       { label: t('Active'), value: 'activo' },
       { label: t('Inactive'), value: 'inactivo' },
     ]
@@ -319,13 +331,11 @@ export default {
       removeParroquia,
 
       // UI
-      resolveParroquiaRoleVariant,
-      resolveParroquiaRoleIcon,
       resolveParroquiaStatusVariant,
 
       // Extra Filters
-      roleFilter,
-      planFilter,
+      provinciaFilter,
+      cantonFilter,
       statusFilter,
     } = useParroquiasList()
 
@@ -348,23 +358,21 @@ export default {
       refParroquiaListTable,
       refetchData,
       removeParroquia,
-      roleOptions,
+      cantonesOptions,
 
       // Filter
       avatarText,
 
       // UI
-      resolveParroquiaRoleVariant,
-      resolveParroquiaRoleIcon,
       resolveParroquiaStatusVariant,
 
-      roleOptions,
-      planOptions,
+      cantonesOptions,
+      provinciasOptions,
       statusOptions,
 
       // Extra Filters
-      roleFilter,
-      planFilter,
+      provinciaFilter,
+      cantonFilter,
       statusFilter,
     }
   },

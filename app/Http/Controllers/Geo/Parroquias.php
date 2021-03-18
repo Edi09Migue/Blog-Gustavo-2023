@@ -33,6 +33,30 @@ class Parroquias extends Controller
             $parroquias = $parroquias->where('estado',$estado);
         }
 
+        //Filtro para Provincia
+        $provincia = $request->has('provincia') ? $request->provincia : '';
+        if($provincia!='') {
+            $parroquias = $parroquias->where(function($q) use($provincia){
+                $q->whereIn('gid1',function($sq) use($provincia){
+                    $sq->select('gid1');
+                    $sq->from('provincias');
+                    $sq->where('id',$provincia);
+                });
+            });
+        }
+
+        //Filtro para Canton
+        $canton = $request->has('canton') ? $request->canton : '';
+        if($canton!='') {
+            $parroquias = $parroquias->where(function($q) use($canton){
+                $q->whereIn('gid2',function($sq) use($canton){
+                    $sq->select('gid2');
+                    $sq->from('cantones');
+                    $sq->where('id',$canton);
+                });
+            });
+        }
+
         //Filtros basicos, orden y paginacion
         $parroquias = $parroquias->where(function($q) use($query){
             $q->where('nombre','like',"%$query%")
@@ -40,6 +64,11 @@ class Parroquias extends Controller
         })
         ->orderBy($sortBy,$sortDesc?'desc':'asc')
         ->paginate($perPage);
+
+        $parroquias->each(function($p){
+            $p->canton;
+            $p->provincia = $p->canton->provincia;
+        });
 
         return response()->json([
             'users' => $parroquias->items(),
@@ -52,10 +81,14 @@ class Parroquias extends Controller
      * Devuelve el id, nombre, gid0 y gid1 de todas las parroquias
      * por lo general para usarlos en un componente dropdown
      */
-    public function dropdownOptions(){
-        $provincias = Parroquia::select('id','nombre','gid0','gid1','gid2','gid3')->get();
+    public function dropdownOptions(Request $request){
+        $parroquias = Parroquia::select('id','nombre','gid0','gid1','gid2','gid3');
+        if($request->has('gid2'))
+            $parroquias = $parroquias->where('gid2',$request->gid2);
 
-        return response()->json($provincias);
+        $parroquias = $parroquias->get();
+        
+        return response()->json($parroquias);
     }
 
     /**
@@ -66,7 +99,7 @@ class Parroquias extends Controller
      */
     public function show(Parroquia $parroquia)
     {
-        
+        $parroquia->canton;
         return response()->json($parroquia);
     }
 
