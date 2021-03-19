@@ -90,8 +90,8 @@
             <template #aside>
               <b-avatar
                 size="32"
-                :src="data.item.avatar"
-                :text="avatarText(data.item.name)"
+                :src="data.item.iconoURL"
+                :text="avatarText(data.item.nombre)"
                 :to="{ name: 'geo-parroquias-view', params: { id: data.item.id } }"
               />
             </template>

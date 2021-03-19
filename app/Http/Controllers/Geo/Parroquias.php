@@ -67,6 +67,7 @@ class Parroquias extends Controller
 
         $parroquias->each(function($p){
             $p->canton;
+            $p->iconoURL = $p->iconoURL;
             $p->provincia = $p->canton->provincia;
         });
 

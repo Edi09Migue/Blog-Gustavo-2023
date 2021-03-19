@@ -413,7 +413,7 @@ export default {
     },
     watch:{
         zoom () { 
-            this.parroquiaDataInfo.zoom = this.zoom
+            this.parroquiaDataInfo.zoom = parseInt(this.zoom)
         },
         bounds(){
             alert('bounds')

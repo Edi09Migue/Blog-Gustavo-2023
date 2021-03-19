@@ -26,19 +26,19 @@
       <b-row>
         <b-col
           cols="12"
-          xl="9"
-          lg="8"
-          md="7"
+          xl="6"
+          lg="6"
+          md="6"
         >
           <parroquia-view-info-card :parroquia-data="parroquiaData" />
         </b-col>
         <b-col
           cols="12"
-          md="5"
-          xl="3"
-          lg="4"
+          md="6"
+          xl="6"
+          lg="6"
         >
-          <!-- <parroquia-plan-card /> -->
+          <parroquia-view-ubicacion-card :parroquia-data="parroquiaData" />
         </b-col>
       </b-row>
 
@@ -47,7 +47,7 @@
           cols="12"
           lg="6"
         >
-          <parroquia-view-ubicacion-card :parroquia-data="parroquiaData" />
+          
         </b-col>
       </b-row>
 

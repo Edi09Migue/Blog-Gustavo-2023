@@ -52,8 +52,7 @@
           />
           <span class="d-none d-sm-inline">{{ $t('Location') }}</span>
         </template>
-        <parroquia-edit-tab-ubicacion 
-        :parroquia-data="parroquiaData" class="mt-2 pt-75" />
+        <parroquia-edit-tab-ubicacion  :parroquia-data="parroquiaData" class="mt-2 pt-75" />
       </b-tab>
 
       <!-- Tab: Multimedia -->
@@ -81,8 +80,8 @@ import router from '@/router'
 import store from '@/store'
 import geoStoreModule from '../../geoStoreModule'
 import ParroquiaEditTabGeneral from './ParroquiaEditTabGeneral.vue'
-import ParroquiaEditTabMultimedia from './ParroquiaEditTabMultimedia.vue'
 import ParroquiaEditTabUbicacion from './ParroquiaEditTabUbicacion.vue'
+import ParroquiaEditTabMultimedia from './ParroquiaEditTabMultimedia.vue'
 
 export default {
   components: {
@@ -97,10 +96,11 @@ export default {
     ParroquiaEditTabUbicacion,
   },
   setup() {
+    console.log('GeoStoreModel');
+    console.log(geoStoreModule);
     const parroquiaData = ref(null)
 
     const GEO_APP_STORE_MODULE_NAME = 'app-geo'
-
     // Register module
     if (!store.hasModule(GEO_APP_STORE_MODULE_NAME)) store.registerModule(GEO_APP_STORE_MODULE_NAME, geoStoreModule)
 

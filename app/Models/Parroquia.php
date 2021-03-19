@@ -239,9 +239,8 @@ class Parroquia extends Model
      * Devuelve la URL completa de la imagen de portada de la parroquia
      */
     public function getIconoURLAttribute(){
-        return $this->icono ? asset('images/parroquias/'.$this->icono) : asset('images/ECU.23.8_1.svg');
+        return asset('images/maps/'.$this->gid1.'/'.$this->gid2.'.svg');
     }
-
     
     /**
      * Devuelve la URL completa de la imagen de portada del lugar

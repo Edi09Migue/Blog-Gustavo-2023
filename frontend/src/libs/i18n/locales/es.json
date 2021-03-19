@@ -137,5 +137,6 @@
   "Multimedia":"Multimedia",
   "Zipcode":"Código postal",
   "Extent":"Cobertura",
-  "Orientation":"Orientación"
+  "Orientation":"Orientación",
+  "Map":"Mapa"
 }
