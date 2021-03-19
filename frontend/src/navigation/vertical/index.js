@@ -24,6 +24,13 @@ export default [
     header: 'Territory',
   },
   {
+    title: 'Cantons',
+    route: 'geo-cantones-list',
+    icon: 'FileIcon',
+    action: 'listar',
+    resource: 'cantones'
+  },
+  {
     title: 'Parishes',
     route: 'geo-parroquias-list',
     icon: 'FileIcon',

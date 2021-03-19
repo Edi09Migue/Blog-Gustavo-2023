@@ -2,7 +2,7 @@
     <div>
         <validation-observer
             #default="{ handleSubmit }"
-            v-if="parroquiaDataInfo"
+            v-if="cantonDataInfo"
             ref="refFormObserver"
         >
             <!-- Form: Personal Info Form -->
@@ -23,7 +23,7 @@
                                 >
                                     <b-form-input
                                         id="zipcode"
-                                        v-model="parroquiaDataInfo.zipcode"
+                                        v-model="cantonDataInfo.zipcode"
                                         placeholder="Ej: 180150"
                                     />
                                 </b-form-group>
@@ -34,7 +34,8 @@
                                 <b-form-group label="Tipo" label-for="tipo">
                                     <b-form-input
                                         id="tipo"
-                                        v-model="parroquiaDataInfo.tipo"
+                                        readonly
+                                        v-model="cantonDataInfo.tipo"
                                     />
                                 </b-form-group>
                             </b-col>
@@ -49,7 +50,7 @@
                         </div>
                         <b-row>
                             <!-- Field: Provincia -->
-                            <b-col cols="12" md="6" lg="6">
+                            <b-col cols="12" md="12" lg="12">
                                 <validation-provider
                                     #default="validationContext"
                                     :name="$t('Province')"
@@ -65,7 +66,7 @@
                                     >
                                         <v-select
                                             v-model="
-                                                parroquiaDataInfo.gid1
+                                                cantonDataInfo.gid1
                                             "
                                             :dir="
                                                 $store.state.appConfig.isRTL
@@ -93,51 +94,6 @@
                                 </validation-provider>
                             </b-col>
 
-                            <!-- Field: Canton -->
-                            <b-col cols="12" md="6" lg="6">
-                                <validation-provider
-                                    #default="validationContext"
-                                    :name="$t('Canton')"
-                                    rules="required"
-                                >
-                                    <b-form-group
-                                        :label="$t('Canton')"
-                                        label-for="canton_id"
-                                        :state="
-                                            getValidationState(
-                                                validationContext
-                                            )
-                                        "
-                                    >
-                                        <v-select
-                                            v-model="
-                                                parroquiaDataInfo.gid2
-                                            "
-                                            :dir="
-                                                $store.state.appConfig.isRTL
-                                                    ? 'rtl'
-                                                    : 'ltr'
-                                            "
-                                            :options="cantonesList"
-                                            :reduce="val => val.gid2"
-                                            label="nombre"
-                                            :clearable="false"
-                                            input-id="canton_id"
-                                            placeholder="Seleccione un Canton"
-                                        />
-                                        <b-form-invalid-feedback
-                                            :state="
-                                                getValidationState(
-                                                    validationContext
-                                                )
-                                            "
-                                        >
-                                            {{ validationContext.errors[0] }}
-                                        </b-form-invalid-feedback>
-                                    </b-form-group>
-                                </validation-provider>
-                            </b-col>
-
                             <!-- Field: Latitud -->
                             <b-col cols="12" md="6" lg="6">
                                 <b-form-group
@@ -146,7 +102,7 @@
                                 >
                                     <b-form-input
                                         id="latitud"
-                                        v-model="parroquiaDataInfo.lat"
+                                        v-model="cantonDataInfo.lat"
                                     />
                                 </b-form-group>
                             </b-col>
@@ -159,7 +115,7 @@
                                 >
                                     <b-form-input
                                         id="longitud"
-                                        v-model="parroquiaDataInfo.lng"
+                                        v-model="cantonDataInfo.lng"
                                     />
                                 </b-form-group>
                             </b-col>
@@ -181,7 +137,7 @@
                                 >
                                     <b-form-input
                                         id="minx"
-                                        v-model="parroquiaDataInfo.minx"
+                                        v-model="cantonDataInfo.minx"
                                     />
                                 </b-form-group>
                             </b-col>
@@ -194,7 +150,7 @@
                                 >
                                     <b-form-input
                                         id="miny"
-                                        v-model="parroquiaDataInfo.miny"
+                                        v-model="cantonDataInfo.miny"
                                     />
                                 </b-form-group>
                             </b-col>
@@ -206,7 +162,7 @@
                                 >
                                     <b-form-input
                                         id="maxx"
-                                        v-model="parroquiaDataInfo.maxx"
+                                        v-model="cantonDataInfo.maxx"
                                     />
                                 </b-form-group>
                             </b-col>
@@ -219,7 +175,7 @@
                                 >
                                     <b-form-input
                                         id="maxy"
-                                        v-model="parroquiaDataInfo.maxy"
+                                        v-model="cantonDataInfo.maxy"
                                     />
                                 </b-form-group>
                             </b-col>
@@ -255,7 +211,7 @@
                                     <b-form-input
                                         id="pitch"
                                         type="number"
-                                        v-model="parroquiaDataInfo.pitch"
+                                        v-model="cantonDataInfo.pitch"
                                     />
                                 </b-form-group>
                             </b-col>
@@ -269,7 +225,7 @@
                                     <b-form-input
                                         id="bearing"
                                         type="number"
-                                        v-model="parroquiaDataInfo.bearing"
+                                        v-model="cantonDataInfo.bearing"
                                     />
                                 </b-form-group>
                             </b-col>
@@ -279,7 +235,7 @@
 
                     <b-col cols="6">
                         <l-map :zoom="zoom" :center="center">
-                                <l-control-layers
+                            <l-control-layers
                                 position="bottomright"
                                 :collapsed="false"
                                 :sort-layers="true"
@@ -320,8 +276,8 @@
                             <!-- Use default icon -->
                             <l-marker
                                 :lat-lng="[
-                                    parroquiaDataInfo.lat,
-                                    parroquiaDataInfo.lng
+                                    cantonDataInfo.lat,
+                                    cantonDataInfo.lng
                                 ]"
                                 :draggable="true"
                                 @dragend="updateLocation"
@@ -377,7 +333,7 @@ import vSelect from "vue-select";
 import { useRouter } from "@core/utils/utils";
 import store from "@/store";
 import { useUtils as useI18nUtils } from "@core/libs/i18n";
-import { LMap, LTileLayer, LMarker, LRectangle, LControlScale, LControlLayers, LLayerGroup, LWMSTileLayer } from "vue2-leaflet";
+import { LMap, LTileLayer, LMarker, LRectangle, LControlScale, LControlLayers, LLayerGroup, LWMSTileLayer} from "vue2-leaflet";
 import {  Icon } from 'leaflet'
 import "leaflet/dist/leaflet.css";
 
@@ -397,7 +353,6 @@ import { extend, ValidationProvider, ValidationObserver } from "vee-validate";
 import { url } from "@validations";
 import formValidation from "@core/comp-functions/forms/form-validation";
 
-
 const tileProviders = [
   {
     name: 'OpenStreetMap',
@@ -416,22 +371,9 @@ const tileProviders = [
 ]
 
 const rrnnLayers = [
-        {
-    name: 'Parroquias',
-    visible: true,
-    format: 'image/png; mode=8bit',
-    transparent: true,
-    opacity: 0.6,
-    layers: 'parroquias',
-    version: '1.1.1',
-    bbox :'-78.857685631137,-1.4218850961551,-78.202410690726,-1.1609180413979',
-    crs: L.CRS.EPSG4326,
-    attribution:'&copy; <a target="_blank" href="http://rrnn.tungurahua.gob.ec">GeoPortal HGPT</a>',
-    url: 'http://mapas.tungurahua.gob.ec/base?_signature=35%3AtQ4w1U9PYXX2oUR-XmrygmZzxcU&',
-  },
     {
     name: 'Cantones',
-    visible: false,
+    visible: true,
     format: 'image/png; mode=8bit',
     transparent: true,
     opacity: 0.6,
@@ -473,34 +415,33 @@ export default {
             url,
             cantonesList: [],
             url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            zoom: this.parroquiaDataInfo.zoom,
-            center: [this.parroquiaDataInfo.lat, this.parroquiaDataInfo.lng],
+            zoom: this.cantonDataInfo.zoom,
+            center: [this.cantonDataInfo.lat, this.cantonDataInfo.lng],
             bounds:[
-                [this.parroquiaDataInfo.miny, this.parroquiaDataInfo.minx],
-                [this.parroquiaDataInfo.maxy, this.parroquiaDataInfo.maxx],
+                [this.cantonDataInfo.miny, this.cantonDataInfo.minx],
+                [this.cantonDataInfo.maxy, this.cantonDataInfo.maxx],
             ],
             rectangle:{
                 style: { color: 'red', weight: 3 }
             },
-              imperial: false,
+            imperial: false,
             token:'mapbox token',
             tileProviders,
             rrnnLayers
         };
     },
     props: {
-        parroquiaData: {
+        cantonData: {
             type: Object,
             required: true
         }
     },
     mounted() {
-        console.log("load: " + this.parroquiaData.canton.id);
-        this.loadCantones(this.parroquiaData.canton.gid1);
+        console.log("load: " + this.cantonData.provincia.id);
     },
     watch:{
         zoom () { 
-            this.parroquiaDataInfo.zoom = parseInt(this.zoom)
+            this.cantonDataInfo.zoom = this.zoom
         },
         bounds(){
             alert('bounds')
@@ -509,21 +450,13 @@ export default {
     },
     methods: {
         updateLocation(location) {
-            this.parroquiaDataInfo.lat = location.target._latlng.lat;
-            this.parroquiaDataInfo.lng = location.target._latlng.lng;
+            this.cantonDataInfo.lat = location.target._latlng.lat;
+            this.cantonDataInfo.lng = location.target._latlng.lng;
         },
         setProvincia(provincia) {
             console.log("provincia");
             console.log(provincia);
-            this.loadCantones(provincia);
         },
-        loadCantones(provincia) {
-            store
-                .dispatch("app-geo/fetchCantonesOptions", { gid1: provincia })
-                .then(response => {
-                    this.cantonesList = response.data;
-                });
-        }
     },
     setup(props) {
         const { t } = useI18nUtils();
@@ -533,8 +466,8 @@ export default {
 
         const errorServer = ref(null);
 
-        const parroquiaDataInfo = ref(
-            JSON.parse(JSON.stringify(props.parroquiaData))
+        const cantonDataInfo = ref(
+            JSON.parse(JSON.stringify(props.cantonData))
         );
 
         const provinciasOptions = ref([])
@@ -563,11 +496,11 @@ export default {
 
         const onSubmit = () => {
             store
-                .dispatch("app-geo/updateParroquia", parroquiaDataInfo)
+                .dispatch("app-geo/updateCanton", cantonDataInfo)
                 .then(response => {
                     if (response.data.status) {
                         router
-                            .replace({ name: "geo-parroquias-list" })
+                            .replace({ name: "geo-cantones-list" })
                             .then(() => {
                                 toast({
                                     component: ToastificationContent,
@@ -576,7 +509,7 @@ export default {
                                         title: `Actualizado`,
                                         icon: "CoffeeIcon",
                                         variant: "success",
-                                        text: `Parroquia ${response.data.data.nombre}. Actualizada correctamente!`
+                                        text: `Canton ${response.data.data.nombre}. Actualizada correctamente!`
                                     }
                                 });
                             })
@@ -596,7 +529,7 @@ export default {
         const { refFormObserver, getValidationState } = formValidation();
 
         return {
-            parroquiaDataInfo,
+            cantonDataInfo,
             provinciasOptions,
             onSubmit,
 

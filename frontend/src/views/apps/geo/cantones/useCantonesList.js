@@ -7,72 +7,69 @@ import { useUtils as useI18nUtils } from '@core/libs/i18n'
 import { useToast } from 'vue-toastification/composition'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
-export default function useParroquiasList() {
+export default function useCantonesList() {
   const { t } = useI18nUtils()
   // Use toast
   const toast = useToast()
 
-  const refParroquiaListTable = ref(null)
+  const refCantonListTable = ref(null)
 
   // Table Handlers
   const tableColumns = [
     { key: 'nombre', sortable: true, label: t('Name') },
     { key: 'provincia', sortable: false, label: t('Province') },
-    { key: 'canton', sortable: false, label: t('Canton') },
     { key: 'estado', sortable: true , label: t('Status')},
     { key: 'actions' , label: t('Actions') },
   ]
   const perPage = ref(10)
-  const totalParroquias = ref(0)
+  const totalCantones = ref(0)
   const currentPage = ref(1)
   const perPageOptions = [10, 25, 50, 100]
   const searchQuery = ref('')
   const sortBy = ref('id')
   const isSortDirDesc = ref(true)
   const provinciaFilter = ref(null)
-  const cantonFilter = ref(null)
-  const statusFilter = ref(null)
+    const statusFilter = ref(null)
 
   const dataMeta = computed(() => {
-    const localItemsCount = refParroquiaListTable.value ? refParroquiaListTable.value.localItems.length : 0
+    const localItemsCount = refCantonListTable.value ? refCantonListTable.value.localItems.length : 0
     return {
       from: perPage.value * (currentPage.value - 1) + (localItemsCount ? 1 : 0),
       to: perPage.value * (currentPage.value - 1) + localItemsCount,
-      of: totalParroquias.value,
+      of: totalCantones.value,
     }
   })
 
   const refetchData = () => {
-    refParroquiaListTable.value.refresh()
+    refCantonListTable.value.refresh()
   }
 
-  watch([currentPage, perPage, searchQuery, provinciaFilter, cantonFilter, statusFilter], () => {
+  watch([currentPage, perPage, searchQuery, provinciaFilter, statusFilter], () => {
     refetchData()
   })
 
-  const fetchParroquias = (ctx, callback) => {
+  const fetchCantones = (ctx, callback) => {
     store
-      .dispatch('app-geo/fetchParroquias', {
+      .dispatch('app-geo/fetchCantones', {
         q: searchQuery.value,
         perPage: perPage.value,
         page: currentPage.value,
         sortBy: sortBy.value,
         sortDesc: isSortDirDesc.value,
         provincia: provinciaFilter.value,
-        canton: cantonFilter.value,
         estado: statusFilter.value,
       })
       .then(response => {
         const { users, total } = response.data
 
         callback(users)
-        totalParroquias.value = total
+        totalCantones.value = total
       })
       .catch(() => {
         toast({
           component: ToastificationContent,
           props: {
-            title: 'Error fetching parroquias list',
+            title: 'Error fetching cantones list',
             icon: 'AlertTriangleIcon',
             variant: 'danger',
           },
@@ -80,7 +77,7 @@ export default function useParroquiasList() {
       })
   }
 
-  const removeParroquia = function(id ) {
+  const removeCanton = function(id ) {
 
       this.$swal({
         title: this.$t('Are you sure'),
@@ -96,7 +93,7 @@ export default function useParroquiasList() {
         buttonsStyling: false,
     }).then(result => {
         if (result.value) {
-        store.dispatch('app-geo/removeParroquia', id )
+        store.dispatch('app-geo/removeCanton', id )
         .then(() => {
             this.$swal({
             icon: 'success',
@@ -117,32 +114,31 @@ export default function useParroquiasList() {
   // *--------- UI ---------------------------------------*
   // *===============================================---*
 
-  const resolveParroquiaStatusVariant = status => {
+  const resolveCantonStatusVariant = status => {
     if (status === 1) return 'success'
     if (status === 0) return 'secondary'
     return 'primary'
   }
 
   return {
-    fetchParroquias,
+    fetchCantones,
     tableColumns,
     perPage,
     currentPage,
-    totalParroquias,
+    totalCantones,
     dataMeta,
     perPageOptions,
     searchQuery,
     sortBy,
     isSortDirDesc,
-    refParroquiaListTable,
-    removeParroquia,
+    refCantonListTable,
+    removeCanton,
 
-    resolveParroquiaStatusVariant,
+    resolveCantonStatusVariant,
     refetchData,
 
     // Extra Filters
     provinciaFilter,
-    cantonFilter,
     statusFilter,
   }
 }

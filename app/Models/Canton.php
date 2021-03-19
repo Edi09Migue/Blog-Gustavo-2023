@@ -5,17 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use Optix\Media\HasMedia;
 
 class Canton extends Model
 {
-    use HasSlug;
+    use HasSlug, HasMedia;
     
     protected $table = "cantones";
 
     protected $fillable = [
-        'gid0',
-        'gid1',
-        'gid2',
+        'gid0',//pais
+        'gid1',//provincia
+        'gid2',//canton
         'nombre',
         'slug',
         'tipo',
@@ -73,6 +74,6 @@ class Canton extends Model
      * Devuelve la URL completa de la imagen de portada de la parroquia
      */
     public function getIconoURLAttribute(){
-        return asset('images/ECU.23.8_1.svg');
+        return asset('images/maps/'.$this->gid1.'/'.$this->gid2.'.svg');
     }
 }

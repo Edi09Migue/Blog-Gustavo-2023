@@ -3,18 +3,16 @@
   <div>
 
     <!-- <user-list-add-new
-      :is-add-new-user-sidebar-active.sync="isAddNewParroquiaSidebarActive"
+      :is-add-new-user-sidebar-active.sync="isAddNewCantonSidebarActive"
       :role-options="cantonesOptions"
       :plan-options="planOptions"
       @refetch-data="refetchData"
     /> -->
 
     <!-- Filters -->
-    <parroquias-list-filters
-      :canton-filter.sync="cantonFilter"
+    <cantones-list-filters
       :provincia-filter.sync="provinciaFilter"
       :status-filter.sync="statusFilter"
-      :cantones-options="cantonesOptions"
       :provincias-options="provinciasOptions"
       :status-options="statusOptions"
     />
@@ -59,11 +57,11 @@
                 :placeholder="$t('Search')+'...'"
               />
               <b-button
-               v-if="$can('crear', 'parroquias')"
+               v-if="$can('crear', 'cantones')"
                 variant="primary"
-                @click="isAddNewParroquiaSidebarActive = true"
+                @click="isAddNewCantonSidebarActive = true"
               >
-                <span class="text-nowrap">{{ $t('Add') }} {{ $t('Parishe') }}</span>
+                <span class="text-nowrap">{{ $t('Add') }} {{ $t('Canton') }}</span>
               </b-button>
             </div>
           </b-col>
@@ -72,9 +70,9 @@
       </div>
 
       <b-table
-        ref="refParroquiaListTable"
+        ref="refCantonListTable"
         class="position-relative"
-        :items="fetchParroquias"
+        :items="fetchCantones"
         responsive
         :fields="tableColumns"
         primary-key="id"
@@ -84,7 +82,7 @@
         :sort-desc.sync="isSortDirDesc"
       >
 
-        <!-- Column: Parroquia -->
+        <!-- Column: Canton -->
         <template #cell(nombre)="data">
           <b-media vertical-align="center">
             <template #aside>
@@ -92,24 +90,17 @@
                 size="32"
                 :src="data.item.iconoURL"
                 :text="avatarText(data.item.nombre)"
-                :to="{ name: 'geo-parroquias-view', params: { id: data.item.id } }"
+                :to="{ name: 'geo-cantones-view', params: { id: data.item.id } }"
               />
             </template>
             <b-link
-              :to="{ name: 'geo-parroquias-view', params: { id: data.item.id } }"
+              :to="{ name: 'geo-cantones-view', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
               {{ data.item.nombre }}
             </b-link>
-            <small class="text-muted">@{{ data.item.nombre_corto }}</small>
+            <small class="text-muted">@{{ data.item.tipo }}</small>
           </b-media>
-        </template>
-
-        <!-- Column: Canton -->
-        <template #cell(canton)="data">
-          <div class="text-nowrap">
-            <span class="align-text-top text-capitalize">{{ data.item.canton.nombre }}</span>
-          </div>
         </template>
 
         <!-- Column: Provinicia -->
@@ -123,10 +114,10 @@
         <template #cell(estado)="data">
           <b-badge
             pill
-            :variant="`light-${resolveParroquiaStatusVariant(data.item.estado)}`"
+            :variant="`light-${resolveCantonStatusVariant(data.item.estado)}`"
             class="text-capitalize"
           >
-          {{ data.item.estado ? $t('Active') : $t('Inactive') }}
+            {{ data.item.estado ? $t('Active') : $t('Inactive') }}
           </b-badge>
         </template>
 
@@ -145,21 +136,21 @@
                 class="align-middle text-body"
               />
             </template>
-            <b-dropdown-item :to="{ name: 'geo-parroquias-view', params: { id: data.item.id } }">
+            <b-dropdown-item :to="{ name: 'geo-cantones-view', params: { id: data.item.id } }">
               <feather-icon icon="FileTextIcon" />
               <span class="align-middle ml-50">{{ $t('Details') }}</span>
             </b-dropdown-item>
 
             <b-dropdown-item
-              v-if="$can('editar', 'parroquias')"
-             :to="{ name: 'geo-parroquias-edit', params: { id: data.item.id } }">
+              v-if="$can('editar', 'cantones')"
+             :to="{ name: 'geo-cantones-edit', params: { id: data.item.id } }">
               <feather-icon icon="EditIcon" />
               <span class="align-middle ml-50">{{ $t('Edit') }}</span>
             </b-dropdown-item>
 
             <b-dropdown-item 
-              v-if="$can('eliminar', 'parroquias')"
-             @click="removeParroquia(data.item.id)">
+              v-if="$can('eliminar', 'cantones')"
+             @click="removeCanton(data.item.id)">
               <feather-icon icon="TrashIcon" />
               <span class="align-middle ml-50">{{ $t('Delete') }}</span>
             </b-dropdown-item>
@@ -186,7 +177,7 @@
 
             <b-pagination
               v-model="currentPage"
-              :total-rows="totalParroquias"
+              :total-rows="totalCantones"
               :per-page="perPage"
               first-number
               last-number
@@ -226,17 +217,17 @@ import store from '@/store'
 import { useUtils as useI18nUtils } from '@core/libs/i18n'
 import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
-import ParroquiasListFilters from './ParroquiasListFilters.vue'
-import useParroquiasList from './useParroquiasList'
+import CantonesListFilters from '../cantones-list/CantonesListFilters.vue'
+import useCantonesList from '../useCantonesList'
 import geoStoreModule from './../../geoStoreModule'
-// import ParroquiaListAddNew from './ParroquiaListAddNew.vue'
+// import CantonListAddNew from './CantonListAddNew.vue'
 
 export default {
   watch: {
   },
   components: {
-    ParroquiasListFilters,
-    // ParroquiaListAddNew,
+    CantonesListFilters,
+    // CantonListAddNew,
 
     BCard,
     BRow,
@@ -266,7 +257,7 @@ export default {
     })
 
     const { t } = useI18nUtils()
-    const isAddNewParroquiaSidebarActive = ref(false)
+    const isAddNewCantonSidebarActive = ref(false)
 
     const provinciasOptions = ref([])
 
@@ -289,90 +280,65 @@ export default {
 
     fetchProvincias()
 
-    const cantonesOptions = ref([])
-
-    const fetchCantones = (ctx, callback) =>{
-      store.dispatch('app-geo/fetchCantonesOptions')
-        .then(response => {
-          cantonesOptions.value = response.data.map(r=> { return {value:r.id.toString(), label:r.nombre }})
-        })
-        .catch(() => {
-          toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Error fetching roles list',
-              icon: 'AlertTriangleIcon',
-              variant: 'danger',
-            },
-          })
-        })
-    }
-
-    fetchCantones()
-    
     const statusOptions = [
       { label: t('Active'), value: '1' },
       { label: t('Inactive'), value: '0' },
     ]
 
     const {
-      fetchParroquias,
+      fetchCantones,
       tableColumns,
       perPage,
       currentPage,
-      totalParroquias,
+      totalCantones,
       dataMeta,
       perPageOptions,
       searchQuery,
       sortBy,
       isSortDirDesc,
-      refParroquiaListTable,
+      refCantonListTable,
       refetchData,
-      removeParroquia,
+      removeCanton,
 
       // UI
-      resolveParroquiaStatusVariant,
+      resolveCantonStatusVariant,
 
       // Extra Filters
       provinciaFilter,
-      cantonFilter,
       statusFilter,
-    } = useParroquiasList()
+    } = useCantonesList()
 
     return {
 
       // Sidebar
-      isAddNewParroquiaSidebarActive,
+      isAddNewCantonSidebarActive,
 
-      fetchParroquias,
+      fetchCantones,
       
       tableColumns,
       perPage,
       currentPage,
-      totalParroquias,
+      totalCantones,
       dataMeta,
       perPageOptions,
       searchQuery,
       sortBy,
       isSortDirDesc,
-      refParroquiaListTable,
+      refCantonListTable,
       refetchData,
-      removeParroquia,
-      cantonesOptions,
+      removeCanton,
 
       // Filter
       avatarText,
 
       // UI
-      resolveParroquiaStatusVariant,
+      resolveCantonStatusVariant,
 
-      cantonesOptions,
       provinciasOptions,
       statusOptions,
 
       // Extra Filters
       provinciaFilter,
-      cantonFilter,
       statusFilter,
     }
   },
