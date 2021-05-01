@@ -81,9 +81,10 @@ class AuthController extends Controller
         $token->save();
 
         $user->ability = $user->allPermissions;
+        $user->notifications;
 
         //TODO:: vericar campos adicionales de user
-        $user->extras=['eCommerceCartItemsCount'=>6];
+        $user->extras=['eCommerceCartItemsCount'=>0];
 
         return response()->json([
             'status' => true,
@@ -106,8 +107,23 @@ class AuthController extends Controller
         $user = $request->user();
         $user->userInfo;
         $user->allPermissions =$user->allPermissions;
+        $user->notifications;
         
         return response()->json($user);
+    }
+
+    /**
+     * Get the Notifications of authenticated User
+    *
+    * @return [json] user object
+    */
+    public function notifications(Request $request)
+    {
+        $user = $request->user();
+        
+        $notifications = $user->notifications;
+
+        return response()->json($notifications);
     }
 
     /**

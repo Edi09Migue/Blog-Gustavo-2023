@@ -168,6 +168,7 @@ class Usuarios extends Controller
         $usuario = User::findOrFail($id);
         $usuario->userInfo;
         $usuario->permisos = $usuario->getAllPermissions();
+        $usuario->notifications;
         return response()->json($usuario);
     }
 

@@ -171,5 +171,14 @@ class ConfiguracionesSeeder extends Seeder
         $config->tipo = "string";
         $config->group_key = "correo";
         $config->save();
+
+        //Notificaciones
+        $config = new Configuracion();
+        $config->key = "notificaciones_mail";
+        $config->value = "0";
+        $config->tipo = "bool";
+        $config->group_key = "notificaciones";
+        $config->save();
+
     }
 }

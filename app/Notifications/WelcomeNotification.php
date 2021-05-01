@@ -30,7 +30,13 @@ class WelcomeNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        //por defecto las notificaciones se guardan en la base
+       $canales = ['database'];
+       //si el usuario tiene activadas las notificaciones via email
+       //TODO:implementar campo configurable en perfil de usuario para gestionar notificaciones
+       //if(Utiles::getSetting('notificaciones_mail') == '1')
+       //$canales[] = 'mail'; //agrego el canal email a los canales
+       return $canales;
     }
 
     /**
@@ -59,7 +65,9 @@ class WelcomeNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'type'  => 'user_create',
+            'resume' => "Nueva cuenta registrada para {$notifiable->name }",
+            'user' => $notifiable
         ];
     }
 }

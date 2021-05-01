@@ -47,7 +47,7 @@
           cols="12"
           lg="6"
         >
-          <user-view-user-timeline-card />
+          <user-view-user-timeline-card :user-data="userData"  />
         </b-col>
         <b-col
           cols="12"

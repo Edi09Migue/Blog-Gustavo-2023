@@ -22,6 +22,7 @@
     </div>
 
     <b-navbar-nav class="nav align-items-center ml-auto">
+      <notification-dropdown :user-data="userData" />
       <b-nav-item-dropdown
         right
         toggle-class="d-flex align-items-center dropdown-user-link"
@@ -123,6 +124,7 @@ import DarkToggler from '@core/layouts/components/app-navbar/components/DarkTogg
 import { initialAbility } from '@/libs/acl/config'
 import useJwt from '@/auth/jwt/useJwt'
 import { avatarText } from '@core/utils/filter'
+import NotificationDropdown from '@core/layouts/components/app-navbar/components/NotificationDropdown.vue'
 
 export default {
   components: {
@@ -131,6 +133,7 @@ export default {
     BNavItemDropdown,
     BDropdownItem,
     BDropdownDivider,
+    NotificationDropdown,
     BAvatar,
 
     // Navbar Components

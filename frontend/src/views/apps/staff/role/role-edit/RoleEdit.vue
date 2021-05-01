@@ -126,7 +126,7 @@
                                 >
                                     <b-form-group>
                                         <b-form-checkbox
-                                          v-model="roleData.permissionsIDs"
+                                          v-model="permisosRoleIDS"
                                             :id="'permiso' + permission.id"
                                             :name="'permiso' + permission.id"
                                             :value="permission.id"
@@ -287,6 +287,7 @@ export default {
     },
   setup() {
     const roleData = ref(null)
+    const permisosRoleIDS = ref([])
     const originalName = ref("")
         // Use toast
     const toast = useToast()
@@ -308,7 +309,7 @@ export default {
       .then(response => {
         roleData.value = response.data.data
         originalName.value = roleData.value.name
-        roleData.value.permissionsIDs = roleData.value.permissions.map(p=>p.id)
+        permisosRoleIDS.value = roleData.value.permissions.map(p=>p.id)
         
         })
       .catch(error => {
@@ -320,6 +321,7 @@ export default {
       })
 
     const onSubmit = () => {
+      roleData.value.permissionsIDs = permisosRoleIDS.value
       store.dispatch("app-role/updateRole", roleData).then((response) => {
         if(response.data.status){
           router.replace({ name: 'apps-roles-list'})
@@ -359,7 +361,8 @@ export default {
       refFormObserver,
       getValidationState,
       originalName,
-      errorServer
+      errorServer,
+      permisosRoleIDS
     }
   },
 }
