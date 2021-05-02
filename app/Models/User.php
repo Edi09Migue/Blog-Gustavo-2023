@@ -59,32 +59,33 @@ class User extends Authenticatable
         'avatarURL'
     ];
 
-
     /**
- * Send a password reset notification to the user.
- *
- * @param  string  $token
- * @return void
- */
-public function sendPasswordResetNotification($token)
-{
-    $url = route('password.reset',['token'=>$token,'email'=>$this->email]);
+     * Send a password reset notification to the user.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $url = route('password.reset', ['token' => $token, 'email' => $this->email]);
 
-    $this->notify(new ResetPasswordNotification($url));
-}
+        $this->notify(new ResetPasswordNotification($url));
+    }
 
     /**
      * Devuelve la información complementaria de un usuario
      */
-    public function userInfo(){
-        return $this->hasOne(UserInfo::class,'id','id');
+    public function userInfo()
+    {
+        return $this->hasOne(UserInfo::class, 'id', 'id');
     }
 
     /**
      * Devuel el nombre del primer rol del Usuario
      */
-    public function getRoleAttribute(){
-        if($this->roles()->count()>0){
+    public function getRoleAttribute()
+    {
+        if ($this->roles()->count() > 0) {
             return $this->roles()->first()->name;
         }
         return 'Sin rol';
@@ -93,17 +94,18 @@ public function sendPasswordResetNotification($token)
     /**
      * Devuelve todos los permisos del usuario
      */
-    public function getAllPermissionsAttribute(){
+    public function getAllPermissionsAttribute()
+    {
         $permisos = [];
-        
-        foreach($this->getAllPermissions() as $permiso){
-            $p = explode('-',$permiso->name);
-            if(count($p)==2){
-                $permiso=[
-                    'action'=> $p[0],
+
+        foreach ($this->getAllPermissions() as $permiso) {
+            $p = explode('-', $permiso->name);
+            if (count($p) == 2) {
+                $permiso = [
+                    'action' => $p[0],
                     'subject' => $p[1]
                 ];
-                $permisos[]= $permiso;
+                $permisos[] = $permiso;
             }
         }
         return $permisos;
@@ -112,21 +114,24 @@ public function sendPasswordResetNotification($token)
     /**
      * Devuelve la URL completa del avatar del usuario
      */
-    public function getAvatarURLAttribute(){
-        return $this->avatar ? asset('images/profiles/'.$this->avatar) :'';
+    public function getAvatarURLAttribute()
+    {
+        return $this->avatar ? asset('images/profiles/' . $this->avatar) : '';
     }
 
     /**
      * Devuelve la fecha de creación del usaurio
      */
-    public function getCreadoAttribute(){
+    public function getCreadoAttribute()
+    {
         return $this->created_at->format('M, d Y');
     }
 
     /**
      * Devuelve el nombre completo del usuaio
      */
-    public function getFullNameAttribute(){
+    public function getFullNameAttribute()
+    {
         return $this->name;
     }
 }
