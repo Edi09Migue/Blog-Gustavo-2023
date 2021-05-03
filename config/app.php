@@ -177,6 +177,7 @@ return [
         App\Providers\SettingsServiceProvider::class,
 
         Spatie\Permission\PermissionServiceProvider::class,
+        OwenIt\Auditing\AuditingServiceProvider::class,
 
     ],
 

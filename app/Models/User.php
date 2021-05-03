@@ -11,13 +11,14 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\CanResetPassword;
 
 use Laravel\Passport\HasApiTokens;
-
-
+use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements Auditable
 {
     use HasApiTokens, HasRoles, HasFactory, Notifiable;
+
+    use \OwenIt\Auditing\Auditable;
 
     /**
      * The attributes that are mass assignable.

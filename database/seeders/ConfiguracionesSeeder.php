@@ -182,7 +182,7 @@ class ConfiguracionesSeeder extends Seeder
 
         $config = new Configuracion();
         $config->key = "notificaciones_websocket";
-        $config->value = "1";
+        $config->value = "0";
         $config->tipo = "bool";
         $config->group_key = "notificaciones";
         $config->save();
