@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Imports\UsersImport;
 use App\Models\User;
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
@@ -10,9 +11,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
+use Maatwebsite\Excel\Facades\Excel;
+
+
 class Usuarios extends Controller
 {
-    var $datos= [];
+    var $datos = [];
 
     /**
      * Display a listing of the resource.
@@ -21,51 +25,51 @@ class Usuarios extends Controller
      */
     public function index(Request $request)
     {
-        
+
         DB::enableQueryLog();
         //Filtros para query
         $query = $request->has('q') ? $request->q : "";
         $perPage = $request->has('perPage') ? $request->perPage : 10;
         $sortBy = $request->has('sortBy') ? $request->sortBy : "id";
-        $sortDesc = $request->has('sortDesc') ? ($request->sortDesc=="true" ? true : false) : false;
-        
+        $sortDesc = $request->has('sortDesc') ? ($request->sortDesc == "true" ? true : false) : false;
+
         //Obtengo una instancia de Usuarios para el query
         $usuarios = User::query();
-        
+
         //Filtro para Estado
         $estado = $request->has('estado') ? $request->estado : '';
-        if($estado!='') {
-            $usuarios = $usuarios->where('estado',$estado);
+        if ($estado != '') {
+            $usuarios = $usuarios->where('estado', $estado);
         }
         //Filtro para Rol
         $role = $request->has('role') ? $request->role : '';
-        if($role!='') {
-            $usuarios = $usuarios->where(function($q) use($role){
-                $q->whereIn('id',function($sq) use($role){
+        if ($role != '') {
+            $usuarios = $usuarios->where(function ($q) use ($role) {
+                $q->whereIn('id', function ($sq) use ($role) {
                     $sq->select('model_id');
                     $sq->from('model_has_roles');
-                    $sq->where('role_id',$role);
+                    $sq->where('role_id', $role);
                 });
             });
         }
 
         //Filtros basicos, orden y paginacion
-        $usuarios = $usuarios->where(function($q) use($query){
-                            $q->where('email','like',"%$query%")
-                            ->orWhere('name','like',"%$query%")
-                            ->orWhere('username','like',"%$query%");
-                        })
-                        ->orderBy($sortBy,$sortDesc?'desc':'asc')
-                        ->paginate($perPage);
+        $usuarios = $usuarios->where(function ($q) use ($query) {
+            $q->where('email', 'like', "%$query%")
+                ->orWhere('name', 'like', "%$query%")
+                ->orWhere('username', 'like', "%$query%");
+        })
+            ->orderBy($sortBy, $sortDesc ? 'desc' : 'asc')
+            ->paginate($perPage);
 
-        $usuarios->each(function($u){
+        $usuarios->each(function ($u) {
             $u->avatar = $u->avatarURL;
         });
-        
-        Log::info(DB::getQueryLog()); 
+
+        Log::info(DB::getQueryLog());
         return response()->json([
             'users' => $usuarios->items(),
-            'total'=>$usuarios->total()
+            'total' => $usuarios->total()
         ]);
     }
 
@@ -77,7 +81,7 @@ class Usuarios extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'username' => 'required|unique:users',
             'email' => 'required|unique:users',
             'name' => 'required',
@@ -90,17 +94,16 @@ class Usuarios extends Controller
                 'status' => false,
                 'data' => $errors,
                 'msg' => $errors->first()
-            ]);    
+            ]);
         }
-        
+
         DB::beginTransaction();
         try {
-            
+
             $usuario = new User($request->all());
             $usuario->password = bcrypt($request->password);
-            if($request->has('avatar') && !is_null($request->avatar))
-            {
-                $usuario->avatar = parent::uploadAvatar($request->avatar,'/images/profiles/');
+            if ($request->has('avatar') && !is_null($request->avatar)) {
+                $usuario->avatar = parent::uploadAvatar($request->avatar, '/images/profiles/');
             }
             $usuario->save();
 
@@ -109,9 +112,9 @@ class Usuarios extends Controller
             ]);
             $info->fill($request->all());
             $info->save();
-            
+
             if ($request->has('role')) {
-                $usuario->assignRole($request->role);//asigno un solo rol
+                $usuario->assignRole($request->role); //asigno un solo rol
                 //$usuario->syncRoles($request->roles_id);//asigno varios roles
             }
 
@@ -119,9 +122,8 @@ class Usuarios extends Controller
             return response()->json([
                 'status' => true,
                 'data' => $usuario,
-                'msg' => $usuario->username.' creado!'
+                'msg' => $usuario->username . ' creado!'
             ]);
-            
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json([
@@ -131,29 +133,31 @@ class Usuarios extends Controller
             ]);
         }
     }
-    
+
     /**
      * Devuelve TRUE si el Username esta disponible
      */
-    public function isUniqueUsername(Request $request){
+    public function isUniqueUsername(Request $request)
+    {
         //$existe = User::where('username',$request->value)->count();
         $existe = User::whereRaw("BINARY `username`= ?", [$request->value])->count();
         return response()->json([
             'status' => true,
-            'valid' => ($existe==0),
-            'msg' =>  $request->value. ($existe!=0 ? ' ya esta siendo utilizado por otro usuario' : ' esta disponible')
+            'valid' => ($existe == 0),
+            'msg' =>  $request->value . ($existe != 0 ? ' ya esta siendo utilizado por otro usuario' : ' esta disponible')
         ]);
     }
-    
+
     /**
      * Devuelve TRUE si el Email esta disponible
      */
-    public function isUniqueEmail(Request $request){
-        $existe = User::where('email',$request->value)->count();
+    public function isUniqueEmail(Request $request)
+    {
+        $existe = User::where('email', $request->value)->count();
         return response()->json([
             'status' => true,
-            'valid' => ($existe==0),
-            'msg' => $request->value. ($existe!=0 ? ' ya esta siendo utilizado por otro usuario' : ' esta disponible')
+            'valid' => ($existe == 0),
+            'msg' => $request->value . ($existe != 0 ? ' ya esta siendo utilizado por otro usuario' : ' esta disponible')
         ]);
     }
 
@@ -180,7 +184,6 @@ class Usuarios extends Controller
      */
     public function checkpointReward($id)
     {
-        
     }
 
     /**
@@ -194,20 +197,19 @@ class Usuarios extends Controller
     {
         $usuario = User::find($id);
         $usuario->fill($request->except(['avatar']));
-        
-        if($request->has('password')){
+
+        if ($request->has('password')) {
             $usuario->password = bcrypt($request->password);
         }
-        
-        if($request->has('avatar') && !is_null($request->avatar))
-        {
-            $usuario->avatar = parent::uploadAvatar($request->avatar,'/images/profiles/');
+
+        if ($request->has('avatar') && !is_null($request->avatar)) {
+            $usuario->avatar = parent::uploadAvatar($request->avatar, '/images/profiles/');
         }
 
         $info = UserInfo::firstOrNew([
             'id' => $usuario->id
         ]);
-        
+
         $info->fill($request->user_info);
         $info->save();
 
@@ -219,7 +221,7 @@ class Usuarios extends Controller
         return response()->json([
             'status' => true,
             'data' => $usuario,
-            'msg' => $usuario->username.' actualizado!'
+            'msg' => $usuario->username . ' actualizado!'
         ]);
     }
 
@@ -233,7 +235,7 @@ class Usuarios extends Controller
     {
         $usuario = User::find($id);
         $usuario->delete();
-        return response()->json(['success'=>TRUE,'id'=>$id]);
+        return response()->json(['success' => TRUE, 'id' => $id]);
     }
 
     /**
@@ -245,8 +247,45 @@ class Usuarios extends Controller
     public function disable($id, Request $request)
     {
         $usuario = User::find($id);
-        $usuario->estado="desactivo";
+        $usuario->estado = "desactivo";
         $usuario->save();
-        return response()->json(['success'=>TRUE,'id'=>$id]);
+        return response()->json(['success' => TRUE, 'id' => $id]);
+    }
+
+    /**
+     * Sube un archivo en excel y los importa a la tabla usuarios
+     */
+    public function importExcel(Request $request)
+    {
+
+        $filename = $request->documento->store('imports/users/');
+
+        try {
+            $resultado = Excel::import(new UsersImport, $filename);
+            $resultado = (new UsersImport)->toCollection($filename);
+
+            if (count($resultado) > 0) {
+                $resultado = $resultado[0];
+            }
+
+            return response()->json(['success' => TRUE, 'items' => $resultado]);
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+
+            foreach ($failures as $failure) {
+                return response()->json([
+                    'success' => FALSE,
+                    'row' => $failure->row(), // row that went wrong
+                    'attribute' => $failure->attribute(), // either heading key (if using heading row concern) or column index
+                    'errors' => $failure->errors(), // Actual error messages from Laravel validator
+                    'values' => $failure->values(), // The values of the row that has failed.
+                ]);
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'success' => FALSE,
+                'errors' => $e
+            ]);
+        }
     }
 }

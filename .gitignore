@@ -6,6 +6,7 @@
 /public/fonts
 /public/images
 /storage/*.key
+/storage/framework/laravel-excel
 /vendor
 .env
 .env.backup

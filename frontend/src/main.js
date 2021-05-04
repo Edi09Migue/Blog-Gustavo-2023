@@ -15,7 +15,7 @@ import "@/libs/acl";
 import "@/libs/portal-vue";
 import "@/libs/sweet-alerts";
 import "@/libs/toastification";
-import "@/libs/pusher";
+//import "@/libs/pusher";
 
 // BSV Plugin Registration
 Vue.use(ToastPlugin);

@@ -126,11 +126,15 @@ export default {
         }
     },
     created() {
-        Echo.private("users." + this.userData.id).notification(notification => {
-            console.log(notification);
-            console.log(notification.type);
-            this.notifications.push(notification);
-        });
+        if (typeof Echo === "object") {
+            Echo.private("users." + this.userData.id).notification(
+                notification => {
+                    console.log(notification);
+                    console.log(notification.type);
+                    this.notifications.push(notification);
+                }
+            );
+        }
     }
 };
 </script>
