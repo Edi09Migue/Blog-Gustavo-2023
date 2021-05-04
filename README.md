@@ -2,16 +2,18 @@
 
 ## About CORE
 
+## Aditional laravel packages
 
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
+-   [Audit tools](http://www.laravel-auditing.com/).
+-   [Excel tools](https://laravel-excel.com/).
+-   [Laravel websockets](https://beyondco.de/docs/laravel-websockets).
+-   [Laravel Permissions](https://spatie.be/docs/laravel-permission/).
 
 ## Deploy
 
 php artisan migrate --seed
 
 php artisan passport:install
-
 
 ## License
 
