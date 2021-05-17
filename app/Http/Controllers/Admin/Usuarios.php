@@ -195,7 +195,9 @@ class Usuarios extends Controller
      */
     public function update(Request $request, $id)
     {
+        
         $usuario = User::find($id);
+        
         $usuario->fill($request->except(['avatar']));
 
         if ($request->has('password')) {
@@ -206,12 +208,13 @@ class Usuarios extends Controller
             $usuario->avatar = parent::uploadAvatar($request->avatar, '/images/profiles/');
         }
 
-        $info = UserInfo::firstOrNew([
-            'id' => $usuario->id
-        ]);
-
-        $info->fill($request->user_info);
-        $info->save();
+        if($request->has('user_info')){
+            $info = UserInfo::firstOrNew([
+                'id' => $usuario->id
+            ]);
+            $info->fill($request->user_info);
+            $info->save();
+        }
 
         if ($request->has('role')) {
             $usuario->syncRoles([$request->role]);
@@ -235,7 +238,7 @@ class Usuarios extends Controller
     {
         $usuario = User::find($id);
         $usuario->delete();
-        return response()->json(['success' => TRUE, 'id' => $id]);
+        return response()->json(['status' => TRUE, 'id' => $id]);
     }
 
     /**
@@ -249,7 +252,7 @@ class Usuarios extends Controller
         $usuario = User::find($id);
         $usuario->estado = "desactivo";
         $usuario->save();
-        return response()->json(['success' => TRUE, 'id' => $id]);
+        return response()->json(['status' => TRUE, 'id' => $id]);
     }
 
     /**
