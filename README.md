@@ -15,6 +15,23 @@ php artisan migrate --seed
 
 php artisan passport:install
 
+php artisan websockets:serve 
+
+## Features
+
+- Módulo de Seguridad
+- - [ ] Iniciar sesión 
+- - [ ] Recuperar contraseña
+- - [ ] Perfil de usuario
+- - [ ] CRUD Usuarios
+- - [ ] CRUD Roles
+- - [ ] CRUD Permisos
+- - [ ] Configuraciones Generales
+- - - [ ] Notificaciones
+- - - [ ] Datos del sistema
+- - [ ] Registrar Usuarios
+
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
