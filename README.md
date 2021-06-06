@@ -4,10 +4,15 @@
 
 ## Aditional laravel packages
 
--   [Audit tools](http://www.laravel-auditing.com/).
--   [Excel tools](https://laravel-excel.com/).
--   [Laravel websockets](https://beyondco.de/docs/laravel-websockets).
--   [Laravel Permissions](https://spatie.be/docs/laravel-permission/).
+-   [Audit tools](http://www.laravel-auditing.com/). Audit tools package documentation
+-   [Excel tools](https://laravel-excel.com/). Excel tools package documentation
+-   [Laravel websockets](https://beyondco.de/docs/laravel-websockets). 
+-   [Laravel Permissions](https://spatie.be/docs/laravel-permission/). Permission manager documentation
+
+-   [Vuexy Template](https://pixinvent.com/demo/vuexy-vuejs-admin-dashboard-template/documentation/guide/laravel-integration/installation.html). Front-End template documentation
+
+-   [DBML](https://www.dbml.org/docs/) Database Markup Language Documentation
+-   [Database Dictionary]()
 
 ## Deploy
 

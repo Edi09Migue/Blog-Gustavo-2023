@@ -1,0 +1,260 @@
+Project core {
+    database_type: 'Mysql'
+    Note: 'Core Database Diagrama'
+}
+
+Enum "configuraciones_tipo_enum" {
+  "string"
+  "text"
+  "int"
+  "bool"
+  "double"
+  "image"
+}
+
+Enum "users_estado_enum" {
+  "pendiente"
+  "activo"
+  "inactivo"
+}
+
+Enum "user_info_genero_enum" {
+  "male"
+  "female"
+}
+
+Table "audits" {
+  "id" bigint(20) [pk, not null]
+  "user_type" varchar(255) [default: NULL]
+  "user_id" bigint(20) [default: NULL]
+  "event" varchar(255) [not null]
+  "auditable_type" varchar(255) [not null]
+  "auditable_id" bigint(20) [not null]
+  "old_values" text [default: NULL]
+  "new_values" text [default: NULL]
+  "url" text [default: NULL]
+  "ip_address" varchar(45) [default: NULL]
+  "user_agent" varchar(1023) [default: NULL]
+  "tags" varchar(255) [default: NULL]
+  "created_at" timestamp [default: NULL]
+  "updated_at" timestamp [default: NULL]
+}
+
+Table "configuraciones" {
+  "id" bigint(20) [pk, not null]
+  "key" varchar(255) [not null]
+  "value" text [default: NULL]
+  "configuracion" text [default: NULL, unique]
+  "tipo" configuraciones_tipo_enum [not null, default: "text"]
+  "descripcion" text [default: NULL]
+  "group_key" text [default: NULL]
+  "created_at" timestamp [default: NULL]
+  "updated_at" timestamp [default: NULL]
+}
+
+Table "failed_jobs" {
+  "id" bigint(20) [pk, not null]
+  "uuid" varchar(255) [not null]
+  "connection" text [not null]
+  "queue" text [not null]
+  "payload" longtext [not null]
+  "exception" longtext [not null]
+  "failed_at" timestamp [not null, default: `current_timestamp()`]
+}
+
+Table "jobs" {
+  "id" bigint(20) [pk, not null]
+  "queue" varchar(255) [not null]
+  "payload" longtext [not null]
+  "attempts" tinyint(3) [not null]
+  "reserved_at" int(10) [default: NULL]
+  "available_at" int(10) [not null]
+  "created_at" int(10) [not null]
+}
+
+Table "migrations" {
+  "id" int(10) [pk, not null]
+  "migration" varchar(255) [not null]
+  "batch" int(11) [not null]
+}
+
+Table "model_has_permissions" {
+  "permission_id" bigint(20) [not null]
+  "model_type" varchar(255) [not null]
+  "model_id" bigint(20) [not null]
+
+Indexes {
+  (permission_id, model_id, model_type) [pk]
+}
+}
+
+Table "model_has_roles" {
+  "role_id" bigint(20) [not null]
+  "model_type" varchar(255) [not null]
+  "model_id" bigint(20) [not null]
+
+Indexes {
+  (role_id, model_id, model_type) [pk]
+}
+}
+
+Table "notifications" {
+  "id" char(36) [pk, not null]
+  "type" varchar(255) [not null]
+  "notifiable_type" varchar(255) [not null]
+  "notifiable_id" bigint(20) [not null]
+  "data" longtext [not null]
+  "read_at" timestamp [default: NULL]
+  "created_at" timestamp [default: NULL]
+  "updated_at" timestamp [default: NULL]
+}
+
+Table "oauth_access_tokens" {
+  "id" varchar(100) [pk, not null]
+  "user_id" bigint(20) [default: NULL]
+  "client_id" char(36) [not null]
+  "name" varchar(255) [default: NULL]
+  "scopes" text [default: NULL]
+  "revoked" tinyint(1) [not null]
+  "created_at" timestamp [default: NULL]
+  "updated_at" timestamp [default: NULL]
+  "expires_at" datetime [default: NULL]
+}
+
+Table "oauth_auth_codes" {
+  "id" varchar(100) [pk, not null]
+  "user_id" bigint(20) [not null]
+  "client_id" char(36) [not null]
+  "scopes" text [default: NULL]
+  "revoked" tinyint(1) [not null]
+  "expires_at" datetime [default: NULL]
+}
+
+Table "oauth_clients" {
+  "id" char(36) [pk, not null]
+  "user_id" bigint(20) [default: NULL]
+  "name" varchar(255) [not null]
+  "secret" varchar(100) [default: NULL]
+  "provider" varchar(255) [default: NULL]
+  "redirect" text [not null]
+  "personal_access_client" tinyint(1) [not null]
+  "password_client" tinyint(1) [not null]
+  "revoked" tinyint(1) [not null]
+  "created_at" timestamp [default: NULL]
+  "updated_at" timestamp [default: NULL]
+}
+
+Table "oauth_personal_access_clients" {
+  "id" bigint(20) [pk, not null]
+  "client_id" char(36) [not null]
+  "created_at" timestamp [default: NULL]
+  "updated_at" timestamp [default: NULL]
+}
+
+Table "oauth_refresh_tokens" {
+  "id" varchar(100) [pk, not null]
+  "access_token_id" varchar(100) [not null]
+  "revoked" tinyint(1) [not null]
+  "expires_at" datetime [default: NULL]
+}
+
+Table "password_resets" {
+  "email" varchar(255) [not null]
+  "token" varchar(255) [not null]
+  "created_at" timestamp [default: NULL]
+}
+
+Table "permissions" {
+  "id" bigint(20) [pk, not null]
+  "name" varchar(255) [not null]
+  "guard_name" varchar(255) [not null]
+  "group_key" varchar(255) [default: NULL]
+  "created_at" timestamp [default: NULL]
+  "updated_at" timestamp [default: NULL]
+}
+
+Table "personal_access_tokens" {
+  "id" bigint(20) [pk, not null]
+  "tokenable_type" varchar(255) [not null]
+  "tokenable_id" bigint(20) [not null]
+  "name" varchar(255) [not null]
+  "token" varchar(64) [not null]
+  "abilities" text [default: NULL]
+  "last_used_at" timestamp [default: NULL]
+  "created_at" timestamp [default: NULL]
+  "updated_at" timestamp [default: NULL]
+}
+
+Table "roles" {
+  "id" bigint(20) [pk, not null]
+  "name" varchar(255) [not null]
+  "guard_name" varchar(255) [not null]
+  "description" text [default: NULL]
+  "created_at" timestamp [default: NULL]
+  "updated_at" timestamp [default: NULL]
+}
+
+Table "role_has_permissions" {
+  "permission_id" bigint(20) [not null]
+  "role_id" bigint(20) [not null]
+
+Indexes {
+  (permission_id, role_id) [pk]
+}
+}
+
+Table "users" {
+  "id" bigint(20) [pk, not null]
+  "name" varchar(255) [not null]
+  "email" varchar(255) [not null, unique]
+  "avatar" varchar(255) [default: NULL]
+  "username" varchar(255) [not null, unique]
+  "estado" users_estado_enum [not null, default: "activo"]
+  "email_verified_at" timestamp [default: NULL]
+  "password" varchar(255) [not null]
+  "remember_token" varchar(100) [default: NULL]
+  "created_at" timestamp [default: NULL]
+  "updated_at" timestamp [default: NULL]
+}
+
+Table "user_info" {
+  "id" bigint(20) [not null]
+  "empresa" varchar(255) [default: NULL]
+  "portada" varchar(255) [default: NULL]
+  "birthdate" varchar(255) [default: NULL]
+  "telefono" varchar(255) [default: NULL]
+  "website" varchar(255) [default: NULL]
+  "idioma" varchar(255) [default: NULL]
+  "genero" user_info_genero_enum [default: NULL]
+  "contact_options" varchar(255) [default: NULL]
+  "bio" text [default: NULL]
+  "pais" varchar(255) [default: NULL]
+  "provincia" varchar(255) [default: NULL]
+  "ciudad" varchar(255) [default: NULL]
+  "postalcode" varchar(255) [default: NULL]
+  "direccion_principal" varchar(255) [default: NULL]
+  "direccion_secundaria" varchar(255) [default: NULL]
+  "social" longtext [default: NULL]
+  "created_at" timestamp [default: NULL]
+  "updated_at" timestamp [default: NULL]
+}
+
+Table "websockets_statistics_entries" {
+  "id" int(10) [pk, not null]
+  "app_id" varchar(255) [not null]
+  "peak_connection_count" int(11) [not null]
+  "websocket_message_count" int(11) [not null]
+  "api_message_count" int(11) [not null]
+  "created_at" timestamp [default: NULL]
+  "updated_at" timestamp [default: NULL]
+}
+
+Ref:"permissions"."id" < "model_has_permissions"."permission_id" [delete: cascade]
+
+Ref:"roles"."id" < "model_has_roles"."role_id" [delete: cascade]
+
+Ref:"permissions"."id" < "role_has_permissions"."permission_id" [delete: cascade]
+
+Ref:"roles"."id" < "role_has_permissions"."role_id" [delete: cascade]
+
+Ref:"users"."id" < "user_info"."id" [delete: cascade]
