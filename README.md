@@ -12,7 +12,7 @@
 -   [Vuexy Template](https://pixinvent.com/demo/vuexy-vuejs-admin-dashboard-template/documentation/guide/laravel-integration/installation.html). Front-End template documentation
 
 -   [DBML](https://www.dbml.org/docs/) Database Markup Language Documentation
--   [Database Dictionary]()
+-   [Database Dictionary](https://dbdocs.io/dexterx17/core) Database Diagrama and Documentation
 
 ## Deploy
 

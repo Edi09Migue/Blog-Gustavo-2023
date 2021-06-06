@@ -12,9 +12,16 @@ Para conocer más sobre la sintaxis y el uso de la herramienta referirse a los s
 
 ## installation
 
+//Installamos dbdocs utility
 npm install -g dbdocs
 
+//Nos logeamos usando github
 dbdocs login
 
+//Publicamos nuestro diagrama
 dbdocs builds core.dbml
 
+//Protegemos nuestro diagrama con password
+dbdocs password --project core
+
+//Password: coreman
