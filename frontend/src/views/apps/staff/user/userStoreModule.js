@@ -75,6 +75,17 @@ export default {
                     .catch(error => reject(error));
             });
         },
+        updatePassword(ctx, userData) {
+            return new Promise((resolve, reject) => {
+                axios
+                    .put(
+                        `/api/admin/usuario/${userData.id}/updatePassword`,
+                        userData
+                    )
+                    .then(response => resolve(response))
+                    .catch(error => reject(error));
+            });
+        },
         updateUserPassword(ctx, userData) {
             return new Promise((resolve, reject) => {
                 axios

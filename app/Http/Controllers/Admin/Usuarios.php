@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -195,9 +196,9 @@ class Usuarios extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+
         $usuario = User::find($id);
-        
+
         $usuario->fill($request->except(['avatar']));
 
         if ($request->has('password')) {
@@ -208,7 +209,7 @@ class Usuarios extends Controller
             $usuario->avatar = parent::uploadAvatar($request->avatar, '/images/profiles/');
         }
 
-        if($request->has('user_info')){
+        if ($request->has('user_info')) {
             $info = UserInfo::firstOrNew([
                 'id' => $usuario->id
             ]);
@@ -219,6 +220,37 @@ class Usuarios extends Controller
         if ($request->has('role')) {
             $usuario->syncRoles([$request->role]);
         }
+        $usuario->save();
+
+        return response()->json([
+            'status' => true,
+            'data' => $usuario,
+            'msg' => $usuario->username . ' actualizado!'
+        ]);
+    }
+
+    /**
+     * Actualiza la contraseña de un usuario
+     */
+    public function updatePassword(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return response()->json([
+                'status' => false,
+                'data' => $errors,
+                'msg' => $errors->first()
+            ]);
+        }
+
+        $usuario = User::find($id);
+
+        $usuario->password = Hash::make($request->password);
+
         $usuario->save();
 
         return response()->json([
