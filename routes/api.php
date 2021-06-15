@@ -6,7 +6,6 @@ use App\Http\Controllers\Admin\Roles;
 use App\Http\Controllers\Admin\UserProfileCtrl;
 use App\Http\Controllers\Admin\Usuarios;
 use App\Http\Controllers\AuthController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,6 +49,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:api'], function () {
   Route::put('usuario/{id}/updatePassword', [Usuarios::class, 'updatePassword']);
   Route::post('usuarios/validate/email', [Usuarios::class, 'isUniqueEmail']);
   Route::post('usuarios/import', [Usuarios::class, 'importExcel']);
+  Route::post('usuarios/reportes', [Usuarios::class, 'reportes']);
 
   Route::put('profile/updatePassword', [UserProfileCtrl::class, 'updatePassword']);
   Route::put('profile/update', [UserProfileCtrl::class, 'update']);

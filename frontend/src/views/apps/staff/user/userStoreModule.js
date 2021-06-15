@@ -113,6 +113,14 @@ export default {
                     .then(response => resolve(response))
                     .catch(error => reject(error));
             });
+        },
+        generarReportes(ctx, reportFilters) {
+            return new Promise((resolve, reject) => {
+                axios
+                    .post("/api/admin/usuarios/reportes", reportFilters)
+                    .then(response => resolve(response))
+                    .catch(error => reject(error));
+            });
         }
     }
 };

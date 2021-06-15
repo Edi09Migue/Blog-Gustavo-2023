@@ -323,4 +323,55 @@ class Usuarios extends Controller
             ]);
         }
     }
+
+    /**
+     * Devuelve los reportes de usuarios con los siguientes filtros opcionales
+     * - Tipo       (full)
+     * - Formato    (pdf,xlsx,view)
+     * - Desde      (yyyy-mm-dd)
+     * - Hasta      (yyyy-mm-dd)
+     */
+    public function reportes(Request $request)
+    {
+        //Si se require un tipo de reporte especial
+        $tipo = $request->has('tipo') ? $request->tipo : "full";    //por defecto va completo
+        //De acuerdo al tipo seleccionamos la vista con el formato
+        $vista_reporte = "back.admin.usuarios.reporte_full";
+
+        //Si se require un formato especifico (pdf,xlsx,view)
+        $formato = $request->has('formato') ? $request->formato : "pdf"; //por defecto va pdf
+
+        $nombre_reporte = "Reporte de Usuarios, $tipo";
+
+        //Si se especifica un intervalo de fechas
+        if ($request->has('desde') && $request->has('hasta')) {
+            $desde = $request->desde;
+            $hasta = $request->hasta;
+            $nombre_reporte .= " ({$desde} - {$hasta})";
+        }
+
+        //envio los parametros al modelo para que solo me devuelva
+        // los que cumplan las condiciones recibidas en $request
+        $usuarios = User::paraReporte($request);
+
+        $datos_reporte = [
+            'titulo'        => $nombre_reporte,
+            'usuarios'   => $usuarios,
+            'tipo'          => $tipo,
+            'desde'         => @$desde,
+            'hasta'         => @$hasta,
+        ];
+
+
+        //De acuerdo al formato utilizamos la libreria
+        switch ($formato) {
+            case 'pdf': //Utilizamos el paquete elibyy/tcpdf-laravel
+                break;
+            case 'xlsx': //Utilizamos el paquete elibyy/tcpdf-laravel
+                break;
+            default: //Devolvemos la vista en HTML
+                return view($vista_reporte, $datos_reporte);
+                break;
+        }
+    }
 }

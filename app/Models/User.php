@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 use Illuminate\Contracts\Auth\CanResetPassword;
-
+use Illuminate\Http\Request;
 use Laravel\Passport\HasApiTokens;
 use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\Permission\Traits\HasRoles;
@@ -134,5 +134,18 @@ class User extends Authenticatable implements Auditable
     public function getFullNameAttribute()
     {
         return $this->name;
+    }
+    /**
+     * Aplica los filtros del formulario de reporte
+     */
+    public function scopeParaReporte($query, Request $request)
+    {
+        $query->whereDate('created_at', '>=', $request->desde)
+            ->whereDate('created_at', '<=', $request->hasta);
+        //si no ha seleccionado todos los roles
+        if ($request->has('roles') && !empty($request->roles)) {
+            $query->role($request->roles);
+        }
+        return $query;
     }
 }
