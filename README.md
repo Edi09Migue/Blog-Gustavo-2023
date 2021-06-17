@@ -14,6 +14,8 @@
 -   [DBML](https://www.dbml.org/docs/) Database Markup Language Documentation
 -   [Database Dictionary](https://dbdocs.io/dexterx17/core) Database Diagrama and Documentation
 
+-   [PHPUNIT](https://phpunit.readthedocs.io/es/latest/) Pruebas unitarias y de cobertura
+
 ## Deploy
 
 php artisan migrate --seed
@@ -21,6 +23,23 @@ php artisan migrate --seed
 php artisan passport:install
 
 php artisan websockets:serve 
+
+## Testing
+
+Lineamientos para escribir pruebas 
+
+https://github.com/framgia/laravel-test-guideline
+php artisan test
+
+Agregar al final de php.ini 
+
+    zend_extension = php_xdebug.dll
+    xdebug.remote_enable = 1
+    xdebug.remote_handler = dbgp
+    xdebug.remote_host = localhost
+    xdebug.remote_autostart = 1
+    xdebug.remote_port = 9000
+    xdebug.show_local_vars = 1
 
 ## Features
 

@@ -43,10 +43,10 @@ class AuthController extends Controller
         ]);
         if ($user->save()) {
             return response()->json([
-                'message' => 'Successfully created user!'
+                'message' => 'Usuario registrado correctamente!'
             ], 201);
         } else {
-            return response()->json(['error' => 'Provide proper details']);
+            return response()->json(['error' => 'Datos incorrectos']);
         }
     }
 
