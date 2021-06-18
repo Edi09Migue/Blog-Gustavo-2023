@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Database\Seeders\ConfiguracionesSeeder;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Password;
@@ -11,7 +12,7 @@ use Tests\TestCase;
 
 class AuthControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseMigrations;
 
     public function test_register()
     {
@@ -23,32 +24,34 @@ class AuthControllerTest extends TestCase
             'c_password'  => '12345678',
         ];
 
-        $response = $this->post('/api/auth/register',$new_user);
+        $response = $this->post('/api/auth/register', $new_user);
         //$response->dump();
         $response->assertStatus(201);
     }
 
-    public function test_login(){
-        
+    public function test_login()
+    {
+
         $this->artisan('passport:install');
 
         $user = User::factory()->create();
 
-        $this->post('/api/auth/login',[
+        $this->post('/api/auth/login', [
             'email' => $user->email,
             'password'  => 'password'
         ])
-        //->dump()
-        ->assertJson(['status'=>TRUE])
-        ->assertStatus(200);
+            //->dump()
+            ->assertJson(['status' => TRUE])
+            ->assertStatus(200);
     }
 
-    public function test_get_logged_user_data(){
+    public function test_get_logged_user_data()
+    {
         $user = User::factory()->create();
 
-        $this->actingAs($user,'api')
+        $this->actingAs($user, 'api')
             ->get('/api/auth/user')
-            ->assertJson(['name'=>$user->name])
+            ->assertJson(['name' => $user->name])
             ->assertStatus(200);
     }
 
@@ -60,7 +63,7 @@ class AuthControllerTest extends TestCase
     //         'password'  => 'password'
     //     ]);
 
-        
+
     //     $this->actingAs($user,'api')
     //         ->get('/api/auth/logout')
     //         ->dump()
@@ -68,43 +71,47 @@ class AuthControllerTest extends TestCase
     //         ->assertStatus(200);
     // }
 
-    public function test_get_user_notifications(){
+    public function test_get_user_notifications()
+    {
         $user = User::factory()->create();
 
-        $this->actingAs($user,'api')
+        $this->actingAs($user, 'api')
             ->get('/api/auth/notifications')
             ->assertJson([])
             ->assertStatus(200);
     }
 
-    public function test_send_reset_password_email(){
+    public function test_send_reset_password_email()
+    {
         $this->seed(ConfiguracionesSeeder::class);
         $user = User::factory()->create([
             //para que me envie el correo a mi
             'email' => 'sistemas@satana.ec'
         ]);
 
-        $this->post('/api/auth/reset-password',['email'=> $user->email])
+        $this->post('/api/auth/reset-password', ['email' => $user->email])
             //->dump()
             ->assertStatus(200);
     }
 
-    public function test_reset_password_recovery(){
+    public function test_reset_password_recovery()
+    {
         $user = User::factory()->create();
 
         $token = Password::broker()->createToken($user);
 
-        $this->post('/api/auth/reset-password-user',[
+        $this->post('/api/auth/reset-password-user', [
             'token'     => $token,
             'email'     => $user->email,
             'password'  => 'nuevopass',
             'password_confirmation'  => 'nuevopass'
-            ])
+        ])
             //->dump()
             ->assertStatus(200);
     }
 
-    public function test_welcome_notification_email(){
+    public function test_welcome_notification_email()
+    {
         $this->seed(ConfiguracionesSeeder::class);
         $user = User::factory()->create([
             //para que me envie el correo a mi
@@ -116,8 +123,9 @@ class AuthControllerTest extends TestCase
             ->assertStatus(200);
     }
 
-    public function test_reset_password_email(){
-        
+    public function test_reset_password_email()
+    {
+
         $this->seed(ConfiguracionesSeeder::class);
         $user = User::factory()->create([
             //para que me envie el correo a mi

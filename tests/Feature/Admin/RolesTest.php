@@ -8,10 +8,10 @@ use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-class PermisosTest extends TestCase
+class RolesTest extends TestCase
 {
     use DatabaseMigrations;
 
@@ -21,14 +21,14 @@ class PermisosTest extends TestCase
         $this->seed(PermisosSeeder::class);
         $admin = User::factory()->create();
 
-        $permisos = Permission::all();
+        $roles = Role::all();
 
         $this->actingAs($admin, 'api')
-            ->get('/api/admin/permisos')
+            ->get('/api/admin/roles')
             //->dump()
             ->assertJson([
                 'items' => [],
-                'total' => $permisos->count()
+                'total' => $roles->count()
             ])
             ->assertStatus(200);
     }
@@ -38,46 +38,45 @@ class PermisosTest extends TestCase
         $admin = User::factory()->create();
 
         $this->actingAs($admin, 'api')
-            ->get('/api/admin/permisos/dropdownOptions')
+            ->get('/api/admin/roles/dropdownOptions')
             //->dump()
             ->assertJson([])
             ->assertStatus(200);
     }
 
-    public function test_crear()
+    public function test_crear_rol()
     {
         $admin = User::factory()->create();
 
         $data = [
-            'name'          => 'tomar-bielas',
+            'name'          => 'rol-test',
             'guard_name'    => 'web',
-            'group_key'     => 'ofi'
+            'description'   => 'Descripcion rol'
         ];
 
         $this->actingAs($admin, 'api')
-            ->post('/api/admin/permisos', $data)
+            ->post('/api/admin/roles', $data)
             //->dump()
             ->assertJson([
                 'status' => true,
-                'msg'   => "{$data['name']} creado!"
+                'msg'   => "{$data['name']} creado correctamente!"
             ])
             ->assertStatus(200);
 
-        $this->assertDatabaseCount('permissions', 1);
+        $this->assertDatabaseCount('roles', 1);
     }
 
-    public function test_crear_campos_required()
+    public function test_crear_campos_rol_required()
     {
         $admin = User::factory()->create();
 
         $data = [
             'name'          => '',
             'guard_name'    => '',
-            'group_key'     => 'ofi'
         ];
 
         $this->actingAs($admin, 'api')
-            ->post('/api/admin/permisos', $data)
+            ->post('/api/admin/roles', $data)
             //->dump()
             //verifico que el array datatiene 2 errores
             ->assertJsonCount(2, 'data')
@@ -87,34 +86,34 @@ class PermisosTest extends TestCase
             ])
             ->assertStatus(200);
 
-        $this->assertDatabaseCount('permissions', 0);
+        $this->assertDatabaseCount('roles', 0);
     }
 
-    public function test_editar()
+    public function test_editar_rol()
     {
         $admin = User::factory()->create();
 
         $data = [
-            'name'          => 'tomar-bielas',
+            'name'          => 'tester-role',
             'guard_name'    => 'web',
-            'group_key'     => 'ofi'
+            'description'     => 'rol description'
         ];
-        $permiso = Permission::create($data);
-        $permiso->name = "updated";
+        $role = Role::create($data);
+        $role->name = "updated";
 
         $this->actingAs($admin, 'api')
-            ->put("/api/admin/permisos/{$permiso->id}", $permiso->toArray())
+            ->put("/api/admin/roles/{$role->id}", $role->toArray())
             //->dump()
             ->assertJson([
                 'status' => true,
-                'msg'   => "{$permiso->name} actualizado!"
+                'msg'   => "{$role->name} actualizado correctamente!"
             ])
             ->assertStatus(200);
 
-        $this->assertDatabaseCount('permissions', 1);
+        $this->assertDatabaseCount('roles', 1);
     }
 
-    public function test_editar_campos_required()
+    public function test_editar_campos_rol_required()
     {
         $admin = User::factory()->create();
 
@@ -123,11 +122,11 @@ class PermisosTest extends TestCase
             'guard_name'    => 'web',
             'group_key'     => 'ofi'
         ];
-        $permiso = Permission::create($data);
-        $permiso->name = "";
+        $role = Role::create($data);
+        $role->name = "";
 
         $this->actingAs($admin, 'api')
-            ->put("/api/admin/permisos/{$permiso->id}", $permiso->toArray())
+            ->put("/api/admin/roles/{$role->id}", $role->toArray())
             //->dump()
             //verifico que el array data tiene 1 error
             ->assertJsonCount(1, 'data')
@@ -137,12 +136,12 @@ class PermisosTest extends TestCase
             ])
             ->assertStatus(200);
 
-        $this->assertDatabaseHas('permissions', [
+        $this->assertDatabaseHas('roles', [
             'name'  => $data['name']
         ]);
     }
 
-    public function test_eliminar()
+    public function test_eliminar_rol()
     {
         $admin = User::factory()->create();
 
@@ -151,33 +150,34 @@ class PermisosTest extends TestCase
             'guard_name'    => 'web',
             'group_key'     => 'ofi'
         ];
-        $permiso = Permission::create($data);
+        $role = Role::create($data);
 
 
         $this->actingAs($admin, 'api')
-            ->delete("/api/admin/permisos/{$permiso->id}")
+            ->delete("/api/admin/roles/{$role->id}")
             //->dump()   
             ->assertJson([
                 'status'    => true,
-                'msg'       => "{$data['name']} eliminado!"
+                'msg'       => "{$data['name']} eliminado correctamente!"
             ])
             ->assertStatus(200);
     }
 
-    public function test_eliminar_permiso_asignado()
+    public function test_eliminar_rol_asignado()
     {
         $this->seed(UserSeeder::class);
+
         $this->seed(PermisosSeeder::class);
 
-        $admin = User::find(1);
-        $permiso = Permission::find(1);
+        $role = Role::find(1);
+        $admin = User::factory()->create();
 
         $this->actingAs($admin, 'api')
-            ->delete("/api/admin/permisos/{$permiso->id}")
+            ->delete("/api/admin/roles/{$role->id}")
             //->dump()   
             ->assertJson([
                 'status'    => true,
-                'msg'       => "{$permiso->name} eliminado!"
+                'msg'       => "{$role->name} eliminado correctamente!"
             ])
             ->assertStatus(200);
     }
@@ -191,12 +191,12 @@ class PermisosTest extends TestCase
             'guard_name'    => 'web',
             'group_key'     => 'ofi'
         ];
-        $permiso = Permission::create($data);
+        $role = Role::create($data);
 
         $nombre_test = "tomar-ron";
 
         $this->actingAs($admin, 'api')
-            ->post("/api/admin/permisos/validate/name", [
+            ->post("/api/admin/roles/validate/name", [
                 'value' => $nombre_test
             ])
             //->dump()   
@@ -217,19 +217,19 @@ class PermisosTest extends TestCase
             'guard_name'    => 'web',
             'group_key'     => 'ofi'
         ];
-        $permiso = Permission::create($data);
+        $role = Role::create($data);
 
         $nombre_test = "tomar-bielas";
 
         $this->actingAs($admin, 'api')
-            ->post("/api/admin/permisos/validate/name", [
+            ->post("/api/admin/roles/validate/name", [
                 'value' => $nombre_test
             ])
             //->dump()   
             ->assertJson([
                 'status'    => true,
                 'valid'     => false,
-                'msg'       => "{$nombre_test} ya esta siendo utilizado por otro permiso"
+                'msg'       => "{$nombre_test} ya esta siendo utilizado por otro rol"
             ])
             ->assertStatus(200);
     }

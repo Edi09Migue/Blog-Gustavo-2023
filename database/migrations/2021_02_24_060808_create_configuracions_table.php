@@ -18,7 +18,7 @@ class CreateConfiguracionsTable extends Migration
             $table->string('key')->unique();
             $table->text('value')->nullable();
             $table->text('configuracion')->nullable();
-            $table->enum('tipo',['string','text','int','bool','double','image'])->default('text');
+            $table->enum('tipo', ['string', 'text', 'int', 'bool', 'double', 'image', 'date'])->default('text');
             $table->text('descripcion')->nullable();
             $table->text('group_key')->nullable();
             $table->timestamps();
