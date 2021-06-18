@@ -125,5 +125,6 @@
     "Pending": "Pending",
     "Active": "Active",
     "Inactive": "Inactive",
-    "Import": "Import"
+    "Import": "Import",
+    "Error fetching list of": "Error fetching list of"
 }
