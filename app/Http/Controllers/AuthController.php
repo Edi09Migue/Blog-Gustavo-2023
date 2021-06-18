@@ -200,7 +200,7 @@ class AuthController extends Controller
 
         $user = User::find(1);
 
-        return (new WelcomeNotification())
+        return (new WelcomeNotification($user))
                     ->toMail($user);
     }
 

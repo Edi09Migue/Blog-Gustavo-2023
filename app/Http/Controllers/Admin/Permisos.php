@@ -13,7 +13,7 @@ class Permisos extends Controller
     var $datos;
 
     /**
-     * Devuelve el listado de permisos paginado
+     * Devuelve el listado de permisos paginados
      */
     public function index(Request $request){
         $query = $request->has('q') ? $request->q : "";
@@ -44,7 +44,7 @@ class Permisos extends Controller
     }
     
     /**
-     * Crea un Rol con sus respectivos permisos
+     * Crea un Permiso
      * @param  Request
      * @return [type]
      */
@@ -65,11 +65,7 @@ class Permisos extends Controller
             ]);    
         }
 
-        $permiso = Permission::create([
-            'name'          => $request->name,
-            'guard_name'    => $request->guard_name,
-            'group_key'     => $request->group_key
-        ]);
+        $permiso = Permission::create($request->all());
 
         return response()->json([
             'status' => true,
@@ -79,14 +75,29 @@ class Permisos extends Controller
     }
 
     /**
-     * Editar rol y sus respectivos permisos
+     * Editar  permiso
      * @param  [integer] 
      * @param  Request
      * @return [type]
      */
     public function update($id, Request $request)
     {
-        //Updating Role
+        $validator = Validator::make($request->all(),[
+            'name' => 'required|unique:permissions',
+            'guard_name' => 'required',
+            'group_key' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return response()->json([
+                'status' => false,
+                'data' => $errors,
+                'msg' => $errors->first()
+            ]);    
+        }
+
+        //Updating Permiso
         $permiso = Permission::findOrFail($id);
 
         $permiso->update([
@@ -103,7 +114,7 @@ class Permisos extends Controller
     }
 
     /**
-     * @param  Toma el id de un Rol y lo elimina con sus respectivos permisos
+     * @param  Toma el id de un Permiso y lo elimina 
      */
     public function destroy($id, Request $request)
     {
@@ -127,7 +138,7 @@ class Permisos extends Controller
         return response()->json([
             'status' => true,
             'valid' => ($existe==0),
-            'msg' =>  $request->value. ($existe!=0 ? ' ya esta siendo utilizado por otro rol' : ' esta disponible')
+            'msg' =>  $request->value. ($existe!=0 ? ' ya esta siendo utilizado por otro permiso' : ' esta disponible')
         ]);
     }
 }

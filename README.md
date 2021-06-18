@@ -18,28 +18,38 @@
 
 ## Deploy
 
+```
 php artisan migrate --seed
+```
 
+```
 php artisan passport:install
+```
 
+```
 php artisan websockets:serve 
+```
 
 ## Testing
 
-Lineamientos para escribir pruebas 
+Lineamientos para escribir pruebas  ttps://github.com/framgia/laravel-test-guideline
 
-https://github.com/framgia/laravel-test-guideline
-php artisan test
+Para ejecutar todas las pruebas 
+ ```php artisan test ```
 
-Agregar al final de php.ini 
+Para generar el reporte de Code Coverage necesitamos habilitar xdebug
 
-    zend_extension = php_xdebug.dll
-    xdebug.remote_enable = 1
-    xdebug.remote_handler = dbgp
-    xdebug.remote_host = localhost
-    xdebug.remote_autostart = 1
-    xdebug.remote_port = 9000
-    xdebug.show_local_vars = 1
+ ```./vendor/bin/phpunit --coverage-html reports ```
+
+Para habilitar xdebug debemos agregar al final de php.ini lo siguiente
+
+zend_extension = php_xdebug.dll
+xdebug.remote_enable = 1
+xdebug.remote_handler = dbgp
+xdebug.remote_host = localhost
+xdebug.remote_autostart = 1
+xdebug.remote_port = 9000
+xdebug.show_local_vars = 1
 
 ## Features
 

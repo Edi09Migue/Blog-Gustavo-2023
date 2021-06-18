@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Database\Seeders\ConfiguracionesSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Password;
@@ -77,9 +78,14 @@ class AuthControllerTest extends TestCase
     }
 
     public function test_send_reset_password_email(){
-        $user = User::factory()->create();
+        $this->seed(ConfiguracionesSeeder::class);
+        $user = User::factory()->create([
+            //para que me envie el correo a mi
+            'email' => 'sistemas@satana.ec'
+        ]);
 
-        $this->post('/api/reset-password',['email'=> $user->email])
+        $this->post('/api/auth/reset-password',['email'=> $user->email])
+            //->dump()
             ->assertStatus(200);
     }
 
@@ -94,9 +100,32 @@ class AuthControllerTest extends TestCase
             'password'  => 'nuevopass',
             'password_confirmation'  => 'nuevopass'
             ])
-            ->dump()
+            //->dump()
             ->assertStatus(200);
     }
 
-    
+    public function test_welcome_notification_email(){
+        $this->seed(ConfiguracionesSeeder::class);
+        $user = User::factory()->create([
+            //para que me envie el correo a mi
+            'email' => 'sistemas@satana.ec'
+        ]);
+        $this->get('/api/testWelcomeEmail')
+            //->dump()
+            ->assertSee('Bienvenido a')
+            ->assertStatus(200);
+    }
+
+    public function test_reset_password_email(){
+        
+        $this->seed(ConfiguracionesSeeder::class);
+        $user = User::factory()->create([
+            //para que me envie el correo a mi
+            'email' => 'sistemas@satana.ec'
+        ]);
+        $this->get('/api/testResetPasswordEmail')
+            //->dump()
+            ->assertSee('Restaurar contraseña')
+            ->assertStatus(200);
+    }
 }

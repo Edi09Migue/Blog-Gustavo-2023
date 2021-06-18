@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -95,8 +95,6 @@ class UsuariosTest extends TestCase
             ->post('/api/admin/usuarios',$data)
             //->dump()
             ->assertJson(['status'=>false])
-            ->assertStatus(200);
-
-        
+            ->assertStatus(200);        
     }
 }
