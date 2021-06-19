@@ -32,15 +32,18 @@ class UserProfileCtrl extends Controller
         $info = UserInfo::firstOrNew([
             'id' => $usuario->id
         ]);
+        
+        if($request->has('user_info')){
 
-        $info->fill($request->user_info);
-
-        unset($info->portada);
-        if ($request->has('portada') && !is_null($request->portada)) {
-            $info->portada = parent::uploadAvatar($request->portada, '/images/profiles/');
+            $info->fill($request->user_info);
+    
+            unset($info->portada);
+            if ($request->has('portada') && !is_null($request->portada)) {
+                $info->portada = parent::uploadAvatar($request->portada, '/images/profiles/');
+            }
+    
+            $info->save();
         }
-
-        $info->save();
 
         $usuario->save();
 
@@ -66,6 +69,8 @@ class UserProfileCtrl extends Controller
             'old_password'          => 'required',
             'password'              => 'required|min:8',
             'password_confirmation' => 'required|same:password'
+        ],[],[
+            'old_password'  => 'Contraseña actual'
         ]);
 
         if ($validator->fails()) {
