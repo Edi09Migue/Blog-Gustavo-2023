@@ -200,7 +200,8 @@ export default {
                         .then(response => {
                             console.log("response");
                             console.log(response.data);
-                            if (response.data.success) {
+                            if (response.data) {
+                                
                                 this.toast({
                                     component: ToastificationContent,
                                     position: "top-right",
@@ -218,15 +219,28 @@ export default {
                                         "#toggle-btn"
                                     );
                                 });
+
+                                
+                                var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                                var fileLink = document.createElement('a');
+
+                                fileLink.href = fileURL;
+                                fileLink.setAttribute('download', 'file.pdf');
+                                document.body.appendChild(fileLink);
+
+                                fileLink.click();
+                                
                             } else {
                                 this.errorServer = response.data.errors;
                             }
                         })
-                        .catch(() => {
+                        .catch((error) => {
+                            console.log('eroor')
+                            console.log(error)
                             this.toast({
                                 component: ToastificationContent,
                                 props: {
-                                    title: "Error importing users list",
+                                    title: "Error al generar reporte de usuarios",
                                     icon: "AlertTriangleIcon",
                                     variant: "danger"
                                 }

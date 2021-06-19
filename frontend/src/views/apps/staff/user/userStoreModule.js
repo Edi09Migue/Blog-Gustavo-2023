@@ -117,7 +117,9 @@ export default {
         generarReportes(ctx, reportFilters) {
             return new Promise((resolve, reject) => {
                 axios
-                    .post("/api/admin/usuarios/reportes", reportFilters)
+                    .post("/api/admin/usuarios/reportes", reportFilters,{
+                        responseType: 'blob',
+                    })
                     .then(response => resolve(response))
                     .catch(error => reject(error));
             });

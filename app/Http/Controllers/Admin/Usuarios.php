@@ -4,16 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Imports\UsersImport;
+use App\Models\Configuracion;
 use App\Models\User;
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\View;
 use Maatwebsite\Excel\Facades\Excel;
-
+use PDF;
 
 class Usuarios extends Controller
 {
@@ -362,10 +364,26 @@ class Usuarios extends Controller
             'hasta'         => @$hasta,
         ];
 
+        $storagePath  = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix();
+        $storagePath.='reportes\\';
+        $file_name = "Reporte Usuarios, $tipo".date('dmY').".pdf";
 
         //De acuerdo al formato utilizamos la libreria
         switch ($formato) {
             case 'pdf': //Utilizamos el paquete elibyy/tcpdf-laravel
+                PDF::SetTitle($nombre_reporte);
+                PDF::SetAuthor(Configuracion::valor('company_name'));
+                PDF::AddPage('P','A4');
+                
+                $info = View::make($vista_reporte, $datos_reporte)->render();
+                PDF::WriteHTML($info, true, 0, true, 0);
+                //F=>Escribir en disco
+                //D=>Descargar
+                $file = PDF::Output($storagePath.$file_name,'I');
+                return response()->json([
+                    'file'=>$file,
+                    'name'=> $file_name
+                ]);
                 break;
             case 'xlsx': //Utilizamos el paquete elibyy/tcpdf-laravel
                 break;

@@ -1,15 +1,23 @@
+<style>
+    h2{
+        text-align: center;
+    }
+    th{
+        text-align: center;
+    }
+</style>
 <h2>{{ $titulo }}</h2>
 
-<table>
+<table border="1">
     <thead>
         <tr>
             <th>ID</th>
-            <th>nombres</th>
-            <th>username</th>
-            <th>email</th>
-            <th>rol</th>
-            <th>estado</th>
-            <th>Creado el</th>
+            <th>NOMBRES</th>
+            <th>USERNAME</th>
+            <th>EMAIL</th>
+            <th>ROL</th>
+            <th>ESTADO</th>
+            <th>CREADO EL</th>
         </tr>
     </thead>
     <tbody>
@@ -25,9 +33,9 @@
         </tr>
         @endforeach
     </tbody>
-    <tfoot>
+    <!-- <tfoot>
         <tr>
             <td colspan="5">Total usuarios: {{ $usuarios->count() }}</td>
         </tr>
-    </tfoot>
+    </tfoot> -->
 </table>
