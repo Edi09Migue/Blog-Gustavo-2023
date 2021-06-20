@@ -83,16 +83,16 @@ export default function useUsersList() {
                 estado: statusFilter.value
             })
             .then(response => {
-                const { users, total } = response.data;
+                const { items, total } = response.data;
 
-                callback(users);
+                callback(items);
                 totalUsers.value = total;
             })
             .catch(() => {
                 toast({
                     component: ToastificationContent,
                     props: {
-                        title: "Error fetching users list",
+                        title: "Error obteniendo listado de usuarios",
                         icon: "AlertTriangleIcon",
                         variant: "danger"
                     }

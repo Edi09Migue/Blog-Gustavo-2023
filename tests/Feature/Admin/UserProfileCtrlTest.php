@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin;
 
 use App\Models\User;
+use App\Models\UserInfo;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -15,7 +16,7 @@ class UserProfileCtrlTest extends TestCase
     public function test_update()
     {
         $admin = User::factory()->create([]);
-
+        $admin->user_info = UserInfo::factory()->raw();
         $response = $this->actingAs($admin,'api')
                     ->put('/api/admin/profile/update',[
                         'name'  => 'tester'

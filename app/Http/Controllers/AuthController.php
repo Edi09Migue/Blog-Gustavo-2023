@@ -71,7 +71,7 @@ class AuthController extends Controller
         if (!Auth::attempt($credentials))
             return response()->json([
                 'status' => false,
-                'message' => 'Usuario o contraseña incorrectos'
+                'msg' => 'Usuario o contraseña incorrectos'
             ]);
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
@@ -133,9 +133,11 @@ class AuthController extends Controller
     */
     public function logout(Request $request)
     {
-        $request->user()->token()->revoke();
+        if($request->user()->token())
+            $request->user()->token()->revoke();
         return response()->json([
-        'message' => 'Successfully logged out'
+            'status'=>true,
+            'msg' => 'Sesión finalizada correctamente'
         ]);
     }
 

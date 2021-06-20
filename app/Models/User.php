@@ -59,6 +59,11 @@ class User extends Authenticatable implements Auditable
         'creado',
         'avatarURL'
     ];
+    
+    //Estados disponibles para el enum 'estado'
+    public const STATUS_PENDIENTE = "pendiente";
+    public const STATUS_ACTIVO = "activo";
+    public const STATUS_INACTIVO = "inactivo";
 
     /**
      * Send a password reset notification to the user.

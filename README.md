@@ -35,14 +35,15 @@ php artisan websockets:serve
 Lineamientos para escribir pruebas  ttps://github.com/framgia/laravel-test-guideline
 
 Para ejecutar todas las pruebas 
- ```php artisan test ```
 
-Para generar el reporte de Code Coverage necesitamos habilitar xdebug
+```php artisan test ```
 
- ```./vendor/bin/phpunit --coverage-html reports ```
+Pasos para generar el reporte de Code Coverage 
 
-Para habilitar xdebug debemos agregar al final de php.ini lo siguiente
+1) Habilitar xdebug
+ debemos agregar al final de php.ini lo siguiente
 
+```
 zend_extension = php_xdebug.dll
 xdebug.remote_enable = 1
 xdebug.remote_handler = dbgp
@@ -50,6 +51,11 @@ xdebug.remote_host = localhost
 xdebug.remote_autostart = 1
 xdebug.remote_port = 9000
 xdebug.show_local_vars = 1
+```
+
+2) Ejecutar en la raiz del proyecto el siguiente comando
+
+ ```./vendor/bin/phpunit --coverage-html reports ```
 
 ## Features
 
@@ -58,6 +64,8 @@ xdebug.show_local_vars = 1
 - - [ ] Recuperar contraseña
 - - [ ] Perfil de usuario
 - - [ ] CRUD Usuarios
+- - - [ ] Importar usuarios desde excel
+- - - [ ] Reportes de usuarios en html, pdf y excel
 - - [ ] CRUD Roles
 - - [ ] CRUD Permisos
 - - [ ] Configuraciones Generales

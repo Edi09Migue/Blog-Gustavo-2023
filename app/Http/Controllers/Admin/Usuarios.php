@@ -29,7 +29,6 @@ class Usuarios extends Controller
      */
     public function index(Request $request)
     {
-
         DB::enableQueryLog();
         //Filtros para query
         $query = $request->has('q') ? $request->q : "";
@@ -72,7 +71,7 @@ class Usuarios extends Controller
 
         Log::info(DB::getQueryLog());
         return response()->json([
-            'users' => $usuarios->items(),
+            'items' => $usuarios->items(),
             'total' => $usuarios->total()
         ]);
     }
@@ -132,7 +131,7 @@ class Usuarios extends Controller
             DB::rollback();
             return response()->json([
                 'status' => false,
-                'error' => $e->getMessage(),
+                'data' => $e->getMessage(),
                 'msg' => 'Error al crear usuario!'
             ]);
         }
@@ -143,8 +142,9 @@ class Usuarios extends Controller
      */
     public function isUniqueUsername(Request $request)
     {
-        //$existe = User::where('username',$request->value)->count();
-        $existe = User::whereRaw("BINARY `username`= ?", [$request->value])->count();
+        $existe = User::where('username',$request->value)->count();
+        //$existe = User::whereRaw("BINARY `username`= ?", [$request->value])->count();
+        
         return response()->json([
             'status' => true,
             'valid' => ($existe == 0),
@@ -178,16 +178,6 @@ class Usuarios extends Controller
         $usuario->permisos = $usuario->getAllPermissions();
         $usuario->notifications;
         return response()->json($usuario);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function checkpointReward($id)
-    {
     }
 
     /**
@@ -285,7 +275,7 @@ class Usuarios extends Controller
     public function disable($id, Request $request)
     {
         $usuario = User::find($id);
-        $usuario->estado = "desactivo";
+        $usuario->estado = User::STATUS_INACTIVO;
         $usuario->save();
         return response()->json(['status' => TRUE, 'id' => $id]);
     }

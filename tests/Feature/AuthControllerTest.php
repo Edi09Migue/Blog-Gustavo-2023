@@ -45,6 +45,44 @@ class AuthControllerTest extends TestCase
             ->assertStatus(200);
     }
 
+    public function test_login_failed()
+    {
+
+        $this->artisan('passport:install');
+
+        $user = User::factory()->create();
+
+        $this->post('/api/auth/login', [
+            'email' => $user->email,
+            'password'  => 'passwo'
+        ])
+            //->dump()
+            ->assertJson([
+                'status' => FALSE,
+                'msg'   => 'Usuario o contraseña incorrectos'
+            ])
+            ->assertStatus(200);
+    }
+
+    public function test_login_rememberme()
+    {
+
+        $this->artisan('passport:install');
+
+        $user = User::factory()->create();
+
+        $this->post('/api/auth/login', [
+            'email' => $user->email,
+            'password'  => 'password',
+            'remember_me'   => true
+        ])
+            //->dump()
+            ->assertJson([
+                'status' => TRUE,
+            ])
+            ->assertStatus(200);
+    }
+
     public function test_get_logged_user_data()
     {
         $user = User::factory()->create();
@@ -55,21 +93,21 @@ class AuthControllerTest extends TestCase
             ->assertStatus(200);
     }
 
-    // public function test_logout(){
-    //     $this->artisan('passport:install');
-    //     $user = User::factory()->create();
-    //     $this->post('/api/auth/login',[
-    //         'email' => $user->email,
-    //         'password'  => 'password'
-    //     ]);
+    public function test_logout(){
+        $this->artisan('passport:install');
+        $user = User::factory()->create();
+        $this->post('/api/auth/login',[
+            'email' => $user->email,
+            'password'  => 'password'
+        ]);
 
 
-    //     $this->actingAs($user,'api')
-    //         ->get('/api/auth/logout')
-    //         ->dump()
-    //         //->assertJson(['message'=>$user->name])
-    //         ->assertStatus(200);
-    // }
+        $this->actingAs($user,'api')
+            ->get('/api/auth/logout')
+            //->dump()
+            ->assertJson(['msg'=>'Sesión finalizada correctamente'])
+            ->assertStatus(200);
+    }
 
     public function test_get_user_notifications()
     {
@@ -107,6 +145,26 @@ class AuthControllerTest extends TestCase
             'password_confirmation'  => 'nuevopass'
         ])
             //->dump()
+            ->assertStatus(200);
+    }
+
+    public function test_reset_password_recovery_validations()
+    {
+        $user = User::factory()->create();
+
+        $token = Password::broker()->createToken($user);
+
+        $this->post('/api/auth/reset-password-user', [
+            'token'     => $token,
+            'email'     => '',
+            'password'  => '',
+            'password_confirmation'  => 'nuevopass'
+        ])
+            ->dump()
+            ->assertJson([
+                'status'=>false
+            ])
+            ->assertJsonCount(2,'data')
             ->assertStatus(200);
     }
 

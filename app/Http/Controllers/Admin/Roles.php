@@ -96,7 +96,7 @@ class Roles extends Controller
             DB::rollback();
             return response()->json([
                 'status' => false,
-                'data' => [],
+                'error' => $e->getMessage(),
                 'msg' => 'Error al crear rol!'
             ]);
         }
@@ -146,7 +146,7 @@ class Roles extends Controller
             DB::rollback();
             return response()->json([
                 'status' => false,
-                'data' => $role,
+                'data' => $e->getMessage(),
                 'msg' => 'Error al actualizar rol!'
             ]);
         }

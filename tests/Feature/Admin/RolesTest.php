@@ -8,6 +8,7 @@ use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -48,10 +49,17 @@ class RolesTest extends TestCase
     {
         $admin = User::factory()->create();
 
+        $permiso = Permission::create([
+            'name'  => 'permiso-test',
+            'guard_name'    => 'web',
+            'group_key' => 'test'
+        ]);
+
         $data = [
             'name'          => 'rol-test',
             'guard_name'    => 'web',
-            'description'   => 'Descripcion rol'
+            'description'   => 'Descripcion rol',
+            'permissions'   => [$permiso->id]
         ];
 
         $this->actingAs($admin, 'api')
@@ -64,6 +72,53 @@ class RolesTest extends TestCase
             ->assertStatus(200);
 
         $this->assertDatabaseCount('roles', 1);
+    }
+
+    public function test_crear_rol_con_permiso_inexistente()
+    {
+        $admin = User::factory()->create();
+
+        $data = [
+            'name'          => 'rol-test',
+            'guard_name'    => 'web',
+            'description'   => 'Descripcion rol',
+            'permissions'   => [1,2]
+        ];
+
+        $this->actingAs($admin, 'api')
+            ->post('/api/admin/roles', $data)
+            //->dump()
+            ->assertJson([
+                'status' => false,
+                'msg'   => "Error al crear rol!"
+            ])
+            ->assertStatus(200);
+
+        $this->assertDatabaseCount('roles', 0);
+    }
+
+    public function test_show_rol()
+    {
+        $admin = User::factory()->create();
+
+        $data = [
+            'name'          => 'rol-test',
+            'guard_name'    => 'web',
+            'description'   => 'Descripcion rol'
+        ];
+        $rol = Role::create($data);
+
+        $this->actingAs($admin, 'api')
+            ->get('/api/admin/roles/'.$rol->id)
+            //->dump()
+            ->assertJson([
+                'status' => true,
+                'data'  => $rol->toArray(),
+                'msg'   => "Rol"
+            ])
+            ->assertJsonCount(0,'data.permissions')
+            ->assertStatus(200);
+
     }
 
     public function test_crear_campos_rol_required()
@@ -93,13 +148,21 @@ class RolesTest extends TestCase
     {
         $admin = User::factory()->create();
 
+        $permiso = Permission::create([
+            'name'  => 'permiso-test',
+            'guard_name'    => 'web',
+            'group_key' => 'test'
+        ]);
+
         $data = [
             'name'          => 'tester-role',
             'guard_name'    => 'web',
-            'description'     => 'rol description'
+            'description'     => 'rol description',
         ];
         $role = Role::create($data);
         $role->name = "updated";
+
+        $role->permissionsIDs = [$permiso->id];
 
         $this->actingAs($admin, 'api')
             ->put("/api/admin/roles/{$role->id}", $role->toArray())
@@ -107,6 +170,32 @@ class RolesTest extends TestCase
             ->assertJson([
                 'status' => true,
                 'msg'   => "{$role->name} actualizado correctamente!"
+            ])
+            ->assertStatus(200);
+
+        $this->assertDatabaseCount('roles', 1);
+    }
+
+    public function test_editar_rol_con_permiso_inexistente()
+    {
+        $admin = User::factory()->create();
+
+        $data = [
+            'name'          => 'tester-role',
+            'guard_name'    => 'web',
+            'description'     => 'rol description',
+        ];
+        $role = Role::create($data);
+        $role->name = "updated";
+
+        $role->permissionsIDs = [1,2];
+
+        $this->actingAs($admin, 'api')
+            ->put("/api/admin/roles/{$role->id}", $role->toArray())
+            //->dump()
+            ->assertJson([
+                'status' => false,
+                'msg'   => "Error al actualizar rol!"
             ])
             ->assertStatus(200);
 

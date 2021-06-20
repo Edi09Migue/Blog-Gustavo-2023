@@ -126,6 +126,8 @@ import useJwt from '@/auth/jwt/useJwt'
 import { avatarText } from '@core/utils/filter'
 import NotificationDropdown from '@core/layouts/components/app-navbar/components/NotificationDropdown.vue'
 
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+
 export default {
   components: {
     BLink,
@@ -153,19 +155,35 @@ export default {
   },
   methods: {
     logout() {
-      // Remove userData from localStorage
-      // ? You just removed token from localStorage. If you like, you can also make API call to backend to blacklist used token
-      localStorage.removeItem(useJwt.jwtConfig.storageTokenKeyName)
-      localStorage.removeItem(useJwt.jwtConfig.storageRefreshTokenKeyName)
 
-      // Remove userData from localStorage
-      localStorage.removeItem('userData')
+      this.$http.get('/api/auth/logout')
+          .then(response => {
+            // Remove userData from localStorage
+            // ? You just removed token from localStorage. If you like, you can also make API call to backend to blacklist used token
+            localStorage.removeItem(useJwt.jwtConfig.storageTokenKeyName)
+            localStorage.removeItem(useJwt.jwtConfig.storageRefreshTokenKeyName)
 
-      // Reset ability
-      this.$ability.update(initialAbility)
+            // Remove userData from localStorage
+            localStorage.removeItem('userData')
 
-      // Redirect to login page
-      this.$router.push({ name: 'auth-login' })
+            // Reset ability
+            this.$ability.update(initialAbility)
+
+            // Redirect to login page
+            this.$router.push({ name: 'auth-login' })
+                  .then(() => {
+                    this.$toast({
+                      component: ToastificationContent,
+                      position: 'top-right',
+                      props: {
+                        title: `Sesión finalizada`,
+                        icon: 'CoffeeIcon',
+                        variant: 'success',
+                        text: response.data.msg,
+                      },
+                    })
+                  })
+          });
     },
   },
 }
