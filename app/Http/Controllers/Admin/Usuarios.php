@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\UsuariosExport;
 use App\Http\Controllers\Controller;
 use App\Imports\UsersImport;
 use App\Models\Configuracion;
@@ -366,7 +367,7 @@ class Usuarios extends Controller
 
         $storagePath  = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix();
         $storagePath.='reportes\\';
-        $file_name = "Reporte Usuarios, $tipo".date('dmY').".pdf";
+        $file_name = "Reporte Usuarios, $tipo".date('dmY');
 
         //De acuerdo al formato utilizamos la libreria
         switch ($formato) {
@@ -379,13 +380,14 @@ class Usuarios extends Controller
                 PDF::WriteHTML($info, true, 0, true, 0);
                 //F=>Escribir en disco
                 //D=>Descargar
-                $file = PDF::Output($storagePath.$file_name,'I');
+                $file = PDF::Output($storagePath.$file_name.".pdf",'I');
                 return response()->json([
                     'file'=>$file,
-                    'name'=> $file_name
+                    'name'=> $file_name.".pdf"
                 ]);
                 break;
             case 'xlsx': //Utilizamos el paquete elibyy/tcpdf-laravel
+                return Excel::download(new UsuariosExport($request), $file_name . '.xlsx');
                 break;
             default: //Devolvemos la vista en HTML
                 return view($vista_reporte, $datos_reporte);

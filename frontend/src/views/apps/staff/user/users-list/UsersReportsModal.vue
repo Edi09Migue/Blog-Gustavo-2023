@@ -190,6 +190,18 @@ export default {
         };
     },
     methods: {
+        downloadGeneratedReport(data,type){
+            var fileURL = window.URL.createObjectURL(new Blob([data]));
+            var fileLink = document.createElement('a');
+
+            fileLink.href = fileURL;
+
+            fileLink.setAttribute('download', 'file.'+type);
+
+            document.body.appendChild(fileLink);
+
+            fileLink.click();
+        },
         validationForm() {
             this.$refs.simpleRules.validate().then(success => {
                 if (success) {
@@ -209,9 +221,7 @@ export default {
                                         title: `Reporte Generado!`,
                                         icon: "CoffeeIcon",
                                         variant: "success",
-                                        text:
-                                            response.data.items.length +
-                                            ` Generado correctamente!`
+                                        text:` Reporte Generado correctamente!`
                                     }
                                 });
                                 this.$nextTick(() => {
@@ -220,15 +230,26 @@ export default {
                                     );
                                 });
 
-                                
-                                var fileURL = window.URL.createObjectURL(new Blob([response.data]));
-                                var fileLink = document.createElement('a');
-
-                                fileLink.href = fileURL;
-                                fileLink.setAttribute('download', 'file.pdf');
-                                document.body.appendChild(fileLink);
-
-                                fileLink.click();
+                                switch (response.data.type) {
+                                    case "text/html":
+                                        var reader = new FileReader();
+                                        reader.onload = function() {
+                                            //open the new window and write your HTML to it
+                                            var preview = window.open("", "response", "resizable=yes");
+                                            console.log(preview)
+                                            preview.document.write(reader.result);
+                                        }
+                                        reader.readAsText(response.data);
+                                        break;
+                                    case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                                        this.downloadGeneratedReport(response.data,'xlsx');
+                                        break;
+                                    case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                                        this.downloadGeneratedReport(response.data,'pdf');
+                                        break;
+                                    default:    
+                                        break;
+                                }
                                 
                             } else {
                                 this.errorServer = response.data.errors;
@@ -240,7 +261,7 @@ export default {
                             this.toast({
                                 component: ToastificationContent,
                                 props: {
-                                    title: "Error al generar reporte de usuarios",
+                                    title: "Error al generar reporte",
                                     icon: "AlertTriangleIcon",
                                     variant: "danger"
                                 }
