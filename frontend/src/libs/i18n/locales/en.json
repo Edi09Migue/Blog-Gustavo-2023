@@ -126,5 +126,6 @@
     "Active": "Active",
     "Inactive": "Inactive",
     "Import": "Import",
-    "Error fetching list of": "Error fetching list of"
+    "Error fetching list of": "Error fetching list of",
+    "Reports": "Reports"
 }

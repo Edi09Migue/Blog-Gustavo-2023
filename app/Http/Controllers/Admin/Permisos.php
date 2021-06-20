@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Validator;
@@ -15,19 +16,20 @@ class Permisos extends Controller
     /**
      * Devuelve el listado de permisos paginados
      */
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $query = $request->has('q') ? $request->q : "";
         $perPage = $request->has('perPage') ? $request->perPage : 10;
         $sortBy = $request->has('sortBy') ? $request->sortBy : "id";
         $sortDesc = $request->has('sortDesc') ? $request->sortDesc : "true";
 
-        
-        $permisos = Permission::where('name','like',"%$query%")
-                        ->orderBy($sortBy,$sortDesc=="true"?'desc':'asc')
-                        ->paginate($perPage);
 
-    	
-    	return response()->json([
+        $permisos = Permission::where('name', 'like', "%$query%")
+            ->orderBy($sortBy, $sortDesc == "true" ? 'desc' : 'asc')
+            ->paginate($perPage);
+
+
+        return response()->json([
             'items' => $permisos->items(),
             'total' => $permisos->total()
         ]);
@@ -37,12 +39,13 @@ class Permisos extends Controller
      * Devuelve el id, nombre y grupo de todos los permisos 
      * por lo general para usarlos en un componente dropdown
      */
-    public function dropdownOptions(){
-        $permisos = Permission::select('id','name','group_key')->get();
+    public function dropdownOptions()
+    {
+        $permisos = Permission::select('id', 'name', 'group_key')->get();
 
         return response()->json($permisos);
     }
-    
+
     /**
      * Crea un Permiso
      * @param  Request
@@ -50,7 +53,7 @@ class Permisos extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'name' => 'required|unique:permissions',
             'guard_name' => 'required',
             'group_key' => 'required'
@@ -62,7 +65,7 @@ class Permisos extends Controller
                 'status' => false,
                 'data' => $errors,
                 'msg' => $errors->first()
-            ]);    
+            ]);
         }
 
         $permiso = Permission::create($request->all());
@@ -70,7 +73,7 @@ class Permisos extends Controller
         return response()->json([
             'status' => true,
             'data' => $permiso,
-            'msg' => $permiso->name.' creado!'
+            'msg' => $permiso->name . ' creado!'
         ]);
     }
 
@@ -122,19 +125,20 @@ class Permisos extends Controller
         $permiso->delete();
 
         return response()->json([
-            'status'=>TRUE,
-            'id' =>$id,
-            'msg' => $permiso->name.' eliminado!'
+            'status' => TRUE,
+            'id' => $id,
+            'msg' => $permiso->name . ' eliminado!'
         ]);
     }
 
-    
-            
+
+
     /**
      * Devuelve TRUE si el campo esta disponible
      */
-    public function isUniqueField($field, Request $request){
-        $existe = Permission::where($field,$request->value)->count();
+    public function isUniqueField($field, Request $request)
+    {
+        $existe = Permission::where($field, $request->value)->count();
         return response()->json([
             'status' => true,
             'valid' => ($existe==0),

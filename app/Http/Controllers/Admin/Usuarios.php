@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\UsuariosExport;
 use App\Http\Controllers\Controller;
 use App\Imports\UsersImport;
+use App\Models\Configuracion;
 use App\Models\User;
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\View;
 use Maatwebsite\Excel\Facades\Excel;
-
+use PDF;
 
 class Usuarios extends Controller
 {
@@ -321,6 +324,74 @@ class Usuarios extends Controller
                 'success' => FALSE,
                 'errors' => $e
             ]);
+        }
+    }
+
+    /**
+     * Devuelve los reportes de usuarios con los siguientes filtros opcionales
+     * - Tipo       (full)
+     * - Formato    (pdf,xlsx,view)
+     * - Desde      (yyyy-mm-dd)
+     * - Hasta      (yyyy-mm-dd)
+     */
+    public function reportes(Request $request)
+    {
+        //Si se require un tipo de reporte especial
+        $tipo = $request->has('tipo') ? $request->tipo : "full";    //por defecto va completo
+        //De acuerdo al tipo seleccionamos la vista con el formato
+        $vista_reporte = "back.admin.usuarios.reporte_full";
+
+        //Si se require un formato especifico (pdf,xlsx,view)
+        $formato = $request->has('formato') ? $request->formato : "pdf"; //por defecto va pdf
+
+        $nombre_reporte = "Reporte de Usuarios, $tipo";
+
+        //Si se especifica un intervalo de fechas
+        if ($request->has('desde') && $request->has('hasta')) {
+            $desde = $request->desde;
+            $hasta = $request->hasta;
+            $nombre_reporte .= " ({$desde} - {$hasta})";
+        }
+
+        //envio los parametros al modelo para que solo me devuelva
+        // los que cumplan las condiciones recibidas en $request
+        $usuarios = User::paraReporte($request);
+
+        $datos_reporte = [
+            'titulo'        => $nombre_reporte,
+            'usuarios'   => $usuarios,
+            'tipo'          => $tipo,
+            'desde'         => @$desde,
+            'hasta'         => @$hasta,
+        ];
+
+        $storagePath  = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix();
+        $storagePath.='reportes\\';
+        $file_name = "Reporte Usuarios, $tipo".date('dmY');
+
+        //De acuerdo al formato utilizamos la libreria
+        switch ($formato) {
+            case 'pdf': //Utilizamos el paquete elibyy/tcpdf-laravel
+                PDF::SetTitle($nombre_reporte);
+                PDF::SetAuthor(Configuracion::valor('company_name'));
+                PDF::AddPage('P','A4');
+                
+                $info = View::make($vista_reporte, $datos_reporte)->render();
+                PDF::WriteHTML($info, true, 0, true, 0);
+                //F=>Escribir en disco
+                //D=>Descargar
+                $file = PDF::Output($storagePath.$file_name.".pdf",'I');
+                return response()->json([
+                    'file'=>$file,
+                    'name'=> $file_name.".pdf"
+                ]);
+                break;
+            case 'xlsx': //Utilizamos el paquete elibyy/tcpdf-laravel
+                return Excel::download(new UsuariosExport($request), $file_name . '.xlsx');
+                break;
+            default: //Devolvemos la vista en HTML
+                return view($vista_reporte, $datos_reporte);
+                break;
         }
     }
 }

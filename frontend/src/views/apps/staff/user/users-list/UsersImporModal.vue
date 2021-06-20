@@ -1,83 +1,63 @@
 <template>
-    <b-dropdown
-        variant="link"
-        no-caret
-        dropleft
-        :right="$store.state.appConfig.isRTL"
+    <b-modal
+        id="modal-import"
+        ref="my-modal"
+        title="Importar Usuarios"
+        :ok-title="$t('Import')"
+        @hidden="resetModal"
+        @ok="handleOk"
+        cancel-variant="outline-secondary"
     >
-        <template #button-content>
-            <feather-icon
-                icon="MoreVerticalIcon"
-                size="16"
-                class="align-middle text-body"
-            />
-        </template>
-        <b-dropdown-item id="toggle-btn" v-b-modal.modal-import>
-            <feather-icon icon="UploadIcon" />
-            <span class="align-middle ml-50"
-                >{{ $t("Import") }} (excel file)</span
-            >
-        </b-dropdown-item>
-        <b-modal
-            id="modal-import"
-            ref="my-modal"
-            title="Importar Usuarios"
-            :ok-title="$t('Import')"
-            @hidden="resetModal"
-            @ok="handleOk"
-            cancel-variant="outline-secondary"
-        >
-            <validation-observer ref="simpleRules">
-                <b-form ref="form" @submit.stop.prevent="handleSubmit">
-                    <validation-provider
-                        #default="{ errors }"
-                        name="Documento de Excel"
-                        rules="required"
+        <validation-observer ref="simpleRules">
+            <b-form ref="form" @submit.stop.prevent="handleSubmit">
+                <validation-provider
+                    #default="{ errors }"
+                    name="Documento de Excel"
+                    rules="required"
+                >
+                    <b-form-group
+                        label="Documento de Excel"
+                        label-for="documento"
                     >
-                        <b-form-group
-                            label="Documento de Excel"
-                            label-for="documento"
-                        >
-                            <b-form-file
-                                id="documento"
-                                v-model="file"
-                                placeholder="Seleccione un archivo o arrastrelo aqui"
-                            />
-                            <small class="text-danger">{{ errors[0] }}</small>
-                        </b-form-group>
-                    </validation-provider>
-                    <b-card-text>
-                        <span
-                            >Recuerde que las columnas deben estar en el
-                            siguiente orden</span
-                        >
-                        <ol type="A">
-                            <li>nombre</li>
-                            <li>email</li>
-                            <li>username</li>
-                            <li>password</li>
-                            <li>telefono</li>
-                            <li>empresa</li>
-                            <li>país</li>
-                            <li>rol</li>
-                        </ol>
-                        <span
-                            >La primera fila(1) debe contener el nombre de cada
-                            columna</span
-                        >
-                    </b-card-text>
-                    <b-alert variant="danger" show v-show="errorServer">
-                        <h4 class="alert-heading">
-                            Error en la fila {{ errorLine }}
-                        </h4>
-                        <div class="alert-body">
-                            <span>{{ errorServer }}</span>
-                        </div>
-                    </b-alert>
-                </b-form>
-            </validation-observer>
-        </b-modal>
-    </b-dropdown>
+                        <b-form-file
+                            id="documento"
+                            v-model="file"
+                            placeholder="Seleccione un archivo o arrastrelo aqui"
+                        />
+                        <small class="text-danger">{{ errors[0] }}</small>
+                    </b-form-group>
+                </validation-provider>
+                <b-card-text>
+                    <span
+                        >Recuerde que las columnas deben estar en el siguiente
+                        orden</span
+                    >
+                    <ol type="A">
+                        <li>nombre</li>
+                        <li>email</li>
+                        <li>username</li>
+                        <li>password</li>
+                        <li>telefono</li>
+                        <li>empresa</li>
+                        <li>país</li>
+                        <li>rol</li>
+                    </ol>
+                    <span
+                        >La primera fila(1) debe contener el nombre de cada
+                        columna</span
+                    >
+                </b-card-text>
+                <b-alert variant="danger" show v-show="errorServer">
+                    <h4 class="alert-heading">
+                        Error en la fila {{ errorLine }}
+                    </h4>
+                    <div class="alert-body">
+                        <span>{{ errorServer }}</span>
+                    </div>
+                </b-alert>
+            </b-form>
+        </validation-observer>
+    </b-modal>
 </template>
 <script>
 import {
@@ -112,9 +92,7 @@ export default {
         BFormInput,
         BFormGroup,
         BFormFile,
-        BCardText,
-        BDropdown,
-        BDropdownItem
+        BCardText
     },
     directives: {
         "b-modal": VBModal,
