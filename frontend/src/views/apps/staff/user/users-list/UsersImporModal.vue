@@ -117,7 +117,7 @@ export default {
                         .then(response => {
                             console.log("response");
                             console.log(response.data);
-                            if (response.data.success) {
+                            if (response.data.status) {
                                 this.$emit("refetch-data");
                                 this.toast({
                                     component: ToastificationContent,

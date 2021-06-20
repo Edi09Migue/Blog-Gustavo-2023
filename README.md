@@ -32,7 +32,7 @@ php artisan websockets:serve
 
 ## Testing
 
-Lineamientos para escribir pruebas  ttps://github.com/framgia/laravel-test-guideline
+Lineamientos para escribir pruebas  https://github.com/framgia/laravel-test-guideline
 
 Para ejecutar todas las pruebas 
 
@@ -55,7 +55,7 @@ xdebug.show_local_vars = 1
 
 2) Ejecutar en la raiz del proyecto el siguiente comando
 
- ```./vendor/bin/phpunit --coverage-html reports ```
+ ```phpdbg -qrr ./vendor/bin/phpunit --coverage-html reports ```
 
 ## Features
 

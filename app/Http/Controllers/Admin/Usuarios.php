@@ -285,7 +285,12 @@ class Usuarios extends Controller
      */
     public function importExcel(Request $request)
     {
-
+        if(!$request->has('documento')){
+            return response()->json([
+                'status' => FALSE,
+                'errors' => 'El documento no se adjunto'
+            ]);
+        }
         $filename = $request->documento->store('imports/users/');
 
         try {

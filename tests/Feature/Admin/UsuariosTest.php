@@ -164,12 +164,20 @@ class UsuariosTest extends TestCase
 
         $data = User::factory()->create();
 
+        $role = Role::create([
+            'name'          => 'tester-role',
+            'guard_name'    => 'web',
+            'description'     => 'rol description',
+        ]);
+
         $user_info = UserInfo::factory()->raw();
 
         $this->actingAs($admin,'api')
         ->put("/api/admin/usuarios/{$data->id}",[
             'email'     => 'updated@test.com',
-            'user_info' => $user_info
+            'user_info' => $user_info,
+            'password'  => '123456',
+            'role'  => $role->id
         ])
         //->dump()
         ->assertJson(['status'=>true])
@@ -178,6 +186,42 @@ class UsuariosTest extends TestCase
         $this->assertDatabaseHas('users',[
             'email' => 'updated@test.com'
         ]);
+    }
+
+    public function test_update_user_password(){
+        $admin =  User::factory()->create();
+
+        $data = User::factory()->create();
+
+        $this->actingAs($admin,'api')
+        ->put("/api/admin/usuario/{$data->id}/updatePassword",[
+            'password'  => '123456',
+            'password_confirmation'  => '123456'
+        ])
+        //->dump()
+        ->assertJson([
+            'msg'   => "{$data->username} actualizado!",
+            'status'=>true
+        ])
+        ->assertStatus(200);
+    }
+
+    public function test_update_user_password_validations(){
+        $admin =  User::factory()->create();
+
+        $data = User::factory()->create();
+
+        $this->actingAs($admin,'api')
+        ->put("/api/admin/usuario/{$data->id}/updatePassword",[
+            'password'  => '',
+            'password_confirmation'  => '12345'
+        ])
+        ->dump()
+        ->assertJson([
+            'msg'   => "El campo contraseña es obligatorio.",
+            'status'=>false
+        ])
+        ->assertStatus(200);
     }
 
     public function test_delete_user(){
