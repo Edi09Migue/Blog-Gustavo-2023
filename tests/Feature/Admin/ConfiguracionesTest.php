@@ -85,24 +85,87 @@ class ConfiguracionesTest extends TestCase
         $this->assertDatabaseCount('configuraciones', 0);
     }
 
-    // public function test_editar()
-    // {
-    //     $admin = User::factory()->create();
+    public function test_editar_mail_settings()
+    {
+        $this->seed(ConfiguracionesSeeder::class);
+        $admin = User::factory()->create();
 
-    //     $configuracion = Configuracion::factory()->create();
-    //     $configuracion->key = "updated";
+        $email_settings = [
+            'servidor_smtp'     => '567',
+            'user_smtp'         => 'test',
+            'password_smtp'     => '12345',
+            'puerto_smtp'       => 23,
+            'encryption_smtp'   => 'tls',
+        ];
 
-    //     $this->actingAs($admin, 'api')
-    //         ->put("/api/admin/configs/{$configuracion->id}", $configuracion->toArray())
-    //         //->dump()
-    //         ->assertJson([
-    //             'status' => true,
-    //             'msg'   => "{$configuracion->key} actualizado!"
-    //         ])
-    //         ->assertStatus(200);
+        $this->actingAs($admin, 'api')
+            ->put("/api/admin/configs/correo", $email_settings)
+            //->dump()
+            ->assertJson([
+                'status' => true,
+                'data'   => "5 configuraciones",
+                'msg'   => "Configuraciones actualizadas!"
+            ])
+            ->assertStatus(200);
 
-    //     $this->assertDatabaseCount('configuraciones', 1);
-    // }
+        $this->assertDatabaseHas('configuraciones', [
+            'group_key'=>'correo'
+        ]);
+    }
+
+    public function test_editar_general_settings()
+    {
+        $this->seed(ConfiguracionesSeeder::class);
+        $admin = User::factory()->create();
+
+        $general_settings = [
+            'company_name'      => 'SANTANA estudio', 
+            'company_shortname' => 'SANTANA',
+            'slogan'            => 'Ideas Originales y Creativas',
+        ];
+
+        $this->actingAs($admin, 'api')
+            ->put("/api/admin/configs/general", $general_settings)
+            //->dump()
+            ->assertJson([
+                'status' => true,
+                'data'   => "3 configuraciones",
+                'msg'   => "Configuraciones actualizadas!"
+            ])
+            ->assertStatus(200);
+
+        $this->assertDatabaseHas('configuraciones', [
+            'group_key'=>'correo'
+        ]);
+    }
+
+    public function test_editar_sistema_settings()
+    {
+        $this->seed(ConfiguracionesSeeder::class);
+        $admin = User::factory()->create();
+
+        $sistema_settings = [
+            'formato_fecha' => 'Y-m-d', 
+            'iva'           => 12, 
+            'decimales'     => 2,
+            'idioma'        => 'es',    
+            'en_mantenimiento'  => false,
+        ];
+
+        $this->actingAs($admin, 'api')
+            ->put("/api/admin/configs/sistema", $sistema_settings)
+            //->dump()
+            ->assertJson([
+                'status' => true,
+                'data'   => "5 configuraciones",
+                'msg'   => "Configuraciones actualizadas!"
+            ])
+            ->assertStatus(200);
+
+        $this->assertDatabaseHas('configuraciones', [
+            'group_key'=>'correo'
+        ]);
+    }
 
     // public function test_editar_campos_required()
     // {

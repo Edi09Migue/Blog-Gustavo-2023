@@ -145,8 +145,10 @@ class User extends Authenticatable implements Auditable
      */
     public function scopeParaReporte($query, Request $request)
     {
-        $query->whereDate('created_at', '>=', $request->desde)
-            ->whereDate('created_at', '<=', $request->hasta);
+        if($request->has('desde') && $request->has('hasta')){
+            $query->whereDate('created_at', '>=', $request->desde)
+                ->whereDate('created_at', '<=', $request->hasta);
+        }
         //si no ha seleccionado todos los roles
         if ($request->has('roles') && !empty($request->roles)) {
             $query->role($request->roles);

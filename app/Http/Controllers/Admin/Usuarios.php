@@ -331,6 +331,7 @@ class Usuarios extends Controller
      */
     public function reportes(Request $request)
     {
+        
         //Si se require un tipo de reporte especial
         $tipo = $request->has('tipo') ? $request->tipo : "full";    //por defecto va completo
         //De acuerdo al tipo seleccionamos la vista con el formato
@@ -347,10 +348,12 @@ class Usuarios extends Controller
             $hasta = $request->hasta;
             $nombre_reporte .= " ({$desde} - {$hasta})";
         }
-
+        
         //envio los parametros al modelo para que solo me devuelva
         // los que cumplan las condiciones recibidas en $request
         $usuarios = User::paraReporte($request);
+        
+        
 
         $datos_reporte = [
             'titulo'        => $nombre_reporte,

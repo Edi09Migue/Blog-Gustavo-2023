@@ -87,6 +87,7 @@ class Configuraciones extends Controller
                     'servidor_smtp', 'user_smtp', 'password_smtp',
                     'puerto_smtp', 'encryption_smtp',
                 ]);
+                
                 //Sobre-escribo el archivo de configuraciones del mail
                 Config::set('mail.mailers.smtp.host', $request->servidor_smtp);
                 Config::set('mail.mailers.smtp.username', $request->user_smtp);
@@ -118,7 +119,7 @@ class Configuraciones extends Controller
                 $valores = [];
                 break;
         }
-
+        
         foreach ($valores as $key => $value) {
             $setting = Configuracion::where('key', $key)->first();
 
@@ -130,7 +131,7 @@ class Configuraciones extends Controller
         return response()->json([
             'status' => TRUE,
             'data' => count($valores) . ' configuraciones',
-            'msg' => 'Configs actualizadas!'
+            'msg' => 'Configuraciones actualizadas!'
         ]);
     }
 
