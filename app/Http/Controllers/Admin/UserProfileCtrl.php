@@ -26,22 +26,28 @@ class UserProfileCtrl extends Controller
         $usuario->fill($request->except(['avatar']));
 
         if ($request->has('avatar') && !is_null($request->avatar)) {
-            $usuario->avatar = parent::uploadAvatar($request->avatar, '/images/profiles/');
+            //Path donde se va a subir el archivo
+            $upload_folder = '/images/profiles/';
+            //Subo la imagen en base 64 y la asigno como 'Mediable'
+            parent::uploadAndConvert($request->avatar, $upload_folder, $usuario, 'main', 'name');
         }
 
         $info = UserInfo::firstOrNew([
             'id' => $usuario->id
         ]);
-        
-        if($request->has('user_info')){
+
+        if ($request->has('user_info')) {
 
             $info->fill($request->user_info);
-    
+
             unset($info->portada);
             if ($request->has('portada') && !is_null($request->portada)) {
-                $info->portada = parent::uploadAvatar($request->portada, '/images/profiles/');
+                //Path donde se va a subir el archivo
+                $upload_folder = '/images/profiles/';
+                //Subo la imagen en base 64 y la asigno como 'Mediable'
+                parent::uploadAndConvert($request->avatar, $upload_folder, $usuario, 'portada', 'name');
             }
-    
+
             $info->save();
         }
 
@@ -69,7 +75,7 @@ class UserProfileCtrl extends Controller
             'old_password'          => 'required',
             'password'              => 'required|min:8',
             'password_confirmation' => 'required|same:password'
-        ],[],[
+        ], [], [
             'old_password'  => 'Contraseña actual'
         ]);
 

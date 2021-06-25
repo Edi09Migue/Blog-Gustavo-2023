@@ -106,7 +106,10 @@ class Usuarios extends Controller
             $usuario = new User($request->all());
             $usuario->password = bcrypt($request->password);
             if ($request->has('avatar') && !is_null($request->avatar)) {
-                $usuario->avatar = parent::uploadAvatar($request->avatar, '/images/profiles/');
+                //Path donde se va a subir el archivo
+                $upload_folder = '/images/profiles/';
+                //Subo la imagen en base 64 y la asigno como 'Mediable'
+                parent::uploadAndConvert($request->avatar, $upload_folder, $usuario, 'main', 'name');
             }
             $usuario->save();
 
@@ -142,9 +145,9 @@ class Usuarios extends Controller
      */
     public function isUniqueUsername(Request $request)
     {
-        $existe = User::where('username',$request->value)->count();
+        $existe = User::where('username', $request->value)->count();
         //$existe = User::whereRaw("BINARY `username`= ?", [$request->value])->count();
-        
+
         return response()->json([
             'status' => true,
             'valid' => ($existe == 0),
@@ -174,6 +177,7 @@ class Usuarios extends Controller
     public function show($id)
     {
         $usuario = User::findOrFail($id);
+        //$usuario->portadaURL = $usuario->imageURL('portada');
         $usuario->userInfo;
         $usuario->permisos = $usuario->getAllPermissions();
         $usuario->notifications;
@@ -199,7 +203,10 @@ class Usuarios extends Controller
         }
 
         if ($request->has('avatar') && !is_null($request->avatar)) {
-            $usuario->avatar = parent::uploadAvatar($request->avatar, '/images/profiles/');
+            //Path donde se va a subir el archivo
+            $upload_folder = '/images/profiles/';
+            //Subo la imagen en base 64 y la asigno como 'Mediable'
+            parent::uploadAndConvert($request->avatar, $upload_folder, $usuario, 'main', 'name');
         }
 
         if ($request->has('user_info')) {
@@ -285,7 +292,7 @@ class Usuarios extends Controller
      */
     public function importExcel(Request $request)
     {
-        if(!$request->has('documento')){
+        if (!$request->has('documento')) {
             return response()->json([
                 'status' => FALSE,
                 'errors' => 'El documento no se adjunto'
@@ -331,7 +338,7 @@ class Usuarios extends Controller
      */
     public function reportes(Request $request)
     {
-        
+
         //Si se require un tipo de reporte especial
         $tipo = $request->has('tipo') ? $request->tipo : "full";    //por defecto va completo
         //De acuerdo al tipo seleccionamos la vista con el formato
@@ -348,12 +355,12 @@ class Usuarios extends Controller
             $hasta = $request->hasta;
             $nombre_reporte .= " ({$desde} - {$hasta})";
         }
-        
+
         //envio los parametros al modelo para que solo me devuelva
         // los que cumplan las condiciones recibidas en $request
         $usuarios = User::paraReporte($request);
-        
-        
+
+
 
         $datos_reporte = [
             'titulo'        => $nombre_reporte,
@@ -364,24 +371,24 @@ class Usuarios extends Controller
         ];
 
         $storagePath  = Storage::disk('local')->getDriver()->getAdapter()->getPathPrefix();
-        $storagePath.='reportes\\';
-        $file_name = "Reporte Usuarios, $tipo".date('dmY');
+        $storagePath .= 'reportes\\';
+        $file_name = "Reporte Usuarios, $tipo" . date('dmY');
 
         //De acuerdo al formato utilizamos la libreria
         switch ($formato) {
             case 'pdf': //Utilizamos el paquete elibyy/tcpdf-laravel
                 PDF::SetTitle($nombre_reporte);
                 PDF::SetAuthor(Configuracion::valor('company_name'));
-                PDF::AddPage('P','A4');
-                
+                PDF::AddPage('P', 'A4');
+
                 $info = View::make($vista_reporte, $datos_reporte)->render();
                 PDF::WriteHTML($info, true, 0, true, 0);
                 //F=>Escribir en disco
                 //D=>Descargar
-                $file = PDF::Output($storagePath.$file_name.".pdf",'I');
+                $file = PDF::Output($storagePath . $file_name . ".pdf", 'I');
                 return response()->json([
-                    'file'=>$file,
-                    'name'=> $file_name.".pdf"
+                    'file' => $file,
+                    'name' => $file_name . ".pdf"
                 ]);
                 break;
             case 'xlsx': //Utilizamos el paquete elibyy/tcpdf-laravel

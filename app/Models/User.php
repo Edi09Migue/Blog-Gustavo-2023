@@ -14,9 +14,11 @@ use Laravel\Passport\HasApiTokens;
 use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\Permission\Traits\HasRoles;
 
+use Optix\Media\HasMedia;
+
 class User extends Authenticatable implements Auditable
 {
-    use HasApiTokens, HasRoles, HasFactory, Notifiable;
+    use HasApiTokens, HasRoles, HasFactory, HasMedia, Notifiable;
 
     use \OwenIt\Auditing\Auditable;
 
@@ -59,11 +61,27 @@ class User extends Authenticatable implements Auditable
         'creado',
         'avatarURL'
     ];
-    
+
     //Estados disponibles para el enum 'estado'
     public const STATUS_PENDIENTE = "pendiente";
     public const STATUS_ACTIVO = "activo";
     public const STATUS_INACTIVO = "inactivo";
+
+    /**
+     * Registro de conversiones a distintos tamaños
+     *  para imagenes asignadas a este modelo
+     */
+    public function registerMediaGroups()
+    {
+        $this->addMediaGroup('main')
+            ->performConversions('thumb', 'preview', 'square');
+
+        $this->addMediaGroup('portada')
+            ->performConversions('thumb', 'preview', 'square');
+
+        $this->addMediaGroup('galeria')
+            ->performConversions('preview', 'square');
+    }
 
     /**
      * Send a password reset notification to the user.
@@ -122,7 +140,24 @@ class User extends Authenticatable implements Auditable
      */
     public function getAvatarURLAttribute()
     {
-        return $this->avatar ? asset('images/profiles/' . $this->avatar) : '';
+        return $this->getFirstMediaUrl('main', 'preview')
+            ? $this->getFirstMediaUrl('main', 'preview')
+            : asset('images/profiles/no-image.png');
+    }
+
+    /**
+     * Devuelve la URL completa de la imagen del productor en el formato requerido
+     */
+    public function scopeImageURL($query, $collection = "default", $type = "")
+    {
+        $thumb = asset('images/profiles/no-image.png');
+
+        if ($this->getFirstMediaUrl($collection, $type)) {
+            $thumb = $this->getFirstMediaUrl($collection, $type);
+        }
+
+        //dd($collection, $type, $this->getFirstMediaUrl('main'));
+        return $thumb;
     }
 
     /**
@@ -145,7 +180,7 @@ class User extends Authenticatable implements Auditable
      */
     public function scopeParaReporte($query, Request $request)
     {
-        if($request->has('desde') && $request->has('hasta')){
+        if ($request->has('desde') && $request->has('hasta')) {
             $query->whereDate('created_at', '>=', $request->desde)
                 ->whereDate('created_at', '<=', $request->hasta);
         }

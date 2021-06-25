@@ -6,8 +6,9 @@
 
 -   [Audit tools](http://www.laravel-auditing.com/). Audit tools package documentation
 -   [Excel tools](https://laravel-excel.com/). Excel tools package documentation
--   [Laravel websockets](https://beyondco.de/docs/laravel-websockets). 
+-   [Laravel websockets](https://beyondco.de/docs/laravel-websockets).
 -   [Laravel Permissions](https://spatie.be/docs/laravel-permission/). Permission manager documentation
+-   [Laravel Media Manager](https://github.com/optixsolutions/laravel-media). Laravel Media manager documentation
 
 -   [Vuexy Template](https://pixinvent.com/demo/vuexy-vuejs-admin-dashboard-template/documentation/guide/laravel-integration/installation.html). Front-End template documentation
 
@@ -27,21 +28,21 @@ php artisan passport:install
 ```
 
 ```
-php artisan websockets:serve 
+php artisan websockets:serve
 ```
 
 ## Testing
 
-Lineamientos para escribir pruebas  https://github.com/framgia/laravel-test-guideline
+Lineamientos para escribir pruebas https://github.com/framgia/laravel-test-guideline
 
-Para ejecutar todas las pruebas 
+Para ejecutar todas las pruebas
 
-```php artisan test ```
+`php artisan test`
 
-Pasos para generar el reporte de Code Coverage 
+Pasos para generar el reporte de Code Coverage
 
-1) Habilitar xdebug
- debemos agregar al final de php.ini lo siguiente
+1. Habilitar xdebug
+   debemos agregar al final de php.ini lo siguiente
 
 ```
 zend_extension = php_xdebug.dll
@@ -53,26 +54,25 @@ xdebug.remote_port = 9000
 xdebug.show_local_vars = 1
 ```
 
-2) Ejecutar en la raiz del proyecto el siguiente comando
+2. Ejecutar en la raiz del proyecto el siguiente comando
 
- ```phpdbg -qrr ./vendor/bin/phpunit --coverage-html reports ```
+`phpdbg -qrr ./vendor/bin/phpunit --coverage-html reports`
 
 ## Features
 
-- Módulo de Seguridad
-- - [ ] Iniciar sesión 
-- - [ ] Recuperar contraseña
-- - [ ] Perfil de usuario
-- - [ ] CRUD Usuarios
-- - - [ ] Importar usuarios desde excel
-- - - [ ] Reportes de usuarios en html, pdf y excel
-- - [ ] CRUD Roles
-- - [ ] CRUD Permisos
-- - [ ] Configuraciones Generales
-- - - [ ] Notificaciones
-- - - [ ] Datos del sistema
-- - [ ] Registrar Usuarios
-
+-   Módulo de Seguridad
+-   -   [ ] Iniciar sesión
+-   -   [ ] Recuperar contraseña
+-   -   [ ] Perfil de usuario
+-   -   [ ] CRUD Usuarios
+-   -   -   [ ] Importar usuarios desde excel
+-   -   -   [ ] Reportes de usuarios en html, pdf y excel
+-   -   [ ] CRUD Roles
+-   -   [ ] CRUD Permisos
+-   -   [ ] Configuraciones Generales
+-   -   -   [ ] Notificaciones
+-   -   -   [ ] Datos del sistema
+-   -   [ ] Registrar Usuarios
 
 ## License
 
