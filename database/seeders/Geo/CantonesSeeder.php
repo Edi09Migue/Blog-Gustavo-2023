@@ -1,8 +1,8 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Geo;
 
-use App\Models\Canton;
+use App\Models\Geo\Canton;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 
@@ -22,11 +22,11 @@ class CantonesSeeder extends Seeder
         $cantones_gadm = json_decode($content);
 
 
-        foreach($cantones_gadm as $canton){
+        foreach ($cantones_gadm as $canton) {
             $p = new Canton();
-            $p->gid0 = $canton->gid0;//pais
-            $p->gid1 = $canton->gid1;//provincia
-            $p->gid2 = $canton->gid2;//canton
+            $p->gid0 = $canton->gid0; //pais
+            $p->gid1 = $canton->gid1; //provincia
+            $p->gid2 = $canton->gid2; //canton
             $p->nombre = $canton->nombre;
             $p->tipo = $canton->tipo;
             $p->engtype = $canton->engtype;
@@ -39,7 +39,7 @@ class CantonesSeeder extends Seeder
             $p->lng = $canton->lng;
             $p->zoom = 13;
             //true solo para tungurahua
-            $p->estado = $canton->gid1=="ECU.23_1" ? true: false;
+            $p->estado = $canton->gid1 == "ECU.23_1" ? true : false;
             $p->save();
         }
     }

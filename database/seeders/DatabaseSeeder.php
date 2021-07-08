@@ -21,10 +21,7 @@ class DatabaseSeeder extends Seeder
 
             FakeUsersSeeder::class,
 
-            PaisesSeeder::class,
-            ProvinciasSeeder::class,
-            CantonesSeeder::class,
-            ParroquiasSeeder::class,
+            GeoSeeder::class,
         ]);
     }
 }

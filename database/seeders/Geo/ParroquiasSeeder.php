@@ -1,8 +1,8 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Geo;
 
-use App\Models\Parroquia;
+use App\Models\Geo\Parroquia;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 
@@ -20,15 +20,15 @@ class ParroquiasSeeder extends Seeder
         $content = File::get($filename);
 
         $parroquias_gadm = json_decode($content);
-        
-        
-        foreach($parroquias_gadm as $parroquia){
-            
+
+
+        foreach ($parroquias_gadm as $parroquia) {
+
             $p = new Parroquia();
-            $p->gid0 = $parroquia->gid0;//pais
-            $p->gid1 = $parroquia->gid1;//provincia
-            $p->gid2 = $parroquia->gid2;//canton
-            $p->gid3 = $parroquia->gid3;//parroquia
+            $p->gid0 = $parroquia->gid0; //pais
+            $p->gid1 = $parroquia->gid1; //provincia
+            $p->gid2 = $parroquia->gid2; //canton
+            $p->gid3 = $parroquia->gid3; //parroquia
             //$p->icono = $parroquia->icono;
             $p->nombre = $parroquia->nombre;
             $p->descripcion = $parroquia->descripcion;
@@ -36,7 +36,7 @@ class ParroquiasSeeder extends Seeder
             //$p->slug = $parroquia->slug;
             $p->tipo = $parroquia->tipo;
             $p->engtype = $parroquia->engtype;
-           // dd($parroquia);
+            // dd($parroquia);
             //$p->bandera_url = strtolower(substr($parroquia->code, 0,2)).'.svg' ;
             $p->minx = $parroquia->minx;
             $p->miny = $parroquia->miny;
@@ -45,7 +45,7 @@ class ParroquiasSeeder extends Seeder
             $p->lat = $parroquia->lat;
             $p->lng = $parroquia->lng;
             //true solo para tungurahua
-            $p->estado = $parroquia->gid1=="ECU.23_1" ? true: false;
+            $p->estado = $parroquia->gid1 == "ECU.23_1" ? true : false;
             $p->zoom = 13;
             $p->save();
         }

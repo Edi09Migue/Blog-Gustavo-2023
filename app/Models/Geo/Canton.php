@@ -1,20 +1,22 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Geo;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use Optix\Media\HasMedia;
 
-class Provincia extends Model
+class Canton extends Model
 {
-    use HasSlug;
-    
-    protected $table = "provincias";
+    use HasSlug, HasMedia;
+
+    protected $table = "cantones";
 
     protected $fillable = [
-        'gid0',//pais
-        'gid1',//provincia
+        'gid0', //pais
+        'gid1', //provincia
+        'gid2', //canton
         'nombre',
         'slug',
         'tipo',
@@ -37,15 +39,16 @@ class Provincia extends Model
 
     public $timestamps = false;
 
-     
+
     protected $appends = [
         'iconoURL',
     ];
-    
-     /**
+
+
+    /**
      * Get the options for generating the slug.
      */
-    public function getSlugOptions() : SlugOptions
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('nombre')
@@ -53,24 +56,27 @@ class Provincia extends Model
     }
 
     /**
-     * Pais al que pertenece la provincia
+     * Provincia al que pertenece el canton
      */
-    public function pais(){
-        return $this->belongsTo(Pais::class,'gid0','gid0');
+    public function provincia()
+    {
+        return $this->belongsTo(Provincia::class, 'gid1', 'gid1');
     }
 
     /**
      * Parroquias que conforman este cantón
      */
-    public function cantones(){
-        return $this->hasMany(Canton::class,'gid1','gid1');
+    public function parroquias()
+    {
+        return $this->hasMany(Parroquia::class, 'gid2', 'gid2');
     }
 
-        
+
     /**
      * Devuelve la URL completa de la imagen de portada de la parroquia
      */
-    public function getIconoURLAttribute(){
-        return asset('images/ECU.23.8_1.svg');
+    public function getIconoURLAttribute()
+    {
+        return asset('images/maps/' . $this->gid1 . '/' . $this->gid2 . '.svg');
     }
 }

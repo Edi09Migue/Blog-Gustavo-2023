@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Geo;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
@@ -9,9 +9,9 @@ use Spatie\Sluggable\SlugOptions;
 class Pais extends Model
 {
     use HasSlug;
-    
+
     protected $table = "paises";
-    
+
     protected $fillable = [
         'gid0',
         'nombre',
@@ -30,21 +30,21 @@ class Pais extends Model
         'bearing',
     ];
 
-     /**
+    /**
      * Get the options for generating the slug.
      */
-    public function getSlugOptions() : SlugOptions
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('nombre')
             ->saveSlugsTo('slug');
     }
-    
+
     /**
      * Provincias que conforman este pais
      */
-    public function provincias(){
-        return $this->hasMany(Provincia::class,'gid0','gid0');
+    public function provincias()
+    {
+        return $this->hasMany(Provincia::class, 'gid0', 'gid0');
     }
-
 }

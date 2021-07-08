@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Geo;
 
 use App\Http\Controllers\Controller;
-use App\Models\Parroquia;
+use App\Models\Geo\Parroquia;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Optix\Media\MediaUploader;
@@ -22,50 +22,50 @@ class Parroquias extends Controller
         $query = $request->has('q') ? $request->q : "";
         $perPage = $request->has('perPage') ? $request->perPage : 10;
         $sortBy = $request->has('sortBy') ? $request->sortBy : "id";
-        $sortDesc = $request->has('sortDesc') ? ($request->sortDesc=="true" ? true : false) : false;
-        
+        $sortDesc = $request->has('sortDesc') ? ($request->sortDesc == "true" ? true : false) : false;
+
         //Obtengo una instancia de Usuarios para el query
         $parroquias = Parroquia::query();
-        
+
         //Filtro para Estado
         $estado = $request->has('estado') ? $request->estado : '';
-        if($estado!='') {
-            $parroquias = $parroquias->where('estado',$estado);
+        if ($estado != '') {
+            $parroquias = $parroquias->where('estado', $estado);
         }
 
         //Filtro para Provincia
         $provincia = $request->has('provincia') ? $request->provincia : '';
-        if($provincia!='') {
-            $parroquias = $parroquias->where(function($q) use($provincia){
-                $q->whereIn('gid1',function($sq) use($provincia){
+        if ($provincia != '') {
+            $parroquias = $parroquias->where(function ($q) use ($provincia) {
+                $q->whereIn('gid1', function ($sq) use ($provincia) {
                     $sq->select('gid1');
                     $sq->from('provincias');
-                    $sq->where('id',$provincia);
+                    $sq->where('id', $provincia);
                 });
             });
         }
 
         //Filtro para Canton
         $canton = $request->has('canton') ? $request->canton : '';
-        if($canton!='') {
-            $parroquias = $parroquias->where(function($q) use($canton){
-                $q->whereIn('gid2',function($sq) use($canton){
+        if ($canton != '') {
+            $parroquias = $parroquias->where(function ($q) use ($canton) {
+                $q->whereIn('gid2', function ($sq) use ($canton) {
                     $sq->select('gid2');
                     $sq->from('cantones');
-                    $sq->where('id',$canton);
+                    $sq->where('id', $canton);
                 });
             });
         }
 
         //Filtros basicos, orden y paginacion
-        $parroquias = $parroquias->where(function($q) use($query){
-            $q->where('nombre','like',"%$query%")
-            ->orWhere('gid3','like',"%$query%");
+        $parroquias = $parroquias->where(function ($q) use ($query) {
+            $q->where('nombre', 'like', "%$query%")
+                ->orWhere('gid3', 'like', "%$query%");
         })
-        ->orderBy($sortBy,$sortDesc?'desc':'asc')
-        ->paginate($perPage);
+            ->orderBy($sortBy, $sortDesc ? 'desc' : 'asc')
+            ->paginate($perPage);
 
-        $parroquias->each(function($p){
+        $parroquias->each(function ($p) {
             $p->canton;
             $p->iconoURL = $p->iconoURL;
             $p->provincia = $p->canton->provincia;
@@ -73,29 +73,30 @@ class Parroquias extends Controller
 
         return response()->json([
             'users' => $parroquias->items(),
-            'total'=>$parroquias->total()
+            'total' => $parroquias->total()
         ]);
     }
 
-        
+
     /**
      * Devuelve el id, nombre, gid0 y gid1 de todas las parroquias
      * por lo general para usarlos en un componente dropdown
      */
-    public function dropdownOptions(Request $request){
-        $parroquias = Parroquia::select('id','nombre','gid0','gid1','gid2','gid3');
-        if($request->has('gid2'))
-            $parroquias = $parroquias->where('gid2',$request->gid2);
+    public function dropdownOptions(Request $request)
+    {
+        $parroquias = Parroquia::select('id', 'nombre', 'gid0', 'gid1', 'gid2', 'gid3');
+        if ($request->has('gid2'))
+            $parroquias = $parroquias->where('gid2', $request->gid2);
 
         $parroquias = $parroquias->get();
-        
+
         return response()->json($parroquias);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Parroquia  $parroquia
+     * @param  \App\Models\Geo\Parroquia  $parroquia
      * @return \Illuminate\Http\Response
      */
     public function show(Parroquia $parroquia)
@@ -108,43 +109,41 @@ class Parroquias extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Parroquia  $parroquia
+     * @param  \App\Models\Geo\Parroquia  $parroquia
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Parroquia $parroquia)
     {
-        $parroquia->fill($request->except('imagen','imagenes'));
+        $parroquia->fill($request->except('imagen', 'imagenes'));
 
         //Elimino imagen si fue quitado del formulario
-        if($request->has('eliminar_imagen') && $request->eliminar_imagen){
-            parent::eliminarFile(public_path().'/images/parroquias/'.$parroquia->imagen);
+        if ($request->has('eliminar_imagen') && $request->eliminar_imagen) {
+            parent::eliminarFile(public_path() . '/images/parroquias/' . $parroquia->imagen);
             $parroquia->imagen = null;
-        }  
-
-        if($request->has('imagen') && !is_null($request->imagen))
-        {
-            $parroquia->imagen = parent::uploadAvatar($request->imagen,'portada_'.$parroquia->slug,'/images/parroquias/');
         }
 
-        
-               
-       if($request->has('imagenes') && !is_null($request->imagenes))
-       {
-           foreach($request->imagenes as $imagen){
-               $filename = 'parroquia_'.$parroquia->slug.date('ymdhis');
-               $uploaded = parent::uploadAvatar($imagen,$filename,'/images/parroquias/',true);
-                $origen = new UploadedFile($uploaded,$filename);
+        if ($request->has('imagen') && !is_null($request->imagen)) {
+            $parroquia->imagen = parent::uploadAvatar($request->imagen, 'portada_' . $parroquia->slug, '/images/parroquias/');
+        }
+
+
+
+        if ($request->has('imagenes') && !is_null($request->imagenes)) {
+            foreach ($request->imagenes as $imagen) {
+                $filename = 'parroquia_' . $parroquia->slug . date('ymdhis');
+                $uploaded = parent::uploadAvatar($imagen, $filename, '/images/parroquias/', true);
+                $origen = new UploadedFile($uploaded, $filename);
                 $media = MediaUploader::fromFile($origen)
-                //->useFileName($imagen_name)
-                ->useName($parroquia->nombre)
-                ->upload();
+                    //->useFileName($imagen_name)
+                    ->useName($parroquia->nombre)
+                    ->upload();
                 $parroquia->attachMedia($media);
-           }
-       }
+            }
+        }
 
         //Elimino las imagenes quitadas de la galeria 
-        if($request->has('imagenes_eliminadas')){
-            foreach($request->imagenes_eliminadas as $id){
+        if ($request->has('imagenes_eliminadas')) {
+            foreach ($request->imagenes_eliminadas as $id) {
                 $img = Media::find($id);
                 $img->delete();
             }

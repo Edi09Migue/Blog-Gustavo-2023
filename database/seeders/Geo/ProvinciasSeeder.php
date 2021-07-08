@@ -1,8 +1,8 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Geo;
 
-use App\Models\Provincia;
+use App\Models\Geo\Provincia;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 
@@ -22,10 +22,10 @@ class ProvinciasSeeder extends Seeder
         $provincias_gadm = json_decode($content);
 
 
-        foreach($provincias_gadm as $provincia){
+        foreach ($provincias_gadm as $provincia) {
             $p = new Provincia();
-            $p->gid0 = $provincia->gid0;//pais
-            $p->gid1 = $provincia->gid1;//provincia
+            $p->gid0 = $provincia->gid0; //pais
+            $p->gid1 = $provincia->gid1; //provincia
             $p->nombre = $provincia->nombre;
             $p->tipo = $provincia->tipo;
             $p->engtype = $provincia->engtype;

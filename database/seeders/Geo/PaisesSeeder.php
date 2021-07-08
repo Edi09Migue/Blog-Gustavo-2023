@@ -1,8 +1,8 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Geo;
 
-use App\Models\Pais;
+use App\Models\Geo\Pais;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 
@@ -22,7 +22,7 @@ class PaisesSeeder extends Seeder
         $paises_gadm = json_decode($content, true);
 
 
-        foreach($paises_gadm as $pais){
+        foreach ($paises_gadm as $pais) {
             //dd($pais);
             $p = new Pais($pais);
             $p->codigo = $p->code;
