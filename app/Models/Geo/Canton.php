@@ -2,6 +2,7 @@
 
 namespace App\Models\Geo;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -9,7 +10,7 @@ use Optix\Media\HasMedia;
 
 class Canton extends Model
 {
-    use HasSlug, HasMedia;
+    use HasSlug, HasMedia, HasFactory;
 
     protected $table = "cantones";
 

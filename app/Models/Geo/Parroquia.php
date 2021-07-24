@@ -6,12 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 use Optix\Media\HasMedia;
 
 use Auth;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class Parroquia extends Model
 {
-    use HasMedia, HasSlug;
+    use HasMedia, HasSlug, HasFactory;
 
     protected $table = "parroquias";
 

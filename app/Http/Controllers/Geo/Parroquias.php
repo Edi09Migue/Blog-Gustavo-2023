@@ -85,6 +85,7 @@ class Parroquias extends Controller
     public function dropdownOptions(Request $request)
     {
         $parroquias = Parroquia::select('id', 'nombre', 'gid0', 'gid1', 'gid2', 'gid3');
+        //en caso de querer solo las parroquias de un canton
         if ($request->has('gid2'))
             $parroquias = $parroquias->where('gid2', $request->gid2);
 

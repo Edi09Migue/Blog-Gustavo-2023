@@ -2,13 +2,14 @@
 
 namespace App\Models\Geo;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class Provincia extends Model
 {
-    use HasSlug;
+    use HasSlug, HasFactory;
 
     protected $table = "provincias";
 

@@ -144,7 +144,7 @@ class Cantones extends Controller
         return response()->json([
             'status' => true,
             'data' => $cantone,
-            'msg' => 'Canton actualizado correctamente!'
+            'msg' => 'Cantón actualizado correctamente!'
         ]);
     }
 }
