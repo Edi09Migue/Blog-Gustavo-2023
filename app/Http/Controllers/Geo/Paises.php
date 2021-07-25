@@ -22,7 +22,7 @@ class Paises extends Controller
         $sortDesc = $request->has('sortDesc') ? ($request->sortDesc == "true" ? true : false) : false;
 
         //Obtengo una instancia de Usuarios para el query
-        $paises = Pais::query();
+        $paises = Pais::withCount('provincias');
 
         //Filtro para Estado
         $estado = $request->has('estado') ? $request->estado : '';
@@ -49,9 +49,12 @@ class Paises extends Controller
      * Devuelve el id, nombre, gid0 y gid1 de todas las paises
      * por lo general para usarlos en un componente dropdown
      */
-    public function dropdownOptions()
+    public function dropdownOptions(Request $request)
     {
-        $paises = Pais::select('id', 'nombre', 'gid0')->get();
+        $paises = Pais::select('id', 'nombre', 'gid0')
+                        ->where('estado',true);
+
+        $paises = $paises->get();
 
         return response()->json($paises);
     }
