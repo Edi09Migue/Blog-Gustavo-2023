@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Optix\Media\Facades\Conversion;
+use Intervention\Image\Image;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Conversion::register('thumb', function (Image $image) {
+            return $image->fit(64, 64);
+        });
+
+        Conversion::register('preview', function (Image $image) {
+            return $image->fit(370, 370);
+        });
+
+        Conversion::register('square', function (Image $image) {
+            return $image->fit(500, 500);
+        });
     }
 }

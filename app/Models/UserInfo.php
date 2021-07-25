@@ -19,8 +19,8 @@ class UserInfo extends Model
     protected $fillable = [
         'id',
         'empresa',
-        'portada',
-        
+        //    'portada',
+
         'birthdate',
         'telefono',
         'website',
@@ -29,7 +29,7 @@ class UserInfo extends Model
         'contact_options',
 
         'bio',
-        
+
         'pais',
         'provincia',
         'ciudad',
@@ -54,14 +54,22 @@ class UserInfo extends Model
     ];
 
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
     /**
      * Devuelve la URL completa de la imagen de portada del usuario
      */
-    public function getportadaURLAttribute(){
-        return asset('images/profiles/'. ($this->portada ? $this->portada :'timeline.jpg'));
+    public function getportadaURLAttribute()
+    {
+        $portada = asset('images/profiles/timeline.jpg');
+
+        if ($this->user) {
+            $portada = $this->user->imageURL('portada');
+        }
+
+        return $portada;
     }
 }

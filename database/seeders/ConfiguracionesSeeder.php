@@ -150,26 +150,41 @@ class ConfiguracionesSeeder extends Seeder
         $config->tipo = "string";
         $config->group_key = "correo";
         $config->save();
-        
+
         $config = new Configuracion();
         $config->key = "password_smtp";
         $config->value = "123456";
         $config->tipo = "string";
         $config->group_key = "correo";
         $config->save();
-        
+
         $config = new Configuracion();
         $config->key = "puerto_smtp";
         $config->value = "465";
         $config->tipo = "int";
         $config->group_key = "correo";
         $config->save();
-        
+
         $config = new Configuracion();
         $config->key = "encryption_smtp";
         $config->value = "ssl";
         $config->tipo = "string";
         $config->group_key = "correo";
+        $config->save();
+
+        //Notificaciones
+        $config = new Configuracion();
+        $config->key = "notificaciones_mail";
+        $config->value = "0";
+        $config->tipo = "bool";
+        $config->group_key = "notificaciones";
+        $config->save();
+
+        $config = new Configuracion();
+        $config->key = "notificaciones_websocket";
+        $config->value = "0";
+        $config->tipo = "bool";
+        $config->group_key = "notificaciones";
         $config->save();
     }
 }

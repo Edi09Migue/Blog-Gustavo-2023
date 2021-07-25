@@ -294,7 +294,7 @@ export default {
                   })
 
             }else{
-              this.errorServer = response.data.message
+              this.errorServer = response.data.msg
             }
           })
           .catch(error => {

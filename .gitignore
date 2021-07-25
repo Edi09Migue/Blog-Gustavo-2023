@@ -7,6 +7,7 @@
 /public/images
 /storage/*.key
 /storage/framework
+/storage/framework/laravel-excel
 /vendor
 .env
 .env.backup
@@ -16,4 +17,4 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-reports
+/reports

@@ -21,7 +21,7 @@ class SettingsComposer
             'company_shortname' => Configuracion::valor('company_shortname'),
             'slogan' => Configuracion::valor('slogan'),
             'logo' => Configuracion::valor('logo'),
-            'logoURL' => Configuracion::where('key','logo')->first()->imageUrl,
+            'logoURL' => @Configuracion::where('key','logo')->first()->imageUrl,
             'telefono' => Configuracion::valor('telefono'),
             'email' => Configuracion::valor('email'),
             'direccion' => Configuracion::valor('direccion'),

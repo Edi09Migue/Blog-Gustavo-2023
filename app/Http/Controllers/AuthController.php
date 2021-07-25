@@ -43,10 +43,10 @@ class AuthController extends Controller
         ]);
         if ($user->save()) {
             return response()->json([
-                'message' => 'Successfully created user!'
+                'message' => 'Usuario registrado correctamente!'
             ], 201);
         } else {
-            return response()->json(['error' => 'Provide proper details']);
+            return response()->json(['error' => 'Datos incorrectos']);
         }
     }
 
@@ -71,7 +71,7 @@ class AuthController extends Controller
         if (!Auth::attempt($credentials))
             return response()->json([
                 'status' => false,
-                'message' => 'Usuario o contraseña incorrectos'
+                'msg' => 'Usuario o contraseña incorrectos'
             ]);
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
@@ -81,9 +81,10 @@ class AuthController extends Controller
         $token->save();
 
         $user->ability = $user->allPermissions;
+        $user->notifications;
 
         //TODO:: vericar campos adicionales de user
-        $user->extras=['eCommerceCartItemsCount'=>6];
+        $user->extras=['eCommerceCartItemsCount'=>0];
 
         return response()->json([
             'status' => true,
@@ -106,8 +107,23 @@ class AuthController extends Controller
         $user = $request->user();
         $user->userInfo;
         $user->allPermissions =$user->allPermissions;
+        $user->notifications;
         
         return response()->json($user);
+    }
+
+    /**
+     * Get the Notifications of authenticated User
+    *
+    * @return [json] user object
+    */
+    public function notifications(Request $request)
+    {
+        $user = $request->user();
+        
+        $notifications = $user->notifications;
+
+        return response()->json($notifications);
     }
 
     /**
@@ -117,9 +133,11 @@ class AuthController extends Controller
     */
     public function logout(Request $request)
     {
-        $request->user()->token()->revoke();
+        if($request->user()->token())
+            $request->user()->token()->revoke();
         return response()->json([
-        'message' => 'Successfully logged out'
+            'status'=>true,
+            'msg' => 'Sesión finalizada correctamente'
         ]);
     }
 
@@ -184,7 +202,7 @@ class AuthController extends Controller
 
         $user = User::find(1);
 
-        return (new WelcomeNotification())
+        return (new WelcomeNotification($user))
                     ->toMail($user);
     }
 

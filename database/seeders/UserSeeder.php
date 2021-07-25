@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\UserInfo;
+use App\Notifications\WelcomeNotification;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -21,6 +22,8 @@ class UserSeeder extends Seeder
         $user->username = "dexterx17";
         $user->password = bcrypt('123456');
         $user->save();
+
+        $user->notify(new WelcomeNotification($user));
 
         $info = new UserInfo([
             'id' => $user->id,
@@ -47,6 +50,8 @@ class UserSeeder extends Seeder
         $user->password = bcrypt('123456');
         $user->save();
 
+        $user->notify(new WelcomeNotification($user));
+
         $info = new UserInfo([
             'id' => $user->id,
             'empresa' =>'SANTANA eCORP',
@@ -64,6 +69,8 @@ class UserSeeder extends Seeder
             'direccion_secundaria' => 'Cdla. Oriente',
         ]);
         $info->save();
+
+
         
     }
 }

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class UserProfileCtrl extends Controller
 {
-     /**
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -24,25 +24,32 @@ class UserProfileCtrl extends Controller
         $usuario = User::find(Auth::user()->id);
 
         $usuario->fill($request->except(['avatar']));
-        
-        if($request->has('avatar') && !is_null($request->avatar))
-        {
-            $usuario->avatar = parent::uploadAvatar($request->avatar,'/images/profiles/');
+
+        if ($request->has('avatar') && !is_null($request->avatar)) {
+            //Path donde se va a subir el archivo
+            $upload_folder = '/images/profiles/';
+            //Subo la imagen en base 64 y la asigno como 'Mediable'
+            parent::uploadAndConvert($request->avatar, $upload_folder, $usuario, 'main', 'name');
         }
 
         $info = UserInfo::firstOrNew([
             'id' => $usuario->id
         ]);
-        
-        $info->fill($request->user_info);
-        
-        unset($info->portada);
-        if($request->has('portada') && !is_null($request->portada))
-        {
-            $info->portada = parent::uploadAvatar($request->portada,'/images/profiles/');
+
+        if ($request->has('user_info')) {
+
+            $info->fill($request->user_info);
+
+            unset($info->portada);
+            if ($request->has('portada') && !is_null($request->portada)) {
+                //Path donde se va a subir el archivo
+                $upload_folder = '/images/profiles/';
+                //Subo la imagen en base 64 y la asigno como 'Mediable'
+                parent::uploadAndConvert($request->avatar, $upload_folder, $usuario, 'portada', 'name');
+            }
+
+            $info->save();
         }
-        
-        $info->save();
 
         $usuario->save();
 
@@ -52,19 +59,24 @@ class UserProfileCtrl extends Controller
         return response()->json([
             'status' => true,
             'data' => $usuario,
-            'msg' => $usuario->username.' actualizado!'
+            'msg' => $usuario->username . ' actualizado!'
         ]);
     }
 
-    
-    public function updatePassword(Request $request){
+    /**
+     * Actualiza la contraseña de un usuario
+     */
+    public function updatePassword(Request $request)
+    {
 
         $user = User::find(Auth::user()->id);
 
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'old_password'          => 'required',
             'password'              => 'required|min:8',
             'password_confirmation' => 'required|same:password'
+        ], [], [
+            'old_password'  => 'Contraseña actual'
         ]);
 
         if ($validator->fails()) {
@@ -73,14 +85,14 @@ class UserProfileCtrl extends Controller
                 'status' => false,
                 'data' => $errors,
                 'msg' => $errors->first()
-            ]);    
+            ]);
         }
 
         if (Hash::check($request->old_password, $user->password)) {
-        
+
             $user->password = Hash::make($request->password);
             $user->save();
-        }else{
+        } else {
             return response()->json([
                 'status' => false,
                 'data' => $user,
@@ -91,8 +103,7 @@ class UserProfileCtrl extends Controller
         return response()->json([
             'status' => true,
             'data' => $user,
-            'msg' => $user->username.' actualizado!'
+            'msg' => $user->username . ' actualizado!'
         ]);
-     
     }
 }

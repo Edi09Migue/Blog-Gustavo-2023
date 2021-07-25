@@ -60,6 +60,20 @@
         </template>
         <setting-edit-tab-correo :settings-data="settingsData" class="mt-2 pt-75" />
       </b-tab>
+
+      
+      <b-tab>
+        <template #title>
+          <feather-icon
+            icon="BellIcon"
+            size="16"
+            class="mr-0 mr-sm-50"
+          />
+          <span class="d-none d-sm-inline">{{ $t('Notifications') }}</span>
+        </template>
+        <setting-edit-tab-notifications :settings-data="settingsData" class="mt-2 pt-75" />
+      </b-tab>
+
     </b-tabs>
   </component>
 </template>
@@ -75,6 +89,7 @@ import settingStoreModule from './settingStoreModule'
 import SettingEditTabGeneral from './SettingEditTabGeneral.vue'
 import SettingEditTabSistema from './SettingEditTabSistema.vue'
 import SettingEditTabCorreo from './SettingEditTabCorreo.vue'
+import SettingEditTabNotifications from './SettingEditTabNotifications.vue'
 
 
 export default {
@@ -88,6 +103,7 @@ export default {
     SettingEditTabGeneral,
     SettingEditTabSistema,
     SettingEditTabCorreo,
+    SettingEditTabNotifications,
   },
   setup() {
     const settingsData = ref(null)

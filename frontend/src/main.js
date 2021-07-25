@@ -1,39 +1,40 @@
-import Vue from 'vue'
-import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
-import VueCompositionAPI from '@vue/composition-api'
+import Vue from "vue";
+import { ToastPlugin, ModalPlugin } from "bootstrap-vue";
+import VueCompositionAPI from "@vue/composition-api";
 
-import i18n from '@/libs/i18n'
-import router from './router'
-import store from './store'
-import App from './App.vue'
+import i18n from "@/libs/i18n";
+import router from "./router";
+import store from "./store";
+import App from "./App.vue";
 
 // Global Components
-import './global-components'
+import "./global-components";
 
 // 3rd party plugins
-import '@/libs/acl'
-import '@/libs/portal-vue'
-import '@/libs/sweet-alerts'
-import '@/libs/toastification'
+import "@/libs/acl";
+import "@/libs/portal-vue";
+import "@/libs/sweet-alerts";
+import "@/libs/toastification";
+//import "@/libs/pusher";
 
 // BSV Plugin Registration
-Vue.use(ToastPlugin)
-Vue.use(ModalPlugin)
+Vue.use(ToastPlugin);
+Vue.use(ModalPlugin);
 
 // Composition API
-Vue.use(VueCompositionAPI)
+Vue.use(VueCompositionAPI);
 
 // import core styles
-require('@core/scss/core.scss')
+require("@core/scss/core.scss");
 
 // import assets styles
-require('@/assets/scss/style.scss')
+require("@/assets/scss/style.scss");
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
-  router,
-  store,
-  i18n,
-  render: h => h(App),
-}).$mount('#app')
+    router,
+    store,
+    i18n,
+    render: h => h(App)
+}).$mount("#app");
