@@ -4,6 +4,7 @@ namespace Tests\Feature\Geo;
 
 use App\Models\Geo\Provincia;
 use App\Models\User;
+use Database\Seeders\Geo\PaisesSeeder;
 use Database\Seeders\Geo\ProvinciasSeeder;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -43,6 +44,7 @@ class ProvinciasTest extends TestCase
     public function test_list(){
         $admin = User::factory()->create([]);
 
+        $this->seed(PaisesSeeder::class);
         $this->seed(ProvinciasSeeder::class);
         $total_provincias = Provincia::count();
 
@@ -52,6 +54,8 @@ class ProvinciasTest extends TestCase
                 'users'     => [],
                 'total'    => $total_provincias
             ])
+            ->assertSee('Azuay')
+            ->assertSee('Ecuador')
             ->assertStatus(200);
     }
     

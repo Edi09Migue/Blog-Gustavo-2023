@@ -24,8 +24,9 @@ class Cantones extends Controller
         $sortBy = $request->has('sortBy') ? $request->sortBy : "id";
         $sortDesc = $request->has('sortDesc') ? ($request->sortDesc == "true" ? true : false) : false;
 
-        //Obtengo una instancia de Usuarios para el query
-        $cantones = Canton::query();
+        //Obtengo una instancia de Canton para el query
+        $cantones = Canton::with('provincia')
+                            ->withCount('parroquias');
 
         //Filtro para Estado
         $estado = $request->has('estado') ? $request->estado : '';
@@ -55,10 +56,6 @@ class Cantones extends Controller
         })
             ->orderBy($sortBy, $sortDesc ? 'desc' : 'asc')
             ->paginate($perPage);
-
-        $cantones->each(function ($p) {
-            $p->provincia;
-        });
 
         return response()->json([
             'users' => $cantones->items(),

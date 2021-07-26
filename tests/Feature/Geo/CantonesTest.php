@@ -58,6 +58,7 @@ class CantonesTest extends TestCase
     public function test_list(){
         $admin = User::factory()->create([]);
 
+        $this->seed(ProvinciasSeeder::class);
         $this->seed(CantonesSeeder::class);
         $total_cantones = Canton::count();
 
@@ -67,6 +68,7 @@ class CantonesTest extends TestCase
                 'users'     => [],
                 'total'    => $total_cantones
             ])
+            ->assertSee('Esmeraldas')
             ->assertStatus(200);
     }
 

@@ -22,7 +22,8 @@ class Provincias extends Controller
         $sortDesc = $request->has('sortDesc') ? ($request->sortDesc == "true" ? true : false) : false;
 
         //Obtengo una instancia de Usuarios para el query
-        $provincias = Provincia::query();
+        $provincias = Provincia::with('pais')
+                                ->withCount('cantones');
 
         //Filtro para Estado
         $estado = $request->has('estado') ? $request->estado : '';
