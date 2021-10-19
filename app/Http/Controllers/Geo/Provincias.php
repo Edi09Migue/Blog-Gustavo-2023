@@ -34,13 +34,13 @@ class Provincias extends Controller
         //Filtros basicos, orden y paginacion
         $provincias = $provincias->where(function ($q) use ($query) {
             $q->where('nombre', 'like', "%$query%")
-                ->orWhere('gid2', 'like', "%$query%");
+                ->orWhere('gid0', 'like', "%$query%");
         })
             ->orderBy($sortBy, $sortDesc ? 'desc' : 'asc')
             ->paginate($perPage);
 
         return response()->json([
-            'users' => $provincias->items(),
+            'items' => $provincias->items(),
             'total' => $provincias->total()
         ]);
     }
@@ -55,5 +55,18 @@ class Provincias extends Controller
         $provincias = Provincia::select('id', 'nombre', 'gid0', 'gid1')->get();
 
         return response()->json($provincias);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Geo\Provincia  $povincia
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Provincia $provincia)
+    {
+        $provincia->pais;
+        
+        return response()->json($provincia);
     }
 }

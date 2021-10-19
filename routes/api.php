@@ -82,7 +82,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:api'], function () {
   Route::apiResource('paises',Paises::class,['only'=>['index']]);
   
   Route::get('provincias/dropdownOptions',[Provincias::class,'dropdownOptions']);
-  Route::apiResource('provincias',Provincias::class,['only'=>['index']]);
+  Route::apiResource('provincias',Provincias::class,['only'=>['index','show']]);
   
   Route::get('cantones/dropdownOptions',[Cantones::class,'dropdownOptions']);
   Route::apiResource('cantones',Cantones::class,['except'=>['destroy']]);

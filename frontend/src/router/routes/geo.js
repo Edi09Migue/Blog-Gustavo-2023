@@ -1,5 +1,50 @@
 export default [
     {
+        path: "/apps/provincias/list",
+        name: "geo-provincias-list",
+        component: () =>
+            import("@/views/apps/geo/provincias/provincias-list/ProvinciasList.vue"),
+        meta: {
+            action: "listar",
+            resource: "provincias",
+            pageTitle: "Listado de Provincias",
+            breadcrumb: [
+                {
+                    text: "Territory"
+                },
+                {
+                    text: "Provinces",
+                    active: true
+                }
+            ]
+        }
+    },
+    {
+        path: "/apps/provincias/edit/:id",
+        name: "geo-provincias-edit",
+        component: () =>
+            import("@/views/apps/geo/provincias/provincias-edit/ProvinciasEdit.vue"),
+        meta: {
+            navActiveLink: "geo-provincias-list",
+            action: "editar",
+            resource: "provincias",
+            pageTitle: "Edición provincia",
+            breadcrumb: [
+                {
+                    text: "Security"
+                },
+                {
+                    text: "Provinces",
+                    to: { name: "geo-provincias-list" }
+                },
+                {
+                    text: "Editing",
+                    active: true
+                }
+            ]
+        }
+    },
+    {
         path: "/apps/cantones/list",
         name: "geo-cantones-list",
         component: () =>

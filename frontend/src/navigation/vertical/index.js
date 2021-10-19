@@ -24,6 +24,13 @@ export default [
     header: 'Territory',
   },
   {
+    title: 'Provinces',
+    route: 'geo-provincias-list',
+    icon: 'FileIcon',
+    action: 'listar',
+    resource: 'provincias'
+  },
+  {
     title: 'Cantons',
     route: 'geo-cantones-list',
     icon: 'FileIcon',
