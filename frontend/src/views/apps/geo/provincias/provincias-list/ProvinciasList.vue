@@ -66,6 +66,26 @@
         :empty-text="$t('Empty Table')"
         :sort-desc.sync="isSortDirDesc"
       >
+        <!-- Column: Provincia -->
+        <template #cell(nombre)="data">
+          <b-media vertical-align="center">
+            <template #aside>
+              <b-avatar
+                size="32"
+                :src="data.item.iconoURL"
+                :text="avatarText(data.item.nombre)"
+                :to="{ name: 'geo-provincias-view', params: { id: data.item.id } }"
+              />
+            </template>
+            <b-link
+              :to="{ name: 'geo-provincias-view', params: { id: data.item.id } }"
+              class="font-weight-bold d-block text-nowrap"
+            >
+              {{ data.item.nombre }}
+            </b-link>
+            <small class="text-muted">@{{ data.item.tipo }}</small>
+          </b-media>
+        </template>
 
         <!-- Column: Pais -->
         <template #cell(pais)="data">

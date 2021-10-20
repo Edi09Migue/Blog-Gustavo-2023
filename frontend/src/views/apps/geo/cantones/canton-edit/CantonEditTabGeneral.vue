@@ -196,7 +196,7 @@
           </b-button>
           <b-button
             variant="outline-secondary"
-            :to="{ name: 'geo-parroquias-list'}"
+            :to="{ name: 'geo-cantones-list'}"
             :block="$store.getters['app/currentBreakPoint'] === 'xs'"
           >
             {{ $t("Cancel") }}

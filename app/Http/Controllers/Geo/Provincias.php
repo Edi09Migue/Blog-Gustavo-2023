@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Geo;
 use App\Http\Controllers\Controller;
 use App\Models\Geo\Provincia;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Optix\Media\MediaUploader;
+use Optix\Media\Models\Media;
 
 class Provincias extends Controller
 {
@@ -68,5 +71,56 @@ class Provincias extends Controller
         $provincia->pais;
         
         return response()->json($provincia);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Geo\Provincia  $provincia
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Provincia $provincia)
+    {
+        $provincia->fill($request->except('imagen', 'imagenes'));
+
+        //Elimino imagen si fue quitado del formulario
+        if ($request->has('eliminar_imagen') && $request->eliminar_imagen) {
+            parent::eliminarFile(public_path() . '/images/provincias/' . $provincia->imagen);
+            $provincia->imagen = null;
+        }
+
+        if ($request->has('imagen') && !is_null($request->imagen)) {
+            $provincia->imagen = parent::uploadAvatar($request->imagen, 'portada_' . $provincia->slug, '/images/provincias/');
+        }
+
+        if ($request->has('imagenes') && !is_null($request->imagenes)) {
+            foreach ($request->imagenes as $imagen) {
+                $filename = 'provincia_' . $provincia->slug . date('ymdhis');
+                $uploaded = parent::uploadAvatar($imagen, $filename, '/images/provincias/', true);
+                $origen = new UploadedFile($uploaded, $filename);
+                $media = MediaUploader::fromFile($origen)
+                    //->useFileName($imagen_name)
+                    ->useName($provincia->nombre)
+                    ->upload();
+                $provincia->attachMedia($media);
+            }
+        }
+
+        //Elimino las imagenes quitadas de la galeria 
+        if ($request->has('imagenes_eliminadas')) {
+            foreach ($request->imagenes_eliminadas as $id) {
+                $img = Media::find($id);
+                $img->delete();
+            }
+        }
+
+        $provincia->save();
+
+        return response()->json([
+            'status' => true,
+            'data' => $provincia,
+            'msg' => 'Provincia actualizada correctamente!'
+        ]);
     }
 }

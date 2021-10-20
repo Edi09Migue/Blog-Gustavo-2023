@@ -17,7 +17,7 @@ export default function useProvinciasList() {
   // Table Handlers
   const tableColumns = [
     { key: 'nombre', sortable: true, label: t('Name') },
-    { key: 'pais', sortable: false, label: t('City') },
+    { key: 'pais', sortable: false, label: t('Country') },
     { key: 'estado', sortable: true , label: t('Status')},
     { key: 'actions' , label: t('Actions') },
   ]

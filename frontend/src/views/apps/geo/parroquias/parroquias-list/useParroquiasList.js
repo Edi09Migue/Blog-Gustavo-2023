@@ -80,6 +80,31 @@ export default function useParroquiasList() {
       })
   }
 
+  const duplicateParroquia = (dataParroquia) => {
+    store.dispatch('app-geo/duplicateParroquia', dataParroquia)
+      .then((response) => {
+        if(response.data.status){
+           toast({
+              component: ToastificationContent,
+              position: 'top-right',
+              props: {
+                title: `Duplicado!`,
+                icon: 'CoffeeIcon',
+                variant: 'success',
+                text: response.data.data.nombre,
+              },
+            })
+            refetchData()
+        }else{
+          errorServer.value = response.data.msg
+        }
+      })
+      .catch((error) => {
+        console.log('error');
+        console.log(error);
+      })
+  }
+
   const removeParroquia = function(id ) {
 
       this.$swal({
@@ -136,6 +161,7 @@ export default function useParroquiasList() {
     isSortDirDesc,
     refParroquiaListTable,
     removeParroquia,
+    duplicateParroquia,
 
     resolveParroquiaStatusVariant,
     refetchData,

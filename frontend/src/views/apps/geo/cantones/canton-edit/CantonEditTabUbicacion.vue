@@ -300,7 +300,7 @@
                         </b-button>
                         <b-button
                             variant="outline-secondary"
-                            :to="{ name: 'apps-users-list' }"
+                            :to="{ name: 'geo-cantones-list' }"
                             :block="
                                 $store.getters['app/currentBreakPoint'] === 'xs'
                             "

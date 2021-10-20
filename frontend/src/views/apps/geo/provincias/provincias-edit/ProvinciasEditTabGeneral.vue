@@ -78,7 +78,7 @@
                       v-model="provinciaDataLocal
                       .nombre"
                       :state="getValidationState(validationContext)"
-                      placeholder="Ej: Santiago de Píllaro"
+                      placeholder="Ej: Tungurahua"
                     />
                     <b-form-invalid-feedback>
                         {{ validationContext.errors[0] }}
@@ -95,7 +95,7 @@
                 <validation-provider
                         #default="validationContext"
                         name="Short Name"
-                        rules="required|max:255"
+                        rules="max:255"
                     >
                   <b-form-group
                     :label="$t('Short Name')"
@@ -106,7 +106,7 @@
                       v-model="provinciaDataLocal
                       .nombre_corto"
                       :state="getValidationState(validationContext)"
-                      placeholder="Ej: Píllaro"
+                      placeholder="Ej: Tungurahua"
                       trim
                     />
                     <b-form-invalid-feedback>
@@ -196,7 +196,7 @@
           </b-button>
           <b-button
             variant="outline-secondary"
-            :to="{ name: 'geo-parroquias-list'}"
+            :to="{ name: 'geo-provincias-list'}"
             :block="$store.getters['app/currentBreakPoint'] === 'xs'"
           >
             {{ $t("Cancel") }}
@@ -270,7 +270,7 @@ export default {
     const profileFile = ref(null)
     const provinciaDataLocal = ref(JSON.parse(JSON.stringify(props.provinciaData)))
 
-    profileFile.value = props.provinciaDataLocal.avatarURL
+    profileFile.value = props.provinciaData.avatarURL
     provinciaDataLocal.value.avatar = null
 
     const toast = useToast()

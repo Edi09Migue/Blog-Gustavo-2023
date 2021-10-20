@@ -151,6 +151,14 @@
             </b-dropdown-item>
 
             <b-dropdown-item
+              v-if="$can('duplicar', 'parroquias')"
+                @click="duplicateParroquia(data.item)"
+              >
+              <feather-icon icon="ColumnsIcon" />
+              <span class="align-middle ml-50">{{ $t('Duplicate') }}</span>
+            </b-dropdown-item>
+
+            <b-dropdown-item
               v-if="$can('editar', 'parroquias')"
              :to="{ name: 'geo-parroquias-edit', params: { id: data.item.id } }">
               <feather-icon icon="EditIcon" />
@@ -329,6 +337,7 @@ export default {
       refParroquiaListTable,
       refetchData,
       removeParroquia,
+      duplicateParroquia,
 
       // UI
       resolveParroquiaStatusVariant,
@@ -358,6 +367,7 @@ export default {
       refParroquiaListTable,
       refetchData,
       removeParroquia,
+      duplicateParroquia,
       cantonesOptions,
 
       // Filter

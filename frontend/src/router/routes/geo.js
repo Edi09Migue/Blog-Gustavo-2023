@@ -45,6 +45,31 @@ export default [
         }
     },
     {
+        path: "/apps/provincias/view/:id",
+        name: "geo-provincias-view",
+        component: () =>
+            import("@/views/apps/geo/provincias/provincia-view/ProvinciaView.vue"),
+        meta: {
+            navActiveLink: "geo-provincias-list",
+            action: "listar",
+            resource: "provincias",
+            pageTitle: "Detalles provincia",
+            breadcrumb: [
+                {
+                    text: "Security"
+                },
+                {
+                    text: "Provinces",
+                    to: { name: "geo-provincias-list" }
+                },
+                {
+                    text: "Details",
+                    active: true
+                }
+            ]
+        }
+    },
+    {
         path: "/apps/cantones/list",
         name: "geo-cantones-list",
         component: () =>

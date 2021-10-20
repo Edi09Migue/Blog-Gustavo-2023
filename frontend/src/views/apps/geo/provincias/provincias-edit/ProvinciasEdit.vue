@@ -22,12 +22,12 @@
     </b-alert>
 
     <b-tabs
-      v-if="provinciaData"
+      v-if="provinciaData!=undefined"
       pills
     >
 
       <!-- Tab: General -->
-      <b-tab v-if="provinciaData!=undefined">
+      <b-tab>
         <template #title>
           <feather-icon
             icon="UserIcon"
@@ -37,7 +37,6 @@
           <span class="d-none d-sm-inline">{{ $t('General') }}</span>
         </template>
         <provincias-edit-tab-general
-            
             :provincia-data="provinciaData"
             class="mt-2 pt-75"
         />

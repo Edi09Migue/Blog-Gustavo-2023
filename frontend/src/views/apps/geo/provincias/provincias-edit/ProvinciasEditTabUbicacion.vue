@@ -2,7 +2,7 @@
     <div>
         <validation-observer
             #default="{ handleSubmit }"
-            v-if="cantonDataInfo"
+            v-if="provinciaDataInfo"
             ref="refFormObserver"
         >
             <!-- Form: Personal Info Form -->
@@ -23,7 +23,7 @@
                                 >
                                     <b-form-input
                                         id="zipcode"
-                                        v-model="cantonDataInfo.zipcode"
+                                        v-model="provinciaDataInfo.zipcode"
                                         placeholder="Ej: 180150"
                                     />
                                 </b-form-group>
@@ -35,7 +35,7 @@
                                     <b-form-input
                                         id="tipo"
                                         readonly
-                                        v-model="cantonDataInfo.tipo"
+                                        v-model="provinciaDataInfo.tipo"
                                     />
                                 </b-form-group>
                             </b-col>
@@ -66,16 +66,16 @@
                                     >
                                         <v-select
                                             v-model="
-                                                cantonDataInfo.gid1
+                                                provinciaDataInfo.gid0
                                             "
                                             :dir="
                                                 $store.state.appConfig.isRTL
                                                     ? 'rtl'
                                                     : 'ltr'
                                             "
-                                            :options="provinciasOptions"
+                                            :options="paisesOptions"
                                             @input="setProvincia"
-                                            :reduce="val => val.gid1"
+                                            :reduce="val => val.gid0"
                                             label="nombre"
                                             :clearable="false"
                                             input-id="province_id"
@@ -102,7 +102,7 @@
                                 >
                                     <b-form-input
                                         id="latitud"
-                                        v-model="cantonDataInfo.lat"
+                                        v-model="provinciaDataInfo.lat"
                                     />
                                 </b-form-group>
                             </b-col>
@@ -115,7 +115,7 @@
                                 >
                                     <b-form-input
                                         id="longitud"
-                                        v-model="cantonDataInfo.lng"
+                                        v-model="provinciaDataInfo.lng"
                                     />
                                 </b-form-group>
                             </b-col>
@@ -137,7 +137,7 @@
                                 >
                                     <b-form-input
                                         id="minx"
-                                        v-model="cantonDataInfo.minx"
+                                        v-model="provinciaDataInfo.minx"
                                     />
                                 </b-form-group>
                             </b-col>
@@ -150,7 +150,7 @@
                                 >
                                     <b-form-input
                                         id="miny"
-                                        v-model="cantonDataInfo.miny"
+                                        v-model="provinciaDataInfo.miny"
                                     />
                                 </b-form-group>
                             </b-col>
@@ -162,7 +162,7 @@
                                 >
                                     <b-form-input
                                         id="maxx"
-                                        v-model="cantonDataInfo.maxx"
+                                        v-model="provinciaDataInfo.maxx"
                                     />
                                 </b-form-group>
                             </b-col>
@@ -175,7 +175,7 @@
                                 >
                                     <b-form-input
                                         id="maxy"
-                                        v-model="cantonDataInfo.maxy"
+                                        v-model="provinciaDataInfo.maxy"
                                     />
                                 </b-form-group>
                             </b-col>
@@ -211,7 +211,7 @@
                                     <b-form-input
                                         id="pitch"
                                         type="number"
-                                        v-model="cantonDataInfo.pitch"
+                                        v-model="provinciaDataInfo.pitch"
                                     />
                                 </b-form-group>
                             </b-col>
@@ -225,7 +225,7 @@
                                     <b-form-input
                                         id="bearing"
                                         type="number"
-                                        v-model="cantonDataInfo.bearing"
+                                        v-model="provinciaDataInfo.bearing"
                                     />
                                 </b-form-group>
                             </b-col>
@@ -276,8 +276,8 @@
                             <!-- Use default icon -->
                             <l-marker
                                 :lat-lng="[
-                                    cantonDataInfo.lat,
-                                    cantonDataInfo.lng
+                                    provinciaDataInfo.lat,
+                                    provinciaDataInfo.lng
                                 ]"
                                 :draggable="true"
                                 @dragend="updateLocation"
@@ -300,7 +300,7 @@
                         </b-button>
                         <b-button
                             variant="outline-secondary"
-                            :to="{ name: 'apps-users-list' }"
+                            :to="{ name: 'geo-provincias-list' }"
                             :block="
                                 $store.getters['app/currentBreakPoint'] === 'xs'
                             "
@@ -415,11 +415,11 @@ export default {
             url,
             cantonesList: [],
             url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            zoom: this.cantonDataInfo.zoom,
-            center: [this.cantonDataInfo.lat, this.cantonDataInfo.lng],
+            zoom: this.provinciaDataInfo.zoom,
+            center: [this.provinciaDataInfo.lat, this.provinciaDataInfo.lng],
             bounds:[
-                [this.cantonDataInfo.miny, this.cantonDataInfo.minx],
-                [this.cantonDataInfo.maxy, this.cantonDataInfo.maxx],
+                [this.provinciaDataInfo.miny, this.provinciaDataInfo.minx],
+                [this.provinciaDataInfo.maxy, this.provinciaDataInfo.maxx],
             ],
             rectangle:{
                 style: { color: 'red', weight: 3 }
@@ -431,17 +431,17 @@ export default {
         };
     },
     props: {
-        cantonData: {
+        provinciaData: {
             type: Object,
             required: true
         }
     },
     mounted() {
-        console.log("load: " + this.cantonData.provincia.id);
+        console.log("load: " + this.provinciaData.pais.id);
     },
     watch:{
         zoom () { 
-            this.cantonDataInfo.zoom = this.zoom
+            this.provinciaDataInfo.zoom = this.zoom
         },
         bounds(){
             alert('bounds')
@@ -450,8 +450,8 @@ export default {
     },
     methods: {
         updateLocation(location) {
-            this.cantonDataInfo.lat = location.target._latlng.lat;
-            this.cantonDataInfo.lng = location.target._latlng.lng;
+            this.provinciaDataInfo.lat = location.target._latlng.lat;
+            this.provinciaDataInfo.lng = location.target._latlng.lng;
         },
         setProvincia(provincia) {
             console.log("provincia");
@@ -466,23 +466,23 @@ export default {
 
         const errorServer = ref(null);
 
-        const cantonDataInfo = ref(
-            JSON.parse(JSON.stringify(props.cantonData))
+        const provinciaDataInfo = ref(
+            JSON.parse(JSON.stringify(props.provinciaData))
         );
 
-        const provinciasOptions = ref([])
+        const paisesOptions = ref([])
 
-        const fetchProvincias = (ctx, callback) => {
+        const fetchPaises = (ctx, callback) => {
             store
-                .dispatch("app-geo/fetchProvinciasOptions", {})
+                .dispatch("app-geo/fetchPaisesOptions", {})
                 .then(response => {
-                    provinciasOptions.value = response.data;
+                    paisesOptions.value = response.data;
                 })
                 .catch(() => {
                     toast({
                         component: ToastificationContent,
                         props: {
-                            title: "Error fetching provincias list",
+                            title: "Error fetching paises list",
                             icon: "AlertTriangleIcon",
                             variant: "danger"
                         }
@@ -490,17 +490,15 @@ export default {
                 });
         };
 
-
-
-        fetchProvincias()
+        fetchPaises()
 
         const onSubmit = () => {
             store
-                .dispatch("app-geo/updateCanton", cantonDataInfo)
+                .dispatch("app-geo/updateProvincia",provinciaDataInfo)
                 .then(response => {
                     if (response.data.status) {
                         router
-                            .replace({ name: "geo-cantones-list" })
+                            .replace({ name: "geo-provincias-list" })
                             .then(() => {
                                 toast({
                                     component: ToastificationContent,
@@ -529,8 +527,8 @@ export default {
         const { refFormObserver, getValidationState } = formValidation();
 
         return {
-            cantonDataInfo,
-            provinciasOptions,
+            provinciaDataInfo,
+            paisesOptions,
             onSubmit,
 
             refFormObserver,

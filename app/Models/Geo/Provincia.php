@@ -75,6 +75,7 @@ class Provincia extends Model
      */
     public function getIconoURLAttribute()
     {
-        return asset('images/ECU.23.8_1.svg');
+        // return asset('images/ECU.23.8_1.svg');
+        return asset('images/maps/' . $this->gid1 . '.svg');
     }
 }

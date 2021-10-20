@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Geo\Parroquia;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Optix\Media\MediaUploader;
 use Optix\Media\Models\Media;
 
@@ -104,6 +105,37 @@ class Parroquias extends Controller
     {
         $parroquia->canton;
         return response()->json($parroquia);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+
+            $parroquia = new Parroquia($request->all());
+            $parroquia->nombre = $parroquia->nombre.' duplicada';
+            $parroquia->save();
+
+            DB::commit();
+            return response()->json([
+                'status' => true,
+                'data' => $parroquia,
+                'msg' => $parroquia->nombre . ' duplicada!'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => false,
+                'data' => $e->getMessage(),
+                'msg' => 'Error al duplicar Parroquia!'
+            ]);
+        }
     }
 
     /**

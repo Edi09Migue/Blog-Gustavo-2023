@@ -146,6 +146,14 @@ export default {
                     .then(response => resolve(response))
                     .catch(error => reject(error));
             });
-        }
+        },
+        duplicateParroquia(ctx, parroquiaData) {
+            return new Promise((resolve, reject) => {
+                axios
+                    .post('/api/admin/parroquias',parroquiaData)
+                    .then(response => resolve(response))
+                    .catch(error => reject(error));
+            });
+        },
     }
 };

@@ -140,5 +140,6 @@
   "Map":"Map",
   "Import": "Import",
   "Error fetching list of": "Error fetching list of",
-  "Reports": "Reports"
+  "Reports": "Reports",
+  "Duplicate":"Duplicate"
 }
