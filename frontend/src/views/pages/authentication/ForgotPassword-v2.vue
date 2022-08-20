@@ -7,7 +7,7 @@
         <vuexy-logo />
 
         <h2 class="brand-text text-primary ml-1">
-          Santana
+          TUNGURAHUA 63
         </h2>
       </b-link>
       <!-- /Brand logo-->

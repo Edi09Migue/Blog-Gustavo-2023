@@ -6,7 +6,7 @@
       <b-link class="brand-logo">
         <vuexy-logo />
         <h2 class="brand-text text-primary ml-1">
-          Santana
+          TUNGURAHUA 63
         </h2>
       </b-link>
       <!-- /Brand logo-->
@@ -41,7 +41,7 @@
             title-tag="h2"
             class="font-weight-bold mb-1"
           >
-            {{ $t('Welcome to') }} SANTANA core! 👋
+            TUNGURAHUA 63! 👋
           </b-card-title>
           <b-card-text class="mb-2">
             {{ $t('Please sign-in') }}
@@ -148,22 +148,22 @@
             </b-form>
           </validation-observer>
 
-          <b-card-text class="text-center mt-2">
+          <!-- <b-card-text class="text-center mt-2">
             <span>{{ $t('New on our platform') }}? </span>
             <b-link :to="{name:'auth-register'}">
               <span>&nbsp;{{ $t('Create an account') }}</span>
             </b-link>
-          </b-card-text>
+          </b-card-text> -->
 
           <!-- divider -->
-          <div class="divider my-2">
+          <!-- <div class="divider my-2">
             <div class="divider-text">
               {{ $t('or') }}
             </div>
-          </div>
+          </div> -->
 
           <!-- social buttons -->
-          <div class="auth-footer-btn d-flex justify-content-center">
+          <!-- <div class="auth-footer-btn d-flex justify-content-center">
             <b-button
               variant="facebook"
               href="javascript:void(0)"
@@ -188,7 +188,7 @@
             >
               <feather-icon icon="GithubIcon" />
             </b-button>
-          </div>
+          </div> -->
         </b-col>
       </b-col>
     <!-- /Login-->

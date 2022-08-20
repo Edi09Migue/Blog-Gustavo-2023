@@ -337,5 +337,28 @@ export default [
           },
         ],
       }
-    },
+  },
+    
+  // *===============================================---*
+  // *--------- INSCRITOS -------------------------------*
+  // *===============================================---*
+  {
+    path: '/apps/inscritos/list',
+    name: 'apps-inscritos-list',
+    component: () => import('@/views/apps/staff/inscritos/inscritos-list/InscritosList.vue'),
+    meta: {
+      action: 'listar',
+      resource: 'inscritos',
+      pageTitle: 'Listado de Inscritos',
+      breadcrumb: [
+        {
+          text: 'Security',
+        },
+        {
+          text: 'Inscritos',
+          active: true,
+        },
+      ],
+    }
+  },
 ]

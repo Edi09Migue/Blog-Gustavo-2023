@@ -18,9 +18,7 @@ class PermisosSeeder extends Seeder
     {
         $superadmin = Role::create(['name' => 'superadmin']);
         $admin = Role::create(['name' => 'admin']);
-        $cliente = Role::create(['name' => 'cliente']);
-        $autor = Role::create(['name' => 'autor']);
-        $editor = Role::create(['name' => 'editor']);
+        $candidato = Role::create(['name' => 'candidato']);
         $suscriptor = Role::create(['name' => 'suscriptor']);
 
         //
@@ -57,14 +55,21 @@ class PermisosSeeder extends Seeder
         $p_editar_permisos = Permission::create(['name' => 'editar-permisos', 'group_key' => 'Seguridad']);
         $p_eliminar_permisos = Permission::create(['name' => 'eliminar-permisos', 'group_key' => 'Seguridad']);
 
+
+        //Inscritos
+
+        $p_listar_inscritos = Permission::create(['name' => 'listar-inscritos', 'group_key' => 'Sistema']);
+        $p_crear_inscritos = Permission::create(['name' => 'crear-inscritos', 'group_key' => 'Sistema']);
+        $p_editar_inscritos = Permission::create(['name' => 'editar-inscritos', 'group_key' => 'Sistema']);
+        $p_eliminar_inscritos = Permission::create(['name' => 'eliminar-inscritos', 'group_key' => 'Sistema']);
+        $p_exportar_inscritos = Permission::create(['name' => 'exportar-inscritos', 'group_key' => 'Sistema']);
+
+
         $permisos = Permission::all();
         foreach ($permisos as $key => $permiso) {
             $superadmin->givePermissionTo($permiso);
             $admin->givePermissionTo($permiso);
         }
-
-        //permisos para editor
-        $editor->givePermissionTo($p_listar_usuarios);
 
         //permisos para todos los roles
         $permisos_globales = [
@@ -73,10 +78,9 @@ class PermisosSeeder extends Seeder
             $p_ver_perfil_user,
             $p_editar_perfil_user
         ];
+        
         foreach ($permisos_globales as $p) {
-            $cliente->givePermissionTo($p);
-            $autor->givePermissionTo($p);
-            $editor->givePermissionTo($p);
+            $candidato->givePermissionTo($p);
             $suscriptor->givePermissionTo($p);
         }
 
@@ -86,6 +90,6 @@ class PermisosSeeder extends Seeder
 
         //USER 2 con rol de editor
         $user_editor = User::find(2);
-        $user_editor->assignRole('editor');
+        $user_editor->assignRole('candidato');
     }
 }

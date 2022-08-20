@@ -31,22 +31,6 @@ const router = new VueRouter({
         ],
       },
     },
-    {
-      path: '/second-page',
-      name: 'second-page',
-      component: () => import('@/views/SecondPage.vue'),
-      meta: {
-        action: 'ver',
-        resource: 'dashboard_user',
-        pageTitle: 'Second Page',
-        breadcrumb: [
-          {
-            text: 'Second Page',
-            active: true,
-          },
-        ],
-      },
-    },
     ...pages,
     {
       path: '*',

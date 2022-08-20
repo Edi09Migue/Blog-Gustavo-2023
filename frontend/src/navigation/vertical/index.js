@@ -7,18 +7,18 @@ export default [
     resource: 'dashboard_user'
   },
   {
-    title: 'Dashboard User',
+    title: 'Dashboard Candidato',
     route: 'second-page',
     icon: 'FileIcon',
     action: 'ver',
     resource: 'dashboard_user'
   },
   {
-    title: 'Dashboard',
-    route: 'dashboard-editor',
-    icon: 'FileIcon',
-    action: 'ver',
-    resource: 'dashboard_editor'
+    title: 'Inscritos',
+    route: 'apps-inscritos-list',
+    icon: 'UsersIcon',
+    action: 'listar',
+    resource: 'inscritos'
   },
   {
     header: 'Staff & Security',

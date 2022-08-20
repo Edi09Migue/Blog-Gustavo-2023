@@ -7,7 +7,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- <link rel="icon" href="<%= BASE_URL %>favicon.ico"> -->
 
-  <title>SANTANA core</title>
+  <title>TUNGURAHUA 63</title>
   <!-- Styles -->
   <link rel="stylesheet" href="{{ asset(mix('css/app.css')) }}">
 

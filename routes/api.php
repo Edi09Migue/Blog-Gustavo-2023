@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Roles;
 use App\Http\Controllers\Admin\UserProfileCtrl;
 use App\Http\Controllers\Admin\Usuarios;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Sistema\Inscritos;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -65,4 +66,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:api'], function () {
 
   Route::apiResource('configs', Configuraciones::class);
   Route::post('configs/validate/{field}', [Configuraciones::class, 'isUniqueField']);
+
+
+
+  Route::get('inscritos/dropdownOptions', [Inscritos::class, 'dropdownOptions']);
+  Route::apiResource('inscritos', Inscritos::class);
+  Route::post('inscritos/validate/{field}', [Inscritos::class, 'isUniqueField']);
 });

@@ -9,22 +9,28 @@
         Template Documentation
       </b-link> to understand where to go from here and how to use our template.</b-card-text>
     </b-card>
-
-    <b-card title="Want to integrate JWT? 🔒">
-      <b-card-text>We carefully crafted JWT flow so you can implement JWT with ease and with minimum efforts.</b-card-text>
-      <b-card-text>Please read our  JWT Documentation to get more out of JWT authentication.</b-card-text>
-    </b-card>
+    
+    <b-row>
+      <b-col>
+        <CardCandidatos/>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
 <script>
-import { BCard, BCardText, BLink } from 'bootstrap-vue'
+import { BCard, BCardText, BLink, BRow, BCol } from 'bootstrap-vue'
+
+import CardCandidatos from '@/views/apps/home/CardCandidatos';
 
 export default {
   components: {
     BCard,
     BCardText,
     BLink,
+    BRow,
+    BCol,
+    CardCandidatos
   },
 }
 </script>

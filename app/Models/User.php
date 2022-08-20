@@ -190,4 +190,10 @@ class User extends Authenticatable implements Auditable
         }
         return $query;
     }
+
+
+    public function inscritos(){
+        return $this->hasMany(Inscrito::class);
+    }
+    
 }
