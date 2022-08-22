@@ -76,7 +76,7 @@ class Cantones extends Controller
         if ($request->has('gid1'))
             $cantones = $cantones->where('gid1', $request->gid1);
 
-        $cantones = $cantones->get();
+        $cantones = $cantones->where('estado',true)->get();
 
         return response()->json($cantones);
     }

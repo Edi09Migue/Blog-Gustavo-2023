@@ -22,7 +22,7 @@ class PermisosSeeder extends Seeder
         $suscriptor = Role::create(['name' => 'suscriptor']);
 
         //
-        $p_listar_configs = Permission::create(['name' => 'manage-all', 'group_key' => 'Generales']);
+        $p_manage_all = Permission::create(['name' => 'manage-all', 'group_key' => 'Generales']);
         $p_read_auth = Permission::create(['name' => 'read-Auth', 'group_key' => 'Generales']);
 
         $p_ver_perfil_user = Permission::create(['name' => 'ver-perfil_user', 'group_key' => 'Generales']);
@@ -71,6 +71,8 @@ class PermisosSeeder extends Seeder
             $admin->givePermissionTo($permiso);
         }
 
+        $superadmin->givePermissionTo($p_manage_all);
+
         //permisos para todos los roles
         $permisos_globales = [
             $p_dashboard_user,
@@ -86,7 +88,7 @@ class PermisosSeeder extends Seeder
 
         //USER 1 con rol de admin
         $user_superadmin = User::find(1);
-        $user_superadmin->assignRole('admin');
+        $user_superadmin->assignRole('superadmin');
 
         //USER 2 con rol de editor
         $user_editor = User::find(2);

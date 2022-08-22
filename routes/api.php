@@ -98,6 +98,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:api'], function () {
 
 
   Route::get('inscritos/dropdownOptions', [Inscritos::class, 'dropdownOptions']);
+  Route::get('mis-inscritos', [Inscritos::class, 'misInscritos']);
   Route::apiResource('inscritos', Inscritos::class);
   Route::post('inscritos/validate/{field}', [Inscritos::class, 'isUniqueField']);
 });

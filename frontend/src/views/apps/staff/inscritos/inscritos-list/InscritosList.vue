@@ -68,6 +68,10 @@
                 :empty-text="$t('Empty Table')"
                 :sort-desc.sync="isSortDirDesc"
             >
+                <!-- Column: Candidato -->
+                <template #cell(candidato_id)="data">
+                    {{ data.item.candidato.name }}
+                </template>
                 <!-- Column: Actions -->
                 <template #cell(actions)="data">
                     <b-dropdown

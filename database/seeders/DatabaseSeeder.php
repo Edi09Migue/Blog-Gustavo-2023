@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             PermisosSeeder::class,
             ConfiguracionesSeeder::class,
 
-            FakeUsersSeeder::class,
+            //FakeUsersSeeder::class,
 
             GeoSeeder::class,
         ]);

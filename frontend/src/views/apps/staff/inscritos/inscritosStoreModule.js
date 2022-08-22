@@ -6,10 +6,10 @@ export default {
     getters: {},
     mutations: {},
     actions: {
-        fetchPermissions(ctx, queryParams) {
+        fetchInscritos(ctx, queryParams) {
             return new Promise((resolve, reject) => {
                 axios
-                    .get("/api/admin/permisos", { params: queryParams })
+                    .get("/api/admin/inscritos", { params: queryParams })
                     .then(response => resolve(response))
                     .catch(error => reject(error));
             });
@@ -17,38 +17,38 @@ export default {
         validateUnique(ctx, value) {
             return new Promise((resolve, reject) => {
                 axios
-                    .post(`/api/admin/permisos/validate/${value.field}`, {
+                    .post(`/api/admin/inscritos/validate/${value.field}`, {
                         value: value.value
                     })
                     .then(response => resolve(response))
                     .catch(error => reject(error));
             });
         },
-        addPermission(ctx, permissionData) {
+        addInscrito(ctx, inscritoData) {
             console.log('storeAdd');
-            console.log(permissionData);
+            console.log(inscritoData);
             return new Promise((resolve, reject) => {
                 axios
-                    .post("/api/admin/permisos", permissionData)
+                    .post("/api/admin/inscritos", inscritoData)
                     .then(response => resolve(response))
                     .catch(error => reject(error));
             });
         },
-        updatePermission(ctx, permissionData) {
+        updateInscrito(ctx, inscritoData) {
             return new Promise((resolve, reject) => {
                 axios
                     .put(
-                        `/api/admin/permisos/${permissionData.id}`,
-                        permissionData
+                        `/api/admin/inscritos/${inscritoData.id}`,
+                        inscritoData
                     )
                     .then(response => resolve(response))
                     .catch(error => reject(error));
             });
         },
-        removePermission(ctx, permissionId) {
+        removeInscrito(ctx, inscritoId) {
             return new Promise((resolve, reject) => {
                 axios
-                    .delete(`/api/admin/permisos/${permissionId}`)
+                    .delete(`/api/admin/inscritos/${inscritoId}`)
                     .then(response => resolve(response))
                     .catch(error => reject(error));
             });

@@ -23,7 +23,8 @@ class Inscritos extends Controller
         $sortDesc = $request->has('sortDesc') ? $request->sortDesc : "true";
 
 
-        $inscritos = Inscrito::where('nombre', 'like', "%$query%")
+        $inscritos = Inscrito::with(['parroquia.canton','candidato'])
+        ->where('nombre', 'like', "%$query%")
         ->orderBy($sortBy, $sortDesc == "true" ? 'desc' : 'asc')
         ->paginate($perPage);
 
@@ -46,6 +47,22 @@ class Inscritos extends Controller
     }
 
     /**
+     * Devuelve el id, nombre y grupo de todos los permisos 
+     * por lo general para usarlos en un componente dropdown
+     */
+    public function misInscritos()
+    {
+        $id = Auth::user()->id;
+
+        $inscritos = Inscrito::with('parroquia.canton')
+                    ->where('candidato_id', $id)
+                    ->orderBy('created_at','desc')
+                    ->get();
+
+        return response()->json($inscritos);
+    }
+
+    /**
      * Crea un Permiso
      * @param  Request
      * @return [type]
@@ -54,7 +71,7 @@ class Inscritos extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nombre' => 'required',
-            'ciudad' => 'required',
+            'parroquia_id' => 'required',
             'telefono' => 'required'
         ]);
 

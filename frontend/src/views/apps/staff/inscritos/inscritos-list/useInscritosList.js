@@ -13,9 +13,11 @@ export default function useInscritosList() {
     const refItemsListTable = ref(null);
     // Table Handlers
     const tableColumns = [
-        { key: "name", sortable: true, label: t("Permission") },
-        { key: "guard_name", sortable: true, label: t("Guard Name") },
-        { key: "group_key", sortable: true, label: t("Group Key") },
+        { key: "candidato_id", sortable: true, label: ("Candidato") },
+        { key: "nombre", sortable: true, label: t("Name") },
+        { key: "telefono", sortable: true, label: t("Phone") },
+        { key: "parroquia.nombre", sortable: true, label: ("Parroquia") },
+        { key: "parroquia.canton.nombre", sortable: true, label: ("Cantón") },
         { key: "actions", label: t("Actions") }
     ];
     const perPage = ref(10);

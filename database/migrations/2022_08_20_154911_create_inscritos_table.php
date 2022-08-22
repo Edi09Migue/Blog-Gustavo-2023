@@ -17,9 +17,13 @@ class CreateInscritosTable extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('telefono');
-            $table->string('ciudad');
-            $table->string('parroquia');
+            // $table->string('canton');
+            // $table->string('parroquia');
             
+
+            $table->bigInteger('parroquia_id')->unsigned();
+            $table->foreign('parroquia_id')->references('id')->on('parroquias')
+            ->onDelete('cascade');
 
             $table->bigInteger('candidato_id')->unsigned();
             $table->foreign('candidato_id')->references('id')->on('users')
