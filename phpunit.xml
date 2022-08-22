@@ -8,13 +8,24 @@
         <testsuite name="Unit">
             <directory suffix="Test.php">./tests/Unit</directory>
         </testsuite>
+        <!-- <testsuite name="Geo">
+            <directory suffix="Test.php">./tests/Feature/Geo</directory>
+        </testsuite> -->
         <testsuite name="Feature">
             <directory suffix="Test.php">./tests/Feature</directory>
         </testsuite>
     </testsuites>
     <coverage processUncoveredFiles="true">
+        <!-- <include>
+            <directory suffix=".php">./app</directory>
+        </include> -->
+        <!-- <include>
+            <directory suffix=".php">./app/Http/Controllers/Geo</directory>
+            <directory suffix=".php">./app/Models/Geo</directory>
+        </include> -->
         <include>
             <directory suffix=".php">./app/Http/Controllers</directory>
+            <directory suffix=".php">./app/Models</directory>
             <directory suffix=".php">./app/Imports</directory>
             <directory suffix=".php">./app/Notifications</directory>
         </include>

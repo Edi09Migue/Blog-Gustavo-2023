@@ -6,6 +6,7 @@
 /public/fonts
 /public/images
 /storage/*.key
+/storage/framework
 /storage/framework/laravel-excel
 /vendor
 .env
@@ -16,4 +17,5 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+ecommerce
 /reports

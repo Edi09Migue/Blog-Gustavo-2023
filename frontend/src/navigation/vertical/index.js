@@ -21,6 +21,30 @@ export default [
     resource: 'inscritos'
   },
   {
+    header: 'Territory',
+  },
+  {
+    title: 'Provinces',
+    route: 'geo-provincias-list',
+    icon: 'FileIcon',
+    action: 'listar',
+    resource: 'provincias'
+  },
+  {
+    title: 'Cantons',
+    route: 'geo-cantones-list',
+    icon: 'FileIcon',
+    action: 'listar',
+    resource: 'cantones'
+  },
+  {
+    title: 'Parishes',
+    route: 'geo-parroquias-list',
+    icon: 'FileIcon',
+    action: 'listar',
+    resource: 'parroquias'
+  },
+  {
     header: 'Staff & Security',
   },
   {

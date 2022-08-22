@@ -1,0 +1,12 @@
+#api keys
+https://developer.here.com/projects/PROD-7271c121-31e7-4c81-a01a-01eb0a2fdcf3
+https://xyz.api.here.com/token-ui/accessmgmt.html
+
+
+
+#install cli https://www.here.xyz/cli/
+npm install -g @here/cli
+
+#install 
+npm install @here/harp-mapview
+

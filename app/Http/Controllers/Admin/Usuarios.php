@@ -105,13 +105,13 @@ class Usuarios extends Controller
 
             $usuario = new User($request->all());
             $usuario->password = bcrypt($request->password);
+            $usuario->save();
             if ($request->has('avatar') && !is_null($request->avatar)) {
                 //Path donde se va a subir el archivo
                 $upload_folder = '/images/profiles/';
                 //Subo la imagen en base 64 y la asigno como 'Mediable'
                 parent::uploadAndConvert($request->avatar, $upload_folder, $usuario, 'main', 'name');
             }
-            $usuario->save();
 
             $info = new UserInfo([
                 'id' => $usuario->id,
