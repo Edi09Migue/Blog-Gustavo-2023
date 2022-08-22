@@ -193,7 +193,7 @@ class User extends Authenticatable implements Auditable
 
 
     public function inscritos(){
-        return $this->hasMany(Inscrito::class);
+        return $this->hasMany(Inscrito::class, 'candidato_id');
     }
     
 }

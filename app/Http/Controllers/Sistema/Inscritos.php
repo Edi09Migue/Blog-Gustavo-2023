@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Sistema;
 use App\Http\Controllers\Controller;
 use App\Models\Inscrito;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class Inscritos extends Controller
 {
@@ -21,14 +23,14 @@ class Inscritos extends Controller
         $sortDesc = $request->has('sortDesc') ? $request->sortDesc : "true";
 
 
-        $permisos = Inscrito::where('nombre', 'like', "%$query%")
+        $inscritos = Inscrito::where('nombre', 'like', "%$query%")
         ->orderBy($sortBy, $sortDesc == "true" ? 'desc' : 'asc')
         ->paginate($perPage);
 
 
         return response()->json([
-            'items' => $permisos->items(),
-            'total' => $permisos->total()
+            'items' => $inscritos->items(),
+            'total' => $inscritos->total()
         ]);
     }
 
@@ -38,9 +40,9 @@ class Inscritos extends Controller
      */
     public function dropdownOptions()
     {
-        $permisos = Inscrito::select('id', 'nombre', 'telefono')->get();
+        $inscritos = Inscrito::select('id', 'nombre', 'telefono')->get();
 
-        return response()->json($permisos);
+        return response()->json($inscritos);
     }
 
     /**
@@ -51,7 +53,7 @@ class Inscritos extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nombre' => 'required|unique:permissions',
+            'nombre' => 'required',
             'ciudad' => 'required',
             'telefono' => 'required'
         ]);
@@ -65,12 +67,16 @@ class Inscritos extends Controller
             ]);
         }
 
-        $permiso = Inscrito::create($request->all());
+        $inscrito = new Inscrito($request->all());
+        $inscrito->candidato_id = Auth::user()->id;
+        $inscrito->creado_por = Auth::user()->id;
+        $inscrito->save();
+        
 
         return response()->json([
             'status' => true,
-            'data' => $permiso,
-            'msg' => $permiso->name . ' creado!'
+            'data' => $inscrito,
+            'msg' => $inscrito->name . ' creado!'
         ]);
     }
 
@@ -83,7 +89,7 @@ class Inscritos extends Controller
     public function update($id, Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nombre' => 'required|unique:permissions',
+            'nombre' => 'required',
             'guard_name' => 'required',
             'telefono' => 'required'
         ]);
@@ -98,9 +104,9 @@ class Inscritos extends Controller
         }
 
         //Updating Permiso
-        $permiso = Inscrito::findOrFail($id);
+        $inscrito = Inscrito::findOrFail($id);
 
-        $permiso->update([
+        $inscrito->update([
             'nombre'          => $request->name,
             'guard_name'    => $request->guard_name,
             'telefono'     => $request->telefono
@@ -108,8 +114,8 @@ class Inscritos extends Controller
 
         return response()->json([
             'status' => TRUE,
-            'data' => $permiso,
-            'msg' => $permiso->name . ' actualizado!'
+            'data' => $inscrito,
+            'msg' => $inscrito->name . ' actualizado!'
         ]);
     }
 
@@ -118,13 +124,13 @@ class Inscritos extends Controller
      */
     public function destroy($id, Request $request)
     {
-        $permiso = Inscrito::find($id);
-        $permiso->delete();
+        $inscrito = Inscrito::find($id);
+        $inscrito->delete();
 
         return response()->json([
             'status' => TRUE,
             'id' => $id,
-            'msg' => $permiso->name . ' eliminado!'
+            'msg' => $inscrito->name . ' eliminado!'
         ]);
     }
 

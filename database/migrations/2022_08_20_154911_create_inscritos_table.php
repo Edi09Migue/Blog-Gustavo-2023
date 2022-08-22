@@ -16,7 +16,7 @@ class CreateInscritosTable extends Migration
         Schema::create('inscritos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->string('telefono')->unique();
+            $table->string('telefono');
             $table->string('ciudad');
             $table->string('parroquia');
             
