@@ -2,6 +2,7 @@
 
 namespace App\Models\Geo;
 
+use App\Models\Inscrito;
 use Illuminate\Database\Eloquent\Model;
 use Optix\Media\HasMedia;
 
