@@ -85,6 +85,14 @@ class Parroquia extends Model
     {
         return $this->canton->provincia;
     }
+
+    /**
+     * Inscritos en esta parroquia
+     */
+    public function inscritos()
+    {
+        return $this->hasMany(Inscrito::class);
+    }
     
     public function getCodigoAttribute()
     {

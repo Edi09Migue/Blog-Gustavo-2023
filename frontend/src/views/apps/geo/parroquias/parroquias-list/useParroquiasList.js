@@ -19,6 +19,7 @@ export default function useParroquiasList() {
     { key: 'nombre', sortable: true, label: t('Name') },
     { key: 'provincia', sortable: false, label: t('Province') },
     { key: 'canton', sortable: false, label: t('Canton') },
+    { key: 'inscritos_count', sortable: false, label: ('Inscritos') },
     { key: 'estado', sortable: true , label: t('Status')},
     { key: 'actions' , label: t('Actions') },
   ]

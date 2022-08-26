@@ -7,7 +7,7 @@ const axiosIns = axios.create({
     // You can add your headers here
     // ================================
     //baseURL: "http://tungurahua63.local/"
-    baseURL: "http://api-63.santana.ec/"
+    baseURL: "https://api.todo63.com/"
     // timeout: 1000,
     // headers: {'X-Custom-Header': 'foobar'}
 });

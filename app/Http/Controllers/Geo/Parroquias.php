@@ -26,7 +26,7 @@ class Parroquias extends Controller
         $sortDesc = $request->has('sortDesc') ? ($request->sortDesc == "true" ? true : false) : false;
 
         //Obtengo una instancia de Usuarios para el query
-        $parroquias = Parroquia::query();
+        $parroquias = Parroquia::withCount('inscritos');
 
         //Filtro para Estado
         $estado = $request->has('estado') ? $request->estado : '';

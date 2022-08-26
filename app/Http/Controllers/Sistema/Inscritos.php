@@ -72,7 +72,7 @@ class Inscritos extends Controller
         $validator = Validator::make($request->all(), [
             'nombre' => 'required',
             'parroquia_id' => 'required',
-            'telefono' => 'required'
+            'telefono' => 'required|unique:inscritos'
         ]);
 
         if ($validator->fails()) {
@@ -123,11 +123,7 @@ class Inscritos extends Controller
         //Updating Permiso
         $inscrito = Inscrito::findOrFail($id);
 
-        $inscrito->update([
-            'nombre'          => $request->name,
-            'guard_name'    => $request->guard_name,
-            'telefono'     => $request->telefono
-        ]);
+        $inscrito->update($request->all());
 
         return response()->json([
             'status' => TRUE,
