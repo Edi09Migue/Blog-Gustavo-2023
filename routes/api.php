@@ -50,6 +50,7 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth:api'], function () {
 
+  Route::get('users/dropdownOptions', [Usuarios::class, 'dropdownOptions']);
   Route::resource('usuarios', Usuarios::class);
   Route::post('usuarios/validate/username', [Usuarios::class, 'isUniqueUsername']);
   Route::put('usuario/{id}/updatePassword', [Usuarios::class, 'updatePassword']);
@@ -91,14 +92,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:api'], function () {
   Route::get('parroquias/dropdownOptions',[Parroquias::class,'dropdownOptions']);
   Route::apiResource('parroquias',Parroquias::class,['except'=>['destroy']]);
       
-      
   Route::apiResource('configs', Configuraciones::class);
   Route::post('configs/validate/{field}', [Configuraciones::class, 'isUniqueField']);
-
 
 
   Route::get('inscritos/dropdownOptions', [Inscritos::class, 'dropdownOptions']);
   Route::get('mis-inscritos', [Inscritos::class, 'misInscritos']);
   Route::apiResource('inscritos', Inscritos::class);
   Route::post('inscritos/validate/{field}', [Inscritos::class, 'isUniqueField']);
+  Route::post('inscritos/reportes', [Inscritos::class, 'reportes']);
 });

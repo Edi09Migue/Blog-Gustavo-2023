@@ -52,6 +52,40 @@ export default {
                     .then(response => resolve(response))
                     .catch(error => reject(error));
             });
+        },
+        fetchCandidatosOptions(ctx) {
+            return new Promise((resolve, reject) => {
+                axios
+                    .get("/api/admin/users/dropdownOptions")
+                    .then(response => resolve(response))
+                    .catch(error => reject(error));
+            });
+        },
+        fetchParroquiasOptions(ctx) {
+            return new Promise((resolve, reject) => {
+                axios
+                    .get("/api/admin/parroquias/dropdownOptions?con_inscritos=true")
+                    .then(response => resolve(response))
+                    .catch(error => reject(error));
+            });
+        },
+        fetchCantonesOptions(ctx, queryParams) {
+            return new Promise((resolve, reject) => {
+                axios
+                    .get("/api/admin/cantones/dropdownOptions", { params: queryParams })
+                    .then(response => resolve(response))
+                    .catch(error => reject(error));
+            });
+        },
+        generarReportes(ctx, reportFilters) {
+            return new Promise((resolve, reject) => {
+                axios
+                    .post("/api/admin/inscritos/reportes", reportFilters, {
+                        responseType: 'blob',
+                    })
+                    .then(response => resolve(response))
+                    .catch(error => reject(error));
+            });
         }
     }
 };

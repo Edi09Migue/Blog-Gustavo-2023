@@ -27,7 +27,10 @@ export default function useInscritosList() {
     const searchQuery = ref("");
     const sortBy = ref("id");
     const isSortDirDesc = ref(true);
-    const groupFilter = ref(null);
+    const candidatoFilter = ref(null);
+    const parroquiaFilter = ref(null);
+    const parroquiasList = ref([]);
+    const candidatosList = ref([]);
 
     const dataMeta = computed(() => {
         const localItemsCount = refItemsListTable.value
@@ -46,7 +49,7 @@ export default function useInscritosList() {
         refItemsListTable.value.refresh();
     };
 
-    watch([currentPage, perPage, searchQuery, groupFilter], () => {
+    watch([currentPage, perPage, searchQuery, candidatoFilter, parroquiaFilter], () => {
         refetchData();
     });
 
@@ -58,7 +61,8 @@ export default function useInscritosList() {
                 page: currentPage.value,
                 sortBy: sortBy.value,
                 sortDesc: isSortDirDesc.value,
-                group: groupFilter.value
+                candidatos: candidatoFilter.value,
+                parroquias: parroquiaFilter.value
             })
             .then(response => {
                 const { items, total } = response.data;
@@ -78,6 +82,46 @@ export default function useInscritosList() {
             });
     };
 
+    const fetchParroquias = () => {
+        store
+            .dispatch("app-inscritos/fetchParroquiasOptions")
+            .then(response => {
+                parroquiasList.value = response.data.filter(p => p.inscritos_count > 0);
+            })
+            .catch(() => {
+                toast({
+                    component: ToastificationContent,
+                    props: {
+                        title: "Error fetching Parroquias list",
+                        icon: "AlertTriangleIcon",
+                        variant: "danger"
+                    }
+                });
+            });
+    };
+
+    fetchParroquias();
+
+    const fetchCandidatos = () => {
+        store
+            .dispatch("app-inscritos/fetchCandidatosOptions")
+            .then(response => {
+                candidatosList.value = response.data;
+            })
+            .catch(() => {
+                toast({
+                    component: ToastificationContent,
+                    props: {
+                        title: "Error fetching Candidatos list",
+                        icon: "AlertTriangleIcon",
+                        variant: "danger"
+                    }
+                });
+            });
+    };
+
+    fetchCandidatos();
+
     return {
         fetchInscritos,
         tableColumns,
@@ -90,10 +134,13 @@ export default function useInscritosList() {
         sortBy,
         isSortDirDesc,
         refItemsListTable,
+        parroquiasList,
+        candidatosList,
 
         refetchData,
 
         //Extra filters
-        groupFilter
+        candidatoFilter,
+        parroquiaFilter
     };
 }

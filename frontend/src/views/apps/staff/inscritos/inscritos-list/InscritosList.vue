@@ -18,7 +18,7 @@
                     <!-- Per Page -->
                     <b-col
                         cols="12"
-                        md="6"
+                        md="4"
                         class="d-flex align-items-center justify-content-start mb-1 mb-md-0"
                     >
                         <label>{{ $t("Show") }}</label>
@@ -33,16 +33,61 @@
                     </b-col>
 
                     <!-- Search -->
-                    <b-col cols="12" md="6">
+                    <b-col cols="12" md="8">
                         <div
-                            class="d-flex align-items-center justify-content-end"
+                            class="d-flex align-items-center justify-content-between"
                         >
+                        <div  class="d-flex align-items-center justify-content-between">
+
+                            <b-form-group label="Candidatos" label-for="candidato" class="d-inline-block">
+                                <v-select
+                                    v-model="candidatoFilter"
+                                    label="name"
+                                    multiple
+                                    :options="candidatosList"
+                                    :clearable="false"
+                                    :reduce="val => val.id"
+                                >
+                                 <template #option="{ name, inscritos_count }">
+                                        <span> {{ name }}</span>
+
+                                        <b-badge>{{inscritos_count}}</b-badge>
+                                    </template>
+                                </v-select>
+                            </b-form-group>
+                            <b-form-group label="Parroquias" label-for="parroquia" class="d-inline-block">
+                                <v-select
+                                    v-model="parroquiaFilter"
+                                    label="nombre"
+                                    multiple
+                                    :options="parroquiasList"
+                                    :clearable="false"
+                                    :reduce="val => val.id"
+                                >
+                                    <template #option="{ nombre, inscritos_count }">
+                                        <span> {{ nombre }}</span>
+
+                                        <b-badge>{{inscritos_count}}</b-badge>
+                                    </template>
+                                </v-select>
+                            </b-form-group>
                             <b-form-input
                                 v-model="searchQuery"
                                 class="d-inline-block mr-1"
                                 :placeholder="$t('Search') + '...'"
                             />
+                        </div>
                             <b-button
+                                variant="secondary"
+                                v-b-modal.modal-reports
+                                v-if="$can('reportes', 'inscritos')"
+                            >
+                                
+                                <span class="align-middle ml-50">{{ $t("Reports") }}</span>
+                            </b-button>
+                            
+                                <inscritos-reports-modal :parroquias-options="parroquiasList" :candidatos-options="candidatosList" />
+                            <!-- <b-button
                                 variant="primary"
                                 @click="isAddNewItemSidebarActive = true"
                             >
@@ -50,7 +95,7 @@
                                     >{{ $t("Add") }}
                                     {{ $t("Inscrito") }}</span
                                 >
-                            </b-button>
+                            </b-button> -->
                         </div>
                     </b-col>
                 </b-row>
@@ -169,6 +214,8 @@ import {
     BTable,
     BDropdown,
     BDropdownItem,
+    BFormGroup,
+    BBadge,
     BPagination
 } from "bootstrap-vue";
 import vSelect from "vue-select";
@@ -182,9 +229,12 @@ import useInscritosList from "./useInscritosList";
 import InscritostoreModule from "../inscritosStoreModule";
 import InscritoListAddNew from "./InscritoListAddNew.vue";
 
+import InscritosReportsModal from "./InscritosReportsModal.vue";
+
 export default {
     components: {
         InscritoListAddNew,
+        InscritosReportsModal,
         BCard,
         BRow,
         BCol,
@@ -194,6 +244,8 @@ export default {
         BDropdown,
         BDropdownItem,
         BPagination,
+        BBadge,
+        BFormGroup,
         vSelect
     },
     setup() {
@@ -329,8 +381,12 @@ export default {
             refetchData,
             refItemsListTable,
 
+            parroquiasList,
+            candidatosList,
+
             //Extra filter
-            groupFilter
+            candidatoFilter,
+            parroquiaFilter
         } = useInscritosList();
 
         return {
@@ -352,7 +408,10 @@ export default {
             //Filter
             formatDate,
 
-            groupFilter,
+            candidatoFilter,
+            parroquiaFilter,          
+            parroquiasList,
+            candidatosList,
 
             inscritoData,
             resetInscritoData,

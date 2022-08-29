@@ -22,7 +22,7 @@ class Parroquias extends Controller
         //Filtros para query
         $query = $request->has('q') ? $request->q : "";
         $perPage = $request->has('perPage') ? $request->perPage : 10;
-        $sortBy = $request->has('sortBy') ? $request->sortBy : "id";
+        $sortBy = $request->has('sortBy') ? ($request->sortBy == "" ? "id" : $request->sortBy) : "id";
         $sortDesc = $request->has('sortDesc') ? ($request->sortDesc == "true" ? true : false) : false;
 
         //Obtengo una instancia de Usuarios para el query
@@ -85,12 +85,13 @@ class Parroquias extends Controller
      */
     public function dropdownOptions(Request $request)
     {
-        $parroquias = Parroquia::select('id', 'nombre', 'gid0', 'gid1', 'gid2', 'gid3');
+        $parroquias = Parroquia::select('id', 'nombre', 'gid0', 'gid1', 'gid2', 'gid3')->withCount('inscritos');
         //en caso de querer solo las parroquias de un canton
         if ($request->has('gid2'))
             $parroquias = $parroquias->where('gid2', $request->gid2);
 
         $parroquias = $parroquias->get();
+
 
         return response()->json($parroquias);
     }

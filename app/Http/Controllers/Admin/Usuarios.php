@@ -76,6 +76,24 @@ class Usuarios extends Controller
         ]);
     }
 
+
+    /**
+     * Devuelve el id, nombre, gid0 y gid1 de todas las cantones
+     * por lo general para usarlos en un componente dropdown
+     */
+    public function dropdownOptions(Request $request)
+    {
+        $candidadtos = User::withCount('inscritos');
+
+        // //en caso de querer solo los cantones de una provincia
+        // if ($request->has('gid1'))
+        // $candidadtos = $candidadtos->where('gid1', $request->gid1);
+
+        $candidadtos = $candidadtos->conRol('candidato')->get();
+
+        return response()->json($candidadtos);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

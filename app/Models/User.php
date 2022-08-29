@@ -196,5 +196,30 @@ class User extends Authenticatable implements Auditable
     public function inscritos(){
         return $this->hasMany(Inscrito::class, 'candidato_id');
     }
-    
+
+
+    /**
+     * Los usuarios de un rol
+     * @param $rol string | array
+     */
+    public function scopeConRol($query, $rol)
+    {
+        $query->whereIn('id', function ($q) use ($rol) {
+            // model_id = user_id
+            $q->from('model_has_roles')
+            ->whereIn('role_id',  function ($q) use ($rol) {
+                $q->from('roles')
+                ->select('id');
+                if (is_array($rol)) {
+                    $q->whereIn('name', $rol);
+                } else {
+                    $q->where('name', $rol);
+                }
+            })
+                ->where('model_type', User::class)
+                ->select('model_id');
+        });
+
+        return $query;
+    }
 }
