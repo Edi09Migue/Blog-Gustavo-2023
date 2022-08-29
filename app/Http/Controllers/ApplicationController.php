@@ -10,7 +10,7 @@ class ApplicationController extends Controller
 {
     public function index()
     {
-        $exitCode = Artisan::call('cache:clear');
+        //$exitCode = Artisan::call('cache:clear');
         return view('application');
     }
 }
