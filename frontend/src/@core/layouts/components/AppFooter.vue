@@ -1,5 +1,5 @@
 <template>
-  <p class="clearfix mb-0">
+  <!-- <p class="clearfix mb-0">
     <span class="float-md-left d-block d-md-inline-block mt-25">
       COPYRIGHT  © {{ new Date().getFullYear() }}
       <b-link
@@ -17,7 +17,7 @@
         class="text-danger stroke-current"
       />
     </span>
-  </p>
+  </p> -->
 </template>
 
 <script>

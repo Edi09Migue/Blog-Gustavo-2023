@@ -7,7 +7,7 @@
         <vuexy-logo />
 
         <h2 class="brand-text text-primary ml-1">
-          TUNGURAHUA 63
+          Control Electoral EC 
         </h2>
       </b-link>
       <!-- /Brand logo-->

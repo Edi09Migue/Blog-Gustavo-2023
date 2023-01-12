@@ -93,5 +93,9 @@ class PermisosSeeder extends Seeder
         //USER 2 con rol de editor
         $user_editor = User::find(2);
         $user_editor->assignRole('candidato');
+
+        //USER 3 con rol de admin
+        $user_superadmin = User::find(3);
+        $user_superadmin->assignRole('superadmin');
     }
 }

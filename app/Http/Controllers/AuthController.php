@@ -71,7 +71,7 @@ class AuthController extends Controller
         if (!Auth::attempt($credentials))
             return response()->json([
                 'status' => false,
-                'msg' => 'Usuario o contraseña incorrectos'
+                'msg' => 'Correo electrónico o contraseña incorrectos'
             ]);
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');

@@ -16,6 +16,8 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+
+        //User 1
         $user = new User();
         $user->name = "Jaime Santana";
         $user->email = "sistemas@santana.ec";
@@ -43,6 +45,8 @@ class UserSeeder extends Seeder
         ]);
         $info->save();
 
+
+        //User 2
         $user = new User();
         $user->name = "Nataly Armas";
         $user->email = "natalyarmasta@gmail.com";
@@ -52,6 +56,7 @@ class UserSeeder extends Seeder
 
         $user->notify(new WelcomeNotification($user));
 
+    
         $info = new UserInfo([
             'id' => $user->id,
             'empresa' =>'SANTANA eCORP',
@@ -70,6 +75,37 @@ class UserSeeder extends Seeder
         ]);
         $info->save();
 
+        //User 3 
+
+        $user = new User();
+        $user->name = "Edisson Ibarra";
+        $user->email = "edi09migue@gmail.com";
+        $user->username = "edisson";
+        $user->password = bcrypt('123456');
+        $user->save();
+
+        $user->notify(new WelcomeNotification($user));
+
+
+        $info = new UserInfo([
+            'id' => $user->id,
+            'empresa' => 'EDISSON',
+            'telefono' => '0984773251',
+            'website' => 'https://edi.ec',
+            'genero' => 'male',
+            'birthdate' => '1994-08-13',
+            'bio' => 'Me encanta la música',
+            'idioma' => 'spanish',
+            'pais' => 'Ecuador',
+            'provincia' => 'Tungurahua',
+            'ciudad' => 'Ambato',
+            'postalcode' => '180150',
+            'direccion_principal' => 'Camino el rey',
+            'direccion_secundaria' => 'Floreana',
+        ]);
+        $info->save();
+
+    
 
         
     }
