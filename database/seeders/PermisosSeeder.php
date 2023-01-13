@@ -56,13 +56,6 @@ class PermisosSeeder extends Seeder
         $p_eliminar_permisos = Permission::create(['name' => 'eliminar-permisos', 'group_key' => 'Seguridad']);
 
 
-        //Inscritos
-
-        $p_listar_inscritos = Permission::create(['name' => 'listar-inscritos', 'group_key' => 'Sistema']);
-        $p_crear_inscritos = Permission::create(['name' => 'crear-inscritos', 'group_key' => 'Sistema']);
-        $p_editar_inscritos = Permission::create(['name' => 'editar-inscritos', 'group_key' => 'Sistema']);
-        $p_eliminar_inscritos = Permission::create(['name' => 'eliminar-inscritos', 'group_key' => 'Sistema']);
-        $p_exportar_inscritos = Permission::create(['name' => 'exportar-inscritos', 'group_key' => 'Sistema']);
 
 
         $permisos = Permission::all();

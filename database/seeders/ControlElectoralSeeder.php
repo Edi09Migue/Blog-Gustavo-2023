@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\ControlElectoral\CandidatoSeeder;
 use Database\Seeders\ControlElectoral\RecintoSeeder;
 use Illuminate\Database\Seeder;
 
@@ -16,6 +17,7 @@ class ControlElectoralSeeder extends Seeder
     {
         $this->call([
             RecintoSeeder::class,
+            CandidatoSeeder::class,
             
         ]);
     }

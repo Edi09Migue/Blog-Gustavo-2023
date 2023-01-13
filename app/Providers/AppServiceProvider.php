@@ -36,5 +36,11 @@ class AppServiceProvider extends ServiceProvider
         Conversion::register('square', function (Image $image) {
             return $image->fit(500, 500);
         });
+
+        // fotos_cel
+        Conversion::register('acta', function (Image $image) {
+            return $image->fit(1000, 1600);
+        });
+
     }
 }

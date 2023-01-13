@@ -5,7 +5,7 @@
         right
         @show="fetchNotifications"
     >
-        <template #button-content>
+        <!-- <template #button-content>
             <feather-icon
                 :badge="notifications.length"
                 badge-classes="bg-danger"
@@ -13,7 +13,7 @@
                 icon="BellIcon"
                 size="21"
             />
-        </template>
+        </template> -->
 
         <!-- Header -->
         <li class="dropdown-menu-header">

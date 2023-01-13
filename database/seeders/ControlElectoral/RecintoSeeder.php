@@ -3,7 +3,6 @@
 namespace Database\Seeders\ControlElectoral;
 
 use App\Imports\ControlElectoral\RecintosImport;
-use App\Models\Infomar\Categoria;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;

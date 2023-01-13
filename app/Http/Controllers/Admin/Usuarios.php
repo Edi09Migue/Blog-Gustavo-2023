@@ -83,7 +83,7 @@ class Usuarios extends Controller
      */
     public function dropdownOptions(Request $request)
     {
-        $candidadtos = User::withCount('inscritos');
+        $candidadtos = User::query();
 
         // //en caso de querer solo los cantones de una provincia
         // if ($request->has('gid1'))

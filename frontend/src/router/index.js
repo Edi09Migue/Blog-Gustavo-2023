@@ -6,6 +6,7 @@ import { canNavigate } from '@/libs/acl/routeProtection'
 import { isUserLoggedIn, getUserData, getHomeRouteForLoggedInUser } from '@/auth/utils'
 import pages from './routes/pages'
 import geo from './routes/geo'
+import controlElectoral from './routes/controlElectoral'
 
 Vue.use(VueRouter)
 
@@ -23,7 +24,7 @@ const router = new VueRouter({
       meta: {
         action: 'ver',
         resource: 'dashboard_user',
-        pageTitle: 'Home',
+        pageTitle: 'Inicio',
         breadcrumb: [
           {
             text: 'Home',
@@ -34,6 +35,7 @@ const router = new VueRouter({
     },
     ...pages,
     ...geo,
+    ...controlElectoral,
     {
       path: '*',
       redirect: 'error-404',

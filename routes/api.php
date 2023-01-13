@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\Roles;
 use App\Http\Controllers\Admin\UserProfileCtrl;
 use App\Http\Controllers\Admin\Usuarios;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Sistema\Inscritos;
+use App\Http\Controllers\ControlElectoral\DashboardAdmin;
 use App\Http\Controllers\Geo\Cantones;
 use App\Http\Controllers\Geo\Paises;
 use App\Http\Controllers\Geo\Parroquias;
@@ -95,10 +95,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:api'], function () {
   Route::apiResource('configs', Configuraciones::class);
   Route::post('configs/validate/{field}', [Configuraciones::class, 'isUniqueField']);
 
+});
 
-  Route::get('inscritos/dropdownOptions', [Inscritos::class, 'dropdownOptions']);
-  Route::get('mis-inscritos', [Inscritos::class, 'misInscritos']);
-  Route::apiResource('inscritos', Inscritos::class);
-  Route::post('inscritos/validate/{field}', [Inscritos::class, 'isUniqueField']);
-  Route::post('inscritos/reportes', [Inscritos::class, 'reportes']);
+
+Route::group(['prefix' => 'control-electoral', 'middleware' => 'auth:api'], function () {
+
+  Route::get('counters', [DashboardAdmin::class, 'counters']);
+
 });

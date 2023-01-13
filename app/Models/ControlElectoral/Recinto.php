@@ -6,11 +6,9 @@ use App\Models\Geo\Canton;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use OwenIt\Auditing\Contracts\Auditable;
 
-class Recinto extends Model implements Auditable
+class Recinto extends Model
 {
-    use \OwenIt\Auditing\Auditable;
 
     use HasFactory, SoftDeletes;
 
@@ -38,6 +36,7 @@ class Recinto extends Model implements Auditable
     protected $casts = [
         'cda' => 'boolean'
     ];
+
 
 
     public function canton()

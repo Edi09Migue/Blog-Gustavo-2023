@@ -141,5 +141,9 @@
   "Import": "Import",
   "Error fetching list of": "Error fetching list of",
   "Reports": "Reports",
-  "Duplicate":"Duplicate"
+  "Duplicate":"Duplicate",
+
+  "Dashboard Admin":"Dashboard Admin",
+  "Results":"Results",
+  "Proceedings":"Proceedings"
 }

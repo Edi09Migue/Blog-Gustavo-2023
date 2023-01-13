@@ -6,44 +6,67 @@ export default [
     action: 'ver',
     resource: 'dashboard_user'
   },
+
   {
-    title: 'Dashboard Candidato',
-    route: 'second-page',
-    icon: 'FileIcon',
+    title: 'Dashboard Admin',
+    route: 'control-dashboard-admin',
+    icon: 'PieChartIcon',
     action: 'ver',
-    resource: 'dashboard_user'
+    resource: 'dashboard_admin'
   },
+
   {
-    title: 'Inscritos',
-    route: 'apps-inscritos-list',
-    icon: 'UsersIcon',
-    action: 'listar',
-    resource: 'inscritos'
+    title: 'Results',
+    route: 'control-resultados',
+    icon: 'BarChart2Icon',
+    action: 'ver',
+    resource: 'resultados'
   },
+
+  {
+    title: 'Proceedings',
+    route: 'control-actas-list',
+    icon: 'FileIcon',
+    action: 'listar',
+    resource: 'actas'
+  },
+
+
   {
     header: 'Territory',
   },
+
   {
-    title: 'Provinces',
-    route: 'geo-provincias-list',
-    icon: 'FileIcon',
-    action: 'listar',
-    resource: 'provincias'
+    title: 'Ecuador',
+    icon: 'MapIcon',
+    children: [
+
+      {
+        title: 'Provinces',
+        route: 'geo-provincias-list',
+        icon: 'ListIcon',
+        action: 'listar',
+        resource: 'provincias'
+      },
+      {
+        title: 'Cantons',
+        route: 'geo-cantones-list',
+        icon: 'ListIcon',
+        action: 'listar',
+        resource: 'cantones'
+      },
+      {
+        title: 'Parishes',
+        route: 'geo-parroquias-list',
+        icon: 'ListIcon',
+        action: 'listar',
+        resource: 'parroquias'
+      },
+
+    ]
+
   },
-  {
-    title: 'Cantons',
-    route: 'geo-cantones-list',
-    icon: 'FileIcon',
-    action: 'listar',
-    resource: 'cantones'
-  },
-  {
-    title: 'Parishes',
-    route: 'geo-parroquias-list',
-    icon: 'FileIcon',
-    action: 'listar',
-    resource: 'parroquias'
-  },
+
   {
     header: 'Staff & Security',
   },

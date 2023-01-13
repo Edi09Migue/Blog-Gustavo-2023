@@ -193,10 +193,6 @@ class User extends Authenticatable implements Auditable
     }
 
 
-    public function inscritos(){
-        return $this->hasMany(Inscrito::class, 'candidato_id');
-    }
-
 
     /**
      * Los usuarios de un rol

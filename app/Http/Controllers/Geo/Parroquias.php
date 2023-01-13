@@ -26,7 +26,7 @@ class Parroquias extends Controller
         $sortDesc = $request->has('sortDesc') ? ($request->sortDesc == "true" ? true : false) : false;
 
         //Obtengo una instancia de Usuarios para el query
-        $parroquias = Parroquia::withCount('inscritos');
+        $parroquias = Parroquia::query();
 
         //Filtro para Estado
         $estado = $request->has('estado') ? $request->estado : '';
@@ -85,7 +85,7 @@ class Parroquias extends Controller
      */
     public function dropdownOptions(Request $request)
     {
-        $parroquias = Parroquia::select('id', 'nombre', 'gid0', 'gid1', 'gid2', 'gid3')->withCount('inscritos');
+        $parroquias = Parroquia::select('id', 'nombre', 'gid0', 'gid1', 'gid2', 'gid3');
         //en caso de querer solo las parroquias de un canton
         if ($request->has('gid2'))
             $parroquias = $parroquias->where('gid2', $request->gid2);

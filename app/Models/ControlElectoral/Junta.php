@@ -2,16 +2,13 @@
 
 namespace App\Models\ControlElectoral;
 
-use App\Models\Geo\Canton;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use OwenIt\Auditing\Contracts\Auditable;
 
-class Junta extends Model implements Auditable
+class Junta extends Model
 {
-    use \OwenIt\Auditing\Auditable;
-
+    
     use HasFactory, SoftDeletes;
 
     protected $table = "juntas";
@@ -22,9 +19,18 @@ class Junta extends Model implements Auditable
         'tipo',
     ];
 
+    //Tipos disponibles para el enum 'tipo'
+    public const TIPO_MASCULINO = "masculino";
+    public const TIPO_FEMENINO = "femenino";
+
     public function recinto()
     {
         return $this->belongsTo(Recinto::class);
+    }
+
+    public function actas()
+    {
+        return $this->hasMany(Acta::class);
     }
 
 

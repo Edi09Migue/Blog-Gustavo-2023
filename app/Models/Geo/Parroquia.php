@@ -2,7 +2,6 @@
 
 namespace App\Models\Geo;
 
-use App\Models\Inscrito;
 use Illuminate\Database\Eloquent\Model;
 use Optix\Media\HasMedia;
 
@@ -87,14 +86,6 @@ class Parroquia extends Model
         return $this->canton->provincia;
     }
 
-    /**
-     * Inscritos en esta parroquia
-     */
-    public function inscritos()
-    {
-        return $this->hasMany(Inscrito::class);
-    }
-    
     public function getCodigoAttribute()
     {
         $provincia_code = substr($this->gid2, 0, -2);

@@ -82,7 +82,7 @@ class AuthController extends Controller
 
         $user->ability = $user->allPermissions;
         $user->notifications;
-        $user->inscritos = $user->inscritos()->count();
+  
 
         //TODO:: vericar campos adicionales de user
         $user->extras=['eCommerceCartItemsCount'=>0];
@@ -110,7 +110,7 @@ class AuthController extends Controller
         $user->allPermissions =$user->allPermissions;
         $user->notifications;
 
-        $user->inscritos = $user->inscritos()->count();
+
         
         return response()->json($user);
     }

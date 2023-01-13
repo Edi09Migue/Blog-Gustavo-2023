@@ -20,8 +20,9 @@ class DatabaseSeeder extends Seeder
             ConfiguracionesSeeder::class,
 
             //FakeUsersSeeder::class,
-
             GeoSeeder::class,
+
+            ControlElectoralSeeder::class,
         ]);
     }
 }

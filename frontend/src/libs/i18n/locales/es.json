@@ -142,5 +142,11 @@
   "Import": "Importar",
   "Error fetching list of": "Error obteniendo listado de",
   "Reports": "Reportes",
-  "Duplicate":"Duplicar"
+  "Duplicate":"Duplicar",
+
+  "Dashboard Admin":"Dashboard Admin",
+  "Results":"Resultados",
+  "Proceedings":"Actas"
+
+
 }
