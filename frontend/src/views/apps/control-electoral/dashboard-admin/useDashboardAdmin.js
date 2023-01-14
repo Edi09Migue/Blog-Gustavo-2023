@@ -48,6 +48,15 @@ export default function useDashboard() {
                 customClass: "mb-2 mb-xl-0"
             },
 
+            {
+                icon: "FileIcon",
+                color: "light-dark",
+                title: countersData.value.total_actas,
+                subtitle: "Actas",
+                link: "control-actas-list",
+                customClass: "mb-2 mb-xl-0"
+            },
+
     
            
             ];

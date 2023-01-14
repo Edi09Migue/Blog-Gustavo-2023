@@ -22,7 +22,7 @@ class Candidato extends Model
 
     public function votosCandidatoActa(){
         return $this->belongsToMany(Acta::class,'votos_candidato_acta','candidato_id','acta_id')
-        ->withPivot(['votos'])
+        ->withPivot(['votos','digitalizado_por'])
         ->withTimestamps();  
     }
 

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\ControlElectoral\ActaSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,6 +24,7 @@ class DatabaseSeeder extends Seeder
             GeoSeeder::class,
 
             ControlElectoralSeeder::class,
+            ActaSeeder::class,
         ]);
     }
 }

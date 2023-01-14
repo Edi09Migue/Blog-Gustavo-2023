@@ -23,7 +23,7 @@ class Acta extends Model implements Auditable
         'votos_blancos',
         'votos_nulos',
         'votos_validos',
-        'registrado_por',
+        'procesado_por',
     ];
 
     protected $appends = [
@@ -37,14 +37,14 @@ class Acta extends Model implements Auditable
         return $this->belongsTo(Junta::class);
     }
 
-    public function registrado()
+    public function procesado()
     {
         return $this->belongsTo(User::class);
     }
 
     public function votosCandidatoActa(){
         return $this->belongsToMany(Candidato::class,'votos_candidato_acta','acta_id','candidato_id')
-        ->withPivot(['votos'])
+        ->withPivot(['votos', 'digitalizado_por'])
         ->withTimestamps();  
     }
 
@@ -68,6 +68,7 @@ class Acta extends Model implements Auditable
          $this->addMediaGroup('main')
          ->performConversions('acta');
      }
+
 
 
 }

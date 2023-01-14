@@ -21,6 +21,8 @@ class CreateCandidatoActaTable extends Migration
             $table->unsignedBigInteger('acta_id');
             $table->foreign('acta_id')->references('id')->on('actas'); 
             $table->integer('votos');
+            $table->unsignedBigInteger('digitalizado_por');
+            $table->foreign('digitalizado_por')->references('id')->on('users');
             $table->softDeletes();
             $table->timestamps();
         });

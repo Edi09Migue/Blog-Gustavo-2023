@@ -35,4 +35,5 @@ class Junta extends Model
 
 
 
+
 }

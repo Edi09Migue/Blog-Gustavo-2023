@@ -16,14 +16,14 @@ class CreateActasTable extends Migration
        
         Schema::create('actas', function (Blueprint $table) {
             $table->id();
-            $table->integer('codigo')->unique();
+            $table->string('codigo')->unique();
             $table->unsignedBigInteger('junta_id');
             $table->foreign('junta_id')->references('id')->on('juntas'); 
             $table->integer('votos_blancos');
             $table->integer('votos_nulos');
             $table->integer('votos_validos');
-            $table->unsignedBigInteger('registrado_por');
-            $table->foreign('registrado_por')->references('id')->on('users');
+            $table->unsignedBigInteger('procesado_por');
+            $table->foreign('procesado_por')->references('id')->on('users');
             $table->softDeletes();
             $table->timestamps();
         });

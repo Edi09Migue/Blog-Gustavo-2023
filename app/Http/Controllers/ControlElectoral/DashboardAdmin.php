@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ControlElectoral;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\ControlElectoral\Acta;
 use App\Models\ControlElectoral\Candidato;
 use App\Models\ControlElectoral\Junta;
 use App\Models\ControlElectoral\Recinto;
@@ -18,6 +19,7 @@ class DashboardAdmin extends Controller
             'total_recintos'    =>  Recinto::count(),
             'total_juntas'    =>  Junta::count(),
             'total_candidatos'    =>  Candidato::count(),
+            'total_actas'    =>  Acta::count(),
   
         ];
 

@@ -16,6 +16,7 @@ class CandidatoActa extends Model
         'candidato_id',
         'acta_id',
         'votos',
+        'digitalizado_por',
     ];
 
 }

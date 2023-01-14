@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Roles;
 use App\Http\Controllers\Admin\UserProfileCtrl;
 use App\Http\Controllers\Admin\Usuarios;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ControlElectoral\Actas;
 use App\Http\Controllers\ControlElectoral\DashboardAdmin;
 use App\Http\Controllers\Geo\Cantones;
 use App\Http\Controllers\Geo\Paises;
@@ -101,5 +102,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:api'], function () {
 Route::group(['prefix' => 'control-electoral', 'middleware' => 'auth:api'], function () {
 
   Route::get('counters', [DashboardAdmin::class, 'counters']);
+  Route::get('actas/dropdownOptions', [Actas::class, 'dropdownOptions']);
+  Route::apiResource('actas', Actas::class, ['parameters' => ['actas' => 'acta']]);
 
 });
