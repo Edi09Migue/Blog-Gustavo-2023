@@ -102,8 +102,10 @@
                variant="primary"
                block
                @click="validationForm"
+               :disabled="isButtonDisabled"
              
             >
+              <b-spinner small v-show="isButtonDisabled" />
               Iniciar sesión
             </b-button>
           </b-form>
@@ -117,7 +119,7 @@
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
-  BButton, BForm, BFormInput, BFormGroup, BCard, BLink, BCardTitle, BCardText, BInputGroup, BInputGroupAppend, BFormCheckbox, BAlert
+  BButton, BForm, BFormInput, BFormGroup, BCard, BLink, BCardTitle, BCardText, BInputGroup, BInputGroupAppend, BFormCheckbox, BAlert, BSpinner
 } from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import { required, email } from '@validations'
@@ -148,6 +150,7 @@ export default {
     ValidationProvider,
     ValidationObserver,
     BAlert,
+    BSpinner,
   },
   mixins: [togglePasswordVisibility],
   data() {
@@ -160,6 +163,9 @@ export default {
       email,
 
       errorServer: null,
+
+      isButtonDisabled: false,
+
   
     }
   },
@@ -172,6 +178,7 @@ export default {
     validationForm() {
       this.$refs.loginForm.validate().then(success => {
         if (success) {
+          this.isButtonDisabled = true;
           this.$http.post('/api/auth/login', {
               email: this.userEmail,
               password: this.password,
@@ -199,13 +206,17 @@ export default {
                   })
 
             }else{
-              this.errorServer = response.data.msg
+              this.errorServer = response.data.msg;
+              this.isButtonDisabled = false;
+
             }
           })
           .catch(error => {
             console.log('error');
             console.log(error);
-            this.$refs.loginForm.setErrors(error)
+            this.$refs.loginForm.setErrors(error);
+            this.isButtonDisabled = false;
+
           })
         }
       })

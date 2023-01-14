@@ -110,7 +110,25 @@
                         </b-media-body>
                     </b-media>
                 </b-row>
+            </div>
 
+            <div class="mt-2">
+                <b-row>
+                    <b-col
+                            cols="12"
+                            xl="12"
+                            class="d-flex justify-content-between flex-column"
+                        >
+                            <b-table
+                                responsive
+                           
+                                :fields="tableDetailColumns"
+                                :tbody-tr-class="rowClass"
+                            >
+                         
+                            </b-table>
+                    </b-col>
+                </b-row>
             </div>
     
       </b-card-body>
@@ -119,7 +137,7 @@
   
   <script>
   import {
-    BCard, BCardHeader, BCardTitle, BCardText, BCardBody, BRow, BCol, BMedia, BMediaAside, BAvatar, BMediaBody, BLink, BBadge
+    BCard, BCardHeader, BCardTitle, BCardText, BCardBody, BRow, BCol, BMedia, BMediaAside, BAvatar, BMediaBody, BLink, BBadge, BTable
   } from 'bootstrap-vue'
   
   export default {
@@ -136,7 +154,8 @@
       BMediaAside,
       BMediaBody,
       BLink,
-      BBadge
+      BBadge,
+      BTable
     },
     props: {
         actaData: {
@@ -144,6 +163,27 @@
             required: true,
         },
     },
+    methods: {
+      rowClass(item, type) {
+        if (!item || type !== 'row') { return }
+        if (item.nombre == "Total") { return 'table-success' }
+      },
+   },
+
+
+    setup() {
+        const tableDetailColumns = [
+            { key: "secciones", sortable: true, label: ("Candidato"),  thClass: 'text-center' },
+            { key: "puntuacion", sortable: true, label: ("Partido"),  thClass: 'text-center' },
+            { key: "total", sortable: true, label: ("Votos"),  thClass: 'text-center' },
+        ];
+
+
+        return {
+            tableDetailColumns,
+        
+        };
+    }
   }
   </script>
   

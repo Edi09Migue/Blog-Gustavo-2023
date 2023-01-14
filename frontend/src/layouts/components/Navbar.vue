@@ -93,7 +93,7 @@
                     @click="logout"
                 >
                     <feather-icon size="16" icon="LogOutIcon" class="mr-50" />
-                    <span>Logout</span>
+                    <span>Salir</span>
                 </b-dropdown-item>
             </b-nav-item-dropdown>
         </b-navbar-nav>

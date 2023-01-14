@@ -19,7 +19,7 @@ export default [
     title: 'Results',
     route: 'control-resultados',
     icon: 'BarChart2Icon',
-    action: 'ver',
+    action: 'listar',
     resource: 'resultados'
   },
 
