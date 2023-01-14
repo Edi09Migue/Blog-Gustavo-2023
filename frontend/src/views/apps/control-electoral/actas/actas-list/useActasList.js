@@ -17,6 +17,11 @@ export default function useActasList(){
     const isSortDirDesc = ref(true);
     const toast = useToast();
 
+    // filters
+    const parroquiaFilter = ref(null);
+    const recintoFilter = ref(null);
+    const juntaFilter = ref(null);
+
   
     const dataMeta = computed(() => {
         const localItemsCount = refUserListTable.value
@@ -49,7 +54,7 @@ export default function useActasList(){
         refUserListTable.value.refresh()
       }
 
-    watch([currentPage, perPage, searchQuery], () => {
+    watch([currentPage, perPage, searchQuery, parroquiaFilter, recintoFilter, juntaFilter], () => {
         refetchData()
       })
 
@@ -63,6 +68,9 @@ export default function useActasList(){
                 page: currentPage.value,
                 sortBy: sortBy.value,
                 sortDesc: isSortDirDesc.value,
+                parroquia: parroquiaFilter.value,
+                recintoFilter: recintoFilter.value,
+                juntaFilter: juntaFilter.value,
             })
             .then(response => {
                 if(response.data.status){
@@ -94,6 +102,102 @@ export default function useActasList(){
                 });
             });
     };
+
+
+    const parroquiasOptions = ref([]);
+    store
+        .dispatch("control-actas/fetchParroquiasOption",{
+            gid2: 'ECU.23.1_1'
+        })
+        .then(response => {
+            if(response.data.status){
+                parroquiasOptions.value = response.data.items;
+            }else{
+                toast({
+                    component: ToastificationContent,
+                    props: {
+                        title: "Error obteniendo parroquias",
+                        text: response.data.msg,
+                        icon: "AlertTriangleIcon",
+                        variant: "danger"
+                    }
+                });
+            }
+        })
+        .catch((error) => {
+            toast({
+                component: ToastificationContent,
+                props: {
+                    title: "Error obteniendo parroquias",
+                    text: error.data ? error.data.msg : error,
+                    icon: "AlertTriangleIcon",
+                    variant: "danger"
+                }
+            });
+        });
+
+
+    const juntasOptions = ref([]);
+    store
+    .dispatch("control-actas/fetchJuntasOption")
+    .then(response => {
+        if(response.data.status){
+            juntasOptions.value = response.data.items;
+        }else{
+            toast({
+                component: ToastificationContent,
+                props: {
+                    title: "Error obteniendo juntas",
+                    text: response.data.msg,
+                    icon: "AlertTriangleIcon",
+                    variant: "danger"
+                }
+            });
+        }
+    })
+    .catch((error) => {
+        toast({
+            component: ToastificationContent,
+            props: {
+                title: "Error obteniendo juntas",
+                text: error.data ? error.data.msg : error,
+                icon: "AlertTriangleIcon",
+                variant: "danger"
+            }
+        });
+    });
+
+    const recintosOptions = ref([]);
+    store
+    .dispatch("control-actas/fetchRecintosOption")
+    .then(response => {
+        if(response.data.status){
+            recintosOptions.value = response.data.items;
+        }else{
+            toast({
+                component: ToastificationContent,
+                props: {
+                    title: "Error obteniendo recintos",
+                    text: response.data.msg,
+                    icon: "AlertTriangleIcon",
+                    variant: "danger"
+                }
+            });
+        }
+    })
+    .catch((error) => {
+        toast({
+            component: ToastificationContent,
+            props: {
+                title: "Error obteniendo recintos",
+                text: error.data ? error.data.msg : error,
+                icon: "AlertTriangleIcon",
+                variant: "danger"
+            }
+        });
+    });
+
+
 
 
 
@@ -192,6 +296,15 @@ export default function useActasList(){
         removeActa,
         actas,
         restoreItem,
+
+        //filters
+        parroquiasOptions,
+        parroquiaFilter,
+        recintosOptions,
+        recintoFilter,
+        juntasOptions,
+        juntaFilter,
+
 
      
     }

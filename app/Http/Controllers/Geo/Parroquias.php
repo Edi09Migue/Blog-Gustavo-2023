@@ -93,9 +93,14 @@ class Parroquias extends Controller
         $parroquias = $parroquias->get();
 
 
-        return response()->json($parroquias);
+        return response()->json([
+            'status' => true,
+            'items' => $parroquias,
+        ]);
     }
 
+
+  
     /**
      * Display the specified resource.
      *

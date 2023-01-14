@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\Usuarios;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ControlElectoral\Actas;
 use App\Http\Controllers\ControlElectoral\DashboardAdmin;
+use App\Http\Controllers\ControlElectoral\Juntas;
+use App\Http\Controllers\ControlElectoral\Recintos;
 use App\Http\Controllers\Geo\Cantones;
 use App\Http\Controllers\Geo\Paises;
 use App\Http\Controllers\Geo\Parroquias;
@@ -104,5 +106,9 @@ Route::group(['prefix' => 'control-electoral', 'middleware' => 'auth:api'], func
   Route::get('counters', [DashboardAdmin::class, 'counters']);
   Route::get('actas/dropdownOptions', [Actas::class, 'dropdownOptions']);
   Route::apiResource('actas', Actas::class, ['parameters' => ['actas' => 'acta']]);
+
+  Route::get('recintos/dropdownOptions', [Recintos::class, 'dropdownOptions']);
+  Route::get('juntas/dropdownOptions', [Juntas::class, 'dropdownOptions']);
+
 
 });

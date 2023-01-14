@@ -1,5 +1,17 @@
 <template>
   <div>
+
+    <!-- Filters -->
+    <actas-list-filters
+        :parroquia-filter.sync="parroquiaFilter"
+        :recinto-filter.sync="recintoFilter"
+        :junta-filter.sync="juntaFilter"
+        :parroquias-options="parroquiasOptions"
+        :recintos-options="recintosOptions"
+        :juntas-options="juntasOptions"
+        @refetch-data="refetchData"
+    />
+
         <b-card>
             <div class="m-2">
                 <!-- Table Top -->
@@ -86,13 +98,14 @@
                 <!-- Column: Acta Personalizada -->
                 <template #cell(codigo)="data">
                     <b-link
-                    :to="{ name: 'control-actas-view', params: { id: data.item.id  } }"
-                    class="d-flex align-items-center flex-column"
+                        :to="{ name: 'control-actas-view', params: { id: data.item.id  } }"
+                        class="d-flex align-items-center flex-column"
                     >
-                    <b-badge variant="light-primary">
-                        {{ data.item.codigo }} 
-                    </b-badge>
-        
+                    {{ data.item.codigo }}
+                        <!-- <b-badge  :variant="`light-${data.item.estado ? 'success' : 'primary'}`">
+                            {{ data.item.codigo }} 
+                        </b-badge> -->
+            
                     </b-link>
                 </template>
 
@@ -114,13 +127,18 @@
                 </template>
 
                 <template #cell(estado)="data">
-                    <b-badge
-                        pill
-                        :variant="`light-${data.item.imagenURL ? 'success' : 'secondary'}`"
-                        class="text-capitalize"
+                    <b-link
+                        :to="{ name: 'control-actas-view', params: { id: data.item.id  } }"
+                        class="d-flex align-items-center flex-column"
                     >
-                        {{ data.item.imagenURL ? ("Digitalizada") : ("Procesada") }}
-                    </b-badge>
+                        <b-badge
+                            pill
+                            :variant="`light-${data.item.estado ? 'success' : 'primary'}`"
+                            class="text-capitalize"
+                        >
+                            {{ data.item.estado ? ("Digitalizada") : ("Procesada") }}
+                        </b-badge>
+                    </b-link>
                 </template>
 
 
@@ -144,7 +162,7 @@
                         <b-dropdown-item
                             v-if="$can('ver', 'actas') && !data.item.deleted_at"
                             :to="{
-                                name: 'actas-actas-view',
+                                name: 'control-actas-view',
                                 params: { id: data.item.id }
                                 
                             }"
@@ -248,6 +266,7 @@ import Ripple from 'vue-ripple-directive'
 import useActasList from './useActasList'
 import store from "@/store";
 import actasStoreModule from '../actasStoreModule'
+import ActasListFilters from './ActasListFilters.vue';
 
 
 export default {
@@ -280,6 +299,7 @@ export default {
       BAvatar,
 
       vSelect,
+      ActasListFilters,
    
 
     },
@@ -323,6 +343,13 @@ export default {
 
             actas,
             restoreItem,
+            //filters
+            parroquiasOptions,
+            parroquiaFilter,
+            recintosOptions,
+            recintoFilter,
+            juntasOptions,
+            juntaFilter,
 
     
         } = useActasList()
@@ -347,7 +374,15 @@ export default {
             removeActa,
             actas,
  
-            restoreItem
+            restoreItem,
+            //filters
+            parroquiasOptions,
+            parroquiaFilter,
+            recintosOptions,
+            recintoFilter,
+            juntasOptions,
+            juntaFilter,
+
         }
     }
 }

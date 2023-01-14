@@ -35,14 +35,14 @@ export default [
     },
 
     {
-      path: "/control/acta/view/:id",
+      path: "/control/actas/view/:id",
       name: "control-actas-view",
       component: () => 
         import('@/views/apps/control-electoral/actas/actas-view/ActasView.vue'),
       meta: {
         navActiveLink: 'control-actas-list',
         action: "ver",
-        resource: "acta",
+        resource: "actas",
         pageTitle: "Detalles del Acta",
         breadcrumb: [
                   {

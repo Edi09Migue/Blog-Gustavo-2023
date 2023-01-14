@@ -23,6 +23,7 @@ class Acta extends Model implements Auditable
         'votos_blancos',
         'votos_nulos',
         'votos_validos',
+        'estado',
         'procesado_por',
     ];
 
@@ -30,6 +31,9 @@ class Acta extends Model implements Auditable
         'imagenURL',
     ];
 
+    protected $casts = [
+        'estado' => 'boolean'
+    ];
 
    
     public function junta()

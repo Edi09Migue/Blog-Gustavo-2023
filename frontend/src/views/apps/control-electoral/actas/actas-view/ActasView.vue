@@ -2,107 +2,67 @@
     <section class="invoice-preview-wrapper">
         <!-- Alert: No item found -->
         <b-alert variant="danger" :show="actaData === undefined">
-            <h4 class="alert-heading">Error obteniendo datos de la receta</h4>
+            <h4 class="alert-heading">Error obteniendo datos del acta</h4>
             <div class="alert-body">
-                No se encontro una receta con ese Id. Verifique
+                No se encontro una acta con ese Id. Verifique
                 <b-link
                     class="alert-link"
                     :to="{ name: 'control-actas-list'}"
                 >
-                    el Listado de Recetas
+                    el listado de Acta
                 </b-link>
             </div>
         </b-alert>
 
         <template v-if="actaData">
 
-            
             <div class="d-flex justify-content-end">
                 <div class="demo-inline-spacing">
-                        <b-button
-                            v-if="$can('descargar', 'oficios')"
-                            v-ripple.400="'rgba(186, 191, 199, 0.15)'"
-                            variant="outline-secondary"
-                            block
-                            class="mt-0 mb-1"
-                            :to="{
-                                name: 'control-actas-edit',
-                                params: { id: actaData.id,}
-                            }"
-                           
-                        >
-                            <feather-icon icon="EditIcon" />
-                            <span class="text-secondary">
-                                Editar
-                            </span>
-                        </b-button>
-
-                        <!-- <oficio-modal-list-add-new
+                    <b-button
+                        v-if="$can('editar', 'actas')"
+                        v-ripple.400="'rgba(186, 191, 199, 0.15)'"
+                        variant="outline-secondary"
+                        block
+                        class="mt-0 mb-1"
+                        :to="{
+                            name: 'control-actas-edit',
+                            params: { id: actaData.id,}
+                        }"
                         
-                            v-if="ultimoJefe"
-                            v-model="showModalOficio"
-                            :modelo-oficio="oficioData"
-                        
-                            :ultimoJefe="ultimoJefe"
-                            @refetch-data="refetchData"
-                            :is-button-disabled="isButtonDisabled"
-                            @add-oficio="addOficio"
-                            @update-oficio="updateOficio"
-                            :module="OFICIOS_APP_STORE_MODULE_NAME"
-                            @cerrar-modal="cerrarModal"
-                        /> -->
-                        
-                    </div>
+                    >
+                        <feather-icon icon="EditIcon" />
+                        <span class="text-secondary">
+                            Editar
+                        </span>
+                    </b-button>
+                </div>
             </div>
 
 
-        <b-img
-            :src="actaData.imagenURL"
-            width="150"
-            size="150"
-            fluid
-            rounded
-        />
-        <h2 class="mt-1">Detalle de votos:</h2>
-
-
-
-            <!-- <b-row>
+            <b-row>
                 <b-col
                     cols="12"
                     md="12"
                     lg="12"
-                    xl="12"
+                    xl="4"
                 >
-                    <receta-view-info-card :receta-data="actaData" />
+                    <b-img
+                        :src="actaData.imagenURL"
+                        width="500"
+                        fluid
+                        rounded
+                    />
+                </b-col>
+
+                <b-col
+                    cols="12"
+                    md="12"
+                    lg="12"
+                    xl="8"
+                >
+                    <acta-detalles :acta-data="actaData" />  
                 </b-col>
             </b-row>
-
-            <b-row>
-                <b-col
-                    xl="12"
-                    md="12"
-                >
-                <receta-statistics :counters-data="statisticsItems"/>
-                </b-col>
-            </b-row>
-
-
-            <b-row>
-                <b-col
-                    xl="12"
-                    md="12"
-                >
-                    <receta-detalles :receta-data="actaData"/>
-                </b-col>
-            </b-row> -->
-            
-
-
-            
-
-        
-
         </template>
 
 
@@ -147,9 +107,7 @@ import { title } from "@core/utils/filter";
 import actasStoreModule from "../actasStoreModule";
 import useActaView from "./useActaView";
 import vSelect from "vue-select";
-// import RecetaViewInfoCard from './RecetaViewInfoCard.vue'
-// import RecetaStatistics from './RecetaStatistics.vue'
-// import RecetaDetalles from './RecetaDetalles.vue'
+import ActaDetalles from './ActaDetalles.vue'
 
 
 export default {
@@ -185,10 +143,7 @@ export default {
         BFormInput,
         vSelect,
         BFormCheckbox,
-
-        // RecetaViewInfoCard,
-        // RecetaStatistics,
-        // RecetaDetalles,
+        ActaDetalles,
     
 
       
@@ -210,24 +165,16 @@ export default {
                 store.unregisterModule(ACTAS_STORE_MODULE_NAME);
         });
 
-
-  
-
         const {
             actaData,
             errorServer,
         } = useActaView(router.currentRoute.params.id);
 
     
-    
         return {
             actaData,
             errorServer,
-          
-
-
-
-     
+        
         };
     }
 };

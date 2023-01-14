@@ -18,7 +18,7 @@ class CreateCandidatosTable extends Migration
             $table->string('nombre');
             $table->string('nombre_partido');
             $table->string('numero_lista');
-            $table->integer('total_votos');
+            $table->integer('total_votos')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

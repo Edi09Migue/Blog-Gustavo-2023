@@ -76,14 +76,39 @@ export default {
             });
         },
 
-        fetchCategoriasOption( ){
+        fetchParroquiasOption(ctx, params){
             return new Promise((resolve, reject) => {
                 axios
-                    .get('/api/control-electoral/categorias/dropdownOptions')
+                    .get('/api/admin/parroquias/dropdownOptions',{
+                        params: params
+                    })
                     .then(response => resolve(response))
                     .catch(error => reject(error))
             })
         },
+
+        fetchRecintosOption(ctx, params){
+            return new Promise((resolve, reject) => {
+                axios
+                    .get('/api/control-electoral/recintos/dropdownOptions',{
+                        params: params
+                    })
+                    .then(response => resolve(response))
+                    .catch(error => reject(error))
+            })
+        },
+
+        fetchJuntasOption(ctx, params){
+            return new Promise((resolve, reject) => {
+                axios
+                    .get('/api/control-electoral/juntas/dropdownOptions',{
+                        params: params
+                    })
+                    .then(response => resolve(response))
+                    .catch(error => reject(error))
+            })
+        },
+
 
 
 

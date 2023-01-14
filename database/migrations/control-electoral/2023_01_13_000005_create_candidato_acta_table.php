@@ -20,7 +20,7 @@ class CreateCandidatoActaTable extends Migration
             $table->foreign('candidato_id')->references('id')->on('candidatos');
             $table->unsignedBigInteger('acta_id');
             $table->foreign('acta_id')->references('id')->on('actas'); 
-            $table->integer('votos');
+            $table->integer('votos')->default(0);
             $table->unsignedBigInteger('digitalizado_por');
             $table->foreign('digitalizado_por')->references('id')->on('users');
             $table->softDeletes();

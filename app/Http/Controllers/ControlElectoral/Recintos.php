@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\ControlElectoral;
 
 use App\Http\Controllers\Controller;
-use App\Models\ControlElectoral\Acta;
+use App\Models\ControlElectoral\Recinto;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Optix\Media\Models\Media;
 
-class Actas extends Controller
+class Recintos extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,21 +25,21 @@ class Actas extends Controller
         $sortDesc = $request->has('sortDesc') ? ($request->sortDesc == "true" ? true : false) : false;
 
         //Obtengo una instancia de Pagina para el query
-        $actas = Acta::with('junta.recinto');
+        $recintos = Recinto::with('junta.recinto');
 
         //Si es admin o superadmin muestro las borradas
         if(Auth::user()->isAdmin){
-            $actas = $actas->withTrashed();
+            $recintos = $recintos->withTrashed();
         }
 
         //Filtros basicos, orden y paginacion
-        $actas = $actas->where(function ($q) use ($query) {
+        $recintos = $recintos->where(function ($q) use ($query) {
             $q->where('codigo', 'like', "%$query%")
-                ->orWhereIn('junta_id', function ($sq) use ($query) {
-                    $sq->select('id');
-                    $sq->from('juntas');
-                    $sq->where('codigo','like', "%$query%");
-                });
+                ->orWhere('junta_id', 'like', "%$query%")
+                ->orWhere('votos_blancos', 'like', "%$query%")
+                ->orWhere('votos_nulos', 'like', "%$query%")
+                ->orWhere('votos_validos', 'like', "%$query%")
+                ->orWhere('procesado_por', 'like', "%$query%");
         })
             ->orderBy($sortBy, $sortDesc ? 'desc' : 'asc')
             ->paginate($perPage);
@@ -48,8 +47,8 @@ class Actas extends Controller
 
         return response()->json([
             'status' => true,
-            'items' => $actas->items(),
-            'total' => $actas->total()
+            'items' => $recintos->items(),
+            'total' => $recintos->total()
         ]);
     }
 
@@ -66,14 +65,14 @@ class Actas extends Controller
         DB::beginTransaction();
         try {
 
-            $acta = new Acta($request->all());
-            $acta->save();
+            $recinto = new Recinto($request->all());
+            $recinto->save();
 
             DB::commit();
             return response()->json([
                 'status'    => TRUE,
-                'msg'       => "Acta: {$acta->nombre}",
-                'data'      => $acta
+                'msg'       => "Recinto: {$recinto->nombre}",
+                'data'      => $recinto
 
             ]);
 
@@ -82,7 +81,7 @@ class Actas extends Controller
                 return response()->json([
                     'status' => false,
                     'error' => $e->getMessage(),
-                    'msg' => 'Error al crear acta'
+                    'msg' => 'Error al crear recinto'
                 ]);
         } 
         
@@ -91,16 +90,15 @@ class Actas extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Gaceta\Acta  $acta
+     * @param  \App\Models\Gaceta\Recinto  $recinto
      * @return \Illuminate\Http\Response
      */
-    public function show(Acta $acta)
+    public function show(Recinto $recinto)
     {
-        $acta->junta->recinto;
 
         return response()->json([
             'status'    => TRUE,
-            'data'      => $acta
+            'data'      => $recinto
         ]);
     }
 
@@ -108,25 +106,25 @@ class Actas extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\\Acta $acta
+     * @param  \App\Models\\Recinto $recinto
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Acta $acta)
+    public function update(Request $request, Recinto $recinto)
     {
 
         DB::beginTransaction();
         
         try {
-            $acta->fill($request->all());
-            $acta->save();
+            $recinto->fill($request->all());
+            $recinto->save();
 
 
 
             DB::commit();
             return response()->json([
                 'status'    => TRUE,
-                'msg'       => "Acta: {$acta->nombre}",
-                'data'      => $acta
+                'msg'       => "Recinto: {$recinto->nombre}",
+                'data'      => $recinto
             ]);
 
         }catch (Exception $e) {
@@ -134,7 +132,7 @@ class Actas extends Controller
             return response()->json([
                 'status' => false,
                 'error' => $e->getMessage(),
-                'msg' => 'Error al crear acta'
+                'msg' => 'Error al crear recinto'
             ]);
         } 
     
@@ -144,49 +142,50 @@ class Actas extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Gaceta\Acta $acta
+     * @param  \App\Models\Gaceta\Recinto $recinto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Acta $acta)
+    public function destroy(Recinto $recinto)
     {
-        $acta->delete();
+        $recinto->delete();
         return response()->json([
             'status'    => TRUE,
-            'data'      => $acta,
-            'msg'       => "Acta: {$acta->nombre}"
+            'data'      => $recinto,
+            'msg'       => "Recinto: {$recinto->nombre}"
         ]);
     }
 
     /**
      * Restaura el elemento borrado
     */
-    public function restore($acta){
+    public function restore($recinto){
 
-        $acta = Acta::withTrashed()->find($acta);
+        $recinto = Recinto::withTrashed()->find($recinto);
         
-        $acta->restore();
+        $recinto->restore();
 
         return response()->json([
             'status' => true,
-            'data' => $acta,
-            'msg'       => "Acta: {$acta->nombre}"
+            'data' => $recinto,
+            'msg'       => "Recinto: {$recinto->nombre}"
 
         ]);
     }
 
 
     /**
-     * Devuelve el id, nombre  de todos las categiorias
-     * por lo general para usarlos en un componente dropdown
-     */
+     * Devuelve todos los recintos
+    */
     public function dropdownOptions()
     {
-        $acta = Acta::orderBy('nombre', 'asc')->get();
+        $recinto = Recinto::get();
+
         return response()->json([
             'status'    =>  true,
-            'items'     =>  $acta
+            'items'     =>  $recinto
         ]);
     }
+
 
 
 
