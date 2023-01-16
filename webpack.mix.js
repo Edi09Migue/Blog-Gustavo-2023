@@ -9,8 +9,9 @@ const mix = require('laravel-mix')
  | for your Laravel applications. By default, we are compiling the CSS
  | file for the application as well as bundling up all the JS files.
  |
- */
-
+*/
+//mix
+//    .js('front_ce/app.js', 'public/front/js');
 mix
   .js('resources/js/app.js', 'public/js')
   .webpackConfig({

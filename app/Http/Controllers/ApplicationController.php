@@ -13,4 +13,10 @@ class ApplicationController extends Controller
         //$exitCode = Artisan::call('cache:clear');
         return view('application');
     }
+
+    public function front_ce()
+    {
+        //$exitCode = Artisan::call('cache:clear');
+        return view('front_ce');
+    }
 }
