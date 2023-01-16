@@ -20546,11 +20546,15 @@ var render = function() {
                   "w-full flex flex-col pt-8 px-4 md:flex-row md:pt-24 md:px-24 bg-no-repeat"
               },
               [
-                _c("div", { staticClass: "w-full sm:w-full md:w-1/2" }, [
-                  _vm._v(
-                    "\n                    inputs formulario\n                    "
-                  )
-                ]),
+                _c(
+                  "div",
+                  { staticClass: "w-full sm:w-full md:w-1/2 bg-red-200" },
+                  [
+                    _vm._v(
+                      "\n                    inputs formulario\n                    "
+                    )
+                  ]
+                ),
                 _vm._v(" "),
                 _c("div", { staticClass: "pb-5 w-full sm:w-full md:w-1/2" }, [
                   _c("div", [
@@ -20697,7 +20701,7 @@ var staticRenderFns = [
       { staticClass: "w-[25px]  overflow-hidden inline-block" },
       [
         _c("div", {
-          staticClass: "h-[50px]  bg-blanco rotate-45 transform origin-top-left"
+          staticClass: "h-[50px]  blanco rotate-45 transform origin-top-left"
         })
       ]
     )

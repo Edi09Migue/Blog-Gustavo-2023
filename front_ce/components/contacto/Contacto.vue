@@ -8,7 +8,7 @@
             >      
                 <div class="w-full flex flex-col pt-8 px-4 md:flex-row md:pt-24 md:px-24 bg-no-repeat">            
                     <!-- información empresa pt-8 px-4 sm:pt-8 px-4 md:flex-row pt-24 px-20-->
-                    <div class="w-full sm:w-full md:w-1/2">
+                    <div class="w-full sm:w-full md:w-1/2 bg-red-200">
                         inputs formulario
                         <!-- <informacion :infoEmpresa="configs.infoEmpresa"></informacion> -->
                     </div>
@@ -50,7 +50,7 @@
                                 </span>
                             </div>
                             <div class="w-[25px]  overflow-hidden inline-block">
-                                <div class="h-[50px]  bg-blanco rotate-45 transform origin-top-left"></div>
+                                <div class="h-[50px]  blanco rotate-45 transform origin-top-left"></div>
                             </div>
                             <div class="pt-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" v-if="processing" fill="none" viewBox="0 0 24 24" stroke="currentColor">
