@@ -3,6 +3,7 @@
 namespace Database\Seeders\ControlElectoral;
 
 use App\Models\ControlElectoral\Acta;
+use App\Models\ControlElectoral\CandidatoActa;
 use App\Models\ControlElectoral\Junta;
 use App\Models\ControlElectoral\Recinto;
 use Illuminate\Database\Seeder;
@@ -26,6 +27,8 @@ class ActaSeeder extends Seeder
         DB::table('actas')->delete();
         DB::statement('ALTER TABLE actas AUTO_INCREMENT = 1');
 
+
+        //Acta 1
         $junta_1 = Junta::find(1);
         $recinto_1 = $junta_1->recinto;
         $codigo_1 =  $recinto_1->codigo.'-'.$junta_1->codigo;
@@ -49,7 +52,36 @@ class ActaSeeder extends Seeder
         $media = MediaUploader::fromFile($file)->upload();
         $acta_1->attachMedia($media,'acta');
 
+        //Votos
+        $votos_candidatos = [
+            [1, $acta_1->id ,10, 2],
+            [2, $acta_1->id, 20, 2],
+            [3, $acta_1->id, 10, 2],
+            [4, $acta_1->id, 40, 2],
+            [5, $acta_1->id, 40, 2],
+            [6, $acta_1->id, 20, 2],
+            [7, $acta_1->id, 30, 2],
+            [8, $acta_1->id, 20, 2],
+            [9, $acta_1->id, 10, 2],
+    
+        ];
 
+        foreach( $votos_candidatos as $votos_candidato){
+
+            CandidatoActa::create([
+                "candidato_id" => $votos_candidato[0],
+                "acta_id" => $votos_candidato[1],
+                "votos" => $votos_candidato[2],
+                "digitalizado_por" => $votos_candidato[3],
+              
+            ]);
+
+        }
+
+    
+
+
+        //Acta 2
         $junta_2= Junta::find(2);
         $recinto_2 = $junta_2->recinto;
         $codigo_2=  $recinto_2->codigo.'-'.$junta_2->codigo;
@@ -73,6 +105,10 @@ class ActaSeeder extends Seeder
         $file = new UploadedFile($full_path,"no-image.png");
         $media = MediaUploader::fromFile($file)->upload();
         $acta_2->attachMedia($media,'acta');
+
+
+
+
 
 
 

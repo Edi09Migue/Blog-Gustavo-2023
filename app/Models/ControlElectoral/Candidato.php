@@ -20,8 +20,8 @@ class Candidato extends Model
         'total_votos',
     ];
 
-    public function votosCandidatoActa(){
-        return $this->belongsToMany(Acta::class,'votos_candidato_acta','candidato_id','acta_id')
+    public function candidatosActa(){
+        return $this->belongsToMany(Acta::class,'candidato_acta','candidato_id','acta_id')
         ->withPivot(['votos','digitalizado_por'])
         ->withTimestamps();  
     }

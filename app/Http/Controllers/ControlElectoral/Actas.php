@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ControlElectoral;
 
 use App\Http\Controllers\Controller;
 use App\Models\ControlElectoral\Acta;
+use App\Models\ControlElectoral\CandidatoActa;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -72,7 +73,7 @@ class Actas extends Controller
             DB::commit();
             return response()->json([
                 'status'    => TRUE,
-                'msg'       => "Acta: {$acta->nombre}",
+                'msg'       => "Acta: {$acta->codigo}",
                 'data'      => $acta
 
             ]);
@@ -97,6 +98,23 @@ class Actas extends Controller
     public function show(Acta $acta)
     {
         $acta->junta->recinto;
+        $acta->procesado;
+
+
+        $candidatosActa = CandidatoActa::where('acta_id',  $acta->id)->get();
+
+        $acta->candidatos_acta = $candidatosActa;
+
+        $total_votos = 0;
+        $digitalizador = null;
+        foreach($candidatosActa as $candidato_acta){
+            $candidato_acta->candidato;
+            $digitalizador  = $candidato_acta->digitalizado->name;
+            $total_votos += $candidato_acta->votos;
+        }
+        $acta->digitalizador = $digitalizador;
+        $acta->total_votos = $total_votos;
+
 
         return response()->json([
             'status'    => TRUE,
@@ -125,7 +143,7 @@ class Actas extends Controller
             DB::commit();
             return response()->json([
                 'status'    => TRUE,
-                'msg'       => "Acta: {$acta->nombre}",
+                'msg'       => "Acta: {$acta->codigo}",
                 'data'      => $acta
             ]);
 
@@ -150,6 +168,7 @@ class Actas extends Controller
     public function destroy(Acta $acta)
     {
         $acta->delete();
+
         return response()->json([
             'status'    => TRUE,
             'data'      => $acta,
@@ -176,12 +195,12 @@ class Actas extends Controller
 
 
     /**
-     * Devuelve el id, nombre  de todos las categiorias
+     * Devuelve todas las actas
      * por lo general para usarlos en un componente dropdown
      */
     public function dropdownOptions()
     {
-        $acta = Acta::orderBy('nombre', 'asc')->get();
+        $acta = Acta::orderBy('id', 'asc')->get();
         return response()->json([
             'status'    =>  true,
             'items'     =>  $acta

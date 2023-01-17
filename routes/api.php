@@ -104,6 +104,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:api'], function () {
 Route::group(['prefix' => 'control-electoral', 'middleware' => 'auth:api'], function () {
 
   Route::get('counters', [DashboardAdmin::class, 'counters']);
+  
   Route::get('actas/dropdownOptions', [Actas::class, 'dropdownOptions']);
   Route::apiResource('actas', Actas::class, ['parameters' => ['actas' => 'acta']]);
 

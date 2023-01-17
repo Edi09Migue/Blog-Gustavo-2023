@@ -43,11 +43,11 @@ class Acta extends Model implements Auditable
 
     public function procesado()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'procesado_por');
     }
 
-    public function votosCandidatoActa(){
-        return $this->belongsToMany(Candidato::class,'votos_candidato_acta','acta_id','candidato_id')
+    public function candidatosActa(){
+        return $this->belongsToMany(Candidato::class,'candidato_acta','acta_id','candidato_id')
         ->withPivot(['votos', 'digitalizado_por'])
         ->withTimestamps();  
     }
@@ -72,6 +72,14 @@ class Acta extends Model implements Auditable
          $this->addMediaGroup('main')
          ->performConversions('acta');
      }
+
+
+    public function getIsAdminAttribute(){
+        $is_admin = $this->roles()
+                        ->whereIn('role_id',[1,2])
+                        ->count();
+        return $is_admin > 0;
+    }
 
 
 

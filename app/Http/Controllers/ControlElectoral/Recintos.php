@@ -25,7 +25,7 @@ class Recintos extends Controller
         $sortDesc = $request->has('sortDesc') ? ($request->sortDesc == "true" ? true : false) : false;
 
         //Obtengo una instancia de Pagina para el query
-        $recintos = Recinto::with('junta.recinto');
+        $recintos = Recinto::query();
 
         //Si es admin o superadmin muestro las borradas
         if(Auth::user()->isAdmin){
