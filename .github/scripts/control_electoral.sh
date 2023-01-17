@@ -13,3 +13,5 @@ php artisan db:seed
 
 # # # # # #generamos las claves para autenticarse
 php artisan passport:install
+
+# php artisan db:seed --class="Database\Seeders\ControlElectoral\CandidatoActaSeeder"
