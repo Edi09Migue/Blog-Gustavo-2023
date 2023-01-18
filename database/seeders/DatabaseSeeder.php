@@ -21,7 +21,6 @@ class DatabaseSeeder extends Seeder
 
             //FakeUsersSeeder::class,
             GeoSeeder::class,
-
             ControlElectoralSeeder::class,
         ]);
     }
