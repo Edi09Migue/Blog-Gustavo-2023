@@ -17,7 +17,7 @@
                 <div class="mt-1">
                     <strong>Parroquia:</strong>
                     <span>
-                        {{ actaData.junta.recinto.parroquia}}
+                        {{ actaData.junta.recinto.parroquia.nombre}}
                     </span>
                 </div>
 
@@ -53,9 +53,9 @@
 
                         </b-media-aside>
                         <b-media-body class="my-auto">
-                            <h4 class="font-weight-bolder mb-0">
+                            <h5 class="font-weight-bolder mb-0">
                                 {{  actaData.votos_blancos }}
-                            </h4>
+                            </h5>
                             <b-card-text class="font-small-5 mb-0">
                                Blancos
                             </b-card-text>
@@ -77,9 +77,9 @@
 
                         </b-media-aside>
                         <b-media-body class="my-auto">
-                            <h4 class="font-weight-bolder mb-0">
+                            <h5 class="font-weight-bolder mb-0">
                                 {{  actaData.votos_nulos }}
-                            </h4>
+                            </h5>
                             <b-card-text class="font-small-5 mb-0">
                                Nulos
                             </b-card-text>
@@ -101,9 +101,9 @@
 
                         </b-media-aside>
                         <b-media-body class="my-auto">
-                            <h4 class="font-weight-bolder mb-0">
+                            <h5 class="font-weight-bolder mb-0">
                                 {{  actaData.votos_validos }}
-                            </h4>
+                            </h5>
                             <b-card-text class="font-small-5 mb-0">
                                Válidos
                             </b-card-text>
@@ -121,12 +121,59 @@
                         >
                             <b-table
                                 responsive
-                           
+                                :items="actaData.candidatos_acta"
                                 :fields="tableDetailColumns"
                                 :tbody-tr-class="rowClass"
                             >
+
+                                <template #cell(candidato)="data">
+                                    <b-card-text class="text-center">
+                                        {{ data.item.candidato.nombre }}
+                                        </b-card-text>
+                                </template>
+
+                                <template #cell(partido)="data">
+                                    <b-card-text class="text-center">
+                                        <small>
+                                            {{ data.item.candidato.nombre_partido }}
+                                        </small>-
+                                        <small> {{ data.item.candidato.numero_lista }}</small>
+                                    </b-card-text>
+                                </template>
+
+                                <template #cell(votos)="data">
+                                    <b-card-text class="text-center">
+                                        {{ data.item.votos }}
+                                        </b-card-text>
+                                </template>
                          
                             </b-table>
+
+
+                            <b-card-body v-if="actaData.total_votos" class="invoice-padding mx-1 d-flex justify-content-end">
+                                <strong>Total:</strong>
+                                &nbsp;
+                                <h4 class="font-weight-bolder mb-0 text-dark">
+                                    {{ actaData.total_votos }}
+                                </h4>
+                            </b-card-body>
+
+                            
+
+
+                            <b-card-body v-if="actaData.procesado" class="invoice-padding mx-1 d-flex flex-column align-items-end">
+                                <small>
+                                    <strong>Procesado:</strong>
+                                    <span>{{ actaData.procesado.name }}</span>
+                                </small>
+                                <small v-if="actaData.digitalizador">
+                                    <strong>Digitalizado:</strong>
+                                    <span>{{ actaData.digitalizador }}</span>
+                                </small>
+                            </b-card-body>
+
+                    
+
                     </b-col>
                 </b-row>
             </div>
@@ -173,9 +220,9 @@
 
     setup() {
         const tableDetailColumns = [
-            { key: "secciones", sortable: true, label: ("Candidato"),  thClass: 'text-center' },
-            { key: "puntuacion", sortable: true, label: ("Partido"),  thClass: 'text-center' },
-            { key: "total", sortable: true, label: ("Votos"),  thClass: 'text-center' },
+            { key: "candidato", sortable: true, label: ("Candidato"),  thClass: 'text-center' },
+            { key: "partido", sortable: true, label: ("Partido"),  thClass: 'text-center' },
+            { key: "votos", sortable: true, label: ("Votos"),  thClass: 'text-center' },
         ];
 
 

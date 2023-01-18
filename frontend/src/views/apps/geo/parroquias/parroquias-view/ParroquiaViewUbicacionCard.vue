@@ -1,6 +1,6 @@
 <template>
   <b-card :title="$t('Map')">
-    <p>Este mapa muestra el Extent de la parroquia y la ubicación del centro poblado más representativo de la zona</p>
+    <p>Este mapa muestra el extent de la parroquia y la ubicación del centro poblado más representativo de la zona</p>
     <b-row>
       <!-- Right Col: Table -->
       <b-col

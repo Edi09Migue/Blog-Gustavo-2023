@@ -89,7 +89,7 @@ export default function useParroquiasList() {
               position: 'top-right',
               props: {
                 title: `Duplicado!`,
-                icon: 'CoffeeIcon',
+                icon: 'CheckIcon',
                 variant: 'success',
                 text: response.data.data.nombre,
               },

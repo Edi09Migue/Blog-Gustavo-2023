@@ -3,6 +3,7 @@
 namespace App\Models\ControlElectoral;
 
 use App\Models\Geo\Canton;
+use App\Models\Geo\Parroquia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,8 +17,8 @@ class Recinto extends Model
 
     protected $fillable  = [
         'canton_id',
-        // 'parroquia_id',
-        'parroquia',
+        'parroquia_id',
+        // 'parroquia',
         'zonificacion',
         'tipo',
         'zona',
@@ -37,6 +38,10 @@ class Recinto extends Model
         'cda' => 'boolean'
     ];
 
+    protected $appends = [
+        'countActas'
+    ];
+
 
 
     public function canton()
@@ -49,10 +54,26 @@ class Recinto extends Model
         return $this->hasMany(Junta::class);
     }
 
-    // public function parrqouia()
-    // {
-    //     return $this->belongsTo(Parroquia::class);
-    // }
+    public function parroquia()
+    {
+        return $this->belongsTo(Parroquia::class);
+    }
+
+
+    
+    /**
+     * Devuelve la cantidad de actas procesadas
+     */
+    public function getCountActasAttribute()
+    {
+        $actas = Acta::whereIn('junta_id', function($q){
+            $q->select('id');
+            $q->from('juntas');
+            $q->where('recinto_id', $this->id);
+        });
+
+        return $actas->count();
+    }
 
 
 

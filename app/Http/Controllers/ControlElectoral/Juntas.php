@@ -25,7 +25,7 @@ class Juntas extends Controller
         $sortDesc = $request->has('sortDesc') ? ($request->sortDesc == "true" ? true : false) : false;
 
         //Obtengo una instancia de Pagina para el query
-        $juntas = Junta::with('junta.junta');
+        $juntas = Junta::query();
 
         //Si es admin o superadmin muestro las borradas
         if(Auth::user()->isAdmin){
@@ -71,7 +71,7 @@ class Juntas extends Controller
             DB::commit();
             return response()->json([
                 'status'    => TRUE,
-                'msg'       => "Junta: {$junta->nombre}",
+                'msg'       => "Junta: {$junta->codigo}",
                 'data'      => $junta
 
             ]);
@@ -123,7 +123,7 @@ class Juntas extends Controller
             DB::commit();
             return response()->json([
                 'status'    => TRUE,
-                'msg'       => "Junta: {$junta->nombre}",
+                'msg'       => "Junta: {$junta->codigo}",
                 'data'      => $junta
             ]);
 
@@ -151,7 +151,7 @@ class Juntas extends Controller
         return response()->json([
             'status'    => TRUE,
             'data'      => $junta,
-            'msg'       => "Junta: {$junta->nombre}"
+            'msg'       => "Junta: {$junta->codigo}"
         ]);
     }
 
@@ -167,7 +167,7 @@ class Juntas extends Controller
         return response()->json([
             'status' => true,
             'data' => $junta,
-            'msg'       => "Junta: {$junta->nombre}"
+            'msg'       => "Junta: {$junta->codigo}"
 
         ]);
     }
@@ -176,13 +176,18 @@ class Juntas extends Controller
     /**
      * Devuelve todos los juntas
     */
-    public function dropdownOptions()
+    public function dropdownOptions(Request $request)
     {
-        $junta = Junta::get();
+        $juntas = Junta::query();
+
+        if ($request->has('recinto'))
+        $juntas = $juntas->where('recinto_id', $request->recinto)->withCount('actas');
+
+         $juntas = $juntas->get();
 
         return response()->json([
             'status'    =>  true,
-            'items'     =>  $junta
+            'items'     =>  $juntas
         ]);
     }
 

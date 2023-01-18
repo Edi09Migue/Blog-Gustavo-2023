@@ -37,6 +37,14 @@ export default [
   },
 
   {
+    title: 'Premises',
+    route: 'control-recintos-list',
+    icon: 'HomeIcon',
+    action: 'listar',
+    resource: 'recintos'
+  },
+
+  {
     title: 'Ecuador',
     icon: 'MapIcon',
     children: [
