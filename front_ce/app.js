@@ -11,8 +11,19 @@ window.axios = require("axios");
 window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 window.Vue = require('vue')
 
-import Contacto from './components/Contacto/Contacto.vue';
-Vue.component('contacto',Contacto);
+// import router from "./src/route";
+
+// import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+library.add(fas);
+
+// import Contacto from './components/Contacto/Contacto.vue';
+import Login from './components/user/Login.vue';
+
+// Vue.component('font-awesome-icon', FontAwesomeIcon);
+// Vue.component('contacto',Contacto);
+Vue.component('login',Login);
 
 var app = new Vue({
     el: '#main',

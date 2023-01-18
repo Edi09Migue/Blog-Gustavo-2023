@@ -20,6 +20,13 @@
 ## Deploy
 
 ```
+cd web
+npx tailwindcss -i ..\resources\css\front.css -o ..\public\front\front.css --watch
+git console
+npx tailwindcss -i ../resources/css/front.css -o ../public/front/front.css --watch
+```
+
+```
 php artisan migrate --seed
 ```
 

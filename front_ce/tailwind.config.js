@@ -12,15 +12,14 @@ module.exports = {
         '3xl': '1800px',
       },
       colors: {
-        'bgSuscribirse': '#1b2a2f', //azul oscuro
-        'tituloSuscribirse': '#ef0d33', //rojo
-        'infoSuscribirse': '#dae9f4', //blanco
-
-        'verde': '#0B6C3D',
-        'rojo': '#E51313',
-        'blanco': '#EFEFEF',
-        // 'blanco': '#F4F4F4',
-        'plomo': '#30323F',
+        'dark': '#455A64',
+        'ligt': '#607D8DC',
+        'azul-obscuro': '#607D8B',
+        'blanco': '#ffffff',
+        'azul': '#448AFF',
+        'negro': '#212121',
+        'plomo': '#757575',
+        'plomo-light': '#BDBDBD',
 
       },
       fontFamily: {
