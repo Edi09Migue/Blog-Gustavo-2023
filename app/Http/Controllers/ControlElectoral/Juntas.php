@@ -176,13 +176,18 @@ class Juntas extends Controller
     /**
      * Devuelve todos los juntas
     */
-    public function dropdownOptions()
+    public function dropdownOptions(Request $request)
     {
-        $junta = Junta::get();
+        $juntas = Junta::query();
+
+        if ($request->has('recinto'))
+        $juntas = $juntas->where('recinto_id', $request->recinto)->withCount('actas');
+
+         $juntas = $juntas->get();
 
         return response()->json([
             'status'    =>  true,
-            'items'     =>  $junta
+            'items'     =>  $juntas
         ]);
     }
 

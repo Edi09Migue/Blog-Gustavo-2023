@@ -216,9 +216,9 @@ export default [
         }
     },
     //Mapas con HarperGL
-    {
-        path: "/apps/geo/harpgl",
-        name: "geo-parroquias-view",
-        component: () => import("@/views/apps/geo/harpgl/HarpglMap.vue")
-    }
+    // {
+    //     path: "/apps/geo/harpgl",
+    //     name: "geo-parroquias-view",
+    //     component: () => import("@/views/apps/geo/harpgl/HarpglMap.vue")
+    // }
 ];

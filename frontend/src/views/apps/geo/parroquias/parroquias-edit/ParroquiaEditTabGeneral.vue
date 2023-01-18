@@ -303,7 +303,7 @@ export default {
                 position: 'top-right',
                 props: {
                   title: `Actualizado`,
-                  icon: 'CoffeeIcon',
+                  icon: 'CheckIcon',
                   variant: 'success',
                   text: `Parroquia ${response.data.data.nombre}. Actualizada correctamente!`,
                 },

@@ -25,6 +25,7 @@ class CreateActasTable extends Migration
             $table->unsignedBigInteger('procesado_por');
             $table->boolean('estado')->default(false);
             $table->foreign('procesado_por')->references('id')->on('users');
+            $table->boolean('visualizado')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

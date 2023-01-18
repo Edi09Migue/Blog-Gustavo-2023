@@ -7,29 +7,29 @@ export default {
     getters: {},
     mutations: {},
     actions: {
-        fetchActas(ctx, queryParams) {
+        fetchRecintos(ctx, queryParams) {
             return new Promise((resolve, reject) => {
                 axios
-                    .get("/api/control-electoral/actas", { params: queryParams })
+                    .get("/api/control-electoral/recintos", { params: queryParams })
                     .then(response => resolve(response))
                     .catch(error => reject(error));
             });
         },
 
-        fetchActa(ctx, { id }) {
+        fetchRecinto(ctx, { id }) {
             console.log(id);
             return new Promise((resolve, reject) => {
                 axios
-                    .get(`/api/control-electoral/actas/${id}`)
+                    .get(`/api/control-electoral/recintos/${id}`)
                     .then(response => resolve(response))
                     .catch(error => reject(error));
             });
         },
 
-        removeActa(ctx, vehiculoId) {
+        removeRecinto(ctx, vehiculoId) {
             return new Promise((resolve, reject) => {
                 axios
-                    .delete(`/api/control-electoral/actas/${vehiculoId}`)
+                    .delete(`/api/control-electoral/recintos/${vehiculoId}`)
                     .then(response => resolve(response))
                     .catch(error => reject(error));
             });
@@ -38,27 +38,27 @@ export default {
         restoreItem(ctx, itemId) {
             return new Promise((resolve, reject) => {
                 axios
-                    .post(`/api/control-electoral/actas/${itemId}/restore`)
+                    .post(`/api/control-electoral/recintos/${itemId}/restore`)
                     .then(response => resolve(response))
                     .catch(error => reject(error));
             });
         },
 
 
-        addActa(ctx, vehiculoData){
+        addRecinto(ctx, vehiculoData){
             return new Promise((resolve, reject) => {
                 axios
-                    .post('/api/control-electoral/actas',  vehiculoData)
+                    .post('/api/control-electoral/recintos',  vehiculoData)
                     .then(response => resolve(response))
                     .catch(error => reject(error))
             })
         }, 
 
-        updateActa(ctx, vehiculoData){
+        updateRecinto(ctx, vehiculoData){
 
             return new Promise((resolve, reject) => {
                 axios
-                    .put(`/api/control-electoral/actas/${vehiculoData.id}`,  vehiculoData)
+                    .put(`/api/control-electoral/recintos/${vehiculoData.id}`,  vehiculoData)
                     .then(response => resolve(response))
                     .catch(error => reject(error))
             })
@@ -68,7 +68,7 @@ export default {
         validateUnique(ctx, value) {
             return new Promise((resolve, reject) => {
                 axios
-                    .post(`/api/control-electoral/actas/validate/${value.field}`, {
+                    .post(`/api/control-electoral/recintos/validate/${value.field}`, {
                         value: value.value
                     })
                     .then(response => resolve(response))

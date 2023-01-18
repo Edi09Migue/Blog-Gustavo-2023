@@ -5,7 +5,7 @@ import store from "@/store";
 import { useToast } from "vue-toastification/composition";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 
-export default function useActasList(){
+export default function useRecintosList(){
     const { t } = useI18nUtils();
     const perPage = ref(5);
     const perPageOptions = [5, 10, 15, 20];
@@ -37,16 +37,11 @@ export default function useActasList(){
     });
 
     const tableColumns = [
-        { key: "codigo", sortable: true, label: ("Código") },
+        { key: "nombre", sortable: true, label: ("Nombre") },
         { key: "parroquia", sortable: true, label: ("Parroquia") },
-        { key: "recinto", sortable: true, label: ("Recinto") },
-        { key: "junta", sortable: true, label: ("Junta") },
-        // { key: "votos_blancos", sortable: true, label: ("V. Blancos") },
-        // { key: "votos_validos", sortable: true, label: ("V. Válidos") },
-        // { key: "votos_nulos", sortable: true, label: ("V. Nulos") },
-        { key: "estado", sortable: false, label: ("Estado") },
-        // { key: "imagenURL", sortable: false, label: ("Imagen") },
-        { key: "actions", label: t("Actions") }
+        { key: "juntas", sortable: true, label: ("Juntas") },
+        { key: "electores", sortable: true, label: ("Electores") },
+        // { key: "actions", label: t("Actions") }
     ];
  
 
@@ -58,19 +53,17 @@ export default function useActasList(){
         refetchData()
       })
 
-    const actas = ref([]);
+    const recintos = ref([]);
 
-    const fetchActas = function (ctx, callback) {
+    const fetchRecintos = function (ctx, callback) {
         store
-            .dispatch("control-actas/fetchActas", {
+            .dispatch("control-recintos/fetchRecintos", {
                 q: searchQuery.value,
                 perPage: perPage.value,
                 page: currentPage.value,
                 sortBy: sortBy.value,
                 sortDesc: isSortDirDesc.value,
                 parroquia: parroquiaFilter.value,
-                recinto: recintoFilter.value,
-                junta: juntaFilter.value,
             })
             .then(response => {
                 if(response.data.status){
@@ -82,7 +75,7 @@ export default function useActasList(){
                     toast({
                         component: ToastificationContent,
                         props: {
-                            title: this.$t("Error fetching list of")+ " actas",
+                            title: this.$t("Error fetching list of")+ " recintos",
                             text: response.data.msg,
                             icon: "AlertTriangleIcon",
                             variant: "danger"
@@ -94,7 +87,7 @@ export default function useActasList(){
                 toast({
                     component: ToastificationContent,
                     props: {
-                        title: this.$t("Error fetching list of")+ " actas",
+                        title: this.$t("Error fetching list of")+ " recintos",
                         icon: "AlertTriangleIcon",
                         text: error,
                         variant: "danger"
@@ -106,7 +99,7 @@ export default function useActasList(){
     
     const parroquiasOptions = ref([]);
     store
-        .dispatch("control-actas/fetchParroquiasOption",{
+        .dispatch("control-recintos/fetchParroquiasOption",{
             gid2: 'ECU.23.1_1'
         })
         .then(response => {
@@ -145,7 +138,7 @@ export default function useActasList(){
         juntaFilter.value = null;
 
         store
-        .dispatch("control-actas/fetchRecintosOption",{
+        .dispatch("control-recintos/fetchRecintosOption",{
             parroquia: parroquiaId,
         })
         .then(response => {
@@ -182,7 +175,7 @@ export default function useActasList(){
     const fetchJuntasOptions = (recintoId) => {
         juntaFilter.value = null;
         store
-        .dispatch("control-actas/fetchJuntasOption",{
+        .dispatch("control-recintos/fetchJuntasOption",{
             recinto: recintoId,
         })
         .then(response => {
@@ -218,10 +211,10 @@ export default function useActasList(){
 
 
 
-    const removeActa = function(acta) {
+    const removeRecinto= function(recinto) {
         this.$swal({
             title: this.$t("Are you sure"),
-            html: `${this.$t("Will be deleted")} el Acta:<strong> ${acta.nombre_comun}</strong><br><small c>${this.$t("Wont Able To Revert")}</small>`,
+            html: `${this.$t("Will be deleted")} el Recinto:<strong> ${recinto.nombre_comun}</strong><br><small c>${this.$t("Wont Able To Revert")}</small>`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: this.$t("Yes delete it"),
@@ -233,7 +226,7 @@ export default function useActasList(){
             buttonsStyling: false
         }).then(result => {
             if (result.value) {
-                store.dispatch("control-actas/removeActa", acta.id).then((response) => {
+                store.dispatch("control-recintos/removeRecinto", recinto.id).then((response) => {
                     if (response.data.status) {
                     this.$swal({
                         icon: "success",
@@ -266,7 +259,7 @@ export default function useActasList(){
         const restoreItem = function(item) {
             this.$swal({
                 title: this.$t("Are you sure"),
-                html: `${this.$t("Will be restored")} el Acta: <strong> ${item.nombre_comun}</strong><br><small c></small>`,
+                html: `${this.$t("Will be restored")} el Recinto: <strong> ${item.nombre_comun}</strong><br><small c></small>`,
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonText: this.$t("Yes restore it"),
@@ -278,7 +271,7 @@ export default function useActasList(){
                 buttonsStyling: false
             }).then(result => {
                 if (result.value) {
-                    store.dispatch("control-actas/restoreItem", item.id).then((response) => {
+                    store.dispatch("control-recintos/restoreItem", item.id).then((response) => {
                         this.$swal({
                             icon: "success",
                             title: this.$t("Restored"),
@@ -304,14 +297,14 @@ export default function useActasList(){
         dataMeta,
         totalItems,
         currentPage, 
-        fetchActas,
+        fetchRecintos,
         tableColumns,
         sortBy,
         isSortDirDesc ,
         refUserListTable,
         refetchData,
-        removeActa,
-        actas,
+        removeRecinto,
+        recintos,
         restoreItem,
 
         //filters

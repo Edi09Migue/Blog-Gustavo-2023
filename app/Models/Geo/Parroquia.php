@@ -2,6 +2,8 @@
 
 namespace App\Models\Geo;
 
+use App\Models\ControlElectoral\Acta;
+use App\Models\ControlElectoral\Recinto;
 use Illuminate\Database\Eloquent\Model;
 use Optix\Media\HasMedia;
 
@@ -56,7 +58,8 @@ class Parroquia extends Model
         'URL',
         'imagenURL',
         'iconoURL',
-        'codigo'
+        'codigo',
+        'countActas'
     ];
 
 
@@ -115,4 +118,30 @@ class Parroquia extends Model
     {
         return '';
     }
+
+    public function recintos()
+    {
+        return $this->hasMany(Recinto::class);
+    }
+
+
+    /**
+     * Devuelve la cantidad de actas procesadas
+     */
+    public function getCountActasAttribute()
+    {
+        $actas = Acta::whereIn('junta_id', function($q){
+            $q->select('id');
+            $q->from('juntas');
+            $q->whereIn('recinto_id', function($sq){
+            $sq->select('id');
+            $sq->from('recintos');
+            $sq->where('parroquia_id', $this->id);
+            });
+        });
+
+        return $actas->count();
+    }
+
+
 }

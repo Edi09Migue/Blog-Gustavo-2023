@@ -2,7 +2,7 @@
   <div>
 
     <!-- Filters -->
-    <actas-list-filters
+    <!-- <recintos-list-filters
         :parroquia-filter.sync="parroquiaFilter"
         :recinto-filter.sync="recintoFilter"
         :junta-filter.sync="juntaFilter"
@@ -12,7 +12,7 @@
         @fetch-juntas-options="fetchJuntasOptions"
         :juntas-options="juntasOptions"
         @refetch-data="refetchData"
-    />
+    /> -->
 
         <b-card>
             <div class="m-2">
@@ -30,8 +30,34 @@
                             :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                             :options="perPageOptions"
                             :clearable="false"
-                            class="per-page-selector d-inline-block mx-50"
+                            class="per-page-selector d-inline-block mr-50"
                         />
+
+                        <v-select
+                            :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                            v-model="parroquiaFilter"
+                            :options="parroquiasOptions"
+                            class="w-50"
+                            label="nombre"
+                            :reduce="val => val.id.toString()"
+                            placeholder="Seleccione la parroquia"
+                            :readonly="true"
+                        >
+                            <template #option="{ nombre, recintos_count}">
+                                    {{ nombre }}
+                                    <small>
+                                        <b-badge variant="dark"> {{ recintos_count }} </b-badge>
+                                    </small>
+                                </template>
+                                <template #selected-option="{ nombre, recintos_count}">
+                                    {{ nombre }}
+                                    &nbsp;
+                                    <small>
+                                        <b-badge variant="dark"> {{ recintos_count }} </b-badge>
+                                    </small>
+                                </template>
+                        </v-select>
+
 
                     </b-col>
                      <!-- Search -->
@@ -48,9 +74,9 @@
                             />
 
                             <!-- <b-button
-                                v-if="$can('crear', 'actas')"
+                                v-if="$can('crear', 'recintos')"
                                 variant="primary"
-                                :to="{ name: 'infomar-actas-create'}"
+                                :to="{ name: 'infomar-recintos-create'}"
                             >
                                 <span class="text-nowrap"
                                     >{{ ("Crear") }} {{ $t("Specie") }} </span
@@ -67,7 +93,7 @@
              <b-table
                 ref="refUserListTable"
                 class="position-relative"
-                :items="fetchActas"
+                :items="fetchRecintos"
                 responsive
                 :fields="tableColumns"
                 primary-key="id"
@@ -78,87 +104,42 @@
                 :tbody-tr-class="rowClass"
             >
                    
-                <!-- Column: Imagen Acta Personalizada -->
-                <template #cell(imagenURL)="data">
-                    <b-media no-body>            
-                        <b-media-aside class="mx-auto">
-                            <b-link
-                            :to="{ name: 'actas-actas-view', params: { id: data.item.id  } }"
-                            >
-                            <b-img
-                                :src="data.item.imagenURL"
-                                width="150"
-                                size="150"
-                                fluid
-                                rounded
-                            />
-                            </b-link>
-                        </b-media-aside>
-                    </b-media>
+                <!-- Column: Imagen RecintoremoveRecinto Personalizada -->
+                <template #cell(nombre)="data">
+                  <small>{{ data.item.nombre }}</small>
+                  <br>
+                  Código: {{ data.item.codigo }}
                 </template>
 
-                <!-- Column: Acta Personalizada -->
-                <template #cell(codigo)="data">
-                    <b-link
-                        :to="{ name: 'control-actas-view', params: { id: data.item.id  } }"
-                        class="d-flex align-items-center flex-column"
-                    >
-                    {{ data.item.codigo }}
-                        <!-- <b-badge  :variant="`light-${data.item.estado ? 'success' : 'primary'}`">
-                            {{ data.item.codigo }} 
-                        </b-badge> -->
             
-                    </b-link>
-                </template>
-
 
                 <!-- Column: Parroquia -->
                 <template #cell(parroquia)="data">
-                    {{ data.item.junta.recinto.parroquia.nombre }}
+                    <small> {{ data.item.parroquia.nombre }} </small>
+                    <br>
+                    <small> {{ data.item.direccion}} </small>
                 </template>
 
 
-                <!-- Column: Recinto -->
-                <template #cell(recinto)="data">
-                    {{ data.item.junta.recinto.nombre }}
+                <!-- Column: juntas -->
+                <template #cell(juntas)="data">
+                    <small> Total: {{  data.item.total_juntas }} </small>
+                    <br>
+                    <small> JF: {{  data.item.juntas_femeninas }} </small>
+                    <br>
+                    <small> JM: {{  data.item.juntas_masculinas }} </small>
                 </template>
 
-                <!-- Column: Junta -->
-                <template #cell(junta)="data">
-                    {{ data.item.junta.codigo }}
+                   <!-- Column: juntas -->
+                   <template #cell(electores)="data">
+                    <small>{{  data.item.cantidad_electores }} </small>
+                   
                 </template>
 
-                <template #cell(estado)="data">
-                    <b-link
-                        :to="{ name: 'control-actas-view', params: { id: data.item.id  } }"
-                        class="d-flex align-items-center flex-column"
-                    >
-                        <b-badge
-                            v-if="data.item.estado"
-                            pill
-                            variant="light-success"
-                            class="text-capitalize"
-                        >
-                             Digitalizada
-                        </b-badge>
-
-                        <b-badge
-                            v-else
-                            pill
-                            variant="light-primary"
-                            class="text-capitalize"
-                        >
-                            {{ data.item.visualizado  ? ("Digitalizando...") : ("Procesada") }}
-                        </b-badge>
-
-                      
 
 
-                         <!-- <small v-if="data.item.visualizado && data.item.estado == false">
-                                Procesando ...
-                            </small> -->
-                    </b-link>
-                </template>
+
+              
 
 
 
@@ -179,9 +160,9 @@
                             />
                         </template>
                         <b-dropdown-item
-                            v-if="$can('ver', 'actas') && !data.item.deleted_at"
+                            v-if="$can('ver', 'recintos') && !data.item.deleted_at"
                             :to="{
-                                name: 'control-actas-view',
+                                name: 'control-recintos-view',
                                 params: { id: data.item.id }
                                 
                             }"
@@ -194,8 +175,8 @@
 
 
                         <b-dropdown-item
-                            v-if="$can('editar', 'actas') && !data.item.deleted_at"
-                            :to="{ name: 'infomar-actas-edit', params: { id: data.item.id } }"
+                            v-if="$can('editar', 'recintos') && !data.item.deleted_at"
+                            :to="{ name: 'infomar-recintos-edit', params: { id: data.item.id } }"
                         >
                             <feather-icon icon="EditIcon" />
                             <span class="align-middle ml-50">{{
@@ -204,7 +185,7 @@
                         </b-dropdown-item>
 
                          <b-dropdown-item
-										v-if="$can('eliminar', 'actas') && data.item.deleted_at"
+										v-if="$can('eliminar', 'recintos') && data.item.deleted_at"
 										@click="restoreItem(data.item)"   
 									
                         >
@@ -216,8 +197,8 @@
 
 
                         <b-dropdown-item
-                            v-if="$can('eliminar', 'actas') && !data.item.deleted_at"
-                            @click="removeActa(data.item)"
+                            v-if="$can('eliminar', 'recintos') && !data.item.deleted_at"
+                            @click="removeRecinto(data.item)"
                         >
                             <feather-icon icon="TrashIcon" />
                             <span class="align-middle ml-50">{{
@@ -282,10 +263,10 @@ BImg, BMediaAside,  BMedia, BBadge, BAvatar, BCardHeader, BCardBody}  from "boot
 import vSelect from "vue-select";
 import {ref,onUnmounted}  from '@vue/composition-api'
 import Ripple from 'vue-ripple-directive'
-import useActasList from './useActasList'
+import useRecintosList from './useRecintosList'
 import store from "@/store";
-import actasStoreModule from '../actasStoreModule'
-import ActasListFilters from './ActasListFilters.vue';
+import recintosStoreModule from '../recintosStoreModule'
+// import RecintosListFilters from './RecintosListFilters.vue';
 
 
 export default {
@@ -318,7 +299,7 @@ export default {
       BAvatar,
 
       vSelect,
-      ActasListFilters,
+    //   RecintosListFilters,
    
 
     },
@@ -333,10 +314,10 @@ export default {
     
     setup(){
      
-        const ACTAS_APP_STORE_MODULE_NAME = "control-actas";
+        const ACTAS_APP_STORE_MODULE_NAME = "control-recintos";
         // Register module
         if (!store.hasModule(ACTAS_APP_STORE_MODULE_NAME))
-            store.registerModule(ACTAS_APP_STORE_MODULE_NAME, actasStoreModule);
+            store.registerModule(ACTAS_APP_STORE_MODULE_NAME, recintosStoreModule);
         // UnRegister on leave
         onUnmounted(() => {
             if (store.hasModule(ACTAS_APP_STORE_MODULE_NAME))
@@ -351,16 +332,16 @@ export default {
             dataMeta,
             totalItems,
             currentPage,
-            fetchActas,
+            fetchRecintos,
             refetchData,
             tableColumns,
             sortBy,
             isSortDirDesc,
             resolveUserRoleVariant,
             refUserListTable,
-            removeActa,
+            removeRecinto,
 
-            actas,
+            recintos,
             restoreItem,
             //filters
             parroquiasOptions,
@@ -372,7 +353,7 @@ export default {
             juntasOptions,
             juntaFilter,
     
-        } = useActasList()
+        } = useRecintosList()
 
         return {
             
@@ -383,7 +364,7 @@ export default {
             dataMeta,
             totalItems,
             currentPage,        
-            fetchActas,
+            fetchRecintos,
             refetchData,
             tableColumns,
             sortBy,
@@ -391,8 +372,8 @@ export default {
             resolveUserRoleVariant,
             refUserListTable,
     
-            removeActa,
-            actas,
+            removeRecinto,
+            recintos,
  
             restoreItem,
             //filters

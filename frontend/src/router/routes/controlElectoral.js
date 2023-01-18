@@ -16,6 +16,26 @@ export default [
         ],
       }
     },
+
+    
+    {
+      path: '/control/recintos/list',
+      name: 'control-recintos-list',
+      component: () => import('@/views/apps/control-electoral/recintos/recintos-list/RecintosList.vue'),
+      meta:{
+        action: 'listar',
+        resource: 'recintos',
+        pageTitle: 'Listado de Recintos',
+        breadcrumb: [
+          {
+            text: 'Premises',
+            active: true,
+          },
+        ],
+      }
+    },
+
+
   
     {
       path: '/control/actas/list',

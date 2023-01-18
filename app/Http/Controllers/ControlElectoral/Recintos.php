@@ -25,21 +25,24 @@ class Recintos extends Controller
         $sortDesc = $request->has('sortDesc') ? ($request->sortDesc == "true" ? true : false) : false;
 
         //Obtengo una instancia de Pagina para el query
-        $recintos = Recinto::query();
+        $recintos = Recinto::with('parroquia');
 
         //Si es admin o superadmin muestro las borradas
         if(Auth::user()->isAdmin){
             $recintos = $recintos->withTrashed();
         }
 
+         //Filtro parroquia
+         $parroquia = $request->has('parroquia') ? $request->parroquia : '';
+         if ($parroquia != '') {
+             $recintos = $recintos->where('parroquia_id', $parroquia);
+         }
+
+
         //Filtros basicos, orden y paginacion
         $recintos = $recintos->where(function ($q) use ($query) {
-            $q->where('codigo', 'like', "%$query%")
-                ->orWhere('junta_id', 'like', "%$query%")
-                ->orWhere('votos_blancos', 'like', "%$query%")
-                ->orWhere('votos_nulos', 'like', "%$query%")
-                ->orWhere('votos_validos', 'like', "%$query%")
-                ->orWhere('procesado_por', 'like', "%$query%");
+            $q->where('nombre', 'like', "%$query%")
+                ->orWhere('direccion', 'like', "%$query%");
         })
             ->orderBy($sortBy, $sortDesc ? 'desc' : 'asc')
             ->paginate($perPage);
@@ -176,15 +179,40 @@ class Recintos extends Controller
     /**
      * Devuelve todos los recintos
     */
-    public function dropdownOptions()
+    public function dropdownOptions(Request $request)
     {
-        $recinto = Recinto::get();
+
+        $recintos = Recinto::query();
+        
+        if ($request->has('parroquia'))
+            $recintos = $recintos->where('parroquia_id', $request->parroquia);
+
+             $recintos = $recintos->get();
+
 
         return response()->json([
             'status'    =>  true,
-            'items'     =>  $recinto
+            'items'     =>  $recintos
         ]);
     }
+
+
+     /**
+     * Devuelve todos los 
+    */
+    // public function recintosControladpsOptions()
+    // {
+    //     $recinto = Recinto::whereIn('id', function($query){
+    //         $query->select('id');
+    //         $query->from('juntas');
+
+    //     });
+
+    //     return response()->json([
+    //         'status'    =>  true,
+    //         'items'     =>  $recinto
+    //     ]);
+    // }
 
 
 

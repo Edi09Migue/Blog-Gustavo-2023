@@ -18,9 +18,9 @@ class CreateRecintosTable extends Migration
             $table->id();
             $table->unsignedBigInteger('canton_id');
             $table->foreign('canton_id')->references('id')->on('cantones'); 
-            // $table->unsignedBigInteger('parroquia_id');
-            // $table->foreign('parroquia_id')->references('id')->on('parroquias'); 
-            $table->string('parroquia');
+            $table->unsignedBigInteger('parroquia_id');
+            $table->foreign('parroquia_id')->references('id')->on('parroquias'); 
+            // $table->string('parroquia');
             $table->string('zonificacion')->nullable();
             $table->enum('tipo', ["R","U"]);
             $table->integer('zona');

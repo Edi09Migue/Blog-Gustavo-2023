@@ -101,7 +101,7 @@
             >
               {{ data.item.nombre }}
             </b-link>
-            <small class="text-muted">@{{ data.item.nombre_corto }}</small>
+            <small class="text-muted">{{ data.item.nombre_corto }}</small>
           </b-media>
         </template>
 

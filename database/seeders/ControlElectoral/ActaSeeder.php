@@ -41,6 +41,7 @@ class ActaSeeder extends Seeder
             "votos_validos" => 230,
             "estado" => true,
             "procesado_por" => 3,
+            "visualizado" => true,
 
         ]);
 
@@ -60,9 +61,9 @@ class ActaSeeder extends Seeder
             [4, $acta_1->id, 40, 2],
             [5, $acta_1->id, 40, 2],
             [6, $acta_1->id, 20, 2],
-            [7, $acta_1->id, 30, 2],
+            [7, $acta_1->id, 50, 2],
             [8, $acta_1->id, 20, 2],
-            [9, $acta_1->id, 10, 2],
+            [9, $acta_1->id, 20, 2],
     
         ];
 
@@ -82,7 +83,7 @@ class ActaSeeder extends Seeder
 
 
         //Acta 2
-        $junta_2= Junta::find(2);
+        $junta_2= Junta::find(100);
         $recinto_2 = $junta_2->recinto;
         $codigo_2=  $recinto_2->codigo.'-'.$junta_2->codigo;
 
@@ -105,14 +106,6 @@ class ActaSeeder extends Seeder
         $file = new UploadedFile($full_path,"no-image.png");
         $media = MediaUploader::fromFile($file)->upload();
         $acta_2->attachMedia($media,'acta');
-
-
-
-
-
-
-
-
 
 
 

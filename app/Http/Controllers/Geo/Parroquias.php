@@ -90,7 +90,7 @@ class Parroquias extends Controller
         if ($request->has('gid2'))
             $parroquias = $parroquias->where('gid2', $request->gid2);
 
-        $parroquias = $parroquias->get();
+            $parroquias = $parroquias->get();
 
 
         return response()->json([
@@ -196,4 +196,29 @@ class Parroquias extends Controller
             'msg' => 'Parroquia actualizada correctamente!'
         ]);
     }
+
+
+     /**
+     * Devuelve el id, nombre, gid0 y gid1 de todas las parroquias
+     * por lo general para usarlos en un componente dropdown
+     */
+    public function parroquiasOptionsActas(Request $request)
+    {
+        $parroquias = Parroquia::select('id', 'nombre', 'gid0', 'gid1', 'gid2', 'gid3')->orderBy('nombre','asc')->withCount('recintos');
+        //en caso de querer solo las parroquias de un canton
+        if ($request->has('gid2'))
+            $parroquias = $parroquias->where('gid2', $request->gid2);
+
+            $parroquias = $parroquias->get();
+
+
+        return response()->json([
+            'status' => true,
+            'items' => $parroquias,
+        ]);
+    }
+
+ 
+
+
 }

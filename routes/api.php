@@ -93,6 +93,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:api'], function () {
   Route::apiResource('cantones',Cantones::class,['except'=>['destroy']]);
   
   Route::get('parroquias/dropdownOptions',[Parroquias::class,'dropdownOptions']);
+  Route::get('parroquias/parroquiasOptionsActas',[Parroquias::class,'parroquiasOptionsActas']);
   Route::apiResource('parroquias',Parroquias::class,['except'=>['destroy']]);
       
   Route::apiResource('configs', Configuraciones::class);
@@ -109,6 +110,8 @@ Route::group(['prefix' => 'control-electoral', 'middleware' => 'auth:api'], func
   Route::apiResource('actas', Actas::class, ['parameters' => ['actas' => 'acta']]);
 
   Route::get('recintos/dropdownOptions', [Recintos::class, 'dropdownOptions']);
+  Route::apiResource('recintos', Recintos::class, ['parameters' => ['recintos' => 'recinto']]);
+
   Route::get('juntas/dropdownOptions', [Juntas::class, 'dropdownOptions']);
 
 

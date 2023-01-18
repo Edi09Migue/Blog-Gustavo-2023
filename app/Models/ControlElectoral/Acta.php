@@ -25,6 +25,7 @@ class Acta extends Model implements Auditable
         'votos_validos',
         'estado',
         'procesado_por',
+        'visualizado',
     ];
 
     protected $appends = [
@@ -32,7 +33,8 @@ class Acta extends Model implements Auditable
     ];
 
     protected $casts = [
-        'estado' => 'boolean'
+        'estado' => 'boolean',
+        'visualizado' => 'boolean'
     ];
 
    

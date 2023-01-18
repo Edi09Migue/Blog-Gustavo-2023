@@ -17,7 +17,7 @@
                 <div class="mt-1">
                     <strong>Parroquia:</strong>
                     <span>
-                        {{ actaData.junta.recinto.parroquia}}
+                        {{ actaData.junta.recinto.parroquia.nombre}}
                     </span>
                 </div>
 
