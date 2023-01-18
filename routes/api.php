@@ -10,6 +10,7 @@ use App\Http\Controllers\ControlElectoral\Actas;
 use App\Http\Controllers\ControlElectoral\DashboardAdmin;
 use App\Http\Controllers\ControlElectoral\Juntas;
 use App\Http\Controllers\ControlElectoral\Recintos;
+use App\Http\Controllers\ControlElectoral\Resultados;
 use App\Http\Controllers\Geo\Cantones;
 use App\Http\Controllers\Geo\Paises;
 use App\Http\Controllers\Geo\Parroquias;
@@ -113,6 +114,9 @@ Route::group(['prefix' => 'control-electoral', 'middleware' => 'auth:api'], func
   Route::apiResource('recintos', Recintos::class, ['parameters' => ['recintos' => 'recinto']]);
 
   Route::get('juntas/dropdownOptions', [Juntas::class, 'dropdownOptions']);
-
-
+  
+  //rutas para resultados
+  Route::get('resultados/totales-por-candidato', [Resultados::class, 'totalesPorCandidato']);
+  Route::get('resultados/totales-por-tipo-voto', [Resultados::class, 'totalesPorTipoVoto']);
+  
 });
