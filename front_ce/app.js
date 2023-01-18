@@ -13,10 +13,12 @@ window.Vue = require('vue')
 
 // import router from "./src/route";
 
+import vSelect from 'vue-select'
 // import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 library.add(fas);
+
 
 // import Contacto from './components/Contacto/Contacto.vue';
 import Login from './components/user/Login.vue';
@@ -24,6 +26,9 @@ import Actas from './components/actas/Actas.vue';
 
 // Vue.component('font-awesome-icon', FontAwesomeIcon);
 // Vue.component('contacto',Contacto);
+Vue.component('v-select', vSelect)
+import 'vue-select/dist/vue-select.css';
+
 Vue.component('login',Login);
 Vue.component('actas',Actas);
 
@@ -32,8 +37,8 @@ var app = new Vue({
     data: {
       baseURL: 'http://controlelectoral.local/api/',
       seccion:  1,
-      user: null,
-      resintos:[]
+      recintos:[],
+      user:null
     },
     methods:{
       fetchRecintos() {
@@ -57,8 +62,8 @@ var app = new Vue({
                     return Promise.reject(error);
                 }
 
-                console.log(response, data)
-                this.resintos = data;
+                console.log(response, data.items)
+                this.recintos = data.items;
             })
 
             .catch(error => {
@@ -72,21 +77,17 @@ var app = new Vue({
       let token = window.localStorage.getItem('token');
       let pagina = window.localStorage.getItem('pagina');
       let user = window.localStorage.getItem('user');
-      // console.log('user',user);
+      
       if (token) {
+
           this.token = token;
           this.seccion = parseInt(pagina);
-
-
           this.user =  JSON.parse(user);
 
           if (this.seccion==2) {
             this.fetchRecintos()
           }
-          // this.user =  user;
-          // this.fetchUser(token);
-          // this.fetchCantones(token);
-          // this.fetchInscritos();
+
       }else{
         this.seccion = 1;
       }

@@ -98,10 +98,13 @@ class Actas extends Controller
         DB::beginTransaction();
         try {
 
+            dd($request->all());
+
             $acta = new Acta($request->all());
             
             //generar código
             $junta = Junta::where($acta->junta_id)->first();
+
             if($junta){
                 $recinto = $junta->recinto;
                 $codigo =  $recinto->codigo.'-'.$junta->codigo;

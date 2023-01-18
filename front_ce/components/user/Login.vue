@@ -69,7 +69,7 @@ export default{
                 },
                 body: JSON.stringify(this.data)
             };
-            // http://controlelectoral.local
+
             fetch(this.$parent.baseURL+'auth/login', requestOptions)
             .then(async response => {
 
@@ -91,12 +91,7 @@ export default{
 
                     window.localStorage.setItem('token', data.accessToken);
                     
-
-                    this.token = data.accessToken;
                     this.errorMessage = '';
-
-                    this.user = data.userData;
-                    this.$parent.user = data.userData;
                     
                     window.localStorage.setItem('user',  JSON.stringify(data.userData));
 
@@ -106,6 +101,7 @@ export default{
                     }else if(this.user.role=='superadmin'){
                         this.$parent.seccion = 3;
                     }
+
                     window.localStorage.setItem('pagina', this.$parent.seccion);
             })
             .catch((error) => {
