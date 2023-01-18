@@ -20,20 +20,75 @@ library.add(fas);
 
 // import Contacto from './components/Contacto/Contacto.vue';
 import Login from './components/user/Login.vue';
+import Actas from './components/actas/Actas.vue';
 
 // Vue.component('font-awesome-icon', FontAwesomeIcon);
 // Vue.component('contacto',Contacto);
 Vue.component('login',Login);
+Vue.component('actas',Actas);
 
 var app = new Vue({
     el: '#main',
     data: {
-      baseURL: 'http://controlelectoral.local/',
+      baseURL: 'http://controlelectoral.local/api/',
+      seccion:  1,
+      user: null,
+      resintos:[]
     },
     methods:{
+      fetchRecintos() {
+        const requestOptions = {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest",
+                'Authorization': 'Bearer ' + this.token,
+            },
+        };
+        fetch(this.baseURL+'control-electoral/recintos/dropdownOptions', requestOptions)
+            .then(async response => {
+                const data = await response.json();
 
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    this.errorMessage = error;
+                    return Promise.reject(error);
+                }
+
+                console.log(response, data)
+                this.resintos = data;
+            })
+
+            .catch(error => {
+                this.errorMessage = error;
+                console.error('There was an error!', error);
+            });
+      },
     },
-    mounted(){
-      // initIntro();
-    }
+    mounted() {
+
+      let token = window.localStorage.getItem('token');
+      let pagina = window.localStorage.getItem('pagina');
+      let user = window.localStorage.getItem('user');
+      // console.log('user',user);
+      if (token) {
+          this.token = token;
+          this.seccion = parseInt(pagina);
+
+
+          this.user =  JSON.parse(user);
+
+          if (this.seccion==2) {
+            this.fetchRecintos()
+          }
+          // this.user =  user;
+          // this.fetchUser(token);
+          // this.fetchCantones(token);
+          // this.fetchInscritos();
+      }else{
+        this.seccion = 1;
+      }
+  },
 })

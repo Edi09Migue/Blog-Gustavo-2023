@@ -18,7 +18,12 @@
 
 <body>
     <div id="main">
-        <login></login>
+        <login v-if="seccion==1"></login>
+        <Actas v-if="seccion==2"></Actas>
+        <login v-if="seccion=='3'"></login>
+        <div v-if="seccion==4">
+            succes
+        </div>
     </div>
     <script src="{{ asset('front/js/app.js') }}"></script>
 </body>

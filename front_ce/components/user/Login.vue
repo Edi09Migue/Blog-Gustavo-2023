@@ -9,7 +9,7 @@
                     <!-- input user -->
                     <div class="flex items-center bg-white rounded-full shadow-md mb-4">
                         <span class="px-3">
-                            <font-awesome-icon icon="fa-solid fa-user" />
+                            <!-- <font-awesome-icon icon="fa-solid fa-user" /> -->
                         </span>
                         <input class="rounded-full w-full h-8 focus:outline-none" type="email" name="email" placeholder="Correo electrónico" v-model="data.email">
                     </div>
@@ -17,7 +17,7 @@
                     <div class="flex items-center bg-white rounded-full shadow-md mb-4">
                         <input class="pl-3 rounded-full w-full h-8 focus:outline-none" type="password" name="password" placeholder="Contraseña" v-model="data.password" style="padding-left: 12px;">
                         <span class="px-3">
-                            <font-awesome-icon icon="fa-solid fa-unlock" />
+                            <!-- <font-awesome-icon icon="fa-solid fa-unlock" /> -->
                         </span>
                     </div>
                     <!-- option save  -->
@@ -69,7 +69,8 @@ export default{
                 },
                 body: JSON.stringify(this.data)
             };
-            fetch('http://controlelectoral.local/api/auth/login', requestOptions)
+            // http://controlelectoral.local
+            fetch(this.$parent.baseURL+'auth/login', requestOptions)
             .then(async response => {
 
                     const data = await response.json();
@@ -89,18 +90,34 @@ export default{
                     }
 
                     window.localStorage.setItem('token', data.accessToken);
+                    
 
                     this.token = data.accessToken;
                     this.errorMessage = '';
 
                     this.user = data.userData;
+                    this.$parent.user = data.userData;
+                    
+                    window.localStorage.setItem('user',  JSON.stringify(data.userData));
+
+                    if(this.user.role=='imagenes'){
+                        this.$parent.seccion = 2;
+                        
+                    }else if(this.user.role=='superadmin'){
+                        this.$parent.seccion = 3;
+                    }
+                    window.localStorage.setItem('pagina', this.$parent.seccion);
             })
             .catch((error) => {
                 console.log(error);
                 this.errorMessage = error
                 this.processing = false
             });
-        }
+        },
+
+    },
+    mounted() {
+        
     },
     setup() {
         
