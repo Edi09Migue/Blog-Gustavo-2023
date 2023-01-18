@@ -14,8 +14,10 @@ use App\Http\Controllers\ApplicationController;
 |
 */
 
-Route::get('/{any}', [ApplicationController::class, 'index'])->where('any', '.*');
+Route::get('/admin/{any}', [ApplicationController::class, 'index'])->where('any', '.*');
+Route::get('/admin', [ApplicationController::class, 'index'])->where('any', '.*')->name('admin');
 
+Route::get('/', [ApplicationController::class, 'front_ce'])->name('front.home');
 
 Route::get('/reset-password/{token}', function ($token) {
     return  $token;
