@@ -113,5 +113,6 @@ Route::group(['prefix' => 'control-electoral', 'middleware' => 'auth:api'], func
   
   //rutas para resultados
   Route::get('resultados/totales-por-candidato', [Resultados::class, 'totalesPorCandidato']);
+  Route::get('resultados/totales-por-tipo-voto', [Resultados::class, 'totalesPorTipoVoto']);
   
 });
