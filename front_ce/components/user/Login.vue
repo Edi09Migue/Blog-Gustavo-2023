@@ -90,10 +90,11 @@ export default{
                     }
 
                     this.$parent.user = data.userData
+
                     window.localStorage.setItem('token', data.accessToken);
                     window.localStorage.setItem('user',  JSON.stringify(data.userData));
 
-                    if(this.$parent.role=='imagenes'){
+                    if(this.$parent.user.role=='imagenes'){
                         this.$parent.seccion = 2;
                         
                     }else if(this.$parent.user.role=='superadmin'){

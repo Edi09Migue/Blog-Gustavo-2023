@@ -34872,7 +34872,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   window.localStorage.setItem('token', data.accessToken);
                   window.localStorage.setItem('user', JSON.stringify(data.userData));
 
-                  if (_this.$parent.role == 'imagenes') {
+                  if (_this.$parent.user.role == 'imagenes') {
                     _this.$parent.seccion = 2;
                   } else if (_this.$parent.user.role == 'superadmin') {
                     _this.$parent.seccion = 3;
