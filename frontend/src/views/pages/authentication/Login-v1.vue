@@ -112,6 +112,19 @@
         </validation-observer>
       </b-card>
       <!-- /Login v1 -->
+      <!-- <div style="background-color: #212121;" class="d-flex justify-content-center mt-1 p-1">
+        <feather-icon
+          icon="BarChart2Icon"
+          size="50" 
+          class="text-white"    
+        />
+        <b-img   
+          width="100px"
+          height="50px" 
+          :src="('/images/login/solidariamente.png')" rounded fluid>
+        </b-img>
+      </div> -->
+
     </div>
   </div>
 </template>
@@ -119,7 +132,7 @@
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
-  BButton, BForm, BFormInput, BFormGroup, BCard, BLink, BCardTitle, BCardText, BInputGroup, BInputGroupAppend, BFormCheckbox, BAlert, BSpinner
+  BButton, BForm, BFormInput, BFormGroup, BCard, BLink, BCardTitle, BCardText, BInputGroup, BInputGroupAppend, BFormCheckbox, BAlert, BSpinner, BImg
 } from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import { required, email } from '@validations'
@@ -151,6 +164,7 @@ export default {
     ValidationObserver,
     BAlert,
     BSpinner,
+    BImg,
   },
   mixins: [togglePasswordVisibility],
   data() {
