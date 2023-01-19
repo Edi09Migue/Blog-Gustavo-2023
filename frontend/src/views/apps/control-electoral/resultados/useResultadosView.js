@@ -5,6 +5,7 @@ import router from "@/router";
 
 export default function useResultadosView(){
     const totalesPorCandidatoData = ref(null);
+    const totalesPorCandidatoParroquiaData = ref(null);
     const totalesPorTipoVotoData = ref(null);
     const errorServer = ref(null);
 
@@ -26,6 +27,25 @@ export default function useResultadosView(){
     }
 
     fetchTotalesPorCandidato();
+
+    const fetchTotalesPorCandidatoParroquia = () => {
+        store
+        .dispatch("control-resultados/fetchTotalesPorCandidatoParroquia", {
+            id: router.currentRoute.params.id
+        })
+        .then(response => {
+            totalesPorCandidatoParroquiaData.value = response.data;  
+        })
+        .catch(error => {
+            console.log("error");
+            console.log(error);
+            if (error.response.status === 404) {
+                totalesPorCandidatoParroquiaData.value = undefined;
+            }
+        });
+    }
+
+    fetchTotalesPorCandidatoParroquia();
 
 
     const fetchTotalesPorTipoVoto  = () => {
@@ -50,6 +70,7 @@ export default function useResultadosView(){
 
     return {
         totalesPorCandidatoData,
+        totalesPorCandidatoParroquiaData,
         totalesPorTipoVotoData,
         errorServer,
     };

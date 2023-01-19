@@ -1,5 +1,5 @@
 <template>
-    <b-card class="py-8" title="Votos por Candidato">
+    <b-card title="Votos por Candidato en Parroquias Rurales y Urbanas">
         <app-echart-bar :option-data="option" />
     </b-card>
 </template>
@@ -15,14 +15,27 @@ export default {
     },
     props: {
         series: {
-            type: Array,
+            type: Object,
             required: true
         }
     },
     data() {
 
-        let categorias = this.series.map(s => s.nombre);
-        let resultados = this.series.map(r => r.total_votos);
+        let categorias = this.series.candidatos;
+        let resultados = this.series.parroquias.map((parroquia,i) => {
+            let data = this.series.items[parroquia];
+            let datos = data.map(d => d.total_votos);
+            return {
+                name: parroquia,
+                type: "bar",
+                stack: i%2 == 0 ? 'rural' : 'urbano',
+                label: {
+                    show: true,
+                    position: 'inside'
+                },
+                data: datos,
+            }
+        });
 
         console.log('categorias',categorias);
         return {
@@ -40,17 +53,7 @@ export default {
                         splitLine: { show: false }
                     }
                 ],
-                series: [
-                    {
-                        name: "Votos",
-                        type: "bar",
-                        label: {
-                            show: true,
-                            position: 'inside'
-                        },
-                        data: resultados,
-                    }
-                ]
+                series: resultados
             }
         };
     }

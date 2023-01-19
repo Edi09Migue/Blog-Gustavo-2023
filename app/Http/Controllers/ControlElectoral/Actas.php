@@ -41,9 +41,9 @@ class Actas extends Controller
                 $q->select('id');
                 $q->from('juntas');
                 $q->whereIn('recinto_id', function($sq) use ($parroquia){
-                $sq->select('id');
-                $sq->from('recintos');
-                $sq->where('parroquia_id', $parroquia);
+                    $sq->select('id');
+                    $sq->from('recintos');
+                    $sq->where('parroquia_id', $parroquia);
                 });
             });
         }
@@ -69,11 +69,18 @@ class Actas extends Controller
         //Filtros basicos, orden y paginacion
         $actas = $actas->where(function ($q) use ($query) {
             $q->where('codigo', 'like', "%$query%")
-                ->orWhereIn('junta_id', function ($q) use ($query) {
+            ->orWhereIn('junta_id', function ($q) use ($query) {
+                $q->select('id');
+                $q->from('juntas');
+                $q->where('codigo','like', "%$query%");
+                $q->orWhereIn('recinto_id', function($q) use ($query){
                     $q->select('id');
-                    $q->from('juntas');
-                    $q->where('codigo','like', "%$query%");
+                    $q->from('recintos');
+                    $q->where('codigo', 'like', "%$query%");
+                    $q->orWhere('nombre', 'like', "%$query%");
                 });
+            });
+            
 
         })
             ->orderBy($sortBy, $sortDesc ? 'desc' : 'asc')
