@@ -20,7 +20,7 @@
     <div id="main">
         <login v-if="seccion==1"></login>
         <Actas v-if="seccion==2"></Actas>
-        <login v-if="seccion=='3'"></login>
+        <Votos v-if="seccion==3"></Votos>
         <div v-if="seccion==4">
             succes
         </div>

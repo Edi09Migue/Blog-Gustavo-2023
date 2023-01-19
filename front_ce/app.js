@@ -23,6 +23,7 @@ library.add(fas);
 // import Contacto from './components/Contacto/Contacto.vue';
 import Login from './components/user/Login.vue';
 import Actas from './components/actas/Actas.vue';
+import Votos from './components/votos/Votos.vue';
 
 // Vue.component('font-awesome-icon', FontAwesomeIcon);
 // Vue.component('contacto',Contacto);
@@ -31,14 +32,17 @@ import 'vue-select/dist/vue-select.css';
 
 Vue.component('login',Login);
 Vue.component('actas',Actas);
+Vue.component('votos',Votos);
 
 var app = new Vue({
     el: '#main',
     data: {
       baseURL: 'http://controlelectoral.local/api/',
       seccion:  1,
+      user:null,
       recintos:[],
-      user:null
+      acta:null,
+      candidatos:[],
     },
     methods:{
       fetchRecintos() {
@@ -71,6 +75,36 @@ var app = new Vue({
                 console.error('There was an error!', error);
             });
       },
+      fetchActa() {
+        const requestOptions = {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest",
+                'Authorization': 'Bearer ' + this.token,
+            },
+        };
+        fetch(this.baseURL+'control-electoral/last-acta', requestOptions)
+            .then(async response => {
+                const data = await response.json();
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    this.errorMessage = error;
+                    return Promise.reject(error);
+                }
+
+                this.acta = data.acta
+                this.candidatos = data.candidatos
+            })
+
+            .catch(error => {
+                this.errorMessage = error;
+                console.error('There was an error!', error);
+            });
+      },
     },
     mounted() {
 
@@ -86,6 +120,10 @@ var app = new Vue({
 
           if (this.seccion==2) {
             this.fetchRecintos()
+          }
+
+          if(this.seccion==3){
+            this.fetchActa()
           }
 
       }else{

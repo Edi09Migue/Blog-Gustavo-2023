@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ControlElectoral\Acta;
 use App\Models\ControlElectoral\CandidatoActa;
 use App\Models\ControlElectoral\Junta;
+use App\Models\ControlElectoral\Candidato;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -176,7 +177,32 @@ class Actas extends Controller
         ]);
     }
 
-    //
+    /**
+     * Display last acta.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function lastActa()
+    {
+        #Obtener una acta que no fue consultada
+        #Una acta consultada es cuando el row visualizado de la tabla acta es true
+
+        #Seleccionara una acta que fue no fue visulazada
+        $acta = Acta::where('visualizado', false)->orderBy('id', 'asc')->first();
+
+        #Actualizar el row  visualizado a true, PARA que otro usuario no consulte la misma
+        $acta->update(['visualizado'=>true]);
+
+        #Seleccionara los candidatos
+        $candidatos = Candidato::all();
+
+        return response()->json([
+            'status'    => TRUE,
+            'acta'      => $acta,
+            'candidatos'=> $candidatos,
+        ]);
+
+    }
 
     /**
      * Update the specified resource in storage.
@@ -282,13 +308,4 @@ class Actas extends Controller
             'items'     =>  $acta
         ]);
     }
-
-
-
-
-
-
-
-
-
 }

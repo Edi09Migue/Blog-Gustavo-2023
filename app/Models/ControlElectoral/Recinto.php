@@ -42,8 +42,6 @@ class Recinto extends Model
         'countActas'
     ];
 
-
-
     public function canton()
     {
         return $this->belongsTo(Canton::class);
@@ -58,8 +56,6 @@ class Recinto extends Model
     {
         return $this->belongsTo(Parroquia::class);
     }
-
-
     
     /**
      * Devuelve la cantidad de actas procesadas
@@ -74,7 +70,4 @@ class Recinto extends Model
 
         return $actas->count();
     }
-
-
-
 }
