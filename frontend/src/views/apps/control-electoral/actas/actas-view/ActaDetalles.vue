@@ -137,7 +137,7 @@
                                     <b-card-text class="text-center">
                                         <small>
                                             {{ data.item.candidato.nombre_partido }}
-                                        </small>-
+                                        </small>
                                         <small> {{ data.item.candidato.numero_lista }}</small>
                                     </b-card-text>
                                 </template>
@@ -151,7 +151,7 @@
                             </b-table>
 
 
-                            <b-card-body  v-if="actaData.total_votos" class="invoice-padding mr-3 d-flex justify-content-end pt-0">
+                            <b-card-body  v-if="actaData.total_votos" class="invoice-padding mr-1 d-flex justify-content-end pt-0">
                                 <strong>Total:</strong>
                                 &nbsp;
                                 <h4 class="font-weight-bolder mb-0 text-dark">
