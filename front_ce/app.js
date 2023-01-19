@@ -11,7 +11,7 @@ window.axios = require("axios");
 window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 window.Vue = require('vue')
 
-// import router from "./src/route";
+import router from "./src/route";
 
 import vSelect from 'vue-select'
 // import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
