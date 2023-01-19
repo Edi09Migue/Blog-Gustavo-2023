@@ -39,7 +39,7 @@ export default [
   {
     title: 'Premises',
     route: 'control-recintos-list',
-    icon: 'HomeIcon',
+    icon: 'ListIcon',
     action: 'listar',
     resource: 'recintos'
   },

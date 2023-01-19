@@ -109,6 +109,8 @@ Route::group(['prefix' => 'control-electoral', 'middleware' => 'auth:api'], func
   
   Route::get('actas/dropdownOptions', [Actas::class, 'dropdownOptions']);
   Route::apiResource('actas', Actas::class, ['parameters' => ['actas' => 'acta']]);
+  Route::post('actas/{acta}/restore', [Actas::class,'restore']);
+
 
   Route::get('recintos/dropdownOptions', [Recintos::class, 'dropdownOptions']);
   Route::apiResource('recintos', Recintos::class, ['parameters' => ['recintos' => 'recinto']]);

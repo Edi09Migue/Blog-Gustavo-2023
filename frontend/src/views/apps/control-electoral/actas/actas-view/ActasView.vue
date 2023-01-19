@@ -28,6 +28,7 @@
                             name: 'control-actas-edit',
                             params: { id: actaData.id,}
                         }"
+                        size="sm"
                         
                     >
                         <feather-icon icon="EditIcon" />

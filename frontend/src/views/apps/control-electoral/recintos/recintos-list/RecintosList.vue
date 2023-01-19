@@ -123,25 +123,24 @@
 
                 <!-- Column: juntas -->
                 <template #cell(juntas)="data">
-                    <small> Total: {{  data.item.total_juntas }} </small>
-                    <br>
                     <small> JF: {{  data.item.juntas_femeninas }} </small>
                     <br>
                     <small> JM: {{  data.item.juntas_masculinas }} </small>
+                    <br>
+                    <small style="font-weight: bold;"> Total: {{  data.item.total_juntas }} </small>
+                    <br>
+                    <b-link
+                        :to="{ name: 'control-actas-list', params: { id: data.item.id  } }">
+                    <small> 
+                        <b-badge :variant="data.item.countActas ==  data.item.total_juntas ? 'success' : 'dark'"> Procesadas: {{ data.item.countActas }} </b-badge></small>
+                    </b-link>
                 </template>
 
-                   <!-- Column: juntas -->
-                   <template #cell(electores)="data">
+                <!-- Column: juntas -->
+                <template #cell(electores)="data">
                     <small>{{  data.item.cantidad_electores }} </small>
                    
                 </template>
-
-
-
-
-              
-
-
 
 
 

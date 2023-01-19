@@ -221,7 +221,7 @@ export default function useActasList(){
     const removeActa = function(acta) {
         this.$swal({
             title: this.$t("Are you sure"),
-            html: `${this.$t("Will be deleted")} el Acta:<strong> ${acta.nombre_comun}</strong><br><small c>${this.$t("Wont Able To Revert")}</small>`,
+            html: `${this.$t("Will be deleted")} el Acta:<strong> ${acta.codigo}</strong><br><small c>${this.$t("Wont Able To Revert")}</small>`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: this.$t("Yes delete it"),
@@ -266,7 +266,7 @@ export default function useActasList(){
         const restoreItem = function(item) {
             this.$swal({
                 title: this.$t("Are you sure"),
-                html: `${this.$t("Will be restored")} el Acta: <strong> ${item.nombre_comun}</strong><br><small c></small>`,
+                html: `${this.$t("Will be restored")} el Acta: <strong> ${item.codigo}</strong><br><small c></small>`,
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonText: this.$t("Yes restore it"),

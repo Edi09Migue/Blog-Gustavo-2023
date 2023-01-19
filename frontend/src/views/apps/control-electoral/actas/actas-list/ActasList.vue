@@ -136,10 +136,10 @@
                         <b-badge
                             v-if="data.item.estado"
                             pill
-                            variant="light-success"
+                            variant="success"
                             class="text-capitalize"
                         >
-                             Digitalizada
+                             Procesada
                         </b-badge>
 
                         <b-badge
@@ -148,7 +148,7 @@
                             variant="light-primary"
                             class="text-capitalize"
                         >
-                            {{ data.item.visualizado  ? ("Digitalizando...") : ("Procesada") }}
+                            {{ data.item.visualizado  ? ("Procesando...") : ("Ingresada") }}
                         </b-badge>
 
                       

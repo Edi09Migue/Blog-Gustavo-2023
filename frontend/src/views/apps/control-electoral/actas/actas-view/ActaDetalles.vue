@@ -39,14 +39,14 @@
                 <b-row class="d-flex justify-content-center">
                     <b-media no-body>
                         <b-media-aside
-                            class="mr-2"
+                            class="mr-1"
                         >
                             <b-avatar
-                                size="30"
+                                size="28"
                                 variant="light-secondary"
                             >
                                 <feather-icon
-                                    size="18"
+                                    size="16"
                                     icon="ArchiveIcon"
                                 />
                             </b-avatar>
@@ -63,14 +63,14 @@
                     </b-media>
                     <b-media no-body class="ml-4">
                         <b-media-aside
-                            class="mr-2"
+                            class="mr-1"
                         >
                             <b-avatar
-                                size="30"
+                                size="28"
                                 variant="light-danger"
                             >
                                 <feather-icon
-                                    size="18"
+                                    size="16"
                                     icon="ArchiveIcon"
                                 />
                             </b-avatar>
@@ -87,14 +87,14 @@
                     </b-media>
                     <b-media no-body class="ml-4">
                         <b-media-aside
-                            class="mr-2"
+                            class="mr-1"
                         >
                             <b-avatar
-                                size="30"
+                                size="28"
                                 variant="light-primary"
                             >
                                 <feather-icon
-                                    size="18"
+                                    size="16"
                                     icon="ArchiveIcon"
                                 />
                             </b-avatar>
@@ -120,6 +120,7 @@
                             class="d-flex justify-content-between flex-column"
                         >
                             <b-table
+                                small
                                 responsive
                                 :items="actaData.candidatos_acta"
                                 :fields="tableDetailColumns"
@@ -129,7 +130,7 @@
                                 <template #cell(candidato)="data">
                                     <b-card-text class="text-center">
                                         {{ data.item.candidato.nombre }}
-                                        </b-card-text>
+                                    </b-card-text>
                                 </template>
 
                                 <template #cell(partido)="data">
@@ -150,7 +151,7 @@
                             </b-table>
 
 
-                            <b-card-body v-if="actaData.total_votos" class="invoice-padding mx-1 d-flex justify-content-end">
+                            <b-card-body  v-if="actaData.total_votos" class="invoice-padding mr-3 d-flex justify-content-end pt-0">
                                 <strong>Total:</strong>
                                 &nbsp;
                                 <h4 class="font-weight-bolder mb-0 text-dark">
@@ -161,14 +162,14 @@
                             
 
 
-                            <b-card-body v-if="actaData.procesado" class="invoice-padding mx-1 d-flex flex-column align-items-end">
+                            <b-card-body no-body v-if="actaData.ingresada" class="invoice-padding mx-1 d-flex flex-column align-items-end py-0">
                                 <small>
-                                    <strong>Procesado:</strong>
-                                    <span>{{ actaData.procesado.name }}</span>
+                                    <strong>Ingresada:</strong>
+                                    <span>{{ actaData.ingresada.name }}</span>
                                 </small>
-                                <small v-if="actaData.digitalizador">
-                                    <strong>Digitalizado:</strong>
-                                    <span>{{ actaData.digitalizador }}</span>
+                                <small v-if="actaData.procesada">
+                                    <strong>Procesada:</strong>
+                                    <span>{{ actaData.procesada }}</span>
                                 </small>
                             </b-card-body>
 
@@ -211,18 +212,17 @@
         },
     },
     methods: {
-      rowClass(item, type) {
-        if (!item || type !== 'row') { return }
-        if (item.nombre == "Total") { return 'table-success' }
+      rowClass(item) {
+        if (item.candidato_id == 9) { return 'table-success' }
       },
    },
 
 
     setup() {
         const tableDetailColumns = [
-            { key: "candidato", sortable: true, label: ("Candidato"),  thClass: 'text-center' },
-            { key: "partido", sortable: true, label: ("Partido"),  thClass: 'text-center' },
-            { key: "votos", sortable: true, label: ("Votos"),  thClass: 'text-center' },
+            { key: "candidato", sortable: false, label: ("Candidato"),  thClass: 'text-center' },
+            { key: "partido", sortable: false, label: ("Partido"),  thClass: 'text-center' },
+            { key: "votos", sortable: false, label: ("Votos"),  thClass: 'text-center' },
         ];
 
 

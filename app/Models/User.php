@@ -218,4 +218,13 @@ class User extends Authenticatable implements Auditable
 
         return $query;
     }
+
+
+    public function getIsAdminAttribute(){
+        $is_admin = $this->roles()
+                        ->whereIn('role_id',[1])
+                        ->count();
+        return $is_admin > 0;
+    }
+
 }

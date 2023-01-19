@@ -40,7 +40,7 @@ class ActaSeeder extends Seeder
             "votos_nulos" => 60,
             "votos_validos" => 230,
             "estado" => true,
-            "procesado_por" => 3,
+            "ingresada_por" => 3,
             "visualizado" => true,
 
         ]);
@@ -73,7 +73,7 @@ class ActaSeeder extends Seeder
                 "candidato_id" => $votos_candidato[0],
                 "acta_id" => $votos_candidato[1],
                 "votos" => $votos_candidato[2],
-                "digitalizado_por" => $votos_candidato[3],
+                "procesada_por" => $votos_candidato[3],
               
             ]);
 
@@ -95,7 +95,7 @@ class ActaSeeder extends Seeder
             "votos_nulos" => 60,
             "votos_validos" => 230,
             "estado" => false,
-            "procesado_por" => 3,
+            "ingresada_por" => 3,
 
         ]);
 

@@ -17,7 +17,7 @@ class CandidatoActa extends Model
         'candidato_id',
         'acta_id',
         'votos',
-        'digitalizado_por',
+        'procesada_por',
     ];
 
     public function candidato()
@@ -30,9 +30,9 @@ class CandidatoActa extends Model
         return $this->belongsTo(Acta::class);
     }
 
-    public function digitalizado()
+    public function procesada()
     {
-        return $this->belongsTo(User::class,'digitalizado_por');
+        return $this->belongsTo(User::class,'procesada_por');
     }
 
 

@@ -69,11 +69,12 @@ class Actas extends Controller
         //Filtros basicos, orden y paginacion
         $actas = $actas->where(function ($q) use ($query) {
             $q->where('codigo', 'like', "%$query%")
-                ->orWhereIn('junta_id', function ($sq) use ($query) {
-                    $sq->select('id');
-                    $sq->from('juntas');
-                    $sq->where('codigo','like', "%$query%");
+                ->orWhereIn('junta_id', function ($q) use ($query) {
+                    $q->select('id');
+                    $q->from('juntas');
+                    $q->where('codigo','like', "%$query%");
                 });
+
         })
             ->orderBy($sortBy, $sortDesc ? 'desc' : 'asc')
             ->paginate($perPage);
@@ -111,7 +112,7 @@ class Actas extends Controller
                 $acta->codigo = $codigo;
             }
 
-            $acta->procesado_por = Auth::user()->id;
+            $acta->ingresada_por = Auth::user()->id;
 
             $acta->save();
 
@@ -151,7 +152,7 @@ class Actas extends Controller
     public function show(Acta $acta)
     {
         $acta->junta->recinto->parroquia;
-        $acta->procesado;
+        $acta->ingresada;
 
 
         $candidatosActa = CandidatoActa::where('acta_id',  $acta->id)->get();
@@ -159,13 +160,13 @@ class Actas extends Controller
         $acta->candidatos_acta = $candidatosActa;
 
         $total_votos = 0;
-        $digitalizador = null;
+        $procesada = null;
         foreach($candidatosActa as $candidato_acta){
             $candidato_acta->candidato;
-            $digitalizador  = $candidato_acta->digitalizado->name;
+            $procesada  = $candidato_acta->procesada->name;
             $total_votos += $candidato_acta->votos;
         }
-        $acta->digitalizador = $digitalizador;
+        $acta->procesada = $procesada;
         $acta->total_votos = $total_votos;
 
 
@@ -207,7 +208,7 @@ class Actas extends Controller
                         "candidato_id" => $candidato['candidato_id'],
                         "acta_id" => $candidato['acta_id'],
                         "votos" => $candidato['votos'],
-                        "digitalizado_por" =>  Auth::user()->id,
+                        "procesada_por" =>  Auth::user()->id,
               
                     ]);
 
@@ -247,7 +248,7 @@ class Actas extends Controller
         return response()->json([
             'status'    => TRUE,
             'data'      => $acta,
-            'msg'       => "Acta: {$acta->nombre}"
+            'msg'       => "Acta: {$acta->codigo}"
         ]);
     }
 
@@ -263,7 +264,7 @@ class Actas extends Controller
         return response()->json([
             'status' => true,
             'data' => $acta,
-            'msg'       => "Acta: {$acta->nombre}"
+            'msg'       => "Acta: {$acta->codigo}"
 
         ]);
     }

@@ -31,7 +31,8 @@ class CandidatoActaSeeder extends Seeder
         $candidatos = Candidato::select('id','nombre')->inRandomOrder()->get();
 
         foreach($recintos as $recinto){
-            echo "Recinto: {$recinto->codigo} => votantes: {$recinto->cantidad_electores}\n";
+            // echo "Recinto: {$recinto->codigo} => votantes: {$recinto->cantidad_electores}\n";
+
             $total_electores_recinto = $recinto->cantidad_electores;
             
             $electores_x_junta = $total_electores_recinto / $recinto->total_juntas;
@@ -39,7 +40,9 @@ class CandidatoActaSeeder extends Seeder
             $totalActas = 0;
 
             foreach($recinto->juntas as $junta){
-                echo "\tJunta: {$junta->codigo} => votantes: {$recinto->electores_x_junta} \n";
+                // echo "\tJunta: {$junta->codigo} => votantes: {$recinto->electores_x_junta} \n";
+
+
                 //$totalActas += (int) $electores_x_junta;
 
                 $codigo =  $recinto->codigo.'-'.$junta->codigo;
@@ -59,7 +62,7 @@ class CandidatoActaSeeder extends Seeder
                     "votos_nulos"       => $votos_nulos,
                     "votos_validos"     => $votos_validos,
                     "estado"            => true,
-                    "procesado_por"     => 3,
+                    "ingresada_por"     => 3,
                 ]);
 
                 $votados = 0;
@@ -67,12 +70,12 @@ class CandidatoActaSeeder extends Seeder
                 foreach($candidatos as $candidato){
                     $votos = rand(0, $votos_validos - $votados);
                     $votados += $votos;
-                    echo "\t\t {$candidato->nombre}: {$votos}\n";
+                    // echo "\t\t {$candidato->nombre}: {$votos}\n";
                     $ca = CandidatoActa::create([
                         'candidato_id'      =>  $candidato->id,
                         'acta_id'           =>  $acta->id,
                         'votos'             =>  $votos,
-                        'digitalizado_por'  =>  3
+                        'procesada_por'  =>  2
                     ]);
                 }
 

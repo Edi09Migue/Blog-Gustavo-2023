@@ -148,7 +148,13 @@
   "Results":"Resultados",
   "Proceedings":"Actas",
   "Ecuador" : "Ecuador",
-  "Premises" : "Recintos"
+  "Premises" : "Recintos",
+  "Will be deleted": "Se eliminará",
+  "Ok": "Aceptar",
+  "Restore": "Restaurar",
+  "Will be restored": "Se restaurará",
+  "Yes restore it": "Si, restaurarlo",
+  "Restored":"Restaurado"
 
 
 

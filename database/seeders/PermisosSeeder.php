@@ -57,11 +57,12 @@ class PermisosSeeder extends Seeder
 
         //Actas
         $p_listar_actas = Permission::create(['name' => 'listar-actas', 'group_key' => 'Admin']);
-        $p_editar_actas = Permission::create(['name' => 'editar-actas', 'group_key' => 'Admin']);
         $p_ver_actas = Permission::create(['name' => 'ver-actas', 'group_key' => 'Admin']);
 
         //Resultados
         $p_listar_resultados = Permission::create(['name' => 'listar-resultados', 'group_key' => 'Admin']);
+
+        $p_listar_recintos = Permission::create(['name' => 'listar-recintos', 'group_key' => 'Admin']);
 
 
 

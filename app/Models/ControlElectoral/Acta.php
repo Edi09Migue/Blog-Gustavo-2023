@@ -24,7 +24,7 @@ class Acta extends Model implements Auditable
         'votos_nulos',
         'votos_validos',
         'estado',
-        'procesado_por',
+        'ingresada_por',
         'visualizado',
     ];
 
@@ -43,9 +43,9 @@ class Acta extends Model implements Auditable
         return $this->belongsTo(Junta::class);
     }
 
-    public function procesado()
+    public function ingresada()
     {
-        return $this->belongsTo(User::class, 'procesado_por');
+        return $this->belongsTo(User::class, 'ingresada_por');
     }
 
     public function candidatosActa(){

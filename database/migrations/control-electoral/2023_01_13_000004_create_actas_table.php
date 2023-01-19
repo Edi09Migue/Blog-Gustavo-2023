@@ -22,9 +22,9 @@ class CreateActasTable extends Migration
             $table->integer('votos_blancos')->default(0);
             $table->integer('votos_nulos')->default(0);
             $table->integer('votos_validos')->default(0);
-            $table->unsignedBigInteger('procesado_por');
+            $table->unsignedBigInteger('ingresada_por');
+            $table->foreign('ingresada_por')->references('id')->on('users');
             $table->boolean('estado')->default(false);
-            $table->foreign('procesado_por')->references('id')->on('users');
             $table->boolean('visualizado')->default(false);
             $table->softDeletes();
             $table->timestamps();
