@@ -1,10 +1,10 @@
 <template>
-    <b-card title="Totales por Tipo de Voto">
+    <b-card title="Total Escrutados">
         <div class="pie-text text-center">
             <h2 class="font-weight-bolder">
                 {{ total }}
             </h2>
-            <span class="font-weight-bold">Votos Escrutados</span>
+            <span class="font-weight-bold">Total Votos</span>
         </div>
 
         <!-- echart -->
@@ -28,9 +28,7 @@ export default {
         }
     },
     data() {
-        let total = parseFloat(this.totales.validos) +
-                    parseFloat(this.totales.blancos) +
-                    parseFloat(this.totales.nulos);
+        let total = parseFloat(this.totales.total);
         return {
             total: total,
             series: [
@@ -46,9 +44,8 @@ export default {
                         show: false
                     },
                     data: [
-                        { value: this.totales.validos, name: `Válidos (${((this.totales.validos / total)*100).toFixed(2)}%)` },
-                        { value: this.totales.nulos, name: `Nulos  (${((this.totales.nulos / total)*100).toFixed(2)}%)` },
-                        { value: this.totales.blancos, name: `Blancos  (${((this.totales.blancos / total)*100).toFixed(2)}%)` }
+                        { value: this.totales.escrutados, name: `Escrutados` },
+                        { value: this.totales.por_escrutar, name: `Por Escrutar` },
                     ]
                 }
             ]

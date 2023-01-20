@@ -33,6 +33,15 @@ export default {
                     .catch(error => reject(error));
             });
         },
+        
+        fetchTotalesEscrutados(ctx, queryParams) {
+            return new Promise((resolve, reject) => {
+                axios
+                    .get("/api/control-electoral/resultados/totales-escrutados", { params: queryParams })
+                    .then(response => resolve(response))
+                    .catch(error => reject(error));
+            });
+        },
 
         fetchParroquiasOption(ctx, params){
             return new Promise((resolve, reject) => {
