@@ -42,7 +42,7 @@
 </div>
 </template>
 <script>
-
+import { http } from "../../axios"
 
 export default{
     name:'Login',
@@ -54,55 +54,26 @@ export default{
             },
             processing:false,
             errorMessage:null,
-            token:null,
-            user:null,
         }
     },
     methods:{
         login(){
 
-            const requestOptions = {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Requested-With": "XMLHttpRequest"
-                },
-                body: JSON.stringify(this.data)
-            };
+            this.processing = true
 
-            fetch(this.$parent.baseURL+'auth/login', requestOptions)
-            .then(async response => {
+            http
+            .post("auth/login",this.data)
+            .then( response => {
 
-                    const data = await response.json();
-
-                    // check for error response
-                    if (!response.ok) {
-                        // get error message from body or default to response status
-                        const error = (data && data.message) || response.status;
-                        this.errorMessage = error;
-                        return Promise.reject(error);
-                    }
-                    
-                    if (!data.status) {
-                        const error = (data && data.msg) || response.status;
-                        this.errorMessage = error;
-                        return Promise.reject(error);
-                    }
-
-                    window.localStorage.setItem('token', data.accessToken);
-                    
+                    let user = response.data
                     this.errorMessage = '';
                     
-                    window.localStorage.setItem('user',  JSON.stringify(data.userData));
+                    window.localStorage.setItem('token', user.accessToken);
+                    window.localStorage.setItem('user',  JSON.stringify(user.userData));
 
-                    if(this.user.role=='imagenes'){
-                        this.$parent.seccion = 2;
-                        
-                    }else if(this.user.role=='superadmin'){
-                        this.$parent.seccion = 3;
-                    }
+                    this.processing = false
 
-                    window.localStorage.setItem('pagina', this.$parent.seccion);
+                    this.$router.push({ path: 'home' })
             })
             .catch((error) => {
                 console.log(error);
@@ -113,7 +84,7 @@ export default{
 
     },
     mounted() {
-        
+        // console.log(this.$parent.baseURL);
     },
     setup() {
         

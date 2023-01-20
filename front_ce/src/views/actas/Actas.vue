@@ -4,7 +4,8 @@
         <div class="bg-white shadow-xl rounded my-8 bg-dark box-login min-w-[80%]">
             
             <div class="text-center text-blanco py-1">
-                {{ this.$parent.user.name }}
+                <!-- {{ $store.getters.getUser.name }} -->
+                {{ user }}
             </div>
 
             <div class="text-center text-blanco py-1">REGISTRO DE ACTAS </div>
@@ -34,8 +35,9 @@
                                     :options="this.$parent.recintos"
                                     label="nombre"
                                     placeholder="Buscar el recinto"
-                                    @input="selectRecinto"
+                                    
                                 >
+                                <!-- @input="selectRecinto" -->
                                     <template v-slot:option="option">
                                         {{ option.codigo }} / {{ option.nombre }}  
                                     </template>
@@ -99,8 +101,8 @@
                         <div class="min-w-[100%] p-4">
                             <button class="flex justify-center w-full border-solid border border-blanco rounded-xl bg-blanco" type="submit">
                                 <span> INGRESAR </span>
-                                <span class="pt-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" v-if="processing" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <span class="pt-2" v-if="processing">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                     </svg>
                                 </span>
@@ -114,7 +116,6 @@
 </template>
 <script>
 export default{
-    name:'Actas',
     data(){
         return{
             acta:{
@@ -128,10 +129,17 @@ export default{
             },
             processing:false,
             errorMessage:null,
-            user:null,
             juntas:[],
+            user:'Mauel'
         }
     },
+    // computed: {
+    //     user() {
+    //         console.log('llamando a v global')
+    //         // return this.$store.getters.getUser
+    //         return localStorage.getItem('user')
+    //     },
+    // },
     methods:{
         selectRecinto(item) {
             const requestOptions = {
@@ -213,6 +221,6 @@ export default{
         
     },
     mounted() {
-
+        alert('manuel');
     }
 }
