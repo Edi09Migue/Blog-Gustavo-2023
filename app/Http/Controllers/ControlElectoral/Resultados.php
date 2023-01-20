@@ -35,7 +35,7 @@ class Resultados extends Controller
                             ->join('parroquias', 'parroquias.id','=','recintos.parroquia_id');
                             
         if($request->has('parroquia')){
-            $totales = $totales->where('parroquias.id',$request->parroquia);
+            $totales = $totales->whereIn('parroquias.id',$request->parroquia);
         }
 
         if($request->has('recinto')){
@@ -80,7 +80,7 @@ class Resultados extends Controller
                             ->join('parroquias', 'parroquias.id','=','recintos.parroquia_id');
         
         if($request->has('parroquia')){
-            $totales = $totales->where('parroquias.id',$request->parroquia);
+            $totales = $totales->whereIn('parroquias.id',$request->parroquia);
         }
 
         if($request->has('recinto')){
@@ -127,7 +127,7 @@ class Resultados extends Controller
                         ->join('parroquias', 'parroquias.id', '=', 'recintos.parroquia_id');
 
         if ($request->has('parroquia')) {
-            $totales = $totales->where('parroquias.id', $request->parroquia);
+            $totales = $totales->whereIn('parroquias.id', $request->parroquia);
         }
 
         if ($request->has('recinto')) {
@@ -159,8 +159,8 @@ class Resultados extends Controller
 
 
         if ($request->has('parroquia')) {
-            $total_electores = $total_electores->where('parroquia_id', $request->parroquia);
-            $totales = $totales->where('parroquias.id', $request->parroquia);
+            $total_electores = $total_electores->whereIn('parroquia_id', $request->parroquia);
+            $totales = $totales->whereIn('parroquias.id', $request->parroquia);
         }
 
         if ($request->has('recinto')) {

@@ -36,15 +36,17 @@ class Actas extends Controller
         }
 
         //Filtro parroquia
-        $parroquia = $request->has('parroquia') ? $request->parroquia : '';
-        if ($parroquia != '') {
-            $actas = $actas->whereIn('junta_id', function($q) use ($parroquia){
+        if ($request->has('parroquia')) {
+            //soporte para buscar una o varias parroquias
+            $parroquiasIds = is_array($request->parroquia) ? $request->parroquia : [$request->parroquia];
+          
+            $actas = $actas->whereIn('junta_id', function($q) use ($parroquiasIds){
                 $q->select('id');
                 $q->from('juntas');
-                $q->whereIn('recinto_id', function($sq) use ($parroquia){
+                $q->whereIn('recinto_id', function($sq) use ($parroquiasIds){
                     $sq->select('id');
                     $sq->from('recintos');
-                    $sq->where('parroquia_id', $parroquia);
+                    $sq->whereIn('parroquia_id', $parroquiasIds);
                 });
             });
         }
