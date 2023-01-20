@@ -1,6 +1,50 @@
 /******/ (function(modules) { // webpackBootstrap
+/******/ 	// install a JSONP callback for chunk loading
+/******/ 	function webpackJsonpCallback(data) {
+/******/ 		var chunkIds = data[0];
+/******/ 		var moreModules = data[1];
+/******/
+/******/
+/******/ 		// add "moreModules" to the modules object,
+/******/ 		// then flag all "chunkIds" as loaded and fire callback
+/******/ 		var moduleId, chunkId, i = 0, resolves = [];
+/******/ 		for(;i < chunkIds.length; i++) {
+/******/ 			chunkId = chunkIds[i];
+/******/ 			if(Object.prototype.hasOwnProperty.call(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 				resolves.push(installedChunks[chunkId][0]);
+/******/ 			}
+/******/ 			installedChunks[chunkId] = 0;
+/******/ 		}
+/******/ 		for(moduleId in moreModules) {
+/******/ 			if(Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
+/******/ 				modules[moduleId] = moreModules[moduleId];
+/******/ 			}
+/******/ 		}
+/******/ 		if(parentJsonpFunction) parentJsonpFunction(data);
+/******/
+/******/ 		while(resolves.length) {
+/******/ 			resolves.shift()();
+/******/ 		}
+/******/
+/******/ 	};
+/******/
+/******/
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
+/******/
+/******/ 	// object to store loaded and loading chunks
+/******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 	// Promise = chunk loading, 0 = chunk loaded
+/******/ 	var installedChunks = {
+/******/ 		"/front/js/app": 0
+/******/ 	};
+/******/
+/******/
+/******/
+/******/ 	// script path function
+/******/ 	function jsonpScriptSrc(chunkId) {
+/******/ 		return __webpack_require__.p + "" + ({}[chunkId]||chunkId) + ".js"
+/******/ 	}
 /******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
@@ -26,6 +70,67 @@
 /******/ 		return module.exports;
 /******/ 	}
 /******/
+/******/ 	// This file contains only the entry chunk.
+/******/ 	// The chunk loading function for additional chunks
+/******/ 	__webpack_require__.e = function requireEnsure(chunkId) {
+/******/ 		var promises = [];
+/******/
+/******/
+/******/ 		// JSONP chunk loading for javascript
+/******/
+/******/ 		var installedChunkData = installedChunks[chunkId];
+/******/ 		if(installedChunkData !== 0) { // 0 means "already installed".
+/******/
+/******/ 			// a Promise means "currently loading".
+/******/ 			if(installedChunkData) {
+/******/ 				promises.push(installedChunkData[2]);
+/******/ 			} else {
+/******/ 				// setup Promise in chunk cache
+/******/ 				var promise = new Promise(function(resolve, reject) {
+/******/ 					installedChunkData = installedChunks[chunkId] = [resolve, reject];
+/******/ 				});
+/******/ 				promises.push(installedChunkData[2] = promise);
+/******/
+/******/ 				// start chunk loading
+/******/ 				var script = document.createElement('script');
+/******/ 				var onScriptComplete;
+/******/
+/******/ 				script.charset = 'utf-8';
+/******/ 				script.timeout = 120;
+/******/ 				if (__webpack_require__.nc) {
+/******/ 					script.setAttribute("nonce", __webpack_require__.nc);
+/******/ 				}
+/******/ 				script.src = jsonpScriptSrc(chunkId);
+/******/
+/******/ 				// create error before stack unwound to get useful stacktrace later
+/******/ 				var error = new Error();
+/******/ 				onScriptComplete = function (event) {
+/******/ 					// avoid mem leaks in IE.
+/******/ 					script.onerror = script.onload = null;
+/******/ 					clearTimeout(timeout);
+/******/ 					var chunk = installedChunks[chunkId];
+/******/ 					if(chunk !== 0) {
+/******/ 						if(chunk) {
+/******/ 							var errorType = event && (event.type === 'load' ? 'missing' : event.type);
+/******/ 							var realSrc = event && event.target && event.target.src;
+/******/ 							error.message = 'Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')';
+/******/ 							error.name = 'ChunkLoadError';
+/******/ 							error.type = errorType;
+/******/ 							error.request = realSrc;
+/******/ 							chunk[1](error);
+/******/ 						}
+/******/ 						installedChunks[chunkId] = undefined;
+/******/ 					}
+/******/ 				};
+/******/ 				var timeout = setTimeout(function(){
+/******/ 					onScriptComplete({ type: 'timeout', target: script });
+/******/ 				}, 120000);
+/******/ 				script.onerror = script.onload = onScriptComplete;
+/******/ 				document.head.appendChild(script);
+/******/ 			}
+/******/ 		}
+/******/ 		return Promise.all(promises);
+/******/ 	};
 /******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
@@ -79,12 +184,91 @@
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "/";
 /******/
+/******/ 	// on error function for async loading
+/******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
+/******/
+/******/ 	var jsonpArray = window["webpackJsonp"] = window["webpackJsonp"] || [];
+/******/ 	var oldJsonpFunction = jsonpArray.push.bind(jsonpArray);
+/******/ 	jsonpArray.push = webpackJsonpCallback;
+/******/ 	jsonpArray = jsonpArray.slice();
+/******/ 	for(var i = 0; i < jsonpArray.length; i++) webpackJsonpCallback(jsonpArray[i]);
+/******/ 	var parentJsonpFunction = oldJsonpFunction;
+/******/
 /******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ({
+
+/***/ "./front_ce/App.vue":
+/*!**************************!*\
+  !*** ./front_ce/App.vue ***!
+  \**************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _App_vue_vue_type_template_id_8eb2b190___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App.vue?vue&type=template&id=8eb2b190& */ "./front_ce/App.vue?vue&type=template&id=8eb2b190&");
+/* harmony import */ var _App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App.vue?vue&type=script&lang=js& */ "./front_ce/App.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _App_vue_vue_type_template_id_8eb2b190___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _App_vue_vue_type_template_id_8eb2b190___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "front_ce/App.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./front_ce/App.vue?vue&type=script&lang=js&":
+/*!***************************************************!*\
+  !*** ./front_ce/App.vue?vue&type=script&lang=js& ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../node_modules/babel-loader/lib??ref--4-0!../node_modules/vue-loader/lib??vue-loader-options!./App.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/App.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./front_ce/App.vue?vue&type=template&id=8eb2b190&":
+/*!*********************************************************!*\
+  !*** ./front_ce/App.vue?vue&type=template&id=8eb2b190& ***!
+  \*********************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_template_id_8eb2b190___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib??vue-loader-options!./App.vue?vue&type=template&id=8eb2b190& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/App.vue?vue&type=template&id=8eb2b190&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_template_id_8eb2b190___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_template_id_8eb2b190___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
 
 /***/ "./front_ce/app.js":
 /*!*************************!*\
@@ -95,407 +279,56 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _src_intro_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/intro.js */ "./front_ce/src/intro.js");
+/* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App.vue */ "./front_ce/App.vue");
+/* harmony import */ var _src_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/store */ "./front_ce/src/store/index.js");
 /* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-select */ "./front_ce/node_modules/vue-select/dist/vue-select.js");
 /* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fortawesome/fontawesome-svg-core */ "./front_ce/node_modules/@fortawesome/fontawesome-svg-core/index.mjs");
 /* harmony import */ var _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @fortawesome/free-solid-svg-icons */ "./front_ce/node_modules/@fortawesome/free-solid-svg-icons/index.mjs");
-/* harmony import */ var _components_user_Login_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/user/Login.vue */ "./front_ce/components/user/Login.vue");
-/* harmony import */ var _components_actas_Actas_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/actas/Actas.vue */ "./front_ce/components/actas/Actas.vue");
-/* harmony import */ var _components_votos_Votos_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/votos/Votos.vue */ "./front_ce/components/votos/Votos.vue");
-/* harmony import */ var vue_select_dist_vue_select_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue-select/dist/vue-select.css */ "./front_ce/node_modules/vue-select/dist/vue-select.css");
-/* harmony import */ var vue_select_dist_vue_select_css__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(vue_select_dist_vue_select_css__WEBPACK_IMPORTED_MODULE_8__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
- // require('./src/main.js');
-
+/* harmony import */ var _src_route__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./src/route */ "./front_ce/src/route/index.js");
+/* harmony import */ var vue_select_dist_vue_select_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-select/dist/vue-select.css */ "./front_ce/node_modules/vue-select/dist/vue-select.css");
+/* harmony import */ var vue_select_dist_vue_select_css__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(vue_select_dist_vue_select_css__WEBPACK_IMPORTED_MODULE_6__);
 /**
 * We'll load the axios HTTP library which allows us to easily issue requests
 * to our Laravel back-end. This library automatically handles sending the
 * CSRF token as a header based on the value of the "XSRF" token cookie.
 */
-
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
-window.Vue = __webpack_require__(/*! vue */ "./front_ce/node_modules/vue/dist/vue.common.js"); // import router from "./src/route";
+window.Vue = __webpack_require__(/*! vue */ "./front_ce/node_modules/vue/dist/vue.common.js");
+ // import axios from './recursos/axios';
+
 
  // import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 
 
-_fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_3__["library"].add(_fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_4__["fas"]); // import Contacto from './components/Contacto/Contacto.vue';
-
-
-
- // Vue.component('font-awesome-icon', FontAwesomeIcon);
+_fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_3__["library"].add(_fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_4__["fas"]);
+ // import Contacto from './components/Contacto/Contacto.vue';
+// import Login from './components/user/Login.vue';
+// import Actas from './components/actas/Actas.vue';
+// Vue.component('font-awesome-icon', FontAwesomeIcon);
 // Vue.component('contacto',Contacto);
 
 Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a);
+ // Vue.component('login',Login);
+// Vue.component('actas',Actas);
 
-Vue.component('login', _components_user_Login_vue__WEBPACK_IMPORTED_MODULE_5__["default"]);
-Vue.component('actas', _components_actas_Actas_vue__WEBPACK_IMPORTED_MODULE_6__["default"]);
-Vue.component('votos', _components_votos_Votos_vue__WEBPACK_IMPORTED_MODULE_7__["default"]);
-var app = new Vue({
+new Vue({
   el: '#main',
-  data: {
-    baseURL: 'http://controlelectoral.local/api/',
-    seccion: 1,
-    user: null,
-    recintos: [],
-    acta: null,
-    candidatos: []
-  },
-  methods: {
-    fetchRecintos: function fetchRecintos() {
-      var _this = this;
-
-      var requestOptions = {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          'Authorization': 'Bearer ' + this.token
-        }
-      };
-      fetch(this.baseURL + 'control-electoral/recintos/dropdownOptions', requestOptions).then( /*#__PURE__*/function () {
-        var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(response) {
-          var data, error;
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-            while (1) {
-              switch (_context.prev = _context.next) {
-                case 0:
-                  _context.next = 2;
-                  return response.json();
-
-                case 2:
-                  data = _context.sent;
-
-                  if (response.ok) {
-                    _context.next = 7;
-                    break;
-                  }
-
-                  // get error message from body or default to response status
-                  error = data && data.message || response.status;
-                  _this.errorMessage = error;
-                  return _context.abrupt("return", Promise.reject(error));
-
-                case 7:
-                  console.log(response, data.items);
-                  _this.recintos = data.items;
-
-                case 9:
-                case "end":
-                  return _context.stop();
-              }
-            }
-          }, _callee);
-        }));
-
-        return function (_x) {
-          return _ref.apply(this, arguments);
-        };
-      }())["catch"](function (error) {
-        _this.errorMessage = error;
-        console.error('There was an error!', error);
-      });
-    },
-    fetchActa: function fetchActa() {
-      var _this2 = this;
-
-      var requestOptions = {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          'Authorization': 'Bearer ' + this.token
-        }
-      };
-      fetch(this.baseURL + 'control-electoral/last-acta', requestOptions).then( /*#__PURE__*/function () {
-        var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(response) {
-          var data, error;
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-            while (1) {
-              switch (_context2.prev = _context2.next) {
-                case 0:
-                  _context2.next = 2;
-                  return response.json();
-
-                case 2:
-                  data = _context2.sent;
-
-                  if (response.ok) {
-                    _context2.next = 7;
-                    break;
-                  }
-
-                  // get error message from body or default to response status
-                  error = data && data.message || response.status;
-                  _this2.errorMessage = error;
-                  return _context2.abrupt("return", Promise.reject(error));
-
-                case 7:
-                  _this2.acta = data.acta;
-                  _this2.candidatos = data.candidatos;
-
-                case 9:
-                case "end":
-                  return _context2.stop();
-              }
-            }
-          }, _callee2);
-        }));
-
-        return function (_x2) {
-          return _ref2.apply(this, arguments);
-        };
-      }())["catch"](function (error) {
-        _this2.errorMessage = error;
-        console.error('There was an error!', error);
-      });
-    }
-  },
-  mounted: function mounted() {
-    var token = window.localStorage.getItem('token');
-    var pagina = window.localStorage.getItem('pagina');
-    var user = window.localStorage.getItem('user');
-
-    if (token) {
-      this.token = token;
-      this.seccion = parseInt(pagina);
-      this.user = JSON.parse(user);
-
-      if (this.seccion == 2) {
-        this.fetchRecintos();
-      }
-
-      if (this.seccion == 3) {
-        this.fetchActa();
-      }
-    } else {
-      this.seccion = 1;
-    }
+  router: _src_route__WEBPACK_IMPORTED_MODULE_5__["default"],
+  store: _src_store__WEBPACK_IMPORTED_MODULE_1__["default"],
+  // axios,
+  // baseURL: 'http://controlelectoral.local/api/',
+  // data: {
+  // seccion:  1,
+  // recintos:[],
+  // user:null
+  // },
+  render: function render(h) {
+    return h(_App_vue__WEBPACK_IMPORTED_MODULE_0__["default"]);
   }
 });
-
-/***/ }),
-
-/***/ "./front_ce/components/actas/Actas.vue":
-/*!*********************************************!*\
-  !*** ./front_ce/components/actas/Actas.vue ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Actas_vue_vue_type_template_id_15622e39___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Actas.vue?vue&type=template&id=15622e39& */ "./front_ce/components/actas/Actas.vue?vue&type=template&id=15622e39&");
-/* harmony import */ var _Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Actas.vue?vue&type=script&lang=js& */ "./front_ce/components/actas/Actas.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Actas_vue_vue_type_template_id_15622e39___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Actas_vue_vue_type_template_id_15622e39___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "front_ce/components/actas/Actas.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./front_ce/components/actas/Actas.vue?vue&type=script&lang=js&":
-/*!**********************************************************************!*\
-  !*** ./front_ce/components/actas/Actas.vue?vue&type=script&lang=js& ***!
-  \**********************************************************************/
-/*! no static exports found */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Actas.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/components/actas/Actas.vue?vue&type=script&lang=js&");
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
- /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
-/***/ "./front_ce/components/actas/Actas.vue?vue&type=template&id=15622e39&":
-/*!****************************************************************************!*\
-  !*** ./front_ce/components/actas/Actas.vue?vue&type=template&id=15622e39& ***!
-  \****************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_template_id_15622e39___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Actas.vue?vue&type=template&id=15622e39& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/components/actas/Actas.vue?vue&type=template&id=15622e39&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_template_id_15622e39___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_template_id_15622e39___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
-/***/ "./front_ce/components/user/Login.vue":
-/*!********************************************!*\
-  !*** ./front_ce/components/user/Login.vue ***!
-  \********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Login_vue_vue_type_template_id_6ae33595___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Login.vue?vue&type=template&id=6ae33595& */ "./front_ce/components/user/Login.vue?vue&type=template&id=6ae33595&");
-/* harmony import */ var _Login_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Login.vue?vue&type=script&lang=js& */ "./front_ce/components/user/Login.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Login_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Login_vue_vue_type_template_id_6ae33595___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Login_vue_vue_type_template_id_6ae33595___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "front_ce/components/user/Login.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./front_ce/components/user/Login.vue?vue&type=script&lang=js&":
-/*!*********************************************************************!*\
-  !*** ./front_ce/components/user/Login.vue?vue&type=script&lang=js& ***!
-  \*********************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Login.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/components/user/Login.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./front_ce/components/user/Login.vue?vue&type=template&id=6ae33595&":
-/*!***************************************************************************!*\
-  !*** ./front_ce/components/user/Login.vue?vue&type=template&id=6ae33595& ***!
-  \***************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_template_id_6ae33595___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Login.vue?vue&type=template&id=6ae33595& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/components/user/Login.vue?vue&type=template&id=6ae33595&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_template_id_6ae33595___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_template_id_6ae33595___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
-/***/ "./front_ce/components/votos/Votos.vue":
-/*!*********************************************!*\
-  !*** ./front_ce/components/votos/Votos.vue ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Votos_vue_vue_type_template_id_d2e51b22___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Votos.vue?vue&type=template&id=d2e51b22& */ "./front_ce/components/votos/Votos.vue?vue&type=template&id=d2e51b22&");
-/* harmony import */ var _Votos_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Votos.vue?vue&type=script&lang=js& */ "./front_ce/components/votos/Votos.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Votos_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Votos_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Votos_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Votos_vue_vue_type_template_id_d2e51b22___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Votos_vue_vue_type_template_id_d2e51b22___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "front_ce/components/votos/Votos.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./front_ce/components/votos/Votos.vue?vue&type=script&lang=js&":
-/*!**********************************************************************!*\
-  !*** ./front_ce/components/votos/Votos.vue?vue&type=script&lang=js& ***!
-  \**********************************************************************/
-/*! no static exports found */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Votos_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Votos.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/components/votos/Votos.vue?vue&type=script&lang=js&");
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Votos_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Votos_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Votos_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Votos_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
- /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Votos_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
-/***/ "./front_ce/components/votos/Votos.vue?vue&type=template&id=d2e51b22&":
-/*!****************************************************************************!*\
-  !*** ./front_ce/components/votos/Votos.vue?vue&type=template&id=d2e51b22& ***!
-  \****************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Votos_vue_vue_type_template_id_d2e51b22___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Votos.vue?vue&type=template&id=d2e51b22& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/components/votos/Votos.vue?vue&type=template&id=d2e51b22&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Votos_vue_vue_type_template_id_d2e51b22___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Votos_vue_vue_type_template_id_d2e51b22___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
 
 /***/ }),
 
@@ -15028,5560 +14861,3081 @@ var icons = {
 
 /***/ }),
 
-/***/ "./front_ce/node_modules/gsap/CSSPlugin.js":
-/*!*************************************************!*\
-  !*** ./front_ce/node_modules/gsap/CSSPlugin.js ***!
-  \*************************************************/
-/*! exports provided: CSSPlugin, default, _getBBox, _createElement, checkPrefix */
+/***/ "./front_ce/node_modules/vue-router/dist/vue-router.esm.js":
+/*!*****************************************************************!*\
+  !*** ./front_ce/node_modules/vue-router/dist/vue-router.esm.js ***!
+  \*****************************************************************/
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CSSPlugin", function() { return CSSPlugin; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return CSSPlugin; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_getBBox", function() { return _getBBox; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_createElement", function() { return _createElement; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "checkPrefix", function() { return _checkPropPrefix; });
-/* harmony import */ var _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./gsap-core.js */ "./front_ce/node_modules/gsap/gsap-core.js");
 /*!
- * CSSPlugin 3.9.1
- * https://greensock.com
- *
- * Copyright 2008-2021, GreenSock. All rights reserved.
- * Subject to the terms at https://greensock.com/standard-license or for
- * Club GreenSock members, the agreement issued with that membership.
- * @author: Jack Doyle, jack@greensock.com
-*/
-
-/* eslint-disable */
-
-
-var _win,
-    _doc,
-    _docElement,
-    _pluginInitted,
-    _tempDiv,
-    _tempDivStyler,
-    _recentSetterPlugin,
-    _windowExists = function _windowExists() {
-  return typeof window !== "undefined";
-},
-    _transformProps = {},
-    _RAD2DEG = 180 / Math.PI,
-    _DEG2RAD = Math.PI / 180,
-    _atan2 = Math.atan2,
-    _bigNum = 1e8,
-    _capsExp = /([A-Z])/g,
-    _horizontalExp = /(?:left|right|width|margin|padding|x)/i,
-    _complexExp = /[\s,\(]\S/,
-    _propertyAliases = {
-  autoAlpha: "opacity,visibility",
-  scale: "scaleX,scaleY",
-  alpha: "opacity"
-},
-    _renderCSSProp = function _renderCSSProp(ratio, data) {
-  return data.set(data.t, data.p, Math.round((data.s + data.c * ratio) * 10000) / 10000 + data.u, data);
-},
-    _renderPropWithEnd = function _renderPropWithEnd(ratio, data) {
-  return data.set(data.t, data.p, ratio === 1 ? data.e : Math.round((data.s + data.c * ratio) * 10000) / 10000 + data.u, data);
-},
-    _renderCSSPropWithBeginning = function _renderCSSPropWithBeginning(ratio, data) {
-  return data.set(data.t, data.p, ratio ? Math.round((data.s + data.c * ratio) * 10000) / 10000 + data.u : data.b, data);
-},
-    //if units change, we need a way to render the original unit/value when the tween goes all the way back to the beginning (ratio:0)
-_renderRoundedCSSProp = function _renderRoundedCSSProp(ratio, data) {
-  var value = data.s + data.c * ratio;
-  data.set(data.t, data.p, ~~(value + (value < 0 ? -.5 : .5)) + data.u, data);
-},
-    _renderNonTweeningValue = function _renderNonTweeningValue(ratio, data) {
-  return data.set(data.t, data.p, ratio ? data.e : data.b, data);
-},
-    _renderNonTweeningValueOnlyAtEnd = function _renderNonTweeningValueOnlyAtEnd(ratio, data) {
-  return data.set(data.t, data.p, ratio !== 1 ? data.b : data.e, data);
-},
-    _setterCSSStyle = function _setterCSSStyle(target, property, value) {
-  return target.style[property] = value;
-},
-    _setterCSSProp = function _setterCSSProp(target, property, value) {
-  return target.style.setProperty(property, value);
-},
-    _setterTransform = function _setterTransform(target, property, value) {
-  return target._gsap[property] = value;
-},
-    _setterScale = function _setterScale(target, property, value) {
-  return target._gsap.scaleX = target._gsap.scaleY = value;
-},
-    _setterScaleWithRender = function _setterScaleWithRender(target, property, value, data, ratio) {
-  var cache = target._gsap;
-  cache.scaleX = cache.scaleY = value;
-  cache.renderTransform(ratio, cache);
-},
-    _setterTransformWithRender = function _setterTransformWithRender(target, property, value, data, ratio) {
-  var cache = target._gsap;
-  cache[property] = value;
-  cache.renderTransform(ratio, cache);
-},
-    _transformProp = "transform",
-    _transformOriginProp = _transformProp + "Origin",
-    _supports3D,
-    _createElement = function _createElement(type, ns) {
-  var e = _doc.createElementNS ? _doc.createElementNS((ns || "http://www.w3.org/1999/xhtml").replace(/^https/, "http"), type) : _doc.createElement(type); //some servers swap in https for http in the namespace which can break things, making "style" inaccessible.
-
-  return e.style ? e : _doc.createElement(type); //some environments won't allow access to the element's style when created with a namespace in which case we default to the standard createElement() to work around the issue. Also note that when GSAP is embedded directly inside an SVG file, createElement() won't allow access to the style object in Firefox (see https://greensock.com/forums/topic/20215-problem-using-tweenmax-in-standalone-self-containing-svg-file-err-cannot-set-property-csstext-of-undefined/).
-},
-    _getComputedProperty = function _getComputedProperty(target, property, skipPrefixFallback) {
-  var cs = getComputedStyle(target);
-  return cs[property] || cs.getPropertyValue(property.replace(_capsExp, "-$1").toLowerCase()) || cs.getPropertyValue(property) || !skipPrefixFallback && _getComputedProperty(target, _checkPropPrefix(property) || property, 1) || ""; //css variables may not need caps swapped out for dashes and lowercase.
-},
-    _prefixes = "O,Moz,ms,Ms,Webkit".split(","),
-    _checkPropPrefix = function _checkPropPrefix(property, element, preferPrefix) {
-  var e = element || _tempDiv,
-      s = e.style,
-      i = 5;
-
-  if (property in s && !preferPrefix) {
-    return property;
-  }
-
-  property = property.charAt(0).toUpperCase() + property.substr(1);
-
-  while (i-- && !(_prefixes[i] + property in s)) {}
-
-  return i < 0 ? null : (i === 3 ? "ms" : i >= 0 ? _prefixes[i] : "") + property;
-},
-    _initCore = function _initCore() {
-  if (_windowExists() && window.document) {
-    _win = window;
-    _doc = _win.document;
-    _docElement = _doc.documentElement;
-    _tempDiv = _createElement("div") || {
-      style: {}
-    };
-    _tempDivStyler = _createElement("div");
-    _transformProp = _checkPropPrefix(_transformProp);
-    _transformOriginProp = _transformProp + "Origin";
-    _tempDiv.style.cssText = "border-width:0;line-height:0;position:absolute;padding:0"; //make sure to override certain properties that may contaminate measurements, in case the user has overreaching style sheets.
-
-    _supports3D = !!_checkPropPrefix("perspective");
-    _pluginInitted = 1;
-  }
-},
-    _getBBoxHack = function _getBBoxHack(swapIfPossible) {
-  //works around issues in some browsers (like Firefox) that don't correctly report getBBox() on SVG elements inside a <defs> element and/or <mask>. We try creating an SVG, adding it to the documentElement and toss the element in there so that it's definitely part of the rendering tree, then grab the bbox and if it works, we actually swap out the original getBBox() method for our own that does these extra steps whenever getBBox is needed. This helps ensure that performance is optimal (only do all these extra steps when absolutely necessary...most elements don't need it).
-  var svg = _createElement("svg", this.ownerSVGElement && this.ownerSVGElement.getAttribute("xmlns") || "http://www.w3.org/2000/svg"),
-      oldParent = this.parentNode,
-      oldSibling = this.nextSibling,
-      oldCSS = this.style.cssText,
-      bbox;
-
-  _docElement.appendChild(svg);
-
-  svg.appendChild(this);
-  this.style.display = "block";
-
-  if (swapIfPossible) {
-    try {
-      bbox = this.getBBox();
-      this._gsapBBox = this.getBBox; //store the original
-
-      this.getBBox = _getBBoxHack;
-    } catch (e) {}
-  } else if (this._gsapBBox) {
-    bbox = this._gsapBBox();
-  }
-
-  if (oldParent) {
-    if (oldSibling) {
-      oldParent.insertBefore(this, oldSibling);
-    } else {
-      oldParent.appendChild(this);
-    }
-  }
-
-  _docElement.removeChild(svg);
-
-  this.style.cssText = oldCSS;
-  return bbox;
-},
-    _getAttributeFallbacks = function _getAttributeFallbacks(target, attributesArray) {
-  var i = attributesArray.length;
-
-  while (i--) {
-    if (target.hasAttribute(attributesArray[i])) {
-      return target.getAttribute(attributesArray[i]);
-    }
-  }
-},
-    _getBBox = function _getBBox(target) {
-  var bounds;
-
-  try {
-    bounds = target.getBBox(); //Firefox throws errors if you try calling getBBox() on an SVG element that's not rendered (like in a <symbol> or <defs>). https://bugzilla.mozilla.org/show_bug.cgi?id=612118
-  } catch (error) {
-    bounds = _getBBoxHack.call(target, true);
-  }
-
-  bounds && (bounds.width || bounds.height) || target.getBBox === _getBBoxHack || (bounds = _getBBoxHack.call(target, true)); //some browsers (like Firefox) misreport the bounds if the element has zero width and height (it just assumes it's at x:0, y:0), thus we need to manually grab the position in that case.
-
-  return bounds && !bounds.width && !bounds.x && !bounds.y ? {
-    x: +_getAttributeFallbacks(target, ["x", "cx", "x1"]) || 0,
-    y: +_getAttributeFallbacks(target, ["y", "cy", "y1"]) || 0,
-    width: 0,
-    height: 0
-  } : bounds;
-},
-    _isSVG = function _isSVG(e) {
-  return !!(e.getCTM && (!e.parentNode || e.ownerSVGElement) && _getBBox(e));
-},
-    //reports if the element is an SVG on which getBBox() actually works
-_removeProperty = function _removeProperty(target, property) {
-  if (property) {
-    var style = target.style;
-
-    if (property in _transformProps && property !== _transformOriginProp) {
-      property = _transformProp;
-    }
-
-    if (style.removeProperty) {
-      if (property.substr(0, 2) === "ms" || property.substr(0, 6) === "webkit") {
-        //Microsoft and some Webkit browsers don't conform to the standard of capitalizing the first prefix character, so we adjust so that when we prefix the caps with a dash, it's correct (otherwise it'd be "ms-transform" instead of "-ms-transform" for IE9, for example)
-        property = "-" + property;
-      }
-
-      style.removeProperty(property.replace(_capsExp, "-$1").toLowerCase());
-    } else {
-      //note: old versions of IE use "removeAttribute()" instead of "removeProperty()"
-      style.removeAttribute(property);
-    }
-  }
-},
-    _addNonTweeningPT = function _addNonTweeningPT(plugin, target, property, beginning, end, onlySetAtEnd) {
-  var pt = new _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["PropTween"](plugin._pt, target, property, 0, 1, onlySetAtEnd ? _renderNonTweeningValueOnlyAtEnd : _renderNonTweeningValue);
-  plugin._pt = pt;
-  pt.b = beginning;
-  pt.e = end;
-
-  plugin._props.push(property);
-
-  return pt;
-},
-    _nonConvertibleUnits = {
-  deg: 1,
-  rad: 1,
-  turn: 1
-},
-    //takes a single value like 20px and converts it to the unit specified, like "%", returning only the numeric amount.
-_convertToUnit = function _convertToUnit(target, property, value, unit) {
-  var curValue = parseFloat(value) || 0,
-      curUnit = (value + "").trim().substr((curValue + "").length) || "px",
-      // some browsers leave extra whitespace at the beginning of CSS variables, hence the need to trim()
-  style = _tempDiv.style,
-      horizontal = _horizontalExp.test(property),
-      isRootSVG = target.tagName.toLowerCase() === "svg",
-      measureProperty = (isRootSVG ? "client" : "offset") + (horizontal ? "Width" : "Height"),
-      amount = 100,
-      toPixels = unit === "px",
-      toPercent = unit === "%",
-      px,
-      parent,
-      cache,
-      isSVG;
-
-  if (unit === curUnit || !curValue || _nonConvertibleUnits[unit] || _nonConvertibleUnits[curUnit]) {
-    return curValue;
-  }
-
-  curUnit !== "px" && !toPixels && (curValue = _convertToUnit(target, property, value, "px"));
-  isSVG = target.getCTM && _isSVG(target);
-
-  if ((toPercent || curUnit === "%") && (_transformProps[property] || ~property.indexOf("adius"))) {
-    px = isSVG ? target.getBBox()[horizontal ? "width" : "height"] : target[measureProperty];
-    return Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(toPercent ? curValue / px * amount : curValue / 100 * px);
-  }
-
-  style[horizontal ? "width" : "height"] = amount + (toPixels ? curUnit : unit);
-  parent = ~property.indexOf("adius") || unit === "em" && target.appendChild && !isRootSVG ? target : target.parentNode;
-
-  if (isSVG) {
-    parent = (target.ownerSVGElement || {}).parentNode;
-  }
-
-  if (!parent || parent === _doc || !parent.appendChild) {
-    parent = _doc.body;
-  }
-
-  cache = parent._gsap;
-
-  if (cache && toPercent && cache.width && horizontal && cache.time === _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_ticker"].time) {
-    return Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(curValue / cache.width * amount);
-  } else {
-    (toPercent || curUnit === "%") && (style.position = _getComputedProperty(target, "position"));
-    parent === target && (style.position = "static"); // like for borderRadius, if it's a % we must have it relative to the target itself but that may not have position: relative or position: absolute in which case it'd go up the chain until it finds its offsetParent (bad). position: static protects against that.
-
-    parent.appendChild(_tempDiv);
-    px = _tempDiv[measureProperty];
-    parent.removeChild(_tempDiv);
-    style.position = "absolute";
-
-    if (horizontal && toPercent) {
-      cache = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_getCache"])(parent);
-      cache.time = _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_ticker"].time;
-      cache.width = parent[measureProperty];
-    }
-  }
-
-  return Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(toPixels ? px * curValue / amount : px && curValue ? amount / px * curValue : 0);
-},
-    _get = function _get(target, property, unit, uncache) {
-  var value;
-  _pluginInitted || _initCore();
-
-  if (property in _propertyAliases && property !== "transform") {
-    property = _propertyAliases[property];
-
-    if (~property.indexOf(",")) {
-      property = property.split(",")[0];
-    }
-  }
-
-  if (_transformProps[property] && property !== "transform") {
-    value = _parseTransform(target, uncache);
-    value = property !== "transformOrigin" ? value[property] : value.svg ? value.origin : _firstTwoOnly(_getComputedProperty(target, _transformOriginProp)) + " " + value.zOrigin + "px";
-  } else {
-    value = target.style[property];
-
-    if (!value || value === "auto" || uncache || ~(value + "").indexOf("calc(")) {
-      value = _specialProps[property] && _specialProps[property](target, property, unit) || _getComputedProperty(target, property) || Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_getProperty"])(target, property) || (property === "opacity" ? 1 : 0); // note: some browsers, like Firefox, don't report borderRadius correctly! Instead, it only reports every corner like  borderTopLeftRadius
-    }
-  }
-
-  return unit && !~(value + "").trim().indexOf(" ") ? _convertToUnit(target, property, value, unit) + unit : value;
-},
-    _tweenComplexCSSString = function _tweenComplexCSSString(target, prop, start, end) {
-  //note: we call _tweenComplexCSSString.call(pluginInstance...) to ensure that it's scoped properly. We may call it from within a plugin too, thus "this" would refer to the plugin.
-  if (!start || start === "none") {
-    // some browsers like Safari actually PREFER the prefixed property and mis-report the unprefixed value like clipPath (BUG). In other words, even though clipPath exists in the style ("clipPath" in target.style) and it's set in the CSS properly (along with -webkit-clip-path), Safari reports clipPath as "none" whereas WebkitClipPath reports accurately like "ellipse(100% 0% at 50% 0%)", so in this case we must SWITCH to using the prefixed property instead. See https://greensock.com/forums/topic/18310-clippath-doesnt-work-on-ios/
-    var p = _checkPropPrefix(prop, target, 1),
-        s = p && _getComputedProperty(target, p, 1);
-
-    if (s && s !== start) {
-      prop = p;
-      start = s;
-    } else if (prop === "borderColor") {
-      start = _getComputedProperty(target, "borderTopColor"); // Firefox bug: always reports "borderColor" as "", so we must fall back to borderTopColor. See https://greensock.com/forums/topic/24583-how-to-return-colors-that-i-had-after-reverse/
-    }
-  }
-
-  var pt = new _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["PropTween"](this._pt, target.style, prop, 0, 1, _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_renderComplexString"]),
-      index = 0,
-      matchIndex = 0,
-      a,
-      result,
-      startValues,
-      startNum,
-      color,
-      startValue,
-      endValue,
-      endNum,
-      chunk,
-      endUnit,
-      startUnit,
-      relative,
-      endValues;
-  pt.b = start;
-  pt.e = end;
-  start += ""; //ensure values are strings
-
-  end += "";
-
-  if (end === "auto") {
-    target.style[prop] = end;
-    end = _getComputedProperty(target, prop) || end;
-    target.style[prop] = start;
-  }
-
-  a = [start, end];
-
-  Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_colorStringFilter"])(a); //pass an array with the starting and ending values and let the filter do whatever it needs to the values. If colors are found, it returns true and then we must match where the color shows up order-wise because for things like boxShadow, sometimes the browser provides the computed values with the color FIRST, but the user provides it with the color LAST, so flip them if necessary. Same for drop-shadow().
-
-
-  start = a[0];
-  end = a[1];
-  startValues = start.match(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_numWithUnitExp"]) || [];
-  endValues = end.match(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_numWithUnitExp"]) || [];
-
-  if (endValues.length) {
-    while (result = _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_numWithUnitExp"].exec(end)) {
-      endValue = result[0];
-      chunk = end.substring(index, result.index);
-
-      if (color) {
-        color = (color + 1) % 5;
-      } else if (chunk.substr(-5) === "rgba(" || chunk.substr(-5) === "hsla(") {
-        color = 1;
-      }
-
-      if (endValue !== (startValue = startValues[matchIndex++] || "")) {
-        startNum = parseFloat(startValue) || 0;
-        startUnit = startValue.substr((startNum + "").length);
-        relative = endValue.charAt(1) === "=" ? +(endValue.charAt(0) + "1") : 0;
-
-        if (relative) {
-          endValue = endValue.substr(2);
-        }
-
-        endNum = parseFloat(endValue);
-        endUnit = endValue.substr((endNum + "").length);
-        index = _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_numWithUnitExp"].lastIndex - endUnit.length;
-
-        if (!endUnit) {
-          //if something like "perspective:300" is passed in and we must add a unit to the end
-          endUnit = endUnit || _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_config"].units[prop] || startUnit;
-
-          if (index === end.length) {
-            end += endUnit;
-            pt.e += endUnit;
-          }
-        }
-
-        if (startUnit !== endUnit) {
-          startNum = _convertToUnit(target, prop, startValue, endUnit) || 0;
-        } //these nested PropTweens are handled in a special way - we'll never actually call a render or setter method on them. We'll just loop through them in the parent complex string PropTween's render method.
-
-
-        pt._pt = {
-          _next: pt._pt,
-          p: chunk || matchIndex === 1 ? chunk : ",",
-          //note: SVG spec allows omission of comma/space when a negative sign is wedged between two numbers, like 2.5-5.3 instead of 2.5,-5.3 but when tweening, the negative value may switch to positive, so we insert the comma just in case.
-          s: startNum,
-          c: relative ? relative * endNum : endNum - startNum,
-          m: color && color < 4 || prop === "zIndex" ? Math.round : 0
-        };
-      }
-    }
-
-    pt.c = index < end.length ? end.substring(index, end.length) : ""; //we use the "c" of the PropTween to store the final part of the string (after the last number)
-  } else {
-    pt.r = prop === "display" && end === "none" ? _renderNonTweeningValueOnlyAtEnd : _renderNonTweeningValue;
-  }
-
-  _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_relExp"].test(end) && (pt.e = 0); //if the end string contains relative values or dynamic random(...) values, delete the end it so that on the final render we don't actually set it to the string with += or -= characters (forces it to use the calculated value).
-
-  this._pt = pt; //start the linked list with this new PropTween. Remember, we call _tweenComplexCSSString.call(pluginInstance...) to ensure that it's scoped properly. We may call it from within another plugin too, thus "this" would refer to the plugin.
-
-  return pt;
-},
-    _keywordToPercent = {
-  top: "0%",
-  bottom: "100%",
-  left: "0%",
-  right: "100%",
-  center: "50%"
-},
-    _convertKeywordsToPercentages = function _convertKeywordsToPercentages(value) {
-  var split = value.split(" "),
-      x = split[0],
-      y = split[1] || "50%";
-
-  if (x === "top" || x === "bottom" || y === "left" || y === "right") {
-    //the user provided them in the wrong order, so flip them
-    value = x;
-    x = y;
-    y = value;
-  }
-
-  split[0] = _keywordToPercent[x] || x;
-  split[1] = _keywordToPercent[y] || y;
-  return split.join(" ");
-},
-    _renderClearProps = function _renderClearProps(ratio, data) {
-  if (data.tween && data.tween._time === data.tween._dur) {
-    var target = data.t,
-        style = target.style,
-        props = data.u,
-        cache = target._gsap,
-        prop,
-        clearTransforms,
-        i;
-
-    if (props === "all" || props === true) {
-      style.cssText = "";
-      clearTransforms = 1;
-    } else {
-      props = props.split(",");
-      i = props.length;
-
-      while (--i > -1) {
-        prop = props[i];
-
-        if (_transformProps[prop]) {
-          clearTransforms = 1;
-          prop = prop === "transformOrigin" ? _transformOriginProp : _transformProp;
-        }
-
-        _removeProperty(target, prop);
-      }
-    }
-
-    if (clearTransforms) {
-      _removeProperty(target, _transformProp);
-
-      if (cache) {
-        cache.svg && target.removeAttribute("transform");
-
-        _parseTransform(target, 1); // force all the cached values back to "normal"/identity, otherwise if there's another tween that's already set to render transforms on this element, it could display the wrong values.
-
-
-        cache.uncache = 1;
-      }
-    }
-  }
-},
-    // note: specialProps should return 1 if (and only if) they have a non-zero priority. It indicates we need to sort the linked list.
-_specialProps = {
-  clearProps: function clearProps(plugin, target, property, endValue, tween) {
-    if (tween.data !== "isFromStart") {
-      var pt = plugin._pt = new _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["PropTween"](plugin._pt, target, property, 0, 0, _renderClearProps);
-      pt.u = endValue;
-      pt.pr = -10;
-      pt.tween = tween;
-
-      plugin._props.push(property);
-
-      return 1;
-    }
-  }
-  /* className feature (about 0.4kb gzipped).
-  , className(plugin, target, property, endValue, tween) {
-  	let _renderClassName = (ratio, data) => {
-  			data.css.render(ratio, data.css);
-  			if (!ratio || ratio === 1) {
-  				let inline = data.rmv,
-  					target = data.t,
-  					p;
-  				target.setAttribute("class", ratio ? data.e : data.b);
-  				for (p in inline) {
-  					_removeProperty(target, p);
-  				}
-  			}
-  		},
-  		_getAllStyles = (target) => {
-  			let styles = {},
-  				computed = getComputedStyle(target),
-  				p;
-  			for (p in computed) {
-  				if (isNaN(p) && p !== "cssText" && p !== "length") {
-  					styles[p] = computed[p];
-  				}
-  			}
-  			_setDefaults(styles, _parseTransform(target, 1));
-  			return styles;
-  		},
-  		startClassList = target.getAttribute("class"),
-  		style = target.style,
-  		cssText = style.cssText,
-  		cache = target._gsap,
-  		classPT = cache.classPT,
-  		inlineToRemoveAtEnd = {},
-  		data = {t:target, plugin:plugin, rmv:inlineToRemoveAtEnd, b:startClassList, e:(endValue.charAt(1) !== "=") ? endValue : startClassList.replace(new RegExp("(?:\\s|^)" + endValue.substr(2) + "(?![\\w-])"), "") + ((endValue.charAt(0) === "+") ? " " + endValue.substr(2) : "")},
-  		changingVars = {},
-  		startVars = _getAllStyles(target),
-  		transformRelated = /(transform|perspective)/i,
-  		endVars, p;
-  	if (classPT) {
-  		classPT.r(1, classPT.d);
-  		_removeLinkedListItem(classPT.d.plugin, classPT, "_pt");
-  	}
-  	target.setAttribute("class", data.e);
-  	endVars = _getAllStyles(target, true);
-  	target.setAttribute("class", startClassList);
-  	for (p in endVars) {
-  		if (endVars[p] !== startVars[p] && !transformRelated.test(p)) {
-  			changingVars[p] = endVars[p];
-  			if (!style[p] && style[p] !== "0") {
-  				inlineToRemoveAtEnd[p] = 1;
-  			}
-  		}
-  	}
-  	cache.classPT = plugin._pt = new PropTween(plugin._pt, target, "className", 0, 0, _renderClassName, data, 0, -11);
-  	if (style.cssText !== cssText) { //only apply if things change. Otherwise, in cases like a background-image that's pulled dynamically, it could cause a refresh. See https://greensock.com/forums/topic/20368-possible-gsap-bug-switching-classnames-in-chrome/.
-  		style.cssText = cssText; //we recorded cssText before we swapped classes and ran _getAllStyles() because in cases when a className tween is overwritten, we remove all the related tweening properties from that class change (otherwise class-specific stuff can't override properties we've directly set on the target's style object due to specificity).
-  	}
-  	_parseTransform(target, true); //to clear the caching of transforms
-  	data.css = new gsap.plugins.css();
-  	data.css.init(target, changingVars, tween);
-  	plugin._props.push(...data.css._props);
-  	return 1;
-  }
+  * vue-router v3.4.9
+  * (c) 2020 Evan You
+  * @license MIT
   */
+/*  */
 
-},
+function assert (condition, message) {
+  if (!condition) {
+    throw new Error(("[vue-router] " + message))
+  }
+}
 
-/*
- * --------------------------------------------------------------------------------------
- * TRANSFORMS
- * --------------------------------------------------------------------------------------
- */
-_identity2DMatrix = [1, 0, 0, 1, 0, 0],
-    _rotationalProperties = {},
-    _isNullTransform = function _isNullTransform(value) {
-  return value === "matrix(1, 0, 0, 1, 0, 0)" || value === "none" || !value;
-},
-    _getComputedTransformMatrixAsArray = function _getComputedTransformMatrixAsArray(target) {
-  var matrixString = _getComputedProperty(target, _transformProp);
+function warn (condition, message) {
+  if ( true && !condition) {
+    typeof console !== 'undefined' && console.warn(("[vue-router] " + message));
+  }
+}
 
-  return _isNullTransform(matrixString) ? _identity2DMatrix : matrixString.substr(7).match(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_numExp"]).map(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"]);
-},
-    _getMatrix = function _getMatrix(target, force2D) {
-  var cache = target._gsap || Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_getCache"])(target),
-      style = target.style,
-      matrix = _getComputedTransformMatrixAsArray(target),
-      parent,
-      nextSibling,
-      temp,
-      addedToDOM;
+function extend (a, b) {
+  for (var key in b) {
+    a[key] = b[key];
+  }
+  return a
+}
 
-  if (cache.svg && target.getAttribute("transform")) {
-    temp = target.transform.baseVal.consolidate().matrix; //ensures that even complex values like "translate(50,60) rotate(135,0,0)" are parsed because it mashes it into a matrix.
+/*  */
 
-    matrix = [temp.a, temp.b, temp.c, temp.d, temp.e, temp.f];
-    return matrix.join(",") === "1,0,0,1,0,0" ? _identity2DMatrix : matrix;
-  } else if (matrix === _identity2DMatrix && !target.offsetParent && target !== _docElement && !cache.svg) {
-    //note: if offsetParent is null, that means the element isn't in the normal document flow, like if it has display:none or one of its ancestors has display:none). Firefox returns null for getComputedStyle() if the element is in an iframe that has display:none. https://bugzilla.mozilla.org/show_bug.cgi?id=548397
-    //browsers don't report transforms accurately unless the element is in the DOM and has a display value that's not "none". Firefox and Microsoft browsers have a partial bug where they'll report transforms even if display:none BUT not any percentage-based values like translate(-50%, 8px) will be reported as if it's translate(0, 8px).
-    temp = style.display;
-    style.display = "block";
-    parent = target.parentNode;
+var encodeReserveRE = /[!'()*]/g;
+var encodeReserveReplacer = function (c) { return '%' + c.charCodeAt(0).toString(16); };
+var commaRE = /%2C/g;
 
-    if (!parent || !target.offsetParent) {
-      // note: in 3.3.0 we switched target.offsetParent to _doc.body.contains(target) to avoid [sometimes unnecessary] MutationObserver calls but that wasn't adequate because there are edge cases where nested position: fixed elements need to get reparented to accurately sense transforms. See https://github.com/greensock/GSAP/issues/388 and https://github.com/greensock/GSAP/issues/375
-      addedToDOM = 1; //flag
+// fixed encodeURIComponent which is more conformant to RFC3986:
+// - escapes [!'()*]
+// - preserve commas
+var encode = function (str) { return encodeURIComponent(str)
+    .replace(encodeReserveRE, encodeReserveReplacer)
+    .replace(commaRE, ','); };
 
-      nextSibling = target.nextSibling;
-
-      _docElement.appendChild(target); //we must add it to the DOM in order to get values properly
-
-    }
-
-    matrix = _getComputedTransformMatrixAsArray(target);
-    temp ? style.display = temp : _removeProperty(target, "display");
-
-    if (addedToDOM) {
-      nextSibling ? parent.insertBefore(target, nextSibling) : parent ? parent.appendChild(target) : _docElement.removeChild(target);
+function decode (str) {
+  try {
+    return decodeURIComponent(str)
+  } catch (err) {
+    if (true) {
+      warn(false, ("Error decoding \"" + str + "\". Leaving it intact."));
     }
   }
+  return str
+}
 
-  return force2D && matrix.length > 6 ? [matrix[0], matrix[1], matrix[4], matrix[5], matrix[12], matrix[13]] : matrix;
-},
-    _applySVGOrigin = function _applySVGOrigin(target, origin, originIsAbsolute, smooth, matrixArray, pluginToAddPropTweensTo) {
-  var cache = target._gsap,
-      matrix = matrixArray || _getMatrix(target, true),
-      xOriginOld = cache.xOrigin || 0,
-      yOriginOld = cache.yOrigin || 0,
-      xOffsetOld = cache.xOffset || 0,
-      yOffsetOld = cache.yOffset || 0,
-      a = matrix[0],
-      b = matrix[1],
-      c = matrix[2],
-      d = matrix[3],
-      tx = matrix[4],
-      ty = matrix[5],
-      originSplit = origin.split(" "),
-      xOrigin = parseFloat(originSplit[0]) || 0,
-      yOrigin = parseFloat(originSplit[1]) || 0,
-      bounds,
-      determinant,
-      x,
-      y;
+function resolveQuery (
+  query,
+  extraQuery,
+  _parseQuery
+) {
+  if ( extraQuery === void 0 ) extraQuery = {};
 
-  if (!originIsAbsolute) {
-    bounds = _getBBox(target);
-    xOrigin = bounds.x + (~originSplit[0].indexOf("%") ? xOrigin / 100 * bounds.width : xOrigin);
-    yOrigin = bounds.y + (~(originSplit[1] || originSplit[0]).indexOf("%") ? yOrigin / 100 * bounds.height : yOrigin);
-  } else if (matrix !== _identity2DMatrix && (determinant = a * d - b * c)) {
-    //if it's zero (like if scaleX and scaleY are zero), skip it to avoid errors with dividing by zero.
-    x = xOrigin * (d / determinant) + yOrigin * (-c / determinant) + (c * ty - d * tx) / determinant;
-    y = xOrigin * (-b / determinant) + yOrigin * (a / determinant) - (a * ty - b * tx) / determinant;
-    xOrigin = x;
-    yOrigin = y;
+  var parse = _parseQuery || parseQuery;
+  var parsedQuery;
+  try {
+    parsedQuery = parse(query || '');
+  } catch (e) {
+     true && warn(false, e.message);
+    parsedQuery = {};
+  }
+  for (var key in extraQuery) {
+    var value = extraQuery[key];
+    parsedQuery[key] = Array.isArray(value)
+      ? value.map(castQueryParamValue)
+      : castQueryParamValue(value);
+  }
+  return parsedQuery
+}
+
+var castQueryParamValue = function (value) { return (value == null || typeof value === 'object' ? value : String(value)); };
+
+function parseQuery (query) {
+  var res = {};
+
+  query = query.trim().replace(/^(\?|#|&)/, '');
+
+  if (!query) {
+    return res
   }
 
-  if (smooth || smooth !== false && cache.smooth) {
-    tx = xOrigin - xOriginOld;
-    ty = yOrigin - yOriginOld;
-    cache.xOffset = xOffsetOld + (tx * a + ty * c) - tx;
-    cache.yOffset = yOffsetOld + (tx * b + ty * d) - ty;
-  } else {
-    cache.xOffset = cache.yOffset = 0;
-  }
+  query.split('&').forEach(function (param) {
+    var parts = param.replace(/\+/g, ' ').split('=');
+    var key = decode(parts.shift());
+    var val = parts.length > 0 ? decode(parts.join('=')) : null;
 
-  cache.xOrigin = xOrigin;
-  cache.yOrigin = yOrigin;
-  cache.smooth = !!smooth;
-  cache.origin = origin;
-  cache.originIsAbsolute = !!originIsAbsolute;
-  target.style[_transformOriginProp] = "0px 0px"; //otherwise, if someone sets  an origin via CSS, it will likely interfere with the SVG transform attribute ones (because remember, we're baking the origin into the matrix() value).
-
-  if (pluginToAddPropTweensTo) {
-    _addNonTweeningPT(pluginToAddPropTweensTo, cache, "xOrigin", xOriginOld, xOrigin);
-
-    _addNonTweeningPT(pluginToAddPropTweensTo, cache, "yOrigin", yOriginOld, yOrigin);
-
-    _addNonTweeningPT(pluginToAddPropTweensTo, cache, "xOffset", xOffsetOld, cache.xOffset);
-
-    _addNonTweeningPT(pluginToAddPropTweensTo, cache, "yOffset", yOffsetOld, cache.yOffset);
-  }
-
-  target.setAttribute("data-svg-origin", xOrigin + " " + yOrigin);
-},
-    _parseTransform = function _parseTransform(target, uncache) {
-  var cache = target._gsap || new _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["GSCache"](target);
-
-  if ("x" in cache && !uncache && !cache.uncache) {
-    return cache;
-  }
-
-  var style = target.style,
-      invertedScaleX = cache.scaleX < 0,
-      px = "px",
-      deg = "deg",
-      origin = _getComputedProperty(target, _transformOriginProp) || "0",
-      x,
-      y,
-      z,
-      scaleX,
-      scaleY,
-      rotation,
-      rotationX,
-      rotationY,
-      skewX,
-      skewY,
-      perspective,
-      xOrigin,
-      yOrigin,
-      matrix,
-      angle,
-      cos,
-      sin,
-      a,
-      b,
-      c,
-      d,
-      a12,
-      a22,
-      t1,
-      t2,
-      t3,
-      a13,
-      a23,
-      a33,
-      a42,
-      a43,
-      a32;
-  x = y = z = rotation = rotationX = rotationY = skewX = skewY = perspective = 0;
-  scaleX = scaleY = 1;
-  cache.svg = !!(target.getCTM && _isSVG(target));
-  matrix = _getMatrix(target, cache.svg);
-
-  if (cache.svg) {
-    t1 = (!cache.uncache || origin === "0px 0px") && !uncache && target.getAttribute("data-svg-origin"); // if origin is 0,0 and cache.uncache is true, let the recorded data-svg-origin stay. Otherwise, whenever we set cache.uncache to true, we'd need to set element.style.transformOrigin = (cache.xOrigin - bbox.x) + "px " + (cache.yOrigin - bbox.y) + "px". Remember, to work around browser inconsistencies we always force SVG elements' transformOrigin to 0,0 and offset the translation accordingly.
-
-    _applySVGOrigin(target, t1 || origin, !!t1 || cache.originIsAbsolute, cache.smooth !== false, matrix);
-  }
-
-  xOrigin = cache.xOrigin || 0;
-  yOrigin = cache.yOrigin || 0;
-
-  if (matrix !== _identity2DMatrix) {
-    a = matrix[0]; //a11
-
-    b = matrix[1]; //a21
-
-    c = matrix[2]; //a31
-
-    d = matrix[3]; //a41
-
-    x = a12 = matrix[4];
-    y = a22 = matrix[5]; //2D matrix
-
-    if (matrix.length === 6) {
-      scaleX = Math.sqrt(a * a + b * b);
-      scaleY = Math.sqrt(d * d + c * c);
-      rotation = a || b ? _atan2(b, a) * _RAD2DEG : 0; //note: if scaleX is 0, we cannot accurately measure rotation. Same for skewX with a scaleY of 0. Therefore, we default to the previously recorded value (or zero if that doesn't exist).
-
-      skewX = c || d ? _atan2(c, d) * _RAD2DEG + rotation : 0;
-      skewX && (scaleY *= Math.abs(Math.cos(skewX * _DEG2RAD)));
-
-      if (cache.svg) {
-        x -= xOrigin - (xOrigin * a + yOrigin * c);
-        y -= yOrigin - (xOrigin * b + yOrigin * d);
-      } //3D matrix
-
+    if (res[key] === undefined) {
+      res[key] = val;
+    } else if (Array.isArray(res[key])) {
+      res[key].push(val);
     } else {
-      a32 = matrix[6];
-      a42 = matrix[7];
-      a13 = matrix[8];
-      a23 = matrix[9];
-      a33 = matrix[10];
-      a43 = matrix[11];
-      x = matrix[12];
-      y = matrix[13];
-      z = matrix[14];
-      angle = _atan2(a32, a33);
-      rotationX = angle * _RAD2DEG; //rotationX
-
-      if (angle) {
-        cos = Math.cos(-angle);
-        sin = Math.sin(-angle);
-        t1 = a12 * cos + a13 * sin;
-        t2 = a22 * cos + a23 * sin;
-        t3 = a32 * cos + a33 * sin;
-        a13 = a12 * -sin + a13 * cos;
-        a23 = a22 * -sin + a23 * cos;
-        a33 = a32 * -sin + a33 * cos;
-        a43 = a42 * -sin + a43 * cos;
-        a12 = t1;
-        a22 = t2;
-        a32 = t3;
-      } //rotationY
-
-
-      angle = _atan2(-c, a33);
-      rotationY = angle * _RAD2DEG;
-
-      if (angle) {
-        cos = Math.cos(-angle);
-        sin = Math.sin(-angle);
-        t1 = a * cos - a13 * sin;
-        t2 = b * cos - a23 * sin;
-        t3 = c * cos - a33 * sin;
-        a43 = d * sin + a43 * cos;
-        a = t1;
-        b = t2;
-        c = t3;
-      } //rotationZ
-
-
-      angle = _atan2(b, a);
-      rotation = angle * _RAD2DEG;
-
-      if (angle) {
-        cos = Math.cos(angle);
-        sin = Math.sin(angle);
-        t1 = a * cos + b * sin;
-        t2 = a12 * cos + a22 * sin;
-        b = b * cos - a * sin;
-        a22 = a22 * cos - a12 * sin;
-        a = t1;
-        a12 = t2;
-      }
-
-      if (rotationX && Math.abs(rotationX) + Math.abs(rotation) > 359.9) {
-        //when rotationY is set, it will often be parsed as 180 degrees different than it should be, and rotationX and rotation both being 180 (it looks the same), so we adjust for that here.
-        rotationX = rotation = 0;
-        rotationY = 180 - rotationY;
-      }
-
-      scaleX = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(Math.sqrt(a * a + b * b + c * c));
-      scaleY = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(Math.sqrt(a22 * a22 + a32 * a32));
-      angle = _atan2(a12, a22);
-      skewX = Math.abs(angle) > 0.0002 ? angle * _RAD2DEG : 0;
-      perspective = a43 ? 1 / (a43 < 0 ? -a43 : a43) : 0;
+      res[key] = [res[key], val];
     }
-
-    if (cache.svg) {
-      //sense if there are CSS transforms applied on an SVG element in which case we must overwrite them when rendering. The transform attribute is more reliable cross-browser, but we can't just remove the CSS ones because they may be applied in a CSS rule somewhere (not just inline).
-      t1 = target.getAttribute("transform");
-      cache.forceCSS = target.setAttribute("transform", "") || !_isNullTransform(_getComputedProperty(target, _transformProp));
-      t1 && target.setAttribute("transform", t1);
-    }
-  }
-
-  if (Math.abs(skewX) > 90 && Math.abs(skewX) < 270) {
-    if (invertedScaleX) {
-      scaleX *= -1;
-      skewX += rotation <= 0 ? 180 : -180;
-      rotation += rotation <= 0 ? 180 : -180;
-    } else {
-      scaleY *= -1;
-      skewX += skewX <= 0 ? 180 : -180;
-    }
-  }
-
-  cache.x = x - ((cache.xPercent = x && (cache.xPercent || (Math.round(target.offsetWidth / 2) === Math.round(-x) ? -50 : 0))) ? target.offsetWidth * cache.xPercent / 100 : 0) + px;
-  cache.y = y - ((cache.yPercent = y && (cache.yPercent || (Math.round(target.offsetHeight / 2) === Math.round(-y) ? -50 : 0))) ? target.offsetHeight * cache.yPercent / 100 : 0) + px;
-  cache.z = z + px;
-  cache.scaleX = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(scaleX);
-  cache.scaleY = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(scaleY);
-  cache.rotation = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(rotation) + deg;
-  cache.rotationX = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(rotationX) + deg;
-  cache.rotationY = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(rotationY) + deg;
-  cache.skewX = skewX + deg;
-  cache.skewY = skewY + deg;
-  cache.transformPerspective = perspective + px;
-
-  if (cache.zOrigin = parseFloat(origin.split(" ")[2]) || 0) {
-    style[_transformOriginProp] = _firstTwoOnly(origin);
-  }
-
-  cache.xOffset = cache.yOffset = 0;
-  cache.force3D = _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_config"].force3D;
-  cache.renderTransform = cache.svg ? _renderSVGTransforms : _supports3D ? _renderCSSTransforms : _renderNon3DTransforms;
-  cache.uncache = 0;
-  return cache;
-},
-    _firstTwoOnly = function _firstTwoOnly(value) {
-  return (value = value.split(" "))[0] + " " + value[1];
-},
-    //for handling transformOrigin values, stripping out the 3rd dimension
-_addPxTranslate = function _addPxTranslate(target, start, value) {
-  var unit = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["getUnit"])(start);
-  return Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(parseFloat(start) + parseFloat(_convertToUnit(target, "x", value + "px", unit))) + unit;
-},
-    _renderNon3DTransforms = function _renderNon3DTransforms(ratio, cache) {
-  cache.z = "0px";
-  cache.rotationY = cache.rotationX = "0deg";
-  cache.force3D = 0;
-
-  _renderCSSTransforms(ratio, cache);
-},
-    _zeroDeg = "0deg",
-    _zeroPx = "0px",
-    _endParenthesis = ") ",
-    _renderCSSTransforms = function _renderCSSTransforms(ratio, cache) {
-  var _ref = cache || this,
-      xPercent = _ref.xPercent,
-      yPercent = _ref.yPercent,
-      x = _ref.x,
-      y = _ref.y,
-      z = _ref.z,
-      rotation = _ref.rotation,
-      rotationY = _ref.rotationY,
-      rotationX = _ref.rotationX,
-      skewX = _ref.skewX,
-      skewY = _ref.skewY,
-      scaleX = _ref.scaleX,
-      scaleY = _ref.scaleY,
-      transformPerspective = _ref.transformPerspective,
-      force3D = _ref.force3D,
-      target = _ref.target,
-      zOrigin = _ref.zOrigin,
-      transforms = "",
-      use3D = force3D === "auto" && ratio && ratio !== 1 || force3D === true; // Safari has a bug that causes it not to render 3D transform-origin values properly, so we force the z origin to 0, record it in the cache, and then do the math here to offset the translate values accordingly (basically do the 3D transform-origin part manually)
-
-
-  if (zOrigin && (rotationX !== _zeroDeg || rotationY !== _zeroDeg)) {
-    var angle = parseFloat(rotationY) * _DEG2RAD,
-        a13 = Math.sin(angle),
-        a33 = Math.cos(angle),
-        cos;
-
-    angle = parseFloat(rotationX) * _DEG2RAD;
-    cos = Math.cos(angle);
-    x = _addPxTranslate(target, x, a13 * cos * -zOrigin);
-    y = _addPxTranslate(target, y, -Math.sin(angle) * -zOrigin);
-    z = _addPxTranslate(target, z, a33 * cos * -zOrigin + zOrigin);
-  }
-
-  if (transformPerspective !== _zeroPx) {
-    transforms += "perspective(" + transformPerspective + _endParenthesis;
-  }
-
-  if (xPercent || yPercent) {
-    transforms += "translate(" + xPercent + "%, " + yPercent + "%) ";
-  }
-
-  if (use3D || x !== _zeroPx || y !== _zeroPx || z !== _zeroPx) {
-    transforms += z !== _zeroPx || use3D ? "translate3d(" + x + ", " + y + ", " + z + ") " : "translate(" + x + ", " + y + _endParenthesis;
-  }
-
-  if (rotation !== _zeroDeg) {
-    transforms += "rotate(" + rotation + _endParenthesis;
-  }
-
-  if (rotationY !== _zeroDeg) {
-    transforms += "rotateY(" + rotationY + _endParenthesis;
-  }
-
-  if (rotationX !== _zeroDeg) {
-    transforms += "rotateX(" + rotationX + _endParenthesis;
-  }
-
-  if (skewX !== _zeroDeg || skewY !== _zeroDeg) {
-    transforms += "skew(" + skewX + ", " + skewY + _endParenthesis;
-  }
-
-  if (scaleX !== 1 || scaleY !== 1) {
-    transforms += "scale(" + scaleX + ", " + scaleY + _endParenthesis;
-  }
-
-  target.style[_transformProp] = transforms || "translate(0, 0)";
-},
-    _renderSVGTransforms = function _renderSVGTransforms(ratio, cache) {
-  var _ref2 = cache || this,
-      xPercent = _ref2.xPercent,
-      yPercent = _ref2.yPercent,
-      x = _ref2.x,
-      y = _ref2.y,
-      rotation = _ref2.rotation,
-      skewX = _ref2.skewX,
-      skewY = _ref2.skewY,
-      scaleX = _ref2.scaleX,
-      scaleY = _ref2.scaleY,
-      target = _ref2.target,
-      xOrigin = _ref2.xOrigin,
-      yOrigin = _ref2.yOrigin,
-      xOffset = _ref2.xOffset,
-      yOffset = _ref2.yOffset,
-      forceCSS = _ref2.forceCSS,
-      tx = parseFloat(x),
-      ty = parseFloat(y),
-      a11,
-      a21,
-      a12,
-      a22,
-      temp;
-
-  rotation = parseFloat(rotation);
-  skewX = parseFloat(skewX);
-  skewY = parseFloat(skewY);
-
-  if (skewY) {
-    //for performance reasons, we combine all skewing into the skewX and rotation values. Remember, a skewY of 10 degrees looks the same as a rotation of 10 degrees plus a skewX of 10 degrees.
-    skewY = parseFloat(skewY);
-    skewX += skewY;
-    rotation += skewY;
-  }
-
-  if (rotation || skewX) {
-    rotation *= _DEG2RAD;
-    skewX *= _DEG2RAD;
-    a11 = Math.cos(rotation) * scaleX;
-    a21 = Math.sin(rotation) * scaleX;
-    a12 = Math.sin(rotation - skewX) * -scaleY;
-    a22 = Math.cos(rotation - skewX) * scaleY;
-
-    if (skewX) {
-      skewY *= _DEG2RAD;
-      temp = Math.tan(skewX - skewY);
-      temp = Math.sqrt(1 + temp * temp);
-      a12 *= temp;
-      a22 *= temp;
-
-      if (skewY) {
-        temp = Math.tan(skewY);
-        temp = Math.sqrt(1 + temp * temp);
-        a11 *= temp;
-        a21 *= temp;
-      }
-    }
-
-    a11 = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(a11);
-    a21 = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(a21);
-    a12 = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(a12);
-    a22 = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(a22);
-  } else {
-    a11 = scaleX;
-    a22 = scaleY;
-    a21 = a12 = 0;
-  }
-
-  if (tx && !~(x + "").indexOf("px") || ty && !~(y + "").indexOf("px")) {
-    tx = _convertToUnit(target, "x", x, "px");
-    ty = _convertToUnit(target, "y", y, "px");
-  }
-
-  if (xOrigin || yOrigin || xOffset || yOffset) {
-    tx = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(tx + xOrigin - (xOrigin * a11 + yOrigin * a12) + xOffset);
-    ty = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(ty + yOrigin - (xOrigin * a21 + yOrigin * a22) + yOffset);
-  }
-
-  if (xPercent || yPercent) {
-    //The SVG spec doesn't support percentage-based translation in the "transform" attribute, so we merge it into the translation to simulate it.
-    temp = target.getBBox();
-    tx = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(tx + xPercent / 100 * temp.width);
-    ty = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_round"])(ty + yPercent / 100 * temp.height);
-  }
-
-  temp = "matrix(" + a11 + "," + a21 + "," + a12 + "," + a22 + "," + tx + "," + ty + ")";
-  target.setAttribute("transform", temp);
-  forceCSS && (target.style[_transformProp] = temp); //some browsers prioritize CSS transforms over the transform attribute. When we sense that the user has CSS transforms applied, we must overwrite them this way (otherwise some browser simply won't render the  transform attribute changes!)
-},
-    _addRotationalPropTween = function _addRotationalPropTween(plugin, target, property, startNum, endValue, relative) {
-  var cap = 360,
-      isString = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_isString"])(endValue),
-      endNum = parseFloat(endValue) * (isString && ~endValue.indexOf("rad") ? _RAD2DEG : 1),
-      change = relative ? endNum * relative : endNum - startNum,
-      finalValue = startNum + change + "deg",
-      direction,
-      pt;
-
-  if (isString) {
-    direction = endValue.split("_")[1];
-
-    if (direction === "short") {
-      change %= cap;
-
-      if (change !== change % (cap / 2)) {
-        change += change < 0 ? cap : -cap;
-      }
-    }
-
-    if (direction === "cw" && change < 0) {
-      change = (change + cap * _bigNum) % cap - ~~(change / cap) * cap;
-    } else if (direction === "ccw" && change > 0) {
-      change = (change - cap * _bigNum) % cap - ~~(change / cap) * cap;
-    }
-  }
-
-  plugin._pt = pt = new _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["PropTween"](plugin._pt, target, property, startNum, change, _renderPropWithEnd);
-  pt.e = finalValue;
-  pt.u = "deg";
-
-  plugin._props.push(property);
-
-  return pt;
-},
-    _assign = function _assign(target, source) {
-  // Internet Explorer doesn't have Object.assign(), so we recreate it here.
-  for (var p in source) {
-    target[p] = source[p];
-  }
-
-  return target;
-},
-    _addRawTransformPTs = function _addRawTransformPTs(plugin, transforms, target) {
-  //for handling cases where someone passes in a whole transform string, like transform: "scale(2, 3) rotate(20deg) translateY(30em)"
-  var startCache = _assign({}, target._gsap),
-      exclude = "perspective,force3D,transformOrigin,svgOrigin",
-      style = target.style,
-      endCache,
-      p,
-      startValue,
-      endValue,
-      startNum,
-      endNum,
-      startUnit,
-      endUnit;
-
-  if (startCache.svg) {
-    startValue = target.getAttribute("transform");
-    target.setAttribute("transform", "");
-    style[_transformProp] = transforms;
-    endCache = _parseTransform(target, 1);
-
-    _removeProperty(target, _transformProp);
-
-    target.setAttribute("transform", startValue);
-  } else {
-    startValue = getComputedStyle(target)[_transformProp];
-    style[_transformProp] = transforms;
-    endCache = _parseTransform(target, 1);
-    style[_transformProp] = startValue;
-  }
-
-  for (p in _transformProps) {
-    startValue = startCache[p];
-    endValue = endCache[p];
-
-    if (startValue !== endValue && exclude.indexOf(p) < 0) {
-      //tweening to no perspective gives very unintuitive results - just keep the same perspective in that case.
-      startUnit = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["getUnit"])(startValue);
-      endUnit = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["getUnit"])(endValue);
-      startNum = startUnit !== endUnit ? _convertToUnit(target, p, startValue, endUnit) : parseFloat(startValue);
-      endNum = parseFloat(endValue);
-      plugin._pt = new _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["PropTween"](plugin._pt, endCache, p, startNum, endNum - startNum, _renderCSSProp);
-      plugin._pt.u = endUnit || 0;
-
-      plugin._props.push(p);
-    }
-  }
-
-  _assign(endCache, startCache);
-}; // handle splitting apart padding, margin, borderWidth, and borderRadius into their 4 components. Firefox, for example, won't report borderRadius correctly - it will only do borderTopLeftRadius and the other corners. We also want to handle paddingTop, marginLeft, borderRightWidth, etc.
-
-
-Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_forEachName"])("padding,margin,Width,Radius", function (name, index) {
-  var t = "Top",
-      r = "Right",
-      b = "Bottom",
-      l = "Left",
-      props = (index < 3 ? [t, r, b, l] : [t + l, t + r, b + r, b + l]).map(function (side) {
-    return index < 2 ? name + side : "border" + side + name;
   });
 
-  _specialProps[index > 1 ? "border" + name : name] = function (plugin, target, property, endValue, tween) {
-    var a, vars;
+  return res
+}
 
-    if (arguments.length < 4) {
-      // getter, passed target, property, and unit (from _get())
-      a = props.map(function (prop) {
-        return _get(plugin, prop, property);
-      });
-      vars = a.join(" ");
-      return vars.split(a[0]).length === 5 ? a[0] : vars;
-    }
+function stringifyQuery (obj) {
+  var res = obj
+    ? Object.keys(obj)
+      .map(function (key) {
+        var val = obj[key];
 
-    a = (endValue + "").split(" ");
-    vars = {};
-    props.forEach(function (prop, i) {
-      return vars[prop] = a[i] = a[i] || a[(i - 1) / 2 | 0];
-    });
-    plugin.init(target, vars, tween);
-  };
-});
-
-var CSSPlugin = {
-  name: "css",
-  register: _initCore,
-  targetTest: function targetTest(target) {
-    return target.style && target.nodeType;
-  },
-  init: function init(target, vars, tween, index, targets) {
-    var props = this._props,
-        style = target.style,
-        startAt = tween.vars.startAt,
-        startValue,
-        endValue,
-        endNum,
-        startNum,
-        type,
-        specialProp,
-        p,
-        startUnit,
-        endUnit,
-        relative,
-        isTransformRelated,
-        transformPropTween,
-        cache,
-        smooth,
-        hasPriority;
-    _pluginInitted || _initCore();
-
-    for (p in vars) {
-      if (p === "autoRound") {
-        continue;
-      }
-
-      endValue = vars[p];
-
-      if (_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_plugins"][p] && Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_checkPlugin"])(p, vars, tween, index, target, targets)) {
-        // plugins
-        continue;
-      }
-
-      type = typeof endValue;
-      specialProp = _specialProps[p];
-
-      if (type === "function") {
-        endValue = endValue.call(tween, index, target, targets);
-        type = typeof endValue;
-      }
-
-      if (type === "string" && ~endValue.indexOf("random(")) {
-        endValue = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_replaceRandom"])(endValue);
-      }
-
-      if (specialProp) {
-        specialProp(this, target, p, endValue, tween) && (hasPriority = 1);
-      } else if (p.substr(0, 2) === "--") {
-        //CSS variable
-        startValue = (getComputedStyle(target).getPropertyValue(p) + "").trim();
-        endValue += "";
-        _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_colorExp"].lastIndex = 0;
-
-        if (!_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_colorExp"].test(startValue)) {
-          // colors don't have units
-          startUnit = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["getUnit"])(startValue);
-          endUnit = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["getUnit"])(endValue);
+        if (val === undefined) {
+          return ''
         }
 
-        endUnit ? startUnit !== endUnit && (startValue = _convertToUnit(target, p, startValue, endUnit) + endUnit) : startUnit && (endValue += startUnit);
-        this.add(style, "setProperty", startValue, endValue, index, targets, 0, 0, p);
-        props.push(p);
-      } else if (type !== "undefined") {
-        if (startAt && p in startAt) {
-          // in case someone hard-codes a complex value as the start, like top: "calc(2vh / 2)". Without this, it'd use the computed value (always in px)
-          startValue = typeof startAt[p] === "function" ? startAt[p].call(tween, index, target, targets) : startAt[p];
-          Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_isString"])(startValue) && ~startValue.indexOf("random(") && (startValue = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_replaceRandom"])(startValue));
-          Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["getUnit"])(startValue + "") || (startValue += _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_config"].units[p] || Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["getUnit"])(_get(target, p)) || ""); // for cases when someone passes in a unitless value like {x: 100}; if we try setting translate(100, 0px) it won't work.
-
-          (startValue + "").charAt(1) === "=" && (startValue = _get(target, p)); // can't work with relative values
-        } else {
-          startValue = _get(target, p);
+        if (val === null) {
+          return encode(key)
         }
 
-        startNum = parseFloat(startValue);
-        relative = type === "string" && endValue.charAt(1) === "=" ? +(endValue.charAt(0) + "1") : 0;
-        relative && (endValue = endValue.substr(2));
-        endNum = parseFloat(endValue);
-
-        if (p in _propertyAliases) {
-          if (p === "autoAlpha") {
-            //special case where we control the visibility along with opacity. We still allow the opacity value to pass through and get tweened.
-            if (startNum === 1 && _get(target, "visibility") === "hidden" && endNum) {
-              //if visibility is initially set to "hidden", we should interpret that as intent to make opacity 0 (a convenience)
-              startNum = 0;
+        if (Array.isArray(val)) {
+          var result = [];
+          val.forEach(function (val2) {
+            if (val2 === undefined) {
+              return
             }
-
-            _addNonTweeningPT(this, style, "visibility", startNum ? "inherit" : "hidden", endNum ? "inherit" : "hidden", !endNum);
-          }
-
-          if (p !== "scale" && p !== "transform") {
-            p = _propertyAliases[p];
-            ~p.indexOf(",") && (p = p.split(",")[0]);
-          }
-        }
-
-        isTransformRelated = p in _transformProps; //--- TRANSFORM-RELATED ---
-
-        if (isTransformRelated) {
-          if (!transformPropTween) {
-            cache = target._gsap;
-            cache.renderTransform && !vars.parseTransform || _parseTransform(target, vars.parseTransform); // if, for example, gsap.set(... {transform:"translateX(50vw)"}), the _get() call doesn't parse the transform, thus cache.renderTransform won't be set yet so force the parsing of the transform here.
-
-            smooth = vars.smoothOrigin !== false && cache.smooth;
-            transformPropTween = this._pt = new _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["PropTween"](this._pt, style, _transformProp, 0, 1, cache.renderTransform, cache, 0, -1); //the first time through, create the rendering PropTween so that it runs LAST (in the linked list, we keep adding to the beginning)
-
-            transformPropTween.dep = 1; //flag it as dependent so that if things get killed/overwritten and this is the only PropTween left, we can safely kill the whole tween.
-          }
-
-          if (p === "scale") {
-            this._pt = new _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["PropTween"](this._pt, cache, "scaleY", cache.scaleY, (relative ? relative * endNum : endNum - cache.scaleY) || 0);
-            props.push("scaleY", p);
-            p += "X";
-          } else if (p === "transformOrigin") {
-            endValue = _convertKeywordsToPercentages(endValue); //in case something like "left top" or "bottom right" is passed in. Convert to percentages.
-
-            if (cache.svg) {
-              _applySVGOrigin(target, endValue, 0, smooth, 0, this);
+            if (val2 === null) {
+              result.push(encode(key));
             } else {
-              endUnit = parseFloat(endValue.split(" ")[2]) || 0; //handle the zOrigin separately!
-
-              endUnit !== cache.zOrigin && _addNonTweeningPT(this, cache, "zOrigin", cache.zOrigin, endUnit);
-
-              _addNonTweeningPT(this, style, p, _firstTwoOnly(startValue), _firstTwoOnly(endValue));
+              result.push(encode(key) + '=' + encode(val2));
             }
-
-            continue;
-          } else if (p === "svgOrigin") {
-            _applySVGOrigin(target, endValue, 1, smooth, 0, this);
-
-            continue;
-          } else if (p in _rotationalProperties) {
-            _addRotationalPropTween(this, cache, p, startNum, endValue, relative);
-
-            continue;
-          } else if (p === "smoothOrigin") {
-            _addNonTweeningPT(this, cache, "smooth", cache.smooth, endValue);
-
-            continue;
-          } else if (p === "force3D") {
-            cache[p] = endValue;
-            continue;
-          } else if (p === "transform") {
-            _addRawTransformPTs(this, endValue, target);
-
-            continue;
-          }
-        } else if (!(p in style)) {
-          p = _checkPropPrefix(p) || p;
-        }
-
-        if (isTransformRelated || (endNum || endNum === 0) && (startNum || startNum === 0) && !_complexExp.test(endValue) && p in style) {
-          startUnit = (startValue + "").substr((startNum + "").length);
-          endNum || (endNum = 0); // protect against NaN
-
-          endUnit = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["getUnit"])(endValue) || (p in _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_config"].units ? _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_config"].units[p] : startUnit);
-          startUnit !== endUnit && (startNum = _convertToUnit(target, p, startValue, endUnit));
-          this._pt = new _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["PropTween"](this._pt, isTransformRelated ? cache : style, p, startNum, relative ? relative * endNum : endNum - startNum, !isTransformRelated && (endUnit === "px" || p === "zIndex") && vars.autoRound !== false ? _renderRoundedCSSProp : _renderCSSProp);
-          this._pt.u = endUnit || 0;
-
-          if (startUnit !== endUnit && endUnit !== "%") {
-            //when the tween goes all the way back to the beginning, we need to revert it to the OLD/ORIGINAL value (with those units). We record that as a "b" (beginning) property and point to a render method that handles that. (performance optimization)
-            this._pt.b = startValue;
-            this._pt.r = _renderCSSPropWithBeginning;
-          }
-        } else if (!(p in style)) {
-          if (p in target) {
-            //maybe it's not a style - it could be a property added directly to an element in which case we'll try to animate that.
-            this.add(target, p, startValue || target[p], endValue, index, targets);
-          } else {
-            Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_missingPlugin"])(p, endValue);
-
-            continue;
-          }
-        } else {
-          _tweenComplexCSSString.call(this, target, p, startValue, endValue);
-        }
-
-        props.push(p);
-      }
-    }
-
-    hasPriority && Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_sortPropTweensByPriority"])(this);
-  },
-  get: _get,
-  aliases: _propertyAliases,
-  getSetter: function getSetter(target, property, plugin) {
-    //returns a setter function that accepts target, property, value and applies it accordingly. Remember, properties like "x" aren't as simple as target.style.property = value because they've got to be applied to a proxy object and then merged into a transform string in a renderer.
-    var p = _propertyAliases[property];
-    p && p.indexOf(",") < 0 && (property = p);
-    return property in _transformProps && property !== _transformOriginProp && (target._gsap.x || _get(target, "x")) ? plugin && _recentSetterPlugin === plugin ? property === "scale" ? _setterScale : _setterTransform : (_recentSetterPlugin = plugin || {}) && (property === "scale" ? _setterScaleWithRender : _setterTransformWithRender) : target.style && !Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_isUndefined"])(target.style[property]) ? _setterCSSStyle : ~property.indexOf("-") ? _setterCSSProp : Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_getSetter"])(target, property);
-  },
-  core: {
-    _removeProperty: _removeProperty,
-    _getMatrix: _getMatrix
-  }
-};
-_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["gsap"].utils.checkPrefix = _checkPropPrefix;
-
-(function (positionAndScale, rotation, others, aliases) {
-  var all = Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_forEachName"])(positionAndScale + "," + rotation + "," + others, function (name) {
-    _transformProps[name] = 1;
-  });
-
-  Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_forEachName"])(rotation, function (name) {
-    _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_config"].units[name] = "deg";
-    _rotationalProperties[name] = 1;
-  });
-
-  _propertyAliases[all[13]] = positionAndScale + "," + rotation;
-
-  Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_forEachName"])(aliases, function (name) {
-    var split = name.split(":");
-    _propertyAliases[split[1]] = all[split[0]];
-  });
-})("x,y,z,scale,scaleX,scaleY,xPercent,yPercent", "rotation,rotationX,rotationY,skewX,skewY", "transform,transformOrigin,svgOrigin,force3D,smoothOrigin,transformPerspective", "0:translateX,1:translateY,2:translateZ,8:rotate,8:rotationZ,8:rotateZ,9:rotateX,10:rotateY");
-
-Object(_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_forEachName"])("x,y,z,top,right,bottom,left,width,height,fontSize,padding,margin,perspective", function (name) {
-  _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["_config"].units[name] = "px";
-});
-
-_gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["gsap"].registerPlugin(CSSPlugin);
-
-
-/***/ }),
-
-/***/ "./front_ce/node_modules/gsap/gsap-core.js":
-/*!*************************************************!*\
-  !*** ./front_ce/node_modules/gsap/gsap-core.js ***!
-  \*************************************************/
-/*! exports provided: GSCache, Animation, Timeline, Tween, PropTween, gsap, Power0, Power1, Power2, Power3, Power4, Linear, Quad, Cubic, Quart, Quint, Strong, Elastic, Back, SteppedEase, Bounce, Sine, Expo, Circ, TweenMax, TweenLite, TimelineMax, TimelineLite, default, wrap, wrapYoyo, distribute, random, snap, normalize, getUnit, clamp, splitColor, toArray, selector, mapRange, pipe, unitize, interpolate, shuffle, _getProperty, _numExp, _numWithUnitExp, _isString, _isUndefined, _renderComplexString, _relExp, _setDefaults, _removeLinkedListItem, _forEachName, _sortPropTweensByPriority, _colorStringFilter, _replaceRandom, _checkPlugin, _plugins, _ticker, _config, _roundModifier, _round, _missingPlugin, _getSetter, _getCache, _colorExp */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GSCache", function() { return GSCache; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Animation", function() { return Animation; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Timeline", function() { return Timeline; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Tween", function() { return Tween; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PropTween", function() { return PropTween; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gsap", function() { return gsap; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Power0", function() { return Power0; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Power1", function() { return Power1; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Power2", function() { return Power2; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Power3", function() { return Power3; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Power4", function() { return Power4; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Linear", function() { return Linear; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Quad", function() { return Quad; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Cubic", function() { return Cubic; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Quart", function() { return Quart; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Quint", function() { return Quint; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Strong", function() { return Strong; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Elastic", function() { return Elastic; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Back", function() { return Back; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SteppedEase", function() { return SteppedEase; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Bounce", function() { return Bounce; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Sine", function() { return Sine; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Expo", function() { return Expo; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Circ", function() { return Circ; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TweenMax", function() { return Tween; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TweenLite", function() { return Tween; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TimelineMax", function() { return Timeline; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TimelineLite", function() { return Timeline; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return gsap; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "wrap", function() { return wrap; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "wrapYoyo", function() { return wrapYoyo; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "distribute", function() { return distribute; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "random", function() { return random; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "snap", function() { return snap; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "normalize", function() { return normalize; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getUnit", function() { return getUnit; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clamp", function() { return clamp; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "splitColor", function() { return splitColor; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toArray", function() { return toArray; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "selector", function() { return selector; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapRange", function() { return mapRange; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pipe", function() { return pipe; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "unitize", function() { return unitize; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "interpolate", function() { return interpolate; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "shuffle", function() { return shuffle; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_getProperty", function() { return _getProperty; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_numExp", function() { return _numExp; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_numWithUnitExp", function() { return _numWithUnitExp; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_isString", function() { return _isString; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_isUndefined", function() { return _isUndefined; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_renderComplexString", function() { return _renderComplexString; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_relExp", function() { return _relExp; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_setDefaults", function() { return _setDefaults; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_removeLinkedListItem", function() { return _removeLinkedListItem; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_forEachName", function() { return _forEachName; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_sortPropTweensByPriority", function() { return _sortPropTweensByPriority; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_colorStringFilter", function() { return _colorStringFilter; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_replaceRandom", function() { return _replaceRandom; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_checkPlugin", function() { return _checkPlugin; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_plugins", function() { return _plugins; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_ticker", function() { return _ticker; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_config", function() { return _config; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_roundModifier", function() { return _roundModifier; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_round", function() { return _round; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_missingPlugin", function() { return _missingPlugin; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_getSetter", function() { return _getSetter; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_getCache", function() { return _getCache; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_colorExp", function() { return _colorExp; });
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
-
-/*!
- * GSAP 3.9.1
- * https://greensock.com
- *
- * @license Copyright 2008-2021, GreenSock. All rights reserved.
- * Subject to the terms at https://greensock.com/standard-license or for
- * Club GreenSock members, the agreement issued with that membership.
- * @author: Jack Doyle, jack@greensock.com
-*/
-
-/* eslint-disable */
-var _config = {
-  autoSleep: 120,
-  force3D: "auto",
-  nullTargetWarn: 1,
-  units: {
-    lineHeight: ""
-  }
-},
-    _defaults = {
-  duration: .5,
-  overwrite: false,
-  delay: 0
-},
-    _suppressOverwrites,
-    _bigNum = 1e8,
-    _tinyNum = 1 / _bigNum,
-    _2PI = Math.PI * 2,
-    _HALF_PI = _2PI / 4,
-    _gsID = 0,
-    _sqrt = Math.sqrt,
-    _cos = Math.cos,
-    _sin = Math.sin,
-    _isString = function _isString(value) {
-  return typeof value === "string";
-},
-    _isFunction = function _isFunction(value) {
-  return typeof value === "function";
-},
-    _isNumber = function _isNumber(value) {
-  return typeof value === "number";
-},
-    _isUndefined = function _isUndefined(value) {
-  return typeof value === "undefined";
-},
-    _isObject = function _isObject(value) {
-  return typeof value === "object";
-},
-    _isNotFalse = function _isNotFalse(value) {
-  return value !== false;
-},
-    _windowExists = function _windowExists() {
-  return typeof window !== "undefined";
-},
-    _isFuncOrString = function _isFuncOrString(value) {
-  return _isFunction(value) || _isString(value);
-},
-    _isTypedArray = typeof ArrayBuffer === "function" && ArrayBuffer.isView || function () {},
-    // note: IE10 has ArrayBuffer, but NOT ArrayBuffer.isView().
-_isArray = Array.isArray,
-    _strictNumExp = /(?:-?\.?\d|\.)+/gi,
-    //only numbers (including negatives and decimals) but NOT relative values.
-_numExp = /[-+=.]*\d+[.e\-+]*\d*[e\-+]*\d*/g,
-    //finds any numbers, including ones that start with += or -=, negative numbers, and ones in scientific notation like 1e-8.
-_numWithUnitExp = /[-+=.]*\d+[.e-]*\d*[a-z%]*/g,
-    _complexStringNumExp = /[-+=.]*\d+\.?\d*(?:e-|e\+)?\d*/gi,
-    //duplicate so that while we're looping through matches from exec(), it doesn't contaminate the lastIndex of _numExp which we use to search for colors too.
-_relExp = /[+-]=-?[.\d]+/,
-    _delimitedValueExp = /[^,'"\[\]\s]+/gi,
-    // previously /[#\-+.]*\b[a-z\d\-=+%.]+/gi but didn't catch special characters.
-_unitExp = /[\d.+\-=]+(?:e[-+]\d*)*/i,
-    _globalTimeline,
-    _win,
-    _coreInitted,
-    _doc,
-    _globals = {},
-    _installScope = {},
-    _coreReady,
-    _install = function _install(scope) {
-  return (_installScope = _merge(scope, _globals)) && gsap;
-},
-    _missingPlugin = function _missingPlugin(property, value) {
-  return console.warn("Invalid property", property, "set to", value, "Missing plugin? gsap.registerPlugin()");
-},
-    _warn = function _warn(message, suppress) {
-  return !suppress && console.warn(message);
-},
-    _addGlobal = function _addGlobal(name, obj) {
-  return name && (_globals[name] = obj) && _installScope && (_installScope[name] = obj) || _globals;
-},
-    _emptyFunc = function _emptyFunc() {
-  return 0;
-},
-    _reservedProps = {},
-    _lazyTweens = [],
-    _lazyLookup = {},
-    _lastRenderedFrame,
-    _plugins = {},
-    _effects = {},
-    _nextGCFrame = 30,
-    _harnessPlugins = [],
-    _callbackNames = "",
-    _harness = function _harness(targets) {
-  var target = targets[0],
-      harnessPlugin,
-      i;
-  _isObject(target) || _isFunction(target) || (targets = [targets]);
-
-  if (!(harnessPlugin = (target._gsap || {}).harness)) {
-    // find the first target with a harness. We assume targets passed into an animation will be of similar type, meaning the same kind of harness can be used for them all (performance optimization)
-    i = _harnessPlugins.length;
-
-    while (i-- && !_harnessPlugins[i].targetTest(target)) {}
-
-    harnessPlugin = _harnessPlugins[i];
-  }
-
-  i = targets.length;
-
-  while (i--) {
-    targets[i] && (targets[i]._gsap || (targets[i]._gsap = new GSCache(targets[i], harnessPlugin))) || targets.splice(i, 1);
-  }
-
-  return targets;
-},
-    _getCache = function _getCache(target) {
-  return target._gsap || _harness(toArray(target))[0]._gsap;
-},
-    _getProperty = function _getProperty(target, property, v) {
-  return (v = target[property]) && _isFunction(v) ? target[property]() : _isUndefined(v) && target.getAttribute && target.getAttribute(property) || v;
-},
-    _forEachName = function _forEachName(names, func) {
-  return (names = names.split(",")).forEach(func) || names;
-},
-    //split a comma-delimited list of names into an array, then run a forEach() function and return the split array (this is just a way to consolidate/shorten some code).
-_round = function _round(value) {
-  return Math.round(value * 100000) / 100000 || 0;
-},
-    _roundPrecise = function _roundPrecise(value) {
-  return Math.round(value * 10000000) / 10000000 || 0;
-},
-    // increased precision mostly for timing values.
-_arrayContainsAny = function _arrayContainsAny(toSearch, toFind) {
-  //searches one array to find matches for any of the items in the toFind array. As soon as one is found, it returns true. It does NOT return all the matches; it's simply a boolean search.
-  var l = toFind.length,
-      i = 0;
-
-  for (; toSearch.indexOf(toFind[i]) < 0 && ++i < l;) {}
-
-  return i < l;
-},
-    _lazyRender = function _lazyRender() {
-  var l = _lazyTweens.length,
-      a = _lazyTweens.slice(0),
-      i,
-      tween;
-
-  _lazyLookup = {};
-  _lazyTweens.length = 0;
-
-  for (i = 0; i < l; i++) {
-    tween = a[i];
-    tween && tween._lazy && (tween.render(tween._lazy[0], tween._lazy[1], true)._lazy = 0);
-  }
-},
-    _lazySafeRender = function _lazySafeRender(animation, time, suppressEvents, force) {
-  _lazyTweens.length && _lazyRender();
-  animation.render(time, suppressEvents, force);
-  _lazyTweens.length && _lazyRender(); //in case rendering caused any tweens to lazy-init, we should render them because typically when someone calls seek() or time() or progress(), they expect an immediate render.
-},
-    _numericIfPossible = function _numericIfPossible(value) {
-  var n = parseFloat(value);
-  return (n || n === 0) && (value + "").match(_delimitedValueExp).length < 2 ? n : _isString(value) ? value.trim() : value;
-},
-    _passThrough = function _passThrough(p) {
-  return p;
-},
-    _setDefaults = function _setDefaults(obj, defaults) {
-  for (var p in defaults) {
-    p in obj || (obj[p] = defaults[p]);
-  }
-
-  return obj;
-},
-    _setKeyframeDefaults = function _setKeyframeDefaults(excludeDuration) {
-  return function (obj, defaults) {
-    for (var p in defaults) {
-      p in obj || p === "duration" && excludeDuration || p === "ease" || (obj[p] = defaults[p]);
-    }
-  };
-},
-    _merge = function _merge(base, toMerge) {
-  for (var p in toMerge) {
-    base[p] = toMerge[p];
-  }
-
-  return base;
-},
-    _mergeDeep = function _mergeDeep(base, toMerge) {
-  for (var p in toMerge) {
-    p !== "__proto__" && p !== "constructor" && p !== "prototype" && (base[p] = _isObject(toMerge[p]) ? _mergeDeep(base[p] || (base[p] = {}), toMerge[p]) : toMerge[p]);
-  }
-
-  return base;
-},
-    _copyExcluding = function _copyExcluding(obj, excluding) {
-  var copy = {},
-      p;
-
-  for (p in obj) {
-    p in excluding || (copy[p] = obj[p]);
-  }
-
-  return copy;
-},
-    _inheritDefaults = function _inheritDefaults(vars) {
-  var parent = vars.parent || _globalTimeline,
-      func = vars.keyframes ? _setKeyframeDefaults(_isArray(vars.keyframes)) : _setDefaults;
-
-  if (_isNotFalse(vars.inherit)) {
-    while (parent) {
-      func(vars, parent.vars.defaults);
-      parent = parent.parent || parent._dp;
-    }
-  }
-
-  return vars;
-},
-    _arraysMatch = function _arraysMatch(a1, a2) {
-  var i = a1.length,
-      match = i === a2.length;
-
-  while (match && i-- && a1[i] === a2[i]) {}
-
-  return i < 0;
-},
-    _addLinkedListItem = function _addLinkedListItem(parent, child, firstProp, lastProp, sortBy) {
-  if (firstProp === void 0) {
-    firstProp = "_first";
-  }
-
-  if (lastProp === void 0) {
-    lastProp = "_last";
-  }
-
-  var prev = parent[lastProp],
-      t;
-
-  if (sortBy) {
-    t = child[sortBy];
-
-    while (prev && prev[sortBy] > t) {
-      prev = prev._prev;
-    }
-  }
-
-  if (prev) {
-    child._next = prev._next;
-    prev._next = child;
-  } else {
-    child._next = parent[firstProp];
-    parent[firstProp] = child;
-  }
-
-  if (child._next) {
-    child._next._prev = child;
-  } else {
-    parent[lastProp] = child;
-  }
-
-  child._prev = prev;
-  child.parent = child._dp = parent;
-  return child;
-},
-    _removeLinkedListItem = function _removeLinkedListItem(parent, child, firstProp, lastProp) {
-  if (firstProp === void 0) {
-    firstProp = "_first";
-  }
-
-  if (lastProp === void 0) {
-    lastProp = "_last";
-  }
-
-  var prev = child._prev,
-      next = child._next;
-
-  if (prev) {
-    prev._next = next;
-  } else if (parent[firstProp] === child) {
-    parent[firstProp] = next;
-  }
-
-  if (next) {
-    next._prev = prev;
-  } else if (parent[lastProp] === child) {
-    parent[lastProp] = prev;
-  }
-
-  child._next = child._prev = child.parent = null; // don't delete the _dp just so we can revert if necessary. But parent should be null to indicate the item isn't in a linked list.
-},
-    _removeFromParent = function _removeFromParent(child, onlyIfParentHasAutoRemove) {
-  child.parent && (!onlyIfParentHasAutoRemove || child.parent.autoRemoveChildren) && child.parent.remove(child);
-  child._act = 0;
-},
-    _uncache = function _uncache(animation, child) {
-  if (animation && (!child || child._end > animation._dur || child._start < 0)) {
-    // performance optimization: if a child animation is passed in we should only uncache if that child EXTENDS the animation (its end time is beyond the end)
-    var a = animation;
-
-    while (a) {
-      a._dirty = 1;
-      a = a.parent;
-    }
-  }
-
-  return animation;
-},
-    _recacheAncestors = function _recacheAncestors(animation) {
-  var parent = animation.parent;
-
-  while (parent && parent.parent) {
-    //sometimes we must force a re-sort of all children and update the duration/totalDuration of all ancestor timelines immediately in case, for example, in the middle of a render loop, one tween alters another tween's timeScale which shoves its startTime before 0, forcing the parent timeline to shift around and shiftChildren() which could affect that next tween's render (startTime). Doesn't matter for the root timeline though.
-    parent._dirty = 1;
-    parent.totalDuration();
-    parent = parent.parent;
-  }
-
-  return animation;
-},
-    _hasNoPausedAncestors = function _hasNoPausedAncestors(animation) {
-  return !animation || animation._ts && _hasNoPausedAncestors(animation.parent);
-},
-    _elapsedCycleDuration = function _elapsedCycleDuration(animation) {
-  return animation._repeat ? _animationCycle(animation._tTime, animation = animation.duration() + animation._rDelay) * animation : 0;
-},
-    // feed in the totalTime and cycleDuration and it'll return the cycle (iteration minus 1) and if the playhead is exactly at the very END, it will NOT bump up to the next cycle.
-_animationCycle = function _animationCycle(tTime, cycleDuration) {
-  var whole = Math.floor(tTime /= cycleDuration);
-  return tTime && whole === tTime ? whole - 1 : whole;
-},
-    _parentToChildTotalTime = function _parentToChildTotalTime(parentTime, child) {
-  return (parentTime - child._start) * child._ts + (child._ts >= 0 ? 0 : child._dirty ? child.totalDuration() : child._tDur);
-},
-    _setEnd = function _setEnd(animation) {
-  return animation._end = _roundPrecise(animation._start + (animation._tDur / Math.abs(animation._ts || animation._rts || _tinyNum) || 0));
-},
-    _alignPlayhead = function _alignPlayhead(animation, totalTime) {
-  // adjusts the animation's _start and _end according to the provided totalTime (only if the parent's smoothChildTiming is true and the animation isn't paused). It doesn't do any rendering or forcing things back into parent timelines, etc. - that's what totalTime() is for.
-  var parent = animation._dp;
-
-  if (parent && parent.smoothChildTiming && animation._ts) {
-    animation._start = _roundPrecise(parent._time - (animation._ts > 0 ? totalTime / animation._ts : ((animation._dirty ? animation.totalDuration() : animation._tDur) - totalTime) / -animation._ts));
-
-    _setEnd(animation);
-
-    parent._dirty || _uncache(parent, animation); //for performance improvement. If the parent's cache is already dirty, it already took care of marking the ancestors as dirty too, so skip the function call here.
-  }
-
-  return animation;
-},
-
-/*
-_totalTimeToTime = (clampedTotalTime, duration, repeat, repeatDelay, yoyo) => {
-	let cycleDuration = duration + repeatDelay,
-		time = _round(clampedTotalTime % cycleDuration);
-	if (time > duration) {
-		time = duration;
-	}
-	return (yoyo && (~~(clampedTotalTime / cycleDuration) & 1)) ? duration - time : time;
-},
-*/
-_postAddChecks = function _postAddChecks(timeline, child) {
-  var t;
-
-  if (child._time || child._initted && !child._dur) {
-    //in case, for example, the _start is moved on a tween that has already rendered. Imagine it's at its end state, then the startTime is moved WAY later (after the end of this timeline), it should render at its beginning.
-    t = _parentToChildTotalTime(timeline.rawTime(), child);
-
-    if (!child._dur || _clamp(0, child.totalDuration(), t) - child._tTime > _tinyNum) {
-      child.render(t, true);
-    }
-  } //if the timeline has already ended but the inserted tween/timeline extends the duration, we should enable this timeline again so that it renders properly. We should also align the playhead with the parent timeline's when appropriate.
-
-
-  if (_uncache(timeline, child)._dp && timeline._initted && timeline._time >= timeline._dur && timeline._ts) {
-    //in case any of the ancestors had completed but should now be enabled...
-    if (timeline._dur < timeline.duration()) {
-      t = timeline;
-
-      while (t._dp) {
-        t.rawTime() >= 0 && t.totalTime(t._tTime); //moves the timeline (shifts its startTime) if necessary, and also enables it. If it's currently zero, though, it may not be scheduled to render until later so there's no need to force it to align with the current playhead position. Only move to catch up with the playhead.
-
-        t = t._dp;
-      }
-    }
-
-    timeline._zTime = -_tinyNum; // helps ensure that the next render() will be forced (crossingStart = true in render()), even if the duration hasn't changed (we're adding a child which would need to get rendered). Definitely an edge case. Note: we MUST do this AFTER the loop above where the totalTime() might trigger a render() because this _addToTimeline() method gets called from the Animation constructor, BEFORE tweens even record their targets, etc. so we wouldn't want things to get triggered in the wrong order.
-  }
-},
-    _addToTimeline = function _addToTimeline(timeline, child, position, skipChecks) {
-  child.parent && _removeFromParent(child);
-  child._start = _roundPrecise((_isNumber(position) ? position : position || timeline !== _globalTimeline ? _parsePosition(timeline, position, child) : timeline._time) + child._delay);
-  child._end = _roundPrecise(child._start + (child.totalDuration() / Math.abs(child.timeScale()) || 0));
-
-  _addLinkedListItem(timeline, child, "_first", "_last", timeline._sort ? "_start" : 0);
-
-  _isFromOrFromStart(child) || (timeline._recent = child);
-  skipChecks || _postAddChecks(timeline, child);
-  return timeline;
-},
-    _scrollTrigger = function _scrollTrigger(animation, trigger) {
-  return (_globals.ScrollTrigger || _missingPlugin("scrollTrigger", trigger)) && _globals.ScrollTrigger.create(trigger, animation);
-},
-    _attemptInitTween = function _attemptInitTween(tween, totalTime, force, suppressEvents) {
-  _initTween(tween, totalTime);
-
-  if (!tween._initted) {
-    return 1;
-  }
-
-  if (!force && tween._pt && (tween._dur && tween.vars.lazy !== false || !tween._dur && tween.vars.lazy) && _lastRenderedFrame !== _ticker.frame) {
-    _lazyTweens.push(tween);
-
-    tween._lazy = [totalTime, suppressEvents];
-    return 1;
-  }
-},
-    _parentPlayheadIsBeforeStart = function _parentPlayheadIsBeforeStart(_ref) {
-  var parent = _ref.parent;
-  return parent && parent._ts && parent._initted && !parent._lock && (parent.rawTime() < 0 || _parentPlayheadIsBeforeStart(parent));
-},
-    // check parent's _lock because when a timeline repeats/yoyos and does its artificial wrapping, we shouldn't force the ratio back to 0
-_isFromOrFromStart = function _isFromOrFromStart(_ref2) {
-  var data = _ref2.data;
-  return data === "isFromStart" || data === "isStart";
-},
-    _renderZeroDurationTween = function _renderZeroDurationTween(tween, totalTime, suppressEvents, force) {
-  var prevRatio = tween.ratio,
-      ratio = totalTime < 0 || !totalTime && (!tween._start && _parentPlayheadIsBeforeStart(tween) && !(!tween._initted && _isFromOrFromStart(tween)) || (tween._ts < 0 || tween._dp._ts < 0) && !_isFromOrFromStart(tween)) ? 0 : 1,
-      // if the tween or its parent is reversed and the totalTime is 0, we should go to a ratio of 0. Edge case: if a from() or fromTo() stagger tween is placed later in a timeline, the "startAt" zero-duration tween could initially render at a time when the parent timeline's playhead is technically BEFORE where this tween is, so make sure that any "from" and "fromTo" startAt tweens are rendered the first time at a ratio of 1.
-  repeatDelay = tween._rDelay,
-      tTime = 0,
-      pt,
-      iteration,
-      prevIteration;
-
-  if (repeatDelay && tween._repeat) {
-    // in case there's a zero-duration tween that has a repeat with a repeatDelay
-    tTime = _clamp(0, tween._tDur, totalTime);
-    iteration = _animationCycle(tTime, repeatDelay);
-    tween._yoyo && iteration & 1 && (ratio = 1 - ratio);
-
-    if (iteration !== _animationCycle(tween._tTime, repeatDelay)) {
-      // if iteration changed
-      prevRatio = 1 - ratio;
-      tween.vars.repeatRefresh && tween._initted && tween.invalidate();
-    }
-  }
-
-  if (ratio !== prevRatio || force || tween._zTime === _tinyNum || !totalTime && tween._zTime) {
-    if (!tween._initted && _attemptInitTween(tween, totalTime, force, suppressEvents)) {
-      // if we render the very beginning (time == 0) of a fromTo(), we must force the render (normal tweens wouldn't need to render at a time of 0 when the prevTime was also 0). This is also mandatory to make sure overwriting kicks in immediately.
-      return;
-    }
-
-    prevIteration = tween._zTime;
-    tween._zTime = totalTime || (suppressEvents ? _tinyNum : 0); // when the playhead arrives at EXACTLY time 0 (right on top) of a zero-duration tween, we need to discern if events are suppressed so that when the playhead moves again (next time), it'll trigger the callback. If events are NOT suppressed, obviously the callback would be triggered in this render. Basically, the callback should fire either when the playhead ARRIVES or LEAVES this exact spot, not both. Imagine doing a timeline.seek(0) and there's a callback that sits at 0. Since events are suppressed on that seek() by default, nothing will fire, but when the playhead moves off of that position, the callback should fire. This behavior is what people intuitively expect.
-
-    suppressEvents || (suppressEvents = totalTime && !prevIteration); // if it was rendered previously at exactly 0 (_zTime) and now the playhead is moving away, DON'T fire callbacks otherwise they'll seem like duplicates.
-
-    tween.ratio = ratio;
-    tween._from && (ratio = 1 - ratio);
-    tween._time = 0;
-    tween._tTime = tTime;
-    pt = tween._pt;
-
-    while (pt) {
-      pt.r(ratio, pt.d);
-      pt = pt._next;
-    }
-
-    tween._startAt && totalTime < 0 && tween._startAt.render(totalTime, true, true);
-    tween._onUpdate && !suppressEvents && _callback(tween, "onUpdate");
-    tTime && tween._repeat && !suppressEvents && tween.parent && _callback(tween, "onRepeat");
-
-    if ((totalTime >= tween._tDur || totalTime < 0) && tween.ratio === ratio) {
-      ratio && _removeFromParent(tween, 1);
-
-      if (!suppressEvents) {
-        _callback(tween, ratio ? "onComplete" : "onReverseComplete", true);
-
-        tween._prom && tween._prom();
-      }
-    }
-  } else if (!tween._zTime) {
-    tween._zTime = totalTime;
-  }
-},
-    _findNextPauseTween = function _findNextPauseTween(animation, prevTime, time) {
-  var child;
-
-  if (time > prevTime) {
-    child = animation._first;
-
-    while (child && child._start <= time) {
-      if (child.data === "isPause" && child._start > prevTime) {
-        return child;
-      }
-
-      child = child._next;
-    }
-  } else {
-    child = animation._last;
-
-    while (child && child._start >= time) {
-      if (child.data === "isPause" && child._start < prevTime) {
-        return child;
-      }
-
-      child = child._prev;
-    }
-  }
-},
-    _setDuration = function _setDuration(animation, duration, skipUncache, leavePlayhead) {
-  var repeat = animation._repeat,
-      dur = _roundPrecise(duration) || 0,
-      totalProgress = animation._tTime / animation._tDur;
-  totalProgress && !leavePlayhead && (animation._time *= dur / animation._dur);
-  animation._dur = dur;
-  animation._tDur = !repeat ? dur : repeat < 0 ? 1e10 : _roundPrecise(dur * (repeat + 1) + animation._rDelay * repeat);
-  totalProgress > 0 && !leavePlayhead ? _alignPlayhead(animation, animation._tTime = animation._tDur * totalProgress) : animation.parent && _setEnd(animation);
-  skipUncache || _uncache(animation.parent, animation);
-  return animation;
-},
-    _onUpdateTotalDuration = function _onUpdateTotalDuration(animation) {
-  return animation instanceof Timeline ? _uncache(animation) : _setDuration(animation, animation._dur);
-},
-    _zeroPosition = {
-  _start: 0,
-  endTime: _emptyFunc,
-  totalDuration: _emptyFunc
-},
-    _parsePosition = function _parsePosition(animation, position, percentAnimation) {
-  var labels = animation.labels,
-      recent = animation._recent || _zeroPosition,
-      clippedDuration = animation.duration() >= _bigNum ? recent.endTime(false) : animation._dur,
-      //in case there's a child that infinitely repeats, users almost never intend for the insertion point of a new child to be based on a SUPER long value like that so we clip it and assume the most recently-added child's endTime should be used instead.
-  i,
-      offset,
-      isPercent;
-
-  if (_isString(position) && (isNaN(position) || position in labels)) {
-    //if the string is a number like "1", check to see if there's a label with that name, otherwise interpret it as a number (absolute value).
-    offset = position.charAt(0);
-    isPercent = position.substr(-1) === "%";
-    i = position.indexOf("=");
-
-    if (offset === "<" || offset === ">") {
-      i >= 0 && (position = position.replace(/=/, ""));
-      return (offset === "<" ? recent._start : recent.endTime(recent._repeat >= 0)) + (parseFloat(position.substr(1)) || 0) * (isPercent ? (i < 0 ? recent : percentAnimation).totalDuration() / 100 : 1);
-    }
-
-    if (i < 0) {
-      position in labels || (labels[position] = clippedDuration);
-      return labels[position];
-    }
-
-    offset = parseFloat(position.charAt(i - 1) + position.substr(i + 1));
-
-    if (isPercent && percentAnimation) {
-      offset = offset / 100 * (_isArray(percentAnimation) ? percentAnimation[0] : percentAnimation).totalDuration();
-    }
-
-    return i > 1 ? _parsePosition(animation, position.substr(0, i - 1), percentAnimation) + offset : clippedDuration + offset;
-  }
-
-  return position == null ? clippedDuration : +position;
-},
-    _createTweenType = function _createTweenType(type, params, timeline) {
-  var isLegacy = _isNumber(params[1]),
-      varsIndex = (isLegacy ? 2 : 1) + (type < 2 ? 0 : 1),
-      vars = params[varsIndex],
-      irVars,
-      parent;
-
-  isLegacy && (vars.duration = params[1]);
-  vars.parent = timeline;
-
-  if (type) {
-    irVars = vars;
-    parent = timeline;
-
-    while (parent && !("immediateRender" in irVars)) {
-      // inheritance hasn't happened yet, but someone may have set a default in an ancestor timeline. We could do vars.immediateRender = _isNotFalse(_inheritDefaults(vars).immediateRender) but that'd exact a slight performance penalty because _inheritDefaults() also runs in the Tween constructor. We're paying a small kb price here to gain speed.
-      irVars = parent.vars.defaults || {};
-      parent = _isNotFalse(parent.vars.inherit) && parent.parent;
-    }
-
-    vars.immediateRender = _isNotFalse(irVars.immediateRender);
-    type < 2 ? vars.runBackwards = 1 : vars.startAt = params[varsIndex - 1]; // "from" vars
-  }
-
-  return new Tween(params[0], vars, params[varsIndex + 1]);
-},
-    _conditionalReturn = function _conditionalReturn(value, func) {
-  return value || value === 0 ? func(value) : func;
-},
-    _clamp = function _clamp(min, max, value) {
-  return value < min ? min : value > max ? max : value;
-},
-    getUnit = function getUnit(value, v) {
-  return !_isString(value) || !(v = _unitExp.exec(value)) ? "" : value.substr(v.index + v[0].length);
-},
-    // note: protect against padded numbers as strings, like "100.100". That shouldn't return "00" as the unit. If it's numeric, return no unit.
-clamp = function clamp(min, max, value) {
-  return _conditionalReturn(value, function (v) {
-    return _clamp(min, max, v);
-  });
-},
-    _slice = [].slice,
-    _isArrayLike = function _isArrayLike(value, nonEmpty) {
-  return value && _isObject(value) && "length" in value && (!nonEmpty && !value.length || value.length - 1 in value && _isObject(value[0])) && !value.nodeType && value !== _win;
-},
-    _flatten = function _flatten(ar, leaveStrings, accumulator) {
-  if (accumulator === void 0) {
-    accumulator = [];
-  }
-
-  return ar.forEach(function (value) {
-    var _accumulator;
-
-    return _isString(value) && !leaveStrings || _isArrayLike(value, 1) ? (_accumulator = accumulator).push.apply(_accumulator, toArray(value)) : accumulator.push(value);
-  }) || accumulator;
-},
-    //takes any value and returns an array. If it's a string (and leaveStrings isn't true), it'll use document.querySelectorAll() and convert that to an array. It'll also accept iterables like jQuery objects.
-toArray = function toArray(value, scope, leaveStrings) {
-  return _isString(value) && !leaveStrings && (_coreInitted || !_wake()) ? _slice.call((scope || _doc).querySelectorAll(value), 0) : _isArray(value) ? _flatten(value, leaveStrings) : _isArrayLike(value) ? _slice.call(value, 0) : value ? [value] : [];
-},
-    selector = function selector(value) {
-  value = toArray(value)[0] || _warn("Invalid scope") || {};
-  return function (v) {
-    var el = value.current || value.nativeElement || value;
-    return toArray(v, el.querySelectorAll ? el : el === value ? _warn("Invalid scope") || _doc.createElement("div") : value);
-  };
-},
-    shuffle = function shuffle(a) {
-  return a.sort(function () {
-    return .5 - Math.random();
-  });
-},
-    // alternative that's a bit faster and more reliably diverse but bigger:   for (let j, v, i = a.length; i; j = Math.floor(Math.random() * i), v = a[--i], a[i] = a[j], a[j] = v); return a;
-//for distributing values across an array. Can accept a number, a function or (most commonly) a function which can contain the following properties: {base, amount, from, ease, grid, axis, length, each}. Returns a function that expects the following parameters: index, target, array. Recognizes the following
-distribute = function distribute(v) {
-  if (_isFunction(v)) {
-    return v;
-  }
-
-  var vars = _isObject(v) ? v : {
-    each: v
-  },
-      //n:1 is just to indicate v was a number; we leverage that later to set v according to the length we get. If a number is passed in, we treat it like the old stagger value where 0.1, for example, would mean that things would be distributed with 0.1 between each element in the array rather than a total "amount" that's chunked out among them all.
-  ease = _parseEase(vars.ease),
-      from = vars.from || 0,
-      base = parseFloat(vars.base) || 0,
-      cache = {},
-      isDecimal = from > 0 && from < 1,
-      ratios = isNaN(from) || isDecimal,
-      axis = vars.axis,
-      ratioX = from,
-      ratioY = from;
-
-  if (_isString(from)) {
-    ratioX = ratioY = {
-      center: .5,
-      edges: .5,
-      end: 1
-    }[from] || 0;
-  } else if (!isDecimal && ratios) {
-    ratioX = from[0];
-    ratioY = from[1];
-  }
-
-  return function (i, target, a) {
-    var l = (a || vars).length,
-        distances = cache[l],
-        originX,
-        originY,
-        x,
-        y,
-        d,
-        j,
-        max,
-        min,
-        wrapAt;
-
-    if (!distances) {
-      wrapAt = vars.grid === "auto" ? 0 : (vars.grid || [1, _bigNum])[1];
-
-      if (!wrapAt) {
-        max = -_bigNum;
-
-        while (max < (max = a[wrapAt++].getBoundingClientRect().left) && wrapAt < l) {}
-
-        wrapAt--;
-      }
-
-      distances = cache[l] = [];
-      originX = ratios ? Math.min(wrapAt, l) * ratioX - .5 : from % wrapAt;
-      originY = wrapAt === _bigNum ? 0 : ratios ? l * ratioY / wrapAt - .5 : from / wrapAt | 0;
-      max = 0;
-      min = _bigNum;
-
-      for (j = 0; j < l; j++) {
-        x = j % wrapAt - originX;
-        y = originY - (j / wrapAt | 0);
-        distances[j] = d = !axis ? _sqrt(x * x + y * y) : Math.abs(axis === "y" ? y : x);
-        d > max && (max = d);
-        d < min && (min = d);
-      }
-
-      from === "random" && shuffle(distances);
-      distances.max = max - min;
-      distances.min = min;
-      distances.v = l = (parseFloat(vars.amount) || parseFloat(vars.each) * (wrapAt > l ? l - 1 : !axis ? Math.max(wrapAt, l / wrapAt) : axis === "y" ? l / wrapAt : wrapAt) || 0) * (from === "edges" ? -1 : 1);
-      distances.b = l < 0 ? base - l : base;
-      distances.u = getUnit(vars.amount || vars.each) || 0; //unit
-
-      ease = ease && l < 0 ? _invertEase(ease) : ease;
-    }
-
-    l = (distances[i] - distances.min) / distances.max || 0;
-    return _roundPrecise(distances.b + (ease ? ease(l) : l) * distances.v) + distances.u; //round in order to work around floating point errors
-  };
-},
-    _roundModifier = function _roundModifier(v) {
-  //pass in 0.1 get a function that'll round to the nearest tenth, or 5 to round to the closest 5, or 0.001 to the closest 1000th, etc.
-  var p = Math.pow(10, ((v + "").split(".")[1] || "").length); //to avoid floating point math errors (like 24 * 0.1 == 2.4000000000000004), we chop off at a specific number of decimal places (much faster than toFixed())
-
-  return function (raw) {
-    var n = Math.round(parseFloat(raw) / v) * v * p;
-    return (n - n % 1) / p + (_isNumber(raw) ? 0 : getUnit(raw)); // n - n % 1 replaces Math.floor() in order to handle negative values properly. For example, Math.floor(-150.00000000000003) is 151!
-  };
-},
-    snap = function snap(snapTo, value) {
-  var isArray = _isArray(snapTo),
-      radius,
-      is2D;
-
-  if (!isArray && _isObject(snapTo)) {
-    radius = isArray = snapTo.radius || _bigNum;
-
-    if (snapTo.values) {
-      snapTo = toArray(snapTo.values);
-
-      if (is2D = !_isNumber(snapTo[0])) {
-        radius *= radius; //performance optimization so we don't have to Math.sqrt() in the loop.
-      }
-    } else {
-      snapTo = _roundModifier(snapTo.increment);
-    }
-  }
-
-  return _conditionalReturn(value, !isArray ? _roundModifier(snapTo) : _isFunction(snapTo) ? function (raw) {
-    is2D = snapTo(raw);
-    return Math.abs(is2D - raw) <= radius ? is2D : raw;
-  } : function (raw) {
-    var x = parseFloat(is2D ? raw.x : raw),
-        y = parseFloat(is2D ? raw.y : 0),
-        min = _bigNum,
-        closest = 0,
-        i = snapTo.length,
-        dx,
-        dy;
-
-    while (i--) {
-      if (is2D) {
-        dx = snapTo[i].x - x;
-        dy = snapTo[i].y - y;
-        dx = dx * dx + dy * dy;
-      } else {
-        dx = Math.abs(snapTo[i] - x);
-      }
-
-      if (dx < min) {
-        min = dx;
-        closest = i;
-      }
-    }
-
-    closest = !radius || min <= radius ? snapTo[closest] : raw;
-    return is2D || closest === raw || _isNumber(raw) ? closest : closest + getUnit(raw);
-  });
-},
-    random = function random(min, max, roundingIncrement, returnFunction) {
-  return _conditionalReturn(_isArray(min) ? !max : roundingIncrement === true ? !!(roundingIncrement = 0) : !returnFunction, function () {
-    return _isArray(min) ? min[~~(Math.random() * min.length)] : (roundingIncrement = roundingIncrement || 1e-5) && (returnFunction = roundingIncrement < 1 ? Math.pow(10, (roundingIncrement + "").length - 2) : 1) && Math.floor(Math.round((min - roundingIncrement / 2 + Math.random() * (max - min + roundingIncrement * .99)) / roundingIncrement) * roundingIncrement * returnFunction) / returnFunction;
-  });
-},
-    pipe = function pipe() {
-  for (var _len = arguments.length, functions = new Array(_len), _key = 0; _key < _len; _key++) {
-    functions[_key] = arguments[_key];
-  }
-
-  return function (value) {
-    return functions.reduce(function (v, f) {
-      return f(v);
-    }, value);
-  };
-},
-    unitize = function unitize(func, unit) {
-  return function (value) {
-    return func(parseFloat(value)) + (unit || getUnit(value));
-  };
-},
-    normalize = function normalize(min, max, value) {
-  return mapRange(min, max, 0, 1, value);
-},
-    _wrapArray = function _wrapArray(a, wrapper, value) {
-  return _conditionalReturn(value, function (index) {
-    return a[~~wrapper(index)];
-  });
-},
-    wrap = function wrap(min, max, value) {
-  // NOTE: wrap() CANNOT be an arrow function! A very odd compiling bug causes problems (unrelated to GSAP).
-  var range = max - min;
-  return _isArray(min) ? _wrapArray(min, wrap(0, min.length), max) : _conditionalReturn(value, function (value) {
-    return (range + (value - min) % range) % range + min;
-  });
-},
-    wrapYoyo = function wrapYoyo(min, max, value) {
-  var range = max - min,
-      total = range * 2;
-  return _isArray(min) ? _wrapArray(min, wrapYoyo(0, min.length - 1), max) : _conditionalReturn(value, function (value) {
-    value = (total + (value - min) % total) % total || 0;
-    return min + (value > range ? total - value : value);
-  });
-},
-    _replaceRandom = function _replaceRandom(value) {
-  //replaces all occurrences of random(...) in a string with the calculated random value. can be a range like random(-100, 100, 5) or an array like random([0, 100, 500])
-  var prev = 0,
-      s = "",
-      i,
-      nums,
-      end,
-      isArray;
-
-  while (~(i = value.indexOf("random(", prev))) {
-    end = value.indexOf(")", i);
-    isArray = value.charAt(i + 7) === "[";
-    nums = value.substr(i + 7, end - i - 7).match(isArray ? _delimitedValueExp : _strictNumExp);
-    s += value.substr(prev, i - prev) + random(isArray ? nums : +nums[0], isArray ? 0 : +nums[1], +nums[2] || 1e-5);
-    prev = end + 1;
-  }
-
-  return s + value.substr(prev, value.length - prev);
-},
-    mapRange = function mapRange(inMin, inMax, outMin, outMax, value) {
-  var inRange = inMax - inMin,
-      outRange = outMax - outMin;
-  return _conditionalReturn(value, function (value) {
-    return outMin + ((value - inMin) / inRange * outRange || 0);
-  });
-},
-    interpolate = function interpolate(start, end, progress, mutate) {
-  var func = isNaN(start + end) ? 0 : function (p) {
-    return (1 - p) * start + p * end;
-  };
-
-  if (!func) {
-    var isString = _isString(start),
-        master = {},
-        p,
-        i,
-        interpolators,
-        l,
-        il;
-
-    progress === true && (mutate = 1) && (progress = null);
-
-    if (isString) {
-      start = {
-        p: start
-      };
-      end = {
-        p: end
-      };
-    } else if (_isArray(start) && !_isArray(end)) {
-      interpolators = [];
-      l = start.length;
-      il = l - 2;
-
-      for (i = 1; i < l; i++) {
-        interpolators.push(interpolate(start[i - 1], start[i])); //build the interpolators up front as a performance optimization so that when the function is called many times, it can just reuse them.
-      }
-
-      l--;
-
-      func = function func(p) {
-        p *= l;
-        var i = Math.min(il, ~~p);
-        return interpolators[i](p - i);
-      };
-
-      progress = end;
-    } else if (!mutate) {
-      start = _merge(_isArray(start) ? [] : {}, start);
-    }
-
-    if (!interpolators) {
-      for (p in end) {
-        _addPropTween.call(master, start, p, "get", end[p]);
-      }
-
-      func = function func(p) {
-        return _renderPropTweens(p, master) || (isString ? start.p : start);
-      };
-    }
-  }
-
-  return _conditionalReturn(progress, func);
-},
-    _getLabelInDirection = function _getLabelInDirection(timeline, fromTime, backward) {
-  //used for nextLabel() and previousLabel()
-  var labels = timeline.labels,
-      min = _bigNum,
-      p,
-      distance,
-      label;
-
-  for (p in labels) {
-    distance = labels[p] - fromTime;
-
-    if (distance < 0 === !!backward && distance && min > (distance = Math.abs(distance))) {
-      label = p;
-      min = distance;
-    }
-  }
-
-  return label;
-},
-    _callback = function _callback(animation, type, executeLazyFirst) {
-  var v = animation.vars,
-      callback = v[type],
-      params,
-      scope;
-
-  if (!callback) {
-    return;
-  }
-
-  params = v[type + "Params"];
-  scope = v.callbackScope || animation;
-  executeLazyFirst && _lazyTweens.length && _lazyRender(); //in case rendering caused any tweens to lazy-init, we should render them because typically when a timeline finishes, users expect things to have rendered fully. Imagine an onUpdate on a timeline that reports/checks tweened values.
-
-  return params ? callback.apply(scope, params) : callback.call(scope);
-},
-    _interrupt = function _interrupt(animation) {
-  _removeFromParent(animation);
-
-  animation.scrollTrigger && animation.scrollTrigger.kill(false);
-  animation.progress() < 1 && _callback(animation, "onInterrupt");
-  return animation;
-},
-    _quickTween,
-    _createPlugin = function _createPlugin(config) {
-  config = !config.name && config["default"] || config; //UMD packaging wraps things oddly, so for example MotionPathHelper becomes {MotionPathHelper:MotionPathHelper, default:MotionPathHelper}.
-
-  var name = config.name,
-      isFunc = _isFunction(config),
-      Plugin = name && !isFunc && config.init ? function () {
-    this._props = [];
-  } : config,
-      //in case someone passes in an object that's not a plugin, like CustomEase
-  instanceDefaults = {
-    init: _emptyFunc,
-    render: _renderPropTweens,
-    add: _addPropTween,
-    kill: _killPropTweensOf,
-    modifier: _addPluginModifier,
-    rawVars: 0
-  },
-      statics = {
-    targetTest: 0,
-    get: 0,
-    getSetter: _getSetter,
-    aliases: {},
-    register: 0
-  };
-
-  _wake();
-
-  if (config !== Plugin) {
-    if (_plugins[name]) {
-      return;
-    }
-
-    _setDefaults(Plugin, _setDefaults(_copyExcluding(config, instanceDefaults), statics)); //static methods
-
-
-    _merge(Plugin.prototype, _merge(instanceDefaults, _copyExcluding(config, statics))); //instance methods
-
-
-    _plugins[Plugin.prop = name] = Plugin;
-
-    if (config.targetTest) {
-      _harnessPlugins.push(Plugin);
-
-      _reservedProps[name] = 1;
-    }
-
-    name = (name === "css" ? "CSS" : name.charAt(0).toUpperCase() + name.substr(1)) + "Plugin"; //for the global name. "motionPath" should become MotionPathPlugin
-  }
-
-  _addGlobal(name, Plugin);
-
-  config.register && config.register(gsap, Plugin, PropTween);
-},
-
-/*
- * --------------------------------------------------------------------------------------
- * COLORS
- * --------------------------------------------------------------------------------------
- */
-_255 = 255,
-    _colorLookup = {
-  aqua: [0, _255, _255],
-  lime: [0, _255, 0],
-  silver: [192, 192, 192],
-  black: [0, 0, 0],
-  maroon: [128, 0, 0],
-  teal: [0, 128, 128],
-  blue: [0, 0, _255],
-  navy: [0, 0, 128],
-  white: [_255, _255, _255],
-  olive: [128, 128, 0],
-  yellow: [_255, _255, 0],
-  orange: [_255, 165, 0],
-  gray: [128, 128, 128],
-  purple: [128, 0, 128],
-  green: [0, 128, 0],
-  red: [_255, 0, 0],
-  pink: [_255, 192, 203],
-  cyan: [0, _255, _255],
-  transparent: [_255, _255, _255, 0]
-},
-    // possible future idea to replace the hard-coded color name values - put this in the ticker.wake() where we set the _doc:
-// let ctx = _doc.createElement("canvas").getContext("2d");
-// _forEachName("aqua,lime,silver,black,maroon,teal,blue,navy,white,olive,yellow,orange,gray,purple,green,red,pink,cyan", color => {ctx.fillStyle = color; _colorLookup[color] = splitColor(ctx.fillStyle)});
-_hue = function _hue(h, m1, m2) {
-  h += h < 0 ? 1 : h > 1 ? -1 : 0;
-  return (h * 6 < 1 ? m1 + (m2 - m1) * h * 6 : h < .5 ? m2 : h * 3 < 2 ? m1 + (m2 - m1) * (2 / 3 - h) * 6 : m1) * _255 + .5 | 0;
-},
-    splitColor = function splitColor(v, toHSL, forceAlpha) {
-  var a = !v ? _colorLookup.black : _isNumber(v) ? [v >> 16, v >> 8 & _255, v & _255] : 0,
-      r,
-      g,
-      b,
-      h,
-      s,
-      l,
-      max,
-      min,
-      d,
-      wasHSL;
-
-  if (!a) {
-    if (v.substr(-1) === ",") {
-      //sometimes a trailing comma is included and we should chop it off (typically from a comma-delimited list of values like a textShadow:"2px 2px 2px blue, 5px 5px 5px rgb(255,0,0)" - in this example "blue," has a trailing comma. We could strip it out inside parseComplex() but we'd need to do it to the beginning and ending values plus it wouldn't provide protection from other potential scenarios like if the user passes in a similar value.
-      v = v.substr(0, v.length - 1);
-    }
-
-    if (_colorLookup[v]) {
-      a = _colorLookup[v];
-    } else if (v.charAt(0) === "#") {
-      if (v.length < 6) {
-        //for shorthand like #9F0 or #9F0F (could have alpha)
-        r = v.charAt(1);
-        g = v.charAt(2);
-        b = v.charAt(3);
-        v = "#" + r + r + g + g + b + b + (v.length === 5 ? v.charAt(4) + v.charAt(4) : "");
-      }
-
-      if (v.length === 9) {
-        // hex with alpha, like #fd5e53ff
-        a = parseInt(v.substr(1, 6), 16);
-        return [a >> 16, a >> 8 & _255, a & _255, parseInt(v.substr(7), 16) / 255];
-      }
-
-      v = parseInt(v.substr(1), 16);
-      a = [v >> 16, v >> 8 & _255, v & _255];
-    } else if (v.substr(0, 3) === "hsl") {
-      a = wasHSL = v.match(_strictNumExp);
-
-      if (!toHSL) {
-        h = +a[0] % 360 / 360;
-        s = +a[1] / 100;
-        l = +a[2] / 100;
-        g = l <= .5 ? l * (s + 1) : l + s - l * s;
-        r = l * 2 - g;
-        a.length > 3 && (a[3] *= 1); //cast as number
-
-        a[0] = _hue(h + 1 / 3, r, g);
-        a[1] = _hue(h, r, g);
-        a[2] = _hue(h - 1 / 3, r, g);
-      } else if (~v.indexOf("=")) {
-        //if relative values are found, just return the raw strings with the relative prefixes in place.
-        a = v.match(_numExp);
-        forceAlpha && a.length < 4 && (a[3] = 1);
-        return a;
-      }
-    } else {
-      a = v.match(_strictNumExp) || _colorLookup.transparent;
-    }
-
-    a = a.map(Number);
-  }
-
-  if (toHSL && !wasHSL) {
-    r = a[0] / _255;
-    g = a[1] / _255;
-    b = a[2] / _255;
-    max = Math.max(r, g, b);
-    min = Math.min(r, g, b);
-    l = (max + min) / 2;
-
-    if (max === min) {
-      h = s = 0;
-    } else {
-      d = max - min;
-      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-      h = max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
-      h *= 60;
-    }
-
-    a[0] = ~~(h + .5);
-    a[1] = ~~(s * 100 + .5);
-    a[2] = ~~(l * 100 + .5);
-  }
-
-  forceAlpha && a.length < 4 && (a[3] = 1);
-  return a;
-},
-    _colorOrderData = function _colorOrderData(v) {
-  // strips out the colors from the string, finds all the numeric slots (with units) and returns an array of those. The Array also has a "c" property which is an Array of the index values where the colors belong. This is to help work around issues where there's a mis-matched order of color/numeric data like drop-shadow(#f00 0px 1px 2px) and drop-shadow(0x 1px 2px #f00). This is basically a helper function used in _formatColors()
-  var values = [],
-      c = [],
-      i = -1;
-  v.split(_colorExp).forEach(function (v) {
-    var a = v.match(_numWithUnitExp) || [];
-    values.push.apply(values, a);
-    c.push(i += a.length + 1);
-  });
-  values.c = c;
-  return values;
-},
-    _formatColors = function _formatColors(s, toHSL, orderMatchData) {
-  var result = "",
-      colors = (s + result).match(_colorExp),
-      type = toHSL ? "hsla(" : "rgba(",
-      i = 0,
-      c,
-      shell,
-      d,
-      l;
-
-  if (!colors) {
-    return s;
-  }
-
-  colors = colors.map(function (color) {
-    return (color = splitColor(color, toHSL, 1)) && type + (toHSL ? color[0] + "," + color[1] + "%," + color[2] + "%," + color[3] : color.join(",")) + ")";
-  });
-
-  if (orderMatchData) {
-    d = _colorOrderData(s);
-    c = orderMatchData.c;
-
-    if (c.join(result) !== d.c.join(result)) {
-      shell = s.replace(_colorExp, "1").split(_numWithUnitExp);
-      l = shell.length - 1;
-
-      for (; i < l; i++) {
-        result += shell[i] + (~c.indexOf(i) ? colors.shift() || type + "0,0,0,0)" : (d.length ? d : colors.length ? colors : orderMatchData).shift());
-      }
-    }
-  }
-
-  if (!shell) {
-    shell = s.split(_colorExp);
-    l = shell.length - 1;
-
-    for (; i < l; i++) {
-      result += shell[i] + colors[i];
-    }
-  }
-
-  return result + shell[l];
-},
-    _colorExp = function () {
-  var s = "(?:\\b(?:(?:rgb|rgba|hsl|hsla)\\(.+?\\))|\\B#(?:[0-9a-f]{3,4}){1,2}\\b",
-      //we'll dynamically build this Regular Expression to conserve file size. After building it, it will be able to find rgb(), rgba(), # (hexadecimal), and named color values like red, blue, purple, etc.,
-  p;
-
-  for (p in _colorLookup) {
-    s += "|" + p + "\\b";
-  }
-
-  return new RegExp(s + ")", "gi");
-}(),
-    _hslExp = /hsl[a]?\(/,
-    _colorStringFilter = function _colorStringFilter(a) {
-  var combined = a.join(" "),
-      toHSL;
-  _colorExp.lastIndex = 0;
-
-  if (_colorExp.test(combined)) {
-    toHSL = _hslExp.test(combined);
-    a[1] = _formatColors(a[1], toHSL);
-    a[0] = _formatColors(a[0], toHSL, _colorOrderData(a[1])); // make sure the order of numbers/colors match with the END value.
-
-    return true;
-  }
-},
-
-/*
- * --------------------------------------------------------------------------------------
- * TICKER
- * --------------------------------------------------------------------------------------
- */
-_tickerActive,
-    _ticker = function () {
-  var _getTime = Date.now,
-      _lagThreshold = 500,
-      _adjustedLag = 33,
-      _startTime = _getTime(),
-      _lastUpdate = _startTime,
-      _gap = 1000 / 240,
-      _nextTime = _gap,
-      _listeners = [],
-      _id,
-      _req,
-      _raf,
-      _self,
-      _delta,
-      _i,
-      _tick = function _tick(v) {
-    var elapsed = _getTime() - _lastUpdate,
-        manual = v === true,
-        overlap,
-        dispatch,
-        time,
-        frame;
-
-    elapsed > _lagThreshold && (_startTime += elapsed - _adjustedLag);
-    _lastUpdate += elapsed;
-    time = _lastUpdate - _startTime;
-    overlap = time - _nextTime;
-
-    if (overlap > 0 || manual) {
-      frame = ++_self.frame;
-      _delta = time - _self.time * 1000;
-      _self.time = time = time / 1000;
-      _nextTime += overlap + (overlap >= _gap ? 4 : _gap - overlap);
-      dispatch = 1;
-    }
-
-    manual || (_id = _req(_tick)); //make sure the request is made before we dispatch the "tick" event so that timing is maintained. Otherwise, if processing the "tick" requires a bunch of time (like 15ms) and we're using a setTimeout() that's based on 16.7ms, it'd technically take 31.7ms between frames otherwise.
-
-    if (dispatch) {
-      for (_i = 0; _i < _listeners.length; _i++) {
-        // use _i and check _listeners.length instead of a variable because a listener could get removed during the loop, and if that happens to an element less than the current index, it'd throw things off in the loop.
-        _listeners[_i](time, _delta, frame, v);
-      }
-    }
-  };
-
-  _self = {
-    time: 0,
-    frame: 0,
-    tick: function tick() {
-      _tick(true);
-    },
-    deltaRatio: function deltaRatio(fps) {
-      return _delta / (1000 / (fps || 60));
-    },
-    wake: function wake() {
-      if (_coreReady) {
-        if (!_coreInitted && _windowExists()) {
-          _win = _coreInitted = window;
-          _doc = _win.document || {};
-          _globals.gsap = gsap;
-          (_win.gsapVersions || (_win.gsapVersions = [])).push(gsap.version);
-
-          _install(_installScope || _win.GreenSockGlobals || !_win.gsap && _win || {});
-
-          _raf = _win.requestAnimationFrame;
-        }
-
-        _id && _self.sleep();
-
-        _req = _raf || function (f) {
-          return setTimeout(f, _nextTime - _self.time * 1000 + 1 | 0);
-        };
-
-        _tickerActive = 1;
-
-        _tick(2);
-      }
-    },
-    sleep: function sleep() {
-      (_raf ? _win.cancelAnimationFrame : clearTimeout)(_id);
-      _tickerActive = 0;
-      _req = _emptyFunc;
-    },
-    lagSmoothing: function lagSmoothing(threshold, adjustedLag) {
-      _lagThreshold = threshold || 1 / _tinyNum; //zero should be interpreted as basically unlimited
-
-      _adjustedLag = Math.min(adjustedLag, _lagThreshold, 0);
-    },
-    fps: function fps(_fps) {
-      _gap = 1000 / (_fps || 240);
-      _nextTime = _self.time * 1000 + _gap;
-    },
-    add: function add(callback) {
-      _listeners.indexOf(callback) < 0 && _listeners.push(callback);
-
-      _wake();
-    },
-    remove: function remove(callback, i) {
-      ~(i = _listeners.indexOf(callback)) && _listeners.splice(i, 1) && _i >= i && _i--;
-    },
-    _listeners: _listeners
-  };
-  return _self;
-}(),
-    _wake = function _wake() {
-  return !_tickerActive && _ticker.wake();
-},
-    //also ensures the core classes are initialized.
-
-/*
-* -------------------------------------------------
-* EASING
-* -------------------------------------------------
-*/
-_easeMap = {},
-    _customEaseExp = /^[\d.\-M][\d.\-,\s]/,
-    _quotesExp = /["']/g,
-    _parseObjectInString = function _parseObjectInString(value) {
-  //takes a string like "{wiggles:10, type:anticipate})" and turns it into a real object. Notice it ends in ")" and includes the {} wrappers. This is because we only use this function for parsing ease configs and prioritized optimization rather than reusability.
-  var obj = {},
-      split = value.substr(1, value.length - 3).split(":"),
-      key = split[0],
-      i = 1,
-      l = split.length,
-      index,
-      val,
-      parsedVal;
-
-  for (; i < l; i++) {
-    val = split[i];
-    index = i !== l - 1 ? val.lastIndexOf(",") : val.length;
-    parsedVal = val.substr(0, index);
-    obj[key] = isNaN(parsedVal) ? parsedVal.replace(_quotesExp, "").trim() : +parsedVal;
-    key = val.substr(index + 1).trim();
-  }
-
-  return obj;
-},
-    _valueInParentheses = function _valueInParentheses(value) {
-  var open = value.indexOf("(") + 1,
-      close = value.indexOf(")"),
-      nested = value.indexOf("(", open);
-  return value.substring(open, ~nested && nested < close ? value.indexOf(")", close + 1) : close);
-},
-    _configEaseFromString = function _configEaseFromString(name) {
-  //name can be a string like "elastic.out(1,0.5)", and pass in _easeMap as obj and it'll parse it out and call the actual function like _easeMap.Elastic.easeOut.config(1,0.5). It will also parse custom ease strings as long as CustomEase is loaded and registered (internally as _easeMap._CE).
-  var split = (name + "").split("("),
-      ease = _easeMap[split[0]];
-  return ease && split.length > 1 && ease.config ? ease.config.apply(null, ~name.indexOf("{") ? [_parseObjectInString(split[1])] : _valueInParentheses(name).split(",").map(_numericIfPossible)) : _easeMap._CE && _customEaseExp.test(name) ? _easeMap._CE("", name) : ease;
-},
-    _invertEase = function _invertEase(ease) {
-  return function (p) {
-    return 1 - ease(1 - p);
-  };
-},
-    // allow yoyoEase to be set in children and have those affected when the parent/ancestor timeline yoyos.
-_propagateYoyoEase = function _propagateYoyoEase(timeline, isYoyo) {
-  var child = timeline._first,
-      ease;
-
-  while (child) {
-    if (child instanceof Timeline) {
-      _propagateYoyoEase(child, isYoyo);
-    } else if (child.vars.yoyoEase && (!child._yoyo || !child._repeat) && child._yoyo !== isYoyo) {
-      if (child.timeline) {
-        _propagateYoyoEase(child.timeline, isYoyo);
-      } else {
-        ease = child._ease;
-        child._ease = child._yEase;
-        child._yEase = ease;
-        child._yoyo = isYoyo;
-      }
-    }
-
-    child = child._next;
-  }
-},
-    _parseEase = function _parseEase(ease, defaultEase) {
-  return !ease ? defaultEase : (_isFunction(ease) ? ease : _easeMap[ease] || _configEaseFromString(ease)) || defaultEase;
-},
-    _insertEase = function _insertEase(names, easeIn, easeOut, easeInOut) {
-  if (easeOut === void 0) {
-    easeOut = function easeOut(p) {
-      return 1 - easeIn(1 - p);
-    };
-  }
-
-  if (easeInOut === void 0) {
-    easeInOut = function easeInOut(p) {
-      return p < .5 ? easeIn(p * 2) / 2 : 1 - easeIn((1 - p) * 2) / 2;
-    };
-  }
-
-  var ease = {
-    easeIn: easeIn,
-    easeOut: easeOut,
-    easeInOut: easeInOut
-  },
-      lowercaseName;
-
-  _forEachName(names, function (name) {
-    _easeMap[name] = _globals[name] = ease;
-    _easeMap[lowercaseName = name.toLowerCase()] = easeOut;
-
-    for (var p in ease) {
-      _easeMap[lowercaseName + (p === "easeIn" ? ".in" : p === "easeOut" ? ".out" : ".inOut")] = _easeMap[name + "." + p] = ease[p];
-    }
-  });
-
-  return ease;
-},
-    _easeInOutFromOut = function _easeInOutFromOut(easeOut) {
-  return function (p) {
-    return p < .5 ? (1 - easeOut(1 - p * 2)) / 2 : .5 + easeOut((p - .5) * 2) / 2;
-  };
-},
-    _configElastic = function _configElastic(type, amplitude, period) {
-  var p1 = amplitude >= 1 ? amplitude : 1,
-      //note: if amplitude is < 1, we simply adjust the period for a more natural feel. Otherwise the math doesn't work right and the curve starts at 1.
-  p2 = (period || (type ? .3 : .45)) / (amplitude < 1 ? amplitude : 1),
-      p3 = p2 / _2PI * (Math.asin(1 / p1) || 0),
-      easeOut = function easeOut(p) {
-    return p === 1 ? 1 : p1 * Math.pow(2, -10 * p) * _sin((p - p3) * p2) + 1;
-  },
-      ease = type === "out" ? easeOut : type === "in" ? function (p) {
-    return 1 - easeOut(1 - p);
-  } : _easeInOutFromOut(easeOut);
-
-  p2 = _2PI / p2; //precalculate to optimize
-
-  ease.config = function (amplitude, period) {
-    return _configElastic(type, amplitude, period);
-  };
-
-  return ease;
-},
-    _configBack = function _configBack(type, overshoot) {
-  if (overshoot === void 0) {
-    overshoot = 1.70158;
-  }
-
-  var easeOut = function easeOut(p) {
-    return p ? --p * p * ((overshoot + 1) * p + overshoot) + 1 : 0;
-  },
-      ease = type === "out" ? easeOut : type === "in" ? function (p) {
-    return 1 - easeOut(1 - p);
-  } : _easeInOutFromOut(easeOut);
-
-  ease.config = function (overshoot) {
-    return _configBack(type, overshoot);
-  };
-
-  return ease;
-}; // a cheaper (kb and cpu) but more mild way to get a parameterized weighted ease by feeding in a value between -1 (easeIn) and 1 (easeOut) where 0 is linear.
-// _weightedEase = ratio => {
-// 	let y = 0.5 + ratio / 2;
-// 	return p => (2 * (1 - p) * p * y + p * p);
-// },
-// a stronger (but more expensive kb/cpu) parameterized weighted ease that lets you feed in a value between -1 (easeIn) and 1 (easeOut) where 0 is linear.
-// _weightedEaseStrong = ratio => {
-// 	ratio = .5 + ratio / 2;
-// 	let o = 1 / 3 * (ratio < .5 ? ratio : 1 - ratio),
-// 		b = ratio - o,
-// 		c = ratio + o;
-// 	return p => p === 1 ? p : 3 * b * (1 - p) * (1 - p) * p + 3 * c * (1 - p) * p * p + p * p * p;
-// };
-
-
-_forEachName("Linear,Quad,Cubic,Quart,Quint,Strong", function (name, i) {
-  var power = i < 5 ? i + 1 : i;
-
-  _insertEase(name + ",Power" + (power - 1), i ? function (p) {
-    return Math.pow(p, power);
-  } : function (p) {
-    return p;
-  }, function (p) {
-    return 1 - Math.pow(1 - p, power);
-  }, function (p) {
-    return p < .5 ? Math.pow(p * 2, power) / 2 : 1 - Math.pow((1 - p) * 2, power) / 2;
-  });
-});
-
-_easeMap.Linear.easeNone = _easeMap.none = _easeMap.Linear.easeIn;
-
-_insertEase("Elastic", _configElastic("in"), _configElastic("out"), _configElastic());
-
-(function (n, c) {
-  var n1 = 1 / c,
-      n2 = 2 * n1,
-      n3 = 2.5 * n1,
-      easeOut = function easeOut(p) {
-    return p < n1 ? n * p * p : p < n2 ? n * Math.pow(p - 1.5 / c, 2) + .75 : p < n3 ? n * (p -= 2.25 / c) * p + .9375 : n * Math.pow(p - 2.625 / c, 2) + .984375;
-  };
-
-  _insertEase("Bounce", function (p) {
-    return 1 - easeOut(1 - p);
-  }, easeOut);
-})(7.5625, 2.75);
-
-_insertEase("Expo", function (p) {
-  return p ? Math.pow(2, 10 * (p - 1)) : 0;
-});
-
-_insertEase("Circ", function (p) {
-  return -(_sqrt(1 - p * p) - 1);
-});
-
-_insertEase("Sine", function (p) {
-  return p === 1 ? 1 : -_cos(p * _HALF_PI) + 1;
-});
-
-_insertEase("Back", _configBack("in"), _configBack("out"), _configBack());
-
-_easeMap.SteppedEase = _easeMap.steps = _globals.SteppedEase = {
-  config: function config(steps, immediateStart) {
-    if (steps === void 0) {
-      steps = 1;
-    }
-
-    var p1 = 1 / steps,
-        p2 = steps + (immediateStart ? 0 : 1),
-        p3 = immediateStart ? 1 : 0,
-        max = 1 - _tinyNum;
-    return function (p) {
-      return ((p2 * _clamp(0, max, p) | 0) + p3) * p1;
-    };
-  }
-};
-_defaults.ease = _easeMap["quad.out"];
-
-_forEachName("onComplete,onUpdate,onStart,onRepeat,onReverseComplete,onInterrupt", function (name) {
-  return _callbackNames += name + "," + name + "Params,";
-});
-/*
- * --------------------------------------------------------------------------------------
- * CACHE
- * --------------------------------------------------------------------------------------
- */
-
-
-var GSCache = function GSCache(target, harness) {
-  this.id = _gsID++;
-  target._gsap = this;
-  this.target = target;
-  this.harness = harness;
-  this.get = harness ? harness.get : _getProperty;
-  this.set = harness ? harness.getSetter : _getSetter;
-};
-/*
- * --------------------------------------------------------------------------------------
- * ANIMATION
- * --------------------------------------------------------------------------------------
- */
-
-var Animation = /*#__PURE__*/function () {
-  function Animation(vars) {
-    this.vars = vars;
-    this._delay = +vars.delay || 0;
-
-    if (this._repeat = vars.repeat === Infinity ? -2 : vars.repeat || 0) {
-      // TODO: repeat: Infinity on a timeline's children must flag that timeline internally and affect its totalDuration, otherwise it'll stop in the negative direction when reaching the start.
-      this._rDelay = vars.repeatDelay || 0;
-      this._yoyo = !!vars.yoyo || !!vars.yoyoEase;
-    }
-
-    this._ts = 1;
-
-    _setDuration(this, +vars.duration, 1, 1);
-
-    this.data = vars.data;
-    _tickerActive || _ticker.wake();
-  }
-
-  var _proto = Animation.prototype;
-
-  _proto.delay = function delay(value) {
-    if (value || value === 0) {
-      this.parent && this.parent.smoothChildTiming && this.startTime(this._start + value - this._delay);
-      this._delay = value;
-      return this;
-    }
-
-    return this._delay;
-  };
-
-  _proto.duration = function duration(value) {
-    return arguments.length ? this.totalDuration(this._repeat > 0 ? value + (value + this._rDelay) * this._repeat : value) : this.totalDuration() && this._dur;
-  };
-
-  _proto.totalDuration = function totalDuration(value) {
-    if (!arguments.length) {
-      return this._tDur;
-    }
-
-    this._dirty = 0;
-    return _setDuration(this, this._repeat < 0 ? value : (value - this._repeat * this._rDelay) / (this._repeat + 1));
-  };
-
-  _proto.totalTime = function totalTime(_totalTime, suppressEvents) {
-    _wake();
-
-    if (!arguments.length) {
-      return this._tTime;
-    }
-
-    var parent = this._dp;
-
-    if (parent && parent.smoothChildTiming && this._ts) {
-      _alignPlayhead(this, _totalTime);
-
-      !parent._dp || parent.parent || _postAddChecks(parent, this); // edge case: if this is a child of a timeline that already completed, for example, we must re-activate the parent.
-      //in case any of the ancestor timelines had completed but should now be enabled, we should reset their totalTime() which will also ensure that they're lined up properly and enabled. Skip for animations that are on the root (wasteful). Example: a TimelineLite.exportRoot() is performed when there's a paused tween on the root, the export will not complete until that tween is unpaused, but imagine a child gets restarted later, after all [unpaused] tweens have completed. The start of that child would get pushed out, but one of the ancestors may have completed.
-
-      while (parent && parent.parent) {
-        if (parent.parent._time !== parent._start + (parent._ts >= 0 ? parent._tTime / parent._ts : (parent.totalDuration() - parent._tTime) / -parent._ts)) {
-          parent.totalTime(parent._tTime, true);
-        }
-
-        parent = parent.parent;
-      }
-
-      if (!this.parent && this._dp.autoRemoveChildren && (this._ts > 0 && _totalTime < this._tDur || this._ts < 0 && _totalTime > 0 || !this._tDur && !_totalTime)) {
-        //if the animation doesn't have a parent, put it back into its last parent (recorded as _dp for exactly cases like this). Limit to parents with autoRemoveChildren (like globalTimeline) so that if the user manually removes an animation from a timeline and then alters its playhead, it doesn't get added back in.
-        _addToTimeline(this._dp, this, this._start - this._delay);
-      }
-    }
-
-    if (this._tTime !== _totalTime || !this._dur && !suppressEvents || this._initted && Math.abs(this._zTime) === _tinyNum || !_totalTime && !this._initted && (this.add || this._ptLookup)) {
-      // check for _ptLookup on a Tween instance to ensure it has actually finished being instantiated, otherwise if this.reverse() gets called in the Animation constructor, it could trigger a render() here even though the _targets weren't populated, thus when _init() is called there won't be any PropTweens (it'll act like the tween is non-functional)
-      this._ts || (this._pTime = _totalTime); // otherwise, if an animation is paused, then the playhead is moved back to zero, then resumed, it'd revert back to the original time at the pause
-      //if (!this._lock) { // avoid endless recursion (not sure we need this yet or if it's worth the performance hit)
-      //   this._lock = 1;
-
-      _lazySafeRender(this, _totalTime, suppressEvents); //   this._lock = 0;
-      //}
-
-    }
-
-    return this;
-  };
-
-  _proto.time = function time(value, suppressEvents) {
-    return arguments.length ? this.totalTime(Math.min(this.totalDuration(), value + _elapsedCycleDuration(this)) % (this._dur + this._rDelay) || (value ? this._dur : 0), suppressEvents) : this._time; // note: if the modulus results in 0, the playhead could be exactly at the end or the beginning, and we always defer to the END with a non-zero value, otherwise if you set the time() to the very end (duration()), it would render at the START!
-  };
-
-  _proto.totalProgress = function totalProgress(value, suppressEvents) {
-    return arguments.length ? this.totalTime(this.totalDuration() * value, suppressEvents) : this.totalDuration() ? Math.min(1, this._tTime / this._tDur) : this.ratio;
-  };
-
-  _proto.progress = function progress(value, suppressEvents) {
-    return arguments.length ? this.totalTime(this.duration() * (this._yoyo && !(this.iteration() & 1) ? 1 - value : value) + _elapsedCycleDuration(this), suppressEvents) : this.duration() ? Math.min(1, this._time / this._dur) : this.ratio;
-  };
-
-  _proto.iteration = function iteration(value, suppressEvents) {
-    var cycleDuration = this.duration() + this._rDelay;
-
-    return arguments.length ? this.totalTime(this._time + (value - 1) * cycleDuration, suppressEvents) : this._repeat ? _animationCycle(this._tTime, cycleDuration) + 1 : 1;
-  } // potential future addition:
-  // isPlayingBackwards() {
-  // 	let animation = this,
-  // 		orientation = 1; // 1 = forward, -1 = backward
-  // 	while (animation) {
-  // 		orientation *= animation.reversed() || (animation.repeat() && !(animation.iteration() & 1)) ? -1 : 1;
-  // 		animation = animation.parent;
-  // 	}
-  // 	return orientation < 0;
-  // }
-  ;
-
-  _proto.timeScale = function timeScale(value) {
-    if (!arguments.length) {
-      return this._rts === -_tinyNum ? 0 : this._rts; // recorded timeScale. Special case: if someone calls reverse() on an animation with timeScale of 0, we assign it -_tinyNum to remember it's reversed.
-    }
-
-    if (this._rts === value) {
-      return this;
-    }
-
-    var tTime = this.parent && this._ts ? _parentToChildTotalTime(this.parent._time, this) : this._tTime; // make sure to do the parentToChildTotalTime() BEFORE setting the new _ts because the old one must be used in that calculation.
-    // future addition? Up side: fast and minimal file size. Down side: only works on this animation; if a timeline is reversed, for example, its childrens' onReverse wouldn't get called.
-    //(+value < 0 && this._rts >= 0) && _callback(this, "onReverse", true);
-    // prioritize rendering where the parent's playhead lines up instead of this._tTime because there could be a tween that's animating another tween's timeScale in the same rendering loop (same parent), thus if the timeScale tween renders first, it would alter _start BEFORE _tTime was set on that tick (in the rendering loop), effectively freezing it until the timeScale tween finishes.
-
-    this._rts = +value || 0;
-    this._ts = this._ps || value === -_tinyNum ? 0 : this._rts; // _ts is the functional timeScale which would be 0 if the animation is paused.
-
-    _recacheAncestors(this.totalTime(_clamp(-this._delay, this._tDur, tTime), true));
-
-    _setEnd(this); // if parent.smoothChildTiming was false, the end time didn't get updated in the _alignPlayhead() method, so do it here.
-
-
-    return this;
-  };
-
-  _proto.paused = function paused(value) {
-    if (!arguments.length) {
-      return this._ps;
-    }
-
-    if (this._ps !== value) {
-      this._ps = value;
-
-      if (value) {
-        this._pTime = this._tTime || Math.max(-this._delay, this.rawTime()); // if the pause occurs during the delay phase, make sure that's factored in when resuming.
-
-        this._ts = this._act = 0; // _ts is the functional timeScale, so a paused tween would effectively have a timeScale of 0. We record the "real" timeScale as _rts (recorded time scale)
-      } else {
-        _wake();
-
-        this._ts = this._rts; //only defer to _pTime (pauseTime) if tTime is zero. Remember, someone could pause() an animation, then scrub the playhead and resume(). If the parent doesn't have smoothChildTiming, we render at the rawTime() because the startTime won't get updated.
-
-        this.totalTime(this.parent && !this.parent.smoothChildTiming ? this.rawTime() : this._tTime || this._pTime, this.progress() === 1 && Math.abs(this._zTime) !== _tinyNum && (this._tTime -= _tinyNum)); // edge case: animation.progress(1).pause().play() wouldn't render again because the playhead is already at the end, but the call to totalTime() below will add it back to its parent...and not remove it again (since removing only happens upon rendering at a new time). Offsetting the _tTime slightly is done simply to cause the final render in totalTime() that'll pop it off its timeline (if autoRemoveChildren is true, of course). Check to make sure _zTime isn't -_tinyNum to avoid an edge case where the playhead is pushed to the end but INSIDE a tween/callback, the timeline itself is paused thus halting rendering and leaving a few unrendered. When resuming, it wouldn't render those otherwise.
-      }
-    }
-
-    return this;
-  };
-
-  _proto.startTime = function startTime(value) {
-    if (arguments.length) {
-      this._start = value;
-      var parent = this.parent || this._dp;
-      parent && (parent._sort || !this.parent) && _addToTimeline(parent, this, value - this._delay);
-      return this;
-    }
-
-    return this._start;
-  };
-
-  _proto.endTime = function endTime(includeRepeats) {
-    return this._start + (_isNotFalse(includeRepeats) ? this.totalDuration() : this.duration()) / Math.abs(this._ts || 1);
-  };
-
-  _proto.rawTime = function rawTime(wrapRepeats) {
-    var parent = this.parent || this._dp; // _dp = detached parent
-
-    return !parent ? this._tTime : wrapRepeats && (!this._ts || this._repeat && this._time && this.totalProgress() < 1) ? this._tTime % (this._dur + this._rDelay) : !this._ts ? this._tTime : _parentToChildTotalTime(parent.rawTime(wrapRepeats), this);
-  };
-
-  _proto.globalTime = function globalTime(rawTime) {
-    var animation = this,
-        time = arguments.length ? rawTime : animation.rawTime();
-
-    while (animation) {
-      time = animation._start + time / (animation._ts || 1);
-      animation = animation._dp;
-    }
-
-    return time;
-  };
-
-  _proto.repeat = function repeat(value) {
-    if (arguments.length) {
-      this._repeat = value === Infinity ? -2 : value;
-      return _onUpdateTotalDuration(this);
-    }
-
-    return this._repeat === -2 ? Infinity : this._repeat;
-  };
-
-  _proto.repeatDelay = function repeatDelay(value) {
-    if (arguments.length) {
-      var time = this._time;
-      this._rDelay = value;
-
-      _onUpdateTotalDuration(this);
-
-      return time ? this.time(time) : this;
-    }
-
-    return this._rDelay;
-  };
-
-  _proto.yoyo = function yoyo(value) {
-    if (arguments.length) {
-      this._yoyo = value;
-      return this;
-    }
-
-    return this._yoyo;
-  };
-
-  _proto.seek = function seek(position, suppressEvents) {
-    return this.totalTime(_parsePosition(this, position), _isNotFalse(suppressEvents));
-  };
-
-  _proto.restart = function restart(includeDelay, suppressEvents) {
-    return this.play().totalTime(includeDelay ? -this._delay : 0, _isNotFalse(suppressEvents));
-  };
-
-  _proto.play = function play(from, suppressEvents) {
-    from != null && this.seek(from, suppressEvents);
-    return this.reversed(false).paused(false);
-  };
-
-  _proto.reverse = function reverse(from, suppressEvents) {
-    from != null && this.seek(from || this.totalDuration(), suppressEvents);
-    return this.reversed(true).paused(false);
-  };
-
-  _proto.pause = function pause(atTime, suppressEvents) {
-    atTime != null && this.seek(atTime, suppressEvents);
-    return this.paused(true);
-  };
-
-  _proto.resume = function resume() {
-    return this.paused(false);
-  };
-
-  _proto.reversed = function reversed(value) {
-    if (arguments.length) {
-      !!value !== this.reversed() && this.timeScale(-this._rts || (value ? -_tinyNum : 0)); // in case timeScale is zero, reversing would have no effect so we use _tinyNum.
-
-      return this;
-    }
-
-    return this._rts < 0;
-  };
-
-  _proto.invalidate = function invalidate() {
-    this._initted = this._act = 0;
-    this._zTime = -_tinyNum;
-    return this;
-  };
-
-  _proto.isActive = function isActive() {
-    var parent = this.parent || this._dp,
-        start = this._start,
-        rawTime;
-    return !!(!parent || this._ts && this._initted && parent.isActive() && (rawTime = parent.rawTime(true)) >= start && rawTime < this.endTime(true) - _tinyNum);
-  };
-
-  _proto.eventCallback = function eventCallback(type, callback, params) {
-    var vars = this.vars;
-
-    if (arguments.length > 1) {
-      if (!callback) {
-        delete vars[type];
-      } else {
-        vars[type] = callback;
-        params && (vars[type + "Params"] = params);
-        type === "onUpdate" && (this._onUpdate = callback);
-      }
-
-      return this;
-    }
-
-    return vars[type];
-  };
-
-  _proto.then = function then(onFulfilled) {
-    var self = this;
-    return new Promise(function (resolve) {
-      var f = _isFunction(onFulfilled) ? onFulfilled : _passThrough,
-          _resolve = function _resolve() {
-        var _then = self.then;
-        self.then = null; // temporarily null the then() method to avoid an infinite loop (see https://github.com/greensock/GSAP/issues/322)
-
-        _isFunction(f) && (f = f(self)) && (f.then || f === self) && (self.then = _then);
-        resolve(f);
-        self.then = _then;
-      };
-
-      if (self._initted && self.totalProgress() === 1 && self._ts >= 0 || !self._tTime && self._ts < 0) {
-        _resolve();
-      } else {
-        self._prom = _resolve;
-      }
-    });
-  };
-
-  _proto.kill = function kill() {
-    _interrupt(this);
-  };
-
-  return Animation;
-}();
-
-_setDefaults(Animation.prototype, {
-  _time: 0,
-  _start: 0,
-  _end: 0,
-  _tTime: 0,
-  _tDur: 0,
-  _dirty: 0,
-  _repeat: 0,
-  _yoyo: false,
-  parent: null,
-  _initted: false,
-  _rDelay: 0,
-  _ts: 1,
-  _dp: 0,
-  ratio: 0,
-  _zTime: -_tinyNum,
-  _prom: 0,
-  _ps: false,
-  _rts: 1
-});
-/*
- * -------------------------------------------------
- * TIMELINE
- * -------------------------------------------------
- */
-
-
-var Timeline = /*#__PURE__*/function (_Animation) {
-  _inheritsLoose(Timeline, _Animation);
-
-  function Timeline(vars, position) {
-    var _this;
-
-    if (vars === void 0) {
-      vars = {};
-    }
-
-    _this = _Animation.call(this, vars) || this;
-    _this.labels = {};
-    _this.smoothChildTiming = !!vars.smoothChildTiming;
-    _this.autoRemoveChildren = !!vars.autoRemoveChildren;
-    _this._sort = _isNotFalse(vars.sortChildren);
-    _globalTimeline && _addToTimeline(vars.parent || _globalTimeline, _assertThisInitialized(_this), position);
-    vars.reversed && _this.reverse();
-    vars.paused && _this.paused(true);
-    vars.scrollTrigger && _scrollTrigger(_assertThisInitialized(_this), vars.scrollTrigger);
-    return _this;
-  }
-
-  var _proto2 = Timeline.prototype;
-
-  _proto2.to = function to(targets, vars, position) {
-    _createTweenType(0, arguments, this);
-
-    return this;
-  };
-
-  _proto2.from = function from(targets, vars, position) {
-    _createTweenType(1, arguments, this);
-
-    return this;
-  };
-
-  _proto2.fromTo = function fromTo(targets, fromVars, toVars, position) {
-    _createTweenType(2, arguments, this);
-
-    return this;
-  };
-
-  _proto2.set = function set(targets, vars, position) {
-    vars.duration = 0;
-    vars.parent = this;
-    _inheritDefaults(vars).repeatDelay || (vars.repeat = 0);
-    vars.immediateRender = !!vars.immediateRender;
-    new Tween(targets, vars, _parsePosition(this, position), 1);
-    return this;
-  };
-
-  _proto2.call = function call(callback, params, position) {
-    return _addToTimeline(this, Tween.delayedCall(0, callback, params), position);
-  } //ONLY for backward compatibility! Maybe delete?
-  ;
-
-  _proto2.staggerTo = function staggerTo(targets, duration, vars, stagger, position, onCompleteAll, onCompleteAllParams) {
-    vars.duration = duration;
-    vars.stagger = vars.stagger || stagger;
-    vars.onComplete = onCompleteAll;
-    vars.onCompleteParams = onCompleteAllParams;
-    vars.parent = this;
-    new Tween(targets, vars, _parsePosition(this, position));
-    return this;
-  };
-
-  _proto2.staggerFrom = function staggerFrom(targets, duration, vars, stagger, position, onCompleteAll, onCompleteAllParams) {
-    vars.runBackwards = 1;
-    _inheritDefaults(vars).immediateRender = _isNotFalse(vars.immediateRender);
-    return this.staggerTo(targets, duration, vars, stagger, position, onCompleteAll, onCompleteAllParams);
-  };
-
-  _proto2.staggerFromTo = function staggerFromTo(targets, duration, fromVars, toVars, stagger, position, onCompleteAll, onCompleteAllParams) {
-    toVars.startAt = fromVars;
-    _inheritDefaults(toVars).immediateRender = _isNotFalse(toVars.immediateRender);
-    return this.staggerTo(targets, duration, toVars, stagger, position, onCompleteAll, onCompleteAllParams);
-  };
-
-  _proto2.render = function render(totalTime, suppressEvents, force) {
-    var prevTime = this._time,
-        tDur = this._dirty ? this.totalDuration() : this._tDur,
-        dur = this._dur,
-        tTime = totalTime <= 0 ? 0 : _roundPrecise(totalTime),
-        // if a paused timeline is resumed (or its _start is updated for another reason...which rounds it), that could result in the playhead shifting a **tiny** amount and a zero-duration child at that spot may get rendered at a different ratio, like its totalTime in render() may be 1e-17 instead of 0, for example.
-    crossingStart = this._zTime < 0 !== totalTime < 0 && (this._initted || !dur),
-        time,
-        child,
-        next,
-        iteration,
-        cycleDuration,
-        prevPaused,
-        pauseTween,
-        timeScale,
-        prevStart,
-        prevIteration,
-        yoyo,
-        isYoyo;
-    this !== _globalTimeline && tTime > tDur && totalTime >= 0 && (tTime = tDur);
-
-    if (tTime !== this._tTime || force || crossingStart) {
-      if (prevTime !== this._time && dur) {
-        //if totalDuration() finds a child with a negative startTime and smoothChildTiming is true, things get shifted around internally so we need to adjust the time accordingly. For example, if a tween starts at -30 we must shift EVERYTHING forward 30 seconds and move this timeline's startTime backward by 30 seconds so that things align with the playhead (no jump).
-        tTime += this._time - prevTime;
-        totalTime += this._time - prevTime;
-      }
-
-      time = tTime;
-      prevStart = this._start;
-      timeScale = this._ts;
-      prevPaused = !timeScale;
-
-      if (crossingStart) {
-        dur || (prevTime = this._zTime); //when the playhead arrives at EXACTLY time 0 (right on top) of a zero-duration timeline, we need to discern if events are suppressed so that when the playhead moves again (next time), it'll trigger the callback. If events are NOT suppressed, obviously the callback would be triggered in this render. Basically, the callback should fire either when the playhead ARRIVES or LEAVES this exact spot, not both. Imagine doing a timeline.seek(0) and there's a callback that sits at 0. Since events are suppressed on that seek() by default, nothing will fire, but when the playhead moves off of that position, the callback should fire. This behavior is what people intuitively expect.
-
-        (totalTime || !suppressEvents) && (this._zTime = totalTime);
-      }
-
-      if (this._repeat) {
-        //adjust the time for repeats and yoyos
-        yoyo = this._yoyo;
-        cycleDuration = dur + this._rDelay;
-
-        if (this._repeat < -1 && totalTime < 0) {
-          return this.totalTime(cycleDuration * 100 + totalTime, suppressEvents, force);
-        }
-
-        time = _roundPrecise(tTime % cycleDuration); //round to avoid floating point errors. (4 % 0.8 should be 0 but some browsers report it as 0.79999999!)
-
-        if (tTime === tDur) {
-          // the tDur === tTime is for edge cases where there's a lengthy decimal on the duration and it may reach the very end but the time is rendered as not-quite-there (remember, tDur is rounded to 4 decimals whereas dur isn't)
-          iteration = this._repeat;
-          time = dur;
-        } else {
-          iteration = ~~(tTime / cycleDuration);
-
-          if (iteration && iteration === tTime / cycleDuration) {
-            time = dur;
-            iteration--;
-          }
-
-          time > dur && (time = dur);
-        }
-
-        prevIteration = _animationCycle(this._tTime, cycleDuration);
-        !prevTime && this._tTime && prevIteration !== iteration && (prevIteration = iteration); // edge case - if someone does addPause() at the very beginning of a repeating timeline, that pause is technically at the same spot as the end which causes this._time to get set to 0 when the totalTime would normally place the playhead at the end. See https://greensock.com/forums/topic/23823-closing-nav-animation-not-working-on-ie-and-iphone-6-maybe-other-older-browser/?tab=comments#comment-113005
-
-        if (yoyo && iteration & 1) {
-          time = dur - time;
-          isYoyo = 1;
-        }
-        /*
-        make sure children at the end/beginning of the timeline are rendered properly. If, for example,
-        a 3-second long timeline rendered at 2.9 seconds previously, and now renders at 3.2 seconds (which
-        would get translated to 2.8 seconds if the timeline yoyos or 0.2 seconds if it just repeats), there
-        could be a callback or a short tween that's at 2.95 or 3 seconds in which wouldn't render. So
-        we need to push the timeline to the end (and/or beginning depending on its yoyo value). Also we must
-        ensure that zero-duration tweens at the very beginning or end of the Timeline work.
-        */
-
-
-        if (iteration !== prevIteration && !this._lock) {
-          var rewinding = yoyo && prevIteration & 1,
-              doesWrap = rewinding === (yoyo && iteration & 1);
-          iteration < prevIteration && (rewinding = !rewinding);
-          prevTime = rewinding ? 0 : dur;
-          this._lock = 1;
-          this.render(prevTime || (isYoyo ? 0 : _roundPrecise(iteration * cycleDuration)), suppressEvents, !dur)._lock = 0;
-          this._tTime = tTime; // if a user gets the iteration() inside the onRepeat, for example, it should be accurate.
-
-          !suppressEvents && this.parent && _callback(this, "onRepeat");
-          this.vars.repeatRefresh && !isYoyo && (this.invalidate()._lock = 1);
-
-          if (prevTime && prevTime !== this._time || prevPaused !== !this._ts || this.vars.onRepeat && !this.parent && !this._act) {
-            // if prevTime is 0 and we render at the very end, _time will be the end, thus won't match. So in this edge case, prevTime won't match _time but that's okay. If it gets killed in the onRepeat, eject as well.
-            return this;
-          }
-
-          dur = this._dur; // in case the duration changed in the onRepeat
-
-          tDur = this._tDur;
-
-          if (doesWrap) {
-            this._lock = 2;
-            prevTime = rewinding ? dur : -0.0001;
-            this.render(prevTime, true);
-            this.vars.repeatRefresh && !isYoyo && this.invalidate();
-          }
-
-          this._lock = 0;
-
-          if (!this._ts && !prevPaused) {
-            return this;
-          } //in order for yoyoEase to work properly when there's a stagger, we must swap out the ease in each sub-tween.
-
-
-          _propagateYoyoEase(this, isYoyo);
-        }
-      }
-
-      if (this._hasPause && !this._forcing && this._lock < 2) {
-        pauseTween = _findNextPauseTween(this, _roundPrecise(prevTime), _roundPrecise(time));
-
-        if (pauseTween) {
-          tTime -= time - (time = pauseTween._start);
-        }
-      }
-
-      this._tTime = tTime;
-      this._time = time;
-      this._act = !timeScale; //as long as it's not paused, force it to be active so that if the user renders independent of the parent timeline, it'll be forced to re-render on the next tick.
-
-      if (!this._initted) {
-        this._onUpdate = this.vars.onUpdate;
-        this._initted = 1;
-        this._zTime = totalTime;
-        prevTime = 0; // upon init, the playhead should always go forward; someone could invalidate() a completed timeline and then if they restart(), that would make child tweens render in reverse order which could lock in the wrong starting values if they build on each other, like tl.to(obj, {x: 100}).to(obj, {x: 0}).
-      }
-
-      if (!prevTime && time && !suppressEvents) {
-        _callback(this, "onStart");
-
-        if (this._tTime !== tTime) {
-          // in case the onStart triggered a render at a different spot, eject. Like if someone did animation.pause(0.5) or something inside the onStart.
-          return this;
-        }
-      }
-
-      if (time >= prevTime && totalTime >= 0) {
-        child = this._first;
-
-        while (child) {
-          next = child._next;
-
-          if ((child._act || time >= child._start) && child._ts && pauseTween !== child) {
-            if (child.parent !== this) {
-              // an extreme edge case - the child's render could do something like kill() the "next" one in the linked list, or reparent it. In that case we must re-initiate the whole render to be safe.
-              return this.render(totalTime, suppressEvents, force);
-            }
-
-            child.render(child._ts > 0 ? (time - child._start) * child._ts : (child._dirty ? child.totalDuration() : child._tDur) + (time - child._start) * child._ts, suppressEvents, force);
-
-            if (time !== this._time || !this._ts && !prevPaused) {
-              //in case a tween pauses or seeks the timeline when rendering, like inside of an onUpdate/onComplete
-              pauseTween = 0;
-              next && (tTime += this._zTime = -_tinyNum); // it didn't finish rendering, so flag zTime as negative so that so that the next time render() is called it'll be forced (to render any remaining children)
-
-              break;
-            }
-          }
-
-          child = next;
-        }
-      } else {
-        child = this._last;
-        var adjustedTime = totalTime < 0 ? totalTime : time; //when the playhead goes backward beyond the start of this timeline, we must pass that information down to the child animations so that zero-duration tweens know whether to render their starting or ending values.
-
-        while (child) {
-          next = child._prev;
-
-          if ((child._act || adjustedTime <= child._end) && child._ts && pauseTween !== child) {
-            if (child.parent !== this) {
-              // an extreme edge case - the child's render could do something like kill() the "next" one in the linked list, or reparent it. In that case we must re-initiate the whole render to be safe.
-              return this.render(totalTime, suppressEvents, force);
-            }
-
-            child.render(child._ts > 0 ? (adjustedTime - child._start) * child._ts : (child._dirty ? child.totalDuration() : child._tDur) + (adjustedTime - child._start) * child._ts, suppressEvents, force);
-
-            if (time !== this._time || !this._ts && !prevPaused) {
-              //in case a tween pauses or seeks the timeline when rendering, like inside of an onUpdate/onComplete
-              pauseTween = 0;
-              next && (tTime += this._zTime = adjustedTime ? -_tinyNum : _tinyNum); // it didn't finish rendering, so adjust zTime so that so that the next time render() is called it'll be forced (to render any remaining children)
-
-              break;
-            }
-          }
-
-          child = next;
-        }
-      }
-
-      if (pauseTween && !suppressEvents) {
-        this.pause();
-        pauseTween.render(time >= prevTime ? 0 : -_tinyNum)._zTime = time >= prevTime ? 1 : -1;
-
-        if (this._ts) {
-          //the callback resumed playback! So since we may have held back the playhead due to where the pause is positioned, go ahead and jump to where it's SUPPOSED to be (if no pause happened).
-          this._start = prevStart; //if the pause was at an earlier time and the user resumed in the callback, it could reposition the timeline (changing its startTime), throwing things off slightly, so we make sure the _start doesn't shift.
-
-          _setEnd(this);
-
-          return this.render(totalTime, suppressEvents, force);
-        }
-      }
-
-      this._onUpdate && !suppressEvents && _callback(this, "onUpdate", true);
-      if (tTime === tDur && tDur >= this.totalDuration() || !tTime && prevTime) if (prevStart === this._start || Math.abs(timeScale) !== Math.abs(this._ts)) if (!this._lock) {
-        (totalTime || !dur) && (tTime === tDur && this._ts > 0 || !tTime && this._ts < 0) && _removeFromParent(this, 1); // don't remove if the timeline is reversed and the playhead isn't at 0, otherwise tl.progress(1).reverse() won't work. Only remove if the playhead is at the end and timeScale is positive, or if the playhead is at 0 and the timeScale is negative.
-
-        if (!suppressEvents && !(totalTime < 0 && !prevTime) && (tTime || prevTime || !tDur)) {
-          _callback(this, tTime === tDur && totalTime >= 0 ? "onComplete" : "onReverseComplete", true);
-
-          this._prom && !(tTime < tDur && this.timeScale() > 0) && this._prom();
-        }
-      }
-    }
-
-    return this;
-  };
-
-  _proto2.add = function add(child, position) {
-    var _this2 = this;
-
-    _isNumber(position) || (position = _parsePosition(this, position, child));
-
-    if (!(child instanceof Animation)) {
-      if (_isArray(child)) {
-        child.forEach(function (obj) {
-          return _this2.add(obj, position);
-        });
-        return this;
-      }
-
-      if (_isString(child)) {
-        return this.addLabel(child, position);
-      }
-
-      if (_isFunction(child)) {
-        child = Tween.delayedCall(0, child);
-      } else {
-        return this;
-      }
-    }
-
-    return this !== child ? _addToTimeline(this, child, position) : this; //don't allow a timeline to be added to itself as a child!
-  };
-
-  _proto2.getChildren = function getChildren(nested, tweens, timelines, ignoreBeforeTime) {
-    if (nested === void 0) {
-      nested = true;
-    }
-
-    if (tweens === void 0) {
-      tweens = true;
-    }
-
-    if (timelines === void 0) {
-      timelines = true;
-    }
-
-    if (ignoreBeforeTime === void 0) {
-      ignoreBeforeTime = -_bigNum;
-    }
-
-    var a = [],
-        child = this._first;
-
-    while (child) {
-      if (child._start >= ignoreBeforeTime) {
-        if (child instanceof Tween) {
-          tweens && a.push(child);
-        } else {
-          timelines && a.push(child);
-          nested && a.push.apply(a, child.getChildren(true, tweens, timelines));
-        }
-      }
-
-      child = child._next;
-    }
-
-    return a;
-  };
-
-  _proto2.getById = function getById(id) {
-    var animations = this.getChildren(1, 1, 1),
-        i = animations.length;
-
-    while (i--) {
-      if (animations[i].vars.id === id) {
-        return animations[i];
-      }
-    }
-  };
-
-  _proto2.remove = function remove(child) {
-    if (_isString(child)) {
-      return this.removeLabel(child);
-    }
-
-    if (_isFunction(child)) {
-      return this.killTweensOf(child);
-    }
-
-    _removeLinkedListItem(this, child);
-
-    if (child === this._recent) {
-      this._recent = this._last;
-    }
-
-    return _uncache(this);
-  };
-
-  _proto2.totalTime = function totalTime(_totalTime2, suppressEvents) {
-    if (!arguments.length) {
-      return this._tTime;
-    }
-
-    this._forcing = 1;
-
-    if (!this._dp && this._ts) {
-      //special case for the global timeline (or any other that has no parent or detached parent).
-      this._start = _roundPrecise(_ticker.time - (this._ts > 0 ? _totalTime2 / this._ts : (this.totalDuration() - _totalTime2) / -this._ts));
-    }
-
-    _Animation.prototype.totalTime.call(this, _totalTime2, suppressEvents);
-
-    this._forcing = 0;
-    return this;
-  };
-
-  _proto2.addLabel = function addLabel(label, position) {
-    this.labels[label] = _parsePosition(this, position);
-    return this;
-  };
-
-  _proto2.removeLabel = function removeLabel(label) {
-    delete this.labels[label];
-    return this;
-  };
-
-  _proto2.addPause = function addPause(position, callback, params) {
-    var t = Tween.delayedCall(0, callback || _emptyFunc, params);
-    t.data = "isPause";
-    this._hasPause = 1;
-    return _addToTimeline(this, t, _parsePosition(this, position));
-  };
-
-  _proto2.removePause = function removePause(position) {
-    var child = this._first;
-    position = _parsePosition(this, position);
-
-    while (child) {
-      if (child._start === position && child.data === "isPause") {
-        _removeFromParent(child);
-      }
-
-      child = child._next;
-    }
-  };
-
-  _proto2.killTweensOf = function killTweensOf(targets, props, onlyActive) {
-    var tweens = this.getTweensOf(targets, onlyActive),
-        i = tweens.length;
-
-    while (i--) {
-      _overwritingTween !== tweens[i] && tweens[i].kill(targets, props);
-    }
-
-    return this;
-  };
-
-  _proto2.getTweensOf = function getTweensOf(targets, onlyActive) {
-    var a = [],
-        parsedTargets = toArray(targets),
-        child = this._first,
-        isGlobalTime = _isNumber(onlyActive),
-        // a number is interpreted as a global time. If the animation spans
-    children;
-
-    while (child) {
-      if (child instanceof Tween) {
-        if (_arrayContainsAny(child._targets, parsedTargets) && (isGlobalTime ? (!_overwritingTween || child._initted && child._ts) && child.globalTime(0) <= onlyActive && child.globalTime(child.totalDuration()) > onlyActive : !onlyActive || child.isActive())) {
-          // note: if this is for overwriting, it should only be for tweens that aren't paused and are initted.
-          a.push(child);
-        }
-      } else if ((children = child.getTweensOf(parsedTargets, onlyActive)).length) {
-        a.push.apply(a, children);
-      }
-
-      child = child._next;
-    }
-
-    return a;
-  } // potential future feature - targets() on timelines
-  // targets() {
-  // 	let result = [];
-  // 	this.getChildren(true, true, false).forEach(t => result.push(...t.targets()));
-  // 	return result.filter((v, i) => result.indexOf(v) === i);
-  // }
-  ;
-
-  _proto2.tweenTo = function tweenTo(position, vars) {
-    vars = vars || {};
-
-    var tl = this,
-        endTime = _parsePosition(tl, position),
-        _vars = vars,
-        startAt = _vars.startAt,
-        _onStart = _vars.onStart,
-        onStartParams = _vars.onStartParams,
-        immediateRender = _vars.immediateRender,
-        initted,
-        tween = Tween.to(tl, _setDefaults({
-      ease: vars.ease || "none",
-      lazy: false,
-      immediateRender: false,
-      time: endTime,
-      overwrite: "auto",
-      duration: vars.duration || Math.abs((endTime - (startAt && "time" in startAt ? startAt.time : tl._time)) / tl.timeScale()) || _tinyNum,
-      onStart: function onStart() {
-        tl.pause();
-
-        if (!initted) {
-          var duration = vars.duration || Math.abs((endTime - (startAt && "time" in startAt ? startAt.time : tl._time)) / tl.timeScale());
-          tween._dur !== duration && _setDuration(tween, duration, 0, 1).render(tween._time, true, true);
-          initted = 1;
-        }
-
-        _onStart && _onStart.apply(tween, onStartParams || []); //in case the user had an onStart in the vars - we don't want to overwrite it.
-      }
-    }, vars));
-
-    return immediateRender ? tween.render(0) : tween;
-  };
-
-  _proto2.tweenFromTo = function tweenFromTo(fromPosition, toPosition, vars) {
-    return this.tweenTo(toPosition, _setDefaults({
-      startAt: {
-        time: _parsePosition(this, fromPosition)
-      }
-    }, vars));
-  };
-
-  _proto2.recent = function recent() {
-    return this._recent;
-  };
-
-  _proto2.nextLabel = function nextLabel(afterTime) {
-    if (afterTime === void 0) {
-      afterTime = this._time;
-    }
-
-    return _getLabelInDirection(this, _parsePosition(this, afterTime));
-  };
-
-  _proto2.previousLabel = function previousLabel(beforeTime) {
-    if (beforeTime === void 0) {
-      beforeTime = this._time;
-    }
-
-    return _getLabelInDirection(this, _parsePosition(this, beforeTime), 1);
-  };
-
-  _proto2.currentLabel = function currentLabel(value) {
-    return arguments.length ? this.seek(value, true) : this.previousLabel(this._time + _tinyNum);
-  };
-
-  _proto2.shiftChildren = function shiftChildren(amount, adjustLabels, ignoreBeforeTime) {
-    if (ignoreBeforeTime === void 0) {
-      ignoreBeforeTime = 0;
-    }
-
-    var child = this._first,
-        labels = this.labels,
-        p;
-
-    while (child) {
-      if (child._start >= ignoreBeforeTime) {
-        child._start += amount;
-        child._end += amount;
-      }
-
-      child = child._next;
-    }
-
-    if (adjustLabels) {
-      for (p in labels) {
-        if (labels[p] >= ignoreBeforeTime) {
-          labels[p] += amount;
-        }
-      }
-    }
-
-    return _uncache(this);
-  };
-
-  _proto2.invalidate = function invalidate() {
-    var child = this._first;
-    this._lock = 0;
-
-    while (child) {
-      child.invalidate();
-      child = child._next;
-    }
-
-    return _Animation.prototype.invalidate.call(this);
-  };
-
-  _proto2.clear = function clear(includeLabels) {
-    if (includeLabels === void 0) {
-      includeLabels = true;
-    }
-
-    var child = this._first,
-        next;
-
-    while (child) {
-      next = child._next;
-      this.remove(child);
-      child = next;
-    }
-
-    this._dp && (this._time = this._tTime = this._pTime = 0);
-    includeLabels && (this.labels = {});
-    return _uncache(this);
-  };
-
-  _proto2.totalDuration = function totalDuration(value) {
-    var max = 0,
-        self = this,
-        child = self._last,
-        prevStart = _bigNum,
-        prev,
-        start,
-        parent;
-
-    if (arguments.length) {
-      return self.timeScale((self._repeat < 0 ? self.duration() : self.totalDuration()) / (self.reversed() ? -value : value));
-    }
-
-    if (self._dirty) {
-      parent = self.parent;
-
-      while (child) {
-        prev = child._prev; //record it here in case the tween changes position in the sequence...
-
-        child._dirty && child.totalDuration(); //could change the tween._startTime, so make sure the animation's cache is clean before analyzing it.
-
-        start = child._start;
-
-        if (start > prevStart && self._sort && child._ts && !self._lock) {
-          //in case one of the tweens shifted out of order, it needs to be re-inserted into the correct position in the sequence
-          self._lock = 1; //prevent endless recursive calls - there are methods that get triggered that check duration/totalDuration when we add().
-
-          _addToTimeline(self, child, start - child._delay, 1)._lock = 0;
-        } else {
-          prevStart = start;
-        }
-
-        if (start < 0 && child._ts) {
-          //children aren't allowed to have negative startTimes unless smoothChildTiming is true, so adjust here if one is found.
-          max -= start;
-
-          if (!parent && !self._dp || parent && parent.smoothChildTiming) {
-            self._start += start / self._ts;
-            self._time -= start;
-            self._tTime -= start;
-          }
-
-          self.shiftChildren(-start, false, -1e999);
-          prevStart = 0;
-        }
-
-        child._end > max && child._ts && (max = child._end);
-        child = prev;
-      }
-
-      _setDuration(self, self === _globalTimeline && self._time > max ? self._time : max, 1, 1);
-
-      self._dirty = 0;
-    }
-
-    return self._tDur;
-  };
-
-  Timeline.updateRoot = function updateRoot(time) {
-    if (_globalTimeline._ts) {
-      _lazySafeRender(_globalTimeline, _parentToChildTotalTime(time, _globalTimeline));
-
-      _lastRenderedFrame = _ticker.frame;
-    }
-
-    if (_ticker.frame >= _nextGCFrame) {
-      _nextGCFrame += _config.autoSleep || 120;
-      var child = _globalTimeline._first;
-      if (!child || !child._ts) if (_config.autoSleep && _ticker._listeners.length < 2) {
-        while (child && !child._ts) {
-          child = child._next;
-        }
-
-        child || _ticker.sleep();
-      }
-    }
-  };
-
-  return Timeline;
-}(Animation);
-
-_setDefaults(Timeline.prototype, {
-  _lock: 0,
-  _hasPause: 0,
-  _forcing: 0
-});
-
-var _addComplexStringPropTween = function _addComplexStringPropTween(target, prop, start, end, setter, stringFilter, funcParam) {
-  //note: we call _addComplexStringPropTween.call(tweenInstance...) to ensure that it's scoped properly. We may call it from within a plugin too, thus "this" would refer to the plugin.
-  var pt = new PropTween(this._pt, target, prop, 0, 1, _renderComplexString, null, setter),
-      index = 0,
-      matchIndex = 0,
-      result,
-      startNums,
-      color,
-      endNum,
-      chunk,
-      startNum,
-      hasRandom,
-      a;
-  pt.b = start;
-  pt.e = end;
-  start += ""; //ensure values are strings
-
-  end += "";
-
-  if (hasRandom = ~end.indexOf("random(")) {
-    end = _replaceRandom(end);
-  }
-
-  if (stringFilter) {
-    a = [start, end];
-    stringFilter(a, target, prop); //pass an array with the starting and ending values and let the filter do whatever it needs to the values.
-
-    start = a[0];
-    end = a[1];
-  }
-
-  startNums = start.match(_complexStringNumExp) || [];
-
-  while (result = _complexStringNumExp.exec(end)) {
-    endNum = result[0];
-    chunk = end.substring(index, result.index);
-
-    if (color) {
-      color = (color + 1) % 5;
-    } else if (chunk.substr(-5) === "rgba(") {
-      color = 1;
-    }
-
-    if (endNum !== startNums[matchIndex++]) {
-      startNum = parseFloat(startNums[matchIndex - 1]) || 0; //these nested PropTweens are handled in a special way - we'll never actually call a render or setter method on them. We'll just loop through them in the parent complex string PropTween's render method.
-
-      pt._pt = {
-        _next: pt._pt,
-        p: chunk || matchIndex === 1 ? chunk : ",",
-        //note: SVG spec allows omission of comma/space when a negative sign is wedged between two numbers, like 2.5-5.3 instead of 2.5,-5.3 but when tweening, the negative value may switch to positive, so we insert the comma just in case.
-        s: startNum,
-        c: endNum.charAt(1) === "=" ? parseFloat(endNum.substr(2)) * (endNum.charAt(0) === "-" ? -1 : 1) : parseFloat(endNum) - startNum,
-        m: color && color < 4 ? Math.round : 0
-      };
-      index = _complexStringNumExp.lastIndex;
-    }
-  }
-
-  pt.c = index < end.length ? end.substring(index, end.length) : ""; //we use the "c" of the PropTween to store the final part of the string (after the last number)
-
-  pt.fp = funcParam;
-
-  if (_relExp.test(end) || hasRandom) {
-    pt.e = 0; //if the end string contains relative values or dynamic random(...) values, delete the end it so that on the final render we don't actually set it to the string with += or -= characters (forces it to use the calculated value).
-  }
-
-  this._pt = pt; //start the linked list with this new PropTween. Remember, we call _addComplexStringPropTween.call(tweenInstance...) to ensure that it's scoped properly. We may call it from within a plugin too, thus "this" would refer to the plugin.
-
-  return pt;
-},
-    _addPropTween = function _addPropTween(target, prop, start, end, index, targets, modifier, stringFilter, funcParam) {
-  _isFunction(end) && (end = end(index || 0, target, targets));
-  var currentValue = target[prop],
-      parsedStart = start !== "get" ? start : !_isFunction(currentValue) ? currentValue : funcParam ? target[prop.indexOf("set") || !_isFunction(target["get" + prop.substr(3)]) ? prop : "get" + prop.substr(3)](funcParam) : target[prop](),
-      setter = !_isFunction(currentValue) ? _setterPlain : funcParam ? _setterFuncWithParam : _setterFunc,
-      pt;
-
-  if (_isString(end)) {
-    if (~end.indexOf("random(")) {
-      end = _replaceRandom(end);
-    }
-
-    if (end.charAt(1) === "=") {
-      pt = parseFloat(parsedStart) + parseFloat(end.substr(2)) * (end.charAt(0) === "-" ? -1 : 1) + (getUnit(parsedStart) || 0);
-
-      if (pt || pt === 0) {
-        // to avoid isNaN, like if someone passes in a value like "!= whatever"
-        end = pt;
-      }
-    }
-  }
-
-  if (parsedStart !== end) {
-    if (!isNaN(parsedStart * end) && end !== "") {
-      // fun fact: any number multiplied by "" is evaluated as the number 0!
-      pt = new PropTween(this._pt, target, prop, +parsedStart || 0, end - (parsedStart || 0), typeof currentValue === "boolean" ? _renderBoolean : _renderPlain, 0, setter);
-      funcParam && (pt.fp = funcParam);
-      modifier && pt.modifier(modifier, this, target);
-      return this._pt = pt;
-    }
-
-    !currentValue && !(prop in target) && _missingPlugin(prop, end);
-    return _addComplexStringPropTween.call(this, target, prop, parsedStart, end, setter, stringFilter || _config.stringFilter, funcParam);
-  }
-},
-    //creates a copy of the vars object and processes any function-based values (putting the resulting values directly into the copy) as well as strings with "random()" in them. It does NOT process relative values.
-_processVars = function _processVars(vars, index, target, targets, tween) {
-  _isFunction(vars) && (vars = _parseFuncOrString(vars, tween, index, target, targets));
-
-  if (!_isObject(vars) || vars.style && vars.nodeType || _isArray(vars) || _isTypedArray(vars)) {
-    return _isString(vars) ? _parseFuncOrString(vars, tween, index, target, targets) : vars;
-  }
-
-  var copy = {},
-      p;
-
-  for (p in vars) {
-    copy[p] = _parseFuncOrString(vars[p], tween, index, target, targets);
-  }
-
-  return copy;
-},
-    _checkPlugin = function _checkPlugin(property, vars, tween, index, target, targets) {
-  var plugin, pt, ptLookup, i;
-
-  if (_plugins[property] && (plugin = new _plugins[property]()).init(target, plugin.rawVars ? vars[property] : _processVars(vars[property], index, target, targets, tween), tween, index, targets) !== false) {
-    tween._pt = pt = new PropTween(tween._pt, target, property, 0, 1, plugin.render, plugin, 0, plugin.priority);
-
-    if (tween !== _quickTween) {
-      ptLookup = tween._ptLookup[tween._targets.indexOf(target)]; //note: we can't use tween._ptLookup[index] because for staggered tweens, the index from the fullTargets array won't match what it is in each individual tween that spawns from the stagger.
-
-      i = plugin._props.length;
-
-      while (i--) {
-        ptLookup[plugin._props[i]] = pt;
-      }
-    }
-  }
-
-  return plugin;
-},
-    _overwritingTween,
-    //store a reference temporarily so we can avoid overwriting itself.
-_initTween = function _initTween(tween, time) {
-  var vars = tween.vars,
-      ease = vars.ease,
-      startAt = vars.startAt,
-      immediateRender = vars.immediateRender,
-      lazy = vars.lazy,
-      onUpdate = vars.onUpdate,
-      onUpdateParams = vars.onUpdateParams,
-      callbackScope = vars.callbackScope,
-      runBackwards = vars.runBackwards,
-      yoyoEase = vars.yoyoEase,
-      keyframes = vars.keyframes,
-      autoRevert = vars.autoRevert,
-      dur = tween._dur,
-      prevStartAt = tween._startAt,
-      targets = tween._targets,
-      parent = tween.parent,
-      fullTargets = parent && parent.data === "nested" ? parent.parent._targets : targets,
-      autoOverwrite = tween._overwrite === "auto" && !_suppressOverwrites,
-      tl = tween.timeline,
-      cleanVars,
-      i,
-      p,
-      pt,
-      target,
-      hasPriority,
-      gsData,
-      harness,
-      plugin,
-      ptLookup,
-      index,
-      harnessVars,
-      overwritten;
-  tl && (!keyframes || !ease) && (ease = "none");
-  tween._ease = _parseEase(ease, _defaults.ease);
-  tween._yEase = yoyoEase ? _invertEase(_parseEase(yoyoEase === true ? ease : yoyoEase, _defaults.ease)) : 0;
-
-  if (yoyoEase && tween._yoyo && !tween._repeat) {
-    //there must have been a parent timeline with yoyo:true that is currently in its yoyo phase, so flip the eases.
-    yoyoEase = tween._yEase;
-    tween._yEase = tween._ease;
-    tween._ease = yoyoEase;
-  }
-
-  tween._from = !tl && !!vars.runBackwards; //nested timelines should never run backwards - the backwards-ness is in the child tweens.
-
-  if (!tl || keyframes && !vars.stagger) {
-    //if there's an internal timeline, skip all the parsing because we passed that task down the chain.
-    harness = targets[0] ? _getCache(targets[0]).harness : 0;
-    harnessVars = harness && vars[harness.prop]; //someone may need to specify CSS-specific values AND non-CSS values, like if the element has an "x" property plus it's a standard DOM element. We allow people to distinguish by wrapping plugin-specific stuff in a css:{} object for example.
-
-    cleanVars = _copyExcluding(vars, _reservedProps);
-    prevStartAt && _removeFromParent(prevStartAt.render(-1, true));
-
-    if (startAt) {
-      _removeFromParent(tween._startAt = Tween.set(targets, _setDefaults({
-        data: "isStart",
-        overwrite: false,
-        parent: parent,
-        immediateRender: true,
-        lazy: _isNotFalse(lazy),
-        startAt: null,
-        delay: 0,
-        onUpdate: onUpdate,
-        onUpdateParams: onUpdateParams,
-        callbackScope: callbackScope,
-        stagger: 0
-      }, startAt))); //copy the properties/values into a new object to avoid collisions, like var to = {x:0}, from = {x:500}; timeline.fromTo(e, from, to).fromTo(e, to, from);
-
-
-      time < 0 && !immediateRender && !autoRevert && tween._startAt.render(-1, true); // rare edge case, like if a render is forced in the negative direction of a non-initted tween.
-
-      if (immediateRender) {
-        time > 0 && !autoRevert && (tween._startAt = 0); //tweens that render immediately (like most from() and fromTo() tweens) shouldn't revert when their parent timeline's playhead goes backward past the startTime because the initial render could have happened anytime and it shouldn't be directly correlated to this tween's startTime. Imagine setting up a complex animation where the beginning states of various objects are rendered immediately but the tween doesn't happen for quite some time - if we revert to the starting values as soon as the playhead goes backward past the tween's startTime, it will throw things off visually. Reversion should only happen in Timeline instances where immediateRender was false or when autoRevert is explicitly set to true.
-
-        if (dur && time <= 0) {
-          time && (tween._zTime = time);
-          return; //we skip initialization here so that overwriting doesn't occur until the tween actually begins. Otherwise, if you create several immediateRender:true tweens of the same target/properties to drop into a Timeline, the last one created would overwrite the first ones because they didn't get placed into the timeline yet before the first render occurs and kicks in overwriting.
-        } // if (time > 0) {
-        // 	autoRevert || (tween._startAt = 0); //tweens that render immediately (like most from() and fromTo() tweens) shouldn't revert when their parent timeline's playhead goes backward past the startTime because the initial render could have happened anytime and it shouldn't be directly correlated to this tween's startTime. Imagine setting up a complex animation where the beginning states of various objects are rendered immediately but the tween doesn't happen for quite some time - if we revert to the starting values as soon as the playhead goes backward past the tween's startTime, it will throw things off visually. Reversion should only happen in Timeline instances where immediateRender was false or when autoRevert is explicitly set to true.
-        // } else if (dur && !(time < 0 && prevStartAt)) {
-        // 	time && (tween._zTime = time);
-        // 	return; //we skip initialization here so that overwriting doesn't occur until the tween actually begins. Otherwise, if you create several immediateRender:true tweens of the same target/properties to drop into a Timeline, the last one created would overwrite the first ones because they didn't get placed into the timeline yet before the first render occurs and kicks in overwriting.
-        // }
-
-      } else if (autoRevert === false) {
-        tween._startAt = 0;
-      }
-    } else if (runBackwards && dur) {
-      //from() tweens must be handled uniquely: their beginning values must be rendered but we don't want overwriting to occur yet (when time is still 0). Wait until the tween actually begins before doing all the routines like overwriting. At that time, we should render at the END of the tween to ensure that things initialize correctly (remember, from() tweens go backwards)
-      if (prevStartAt) {
-        !autoRevert && (tween._startAt = 0);
-      } else {
-        time && (immediateRender = false); //in rare cases (like if a from() tween runs and then is invalidate()-ed), immediateRender could be true but the initial forced-render gets skipped, so there's no need to force the render in this context when the _time is greater than 0
-
-        p = _setDefaults({
-          overwrite: false,
-          data: "isFromStart",
-          //we tag the tween with as "isFromStart" so that if [inside a plugin] we need to only do something at the very END of a tween, we have a way of identifying this tween as merely the one that's setting the beginning values for a "from()" tween. For example, clearProps in CSSPlugin should only get applied at the very END of a tween and without this tag, from(...{height:100, clearProps:"height", delay:1}) would wipe the height at the beginning of the tween and after 1 second, it'd kick back in.
-          lazy: immediateRender && _isNotFalse(lazy),
-          immediateRender: immediateRender,
-          //zero-duration tweens render immediately by default, but if we're not specifically instructed to render this tween immediately, we should skip this and merely _init() to record the starting values (rendering them immediately would push them to completion which is wasteful in that case - we'd have to render(-1) immediately after)
-          stagger: 0,
-          parent: parent //ensures that nested tweens that had a stagger are handled properly, like gsap.from(".class", {y:gsap.utils.wrap([-100,100])})
-
-        }, cleanVars);
-        harnessVars && (p[harness.prop] = harnessVars); // in case someone does something like .from(..., {css:{}})
-
-        _removeFromParent(tween._startAt = Tween.set(targets, p));
-
-        time < 0 && tween._startAt.render(-1, true); // rare edge case, like if a render is forced in the negative direction of a non-initted from() tween.
-
-        tween._zTime = time;
-
-        if (!immediateRender) {
-          _initTween(tween._startAt, _tinyNum); //ensures that the initial values are recorded
-
-        } else if (!time) {
-          return;
-        }
-      }
-    }
-
-    tween._pt = 0;
-    lazy = dur && _isNotFalse(lazy) || lazy && !dur;
-
-    for (i = 0; i < targets.length; i++) {
-      target = targets[i];
-      gsData = target._gsap || _harness(targets)[i]._gsap;
-      tween._ptLookup[i] = ptLookup = {};
-      _lazyLookup[gsData.id] && _lazyTweens.length && _lazyRender(); //if other tweens of the same target have recently initted but haven't rendered yet, we've got to force the render so that the starting values are correct (imagine populating a timeline with a bunch of sequential tweens and then jumping to the end)
-
-      index = fullTargets === targets ? i : fullTargets.indexOf(target);
-
-      if (harness && (plugin = new harness()).init(target, harnessVars || cleanVars, tween, index, fullTargets) !== false) {
-        tween._pt = pt = new PropTween(tween._pt, target, plugin.name, 0, 1, plugin.render, plugin, 0, plugin.priority);
-
-        plugin._props.forEach(function (name) {
-          ptLookup[name] = pt;
-        });
-
-        plugin.priority && (hasPriority = 1);
-      }
-
-      if (!harness || harnessVars) {
-        for (p in cleanVars) {
-          if (_plugins[p] && (plugin = _checkPlugin(p, cleanVars, tween, index, target, fullTargets))) {
-            plugin.priority && (hasPriority = 1);
-          } else {
-            ptLookup[p] = pt = _addPropTween.call(tween, target, p, "get", cleanVars[p], index, fullTargets, 0, vars.stringFilter);
-          }
-        }
-      }
-
-      tween._op && tween._op[i] && tween.kill(target, tween._op[i]);
-
-      if (autoOverwrite && tween._pt) {
-        _overwritingTween = tween;
-
-        _globalTimeline.killTweensOf(target, ptLookup, tween.globalTime(time)); // make sure the overwriting doesn't overwrite THIS tween!!!
-
-
-        overwritten = !tween.parent;
-        _overwritingTween = 0;
-      }
-
-      tween._pt && lazy && (_lazyLookup[gsData.id] = 1);
-    }
-
-    hasPriority && _sortPropTweensByPriority(tween);
-    tween._onInit && tween._onInit(tween); //plugins like RoundProps must wait until ALL of the PropTweens are instantiated. In the plugin's init() function, it sets the _onInit on the tween instance. May not be pretty/intuitive, but it's fast and keeps file size down.
-  }
-
-  tween._onUpdate = onUpdate;
-  tween._initted = (!tween._op || tween._pt) && !overwritten; // if overwrittenProps resulted in the entire tween being killed, do NOT flag it as initted or else it may render for one tick.
-
-  keyframes && time <= 0 && tl.render(_bigNum, true, true); // if there's a 0% keyframe, it'll render in the "before" state for any staggered/delayed animations thus when the following tween initializes, it'll use the "before" state instead of the "after" state as the initial values.
-},
-    _addAliasesToVars = function _addAliasesToVars(targets, vars) {
-  var harness = targets[0] ? _getCache(targets[0]).harness : 0,
-      propertyAliases = harness && harness.aliases,
-      copy,
-      p,
-      i,
-      aliases;
-
-  if (!propertyAliases) {
-    return vars;
-  }
-
-  copy = _merge({}, vars);
-
-  for (p in propertyAliases) {
-    if (p in copy) {
-      aliases = propertyAliases[p].split(",");
-      i = aliases.length;
-
-      while (i--) {
-        copy[aliases[i]] = copy[p];
-      }
-    }
-  }
-
-  return copy;
-},
-    // parses multiple formats, like {"0%": {x: 100}, {"50%": {x: -20}} and { x: {"0%": 100, "50%": -20} }, and an "ease" can be set on any object. We populate an "allProps" object with an Array for each property, like {x: [{}, {}], y:[{}, {}]} with data for each property tween. The objects have a "t" (time), "v", (value), and "e" (ease) property. This allows us to piece together a timeline later.
-_parseKeyframe = function _parseKeyframe(prop, obj, allProps, easeEach) {
-  var ease = obj.ease || easeEach || "power1.inOut",
-      p,
-      a;
-
-  if (_isArray(obj)) {
-    a = allProps[prop] || (allProps[prop] = []); // t = time (out of 100), v = value, e = ease
-
-    obj.forEach(function (value, i) {
-      return a.push({
-        t: i / (obj.length - 1) * 100,
-        v: value,
-        e: ease
-      });
-    });
-  } else {
-    for (p in obj) {
-      a = allProps[p] || (allProps[p] = []);
-      p === "ease" || a.push({
-        t: parseFloat(prop),
-        v: obj[p],
-        e: ease
-      });
-    }
-  }
-},
-    _parseFuncOrString = function _parseFuncOrString(value, tween, i, target, targets) {
-  return _isFunction(value) ? value.call(tween, i, target, targets) : _isString(value) && ~value.indexOf("random(") ? _replaceRandom(value) : value;
-},
-    _staggerTweenProps = _callbackNames + "repeat,repeatDelay,yoyo,repeatRefresh,yoyoEase",
-    _staggerPropsToSkip = {};
-
-_forEachName(_staggerTweenProps + ",id,stagger,delay,duration,paused,scrollTrigger", function (name) {
-  return _staggerPropsToSkip[name] = 1;
-});
-/*
- * --------------------------------------------------------------------------------------
- * TWEEN
- * --------------------------------------------------------------------------------------
- */
-
-
-var Tween = /*#__PURE__*/function (_Animation2) {
-  _inheritsLoose(Tween, _Animation2);
-
-  function Tween(targets, vars, position, skipInherit) {
-    var _this3;
-
-    if (typeof vars === "number") {
-      position.duration = vars;
-      vars = position;
-      position = null;
-    }
-
-    _this3 = _Animation2.call(this, skipInherit ? vars : _inheritDefaults(vars)) || this;
-    var _this3$vars = _this3.vars,
-        duration = _this3$vars.duration,
-        delay = _this3$vars.delay,
-        immediateRender = _this3$vars.immediateRender,
-        stagger = _this3$vars.stagger,
-        overwrite = _this3$vars.overwrite,
-        keyframes = _this3$vars.keyframes,
-        defaults = _this3$vars.defaults,
-        scrollTrigger = _this3$vars.scrollTrigger,
-        yoyoEase = _this3$vars.yoyoEase,
-        parent = vars.parent || _globalTimeline,
-        parsedTargets = (_isArray(targets) || _isTypedArray(targets) ? _isNumber(targets[0]) : "length" in vars) ? [targets] : toArray(targets),
-        tl,
-        i,
-        copy,
-        l,
-        p,
-        curTarget,
-        staggerFunc,
-        staggerVarsToMerge;
-    _this3._targets = parsedTargets.length ? _harness(parsedTargets) : _warn("GSAP target " + targets + " not found. https://greensock.com", !_config.nullTargetWarn) || [];
-    _this3._ptLookup = []; //PropTween lookup. An array containing an object for each target, having keys for each tweening property
-
-    _this3._overwrite = overwrite;
-
-    if (keyframes || stagger || _isFuncOrString(duration) || _isFuncOrString(delay)) {
-      vars = _this3.vars;
-      tl = _this3.timeline = new Timeline({
-        data: "nested",
-        defaults: defaults || {}
-      });
-      tl.kill();
-      tl.parent = tl._dp = _assertThisInitialized(_this3);
-      tl._start = 0;
-
-      if (stagger || _isFuncOrString(duration) || _isFuncOrString(delay)) {
-        l = parsedTargets.length;
-        staggerFunc = stagger && distribute(stagger);
-
-        if (_isObject(stagger)) {
-          //users can pass in callbacks like onStart/onComplete in the stagger object. These should fire with each individual tween.
-          for (p in stagger) {
-            if (~_staggerTweenProps.indexOf(p)) {
-              staggerVarsToMerge || (staggerVarsToMerge = {});
-              staggerVarsToMerge[p] = stagger[p];
-            }
-          }
-        }
-
-        for (i = 0; i < l; i++) {
-          copy = _copyExcluding(vars, _staggerPropsToSkip);
-          copy.stagger = 0;
-          yoyoEase && (copy.yoyoEase = yoyoEase);
-          staggerVarsToMerge && _merge(copy, staggerVarsToMerge);
-          curTarget = parsedTargets[i]; //don't just copy duration or delay because if they're a string or function, we'd end up in an infinite loop because _isFuncOrString() would evaluate as true in the child tweens, entering this loop, etc. So we parse the value straight from vars and default to 0.
-
-          copy.duration = +_parseFuncOrString(duration, _assertThisInitialized(_this3), i, curTarget, parsedTargets);
-          copy.delay = (+_parseFuncOrString(delay, _assertThisInitialized(_this3), i, curTarget, parsedTargets) || 0) - _this3._delay;
-
-          if (!stagger && l === 1 && copy.delay) {
-            // if someone does delay:"random(1, 5)", repeat:-1, for example, the delay shouldn't be inside the repeat.
-            _this3._delay = delay = copy.delay;
-            _this3._start += delay;
-            copy.delay = 0;
-          }
-
-          tl.to(curTarget, copy, staggerFunc ? staggerFunc(i, curTarget, parsedTargets) : 0);
-          tl._ease = _easeMap.none;
-        }
-
-        tl.duration() ? duration = delay = 0 : _this3.timeline = 0; // if the timeline's duration is 0, we don't need a timeline internally!
-      } else if (keyframes) {
-        _inheritDefaults(_setDefaults(tl.vars.defaults, {
-          ease: "none"
-        }));
-
-        tl._ease = _parseEase(keyframes.ease || vars.ease || "none");
-        var time = 0,
-            a,
-            kf,
-            v;
-
-        if (_isArray(keyframes)) {
-          keyframes.forEach(function (frame) {
-            return tl.to(parsedTargets, frame, ">");
           });
-        } else {
-          copy = {};
-
-          for (p in keyframes) {
-            p === "ease" || p === "easeEach" || _parseKeyframe(p, keyframes[p], copy, keyframes.easeEach);
-          }
-
-          for (p in copy) {
-            a = copy[p].sort(function (a, b) {
-              return a.t - b.t;
-            });
-            time = 0;
-
-            for (i = 0; i < a.length; i++) {
-              kf = a[i];
-              v = {
-                ease: kf.e,
-                duration: (kf.t - (i ? a[i - 1].t : 0)) / 100 * duration
-              };
-              v[p] = kf.v;
-              tl.to(parsedTargets, v, time);
-              time += v.duration;
-            }
-          }
-
-          tl.duration() < duration && tl.to({}, {
-            duration: duration - tl.duration()
-          }); // in case keyframes didn't go to 100%
+          return result.join('&')
         }
+
+        return encode(key) + '=' + encode(val)
+      })
+      .filter(function (x) { return x.length > 0; })
+      .join('&')
+    : null;
+  return res ? ("?" + res) : ''
+}
+
+/*  */
+
+var trailingSlashRE = /\/?$/;
+
+function createRoute (
+  record,
+  location,
+  redirectedFrom,
+  router
+) {
+  var stringifyQuery = router && router.options.stringifyQuery;
+
+  var query = location.query || {};
+  try {
+    query = clone(query);
+  } catch (e) {}
+
+  var route = {
+    name: location.name || (record && record.name),
+    meta: (record && record.meta) || {},
+    path: location.path || '/',
+    hash: location.hash || '',
+    query: query,
+    params: location.params || {},
+    fullPath: getFullPath(location, stringifyQuery),
+    matched: record ? formatMatch(record) : []
+  };
+  if (redirectedFrom) {
+    route.redirectedFrom = getFullPath(redirectedFrom, stringifyQuery);
+  }
+  return Object.freeze(route)
+}
+
+function clone (value) {
+  if (Array.isArray(value)) {
+    return value.map(clone)
+  } else if (value && typeof value === 'object') {
+    var res = {};
+    for (var key in value) {
+      res[key] = clone(value[key]);
+    }
+    return res
+  } else {
+    return value
+  }
+}
+
+// the starting route that represents the initial state
+var START = createRoute(null, {
+  path: '/'
+});
+
+function formatMatch (record) {
+  var res = [];
+  while (record) {
+    res.unshift(record);
+    record = record.parent;
+  }
+  return res
+}
+
+function getFullPath (
+  ref,
+  _stringifyQuery
+) {
+  var path = ref.path;
+  var query = ref.query; if ( query === void 0 ) query = {};
+  var hash = ref.hash; if ( hash === void 0 ) hash = '';
+
+  var stringify = _stringifyQuery || stringifyQuery;
+  return (path || '/') + stringify(query) + hash
+}
+
+function isSameRoute (a, b) {
+  if (b === START) {
+    return a === b
+  } else if (!b) {
+    return false
+  } else if (a.path && b.path) {
+    return (
+      a.path.replace(trailingSlashRE, '') === b.path.replace(trailingSlashRE, '') &&
+      a.hash === b.hash &&
+      isObjectEqual(a.query, b.query)
+    )
+  } else if (a.name && b.name) {
+    return (
+      a.name === b.name &&
+      a.hash === b.hash &&
+      isObjectEqual(a.query, b.query) &&
+      isObjectEqual(a.params, b.params)
+    )
+  } else {
+    return false
+  }
+}
+
+function isObjectEqual (a, b) {
+  if ( a === void 0 ) a = {};
+  if ( b === void 0 ) b = {};
+
+  // handle null value #1566
+  if (!a || !b) { return a === b }
+  var aKeys = Object.keys(a).sort();
+  var bKeys = Object.keys(b).sort();
+  if (aKeys.length !== bKeys.length) {
+    return false
+  }
+  return aKeys.every(function (key, i) {
+    var aVal = a[key];
+    var bKey = bKeys[i];
+    if (bKey !== key) { return false }
+    var bVal = b[key];
+    // query values can be null and undefined
+    if (aVal == null || bVal == null) { return aVal === bVal }
+    // check nested equality
+    if (typeof aVal === 'object' && typeof bVal === 'object') {
+      return isObjectEqual(aVal, bVal)
+    }
+    return String(aVal) === String(bVal)
+  })
+}
+
+function isIncludedRoute (current, target) {
+  return (
+    current.path.replace(trailingSlashRE, '/').indexOf(
+      target.path.replace(trailingSlashRE, '/')
+    ) === 0 &&
+    (!target.hash || current.hash === target.hash) &&
+    queryIncludes(current.query, target.query)
+  )
+}
+
+function queryIncludes (current, target) {
+  for (var key in target) {
+    if (!(key in current)) {
+      return false
+    }
+  }
+  return true
+}
+
+function handleRouteEntered (route) {
+  for (var i = 0; i < route.matched.length; i++) {
+    var record = route.matched[i];
+    for (var name in record.instances) {
+      var instance = record.instances[name];
+      var cbs = record.enteredCbs[name];
+      if (!instance || !cbs) { continue }
+      delete record.enteredCbs[name];
+      for (var i$1 = 0; i$1 < cbs.length; i$1++) {
+        if (!instance._isBeingDestroyed) { cbs[i$1](instance); }
+      }
+    }
+  }
+}
+
+var View = {
+  name: 'RouterView',
+  functional: true,
+  props: {
+    name: {
+      type: String,
+      default: 'default'
+    }
+  },
+  render: function render (_, ref) {
+    var props = ref.props;
+    var children = ref.children;
+    var parent = ref.parent;
+    var data = ref.data;
+
+    // used by devtools to display a router-view badge
+    data.routerView = true;
+
+    // directly use parent context's createElement() function
+    // so that components rendered by router-view can resolve named slots
+    var h = parent.$createElement;
+    var name = props.name;
+    var route = parent.$route;
+    var cache = parent._routerViewCache || (parent._routerViewCache = {});
+
+    // determine current view depth, also check to see if the tree
+    // has been toggled inactive but kept-alive.
+    var depth = 0;
+    var inactive = false;
+    while (parent && parent._routerRoot !== parent) {
+      var vnodeData = parent.$vnode ? parent.$vnode.data : {};
+      if (vnodeData.routerView) {
+        depth++;
+      }
+      if (vnodeData.keepAlive && parent._directInactive && parent._inactive) {
+        inactive = true;
+      }
+      parent = parent.$parent;
+    }
+    data.routerViewDepth = depth;
+
+    // render previous view if the tree is inactive and kept-alive
+    if (inactive) {
+      var cachedData = cache[name];
+      var cachedComponent = cachedData && cachedData.component;
+      if (cachedComponent) {
+        // #2301
+        // pass props
+        if (cachedData.configProps) {
+          fillPropsinData(cachedComponent, data, cachedData.route, cachedData.configProps);
+        }
+        return h(cachedComponent, data, children)
+      } else {
+        // render previous empty view
+        return h()
+      }
+    }
+
+    var matched = route.matched[depth];
+    var component = matched && matched.components[name];
+
+    // render empty node if no matched route or no config component
+    if (!matched || !component) {
+      cache[name] = null;
+      return h()
+    }
+
+    // cache component
+    cache[name] = { component: component };
+
+    // attach instance registration hook
+    // this will be called in the instance's injected lifecycle hooks
+    data.registerRouteInstance = function (vm, val) {
+      // val could be undefined for unregistration
+      var current = matched.instances[name];
+      if (
+        (val && current !== vm) ||
+        (!val && current === vm)
+      ) {
+        matched.instances[name] = val;
+      }
+    }
+
+    // also register instance in prepatch hook
+    // in case the same component instance is reused across different routes
+    ;(data.hook || (data.hook = {})).prepatch = function (_, vnode) {
+      matched.instances[name] = vnode.componentInstance;
+    };
+
+    // register instance in init hook
+    // in case kept-alive component be actived when routes changed
+    data.hook.init = function (vnode) {
+      if (vnode.data.keepAlive &&
+        vnode.componentInstance &&
+        vnode.componentInstance !== matched.instances[name]
+      ) {
+        matched.instances[name] = vnode.componentInstance;
       }
 
-      duration || _this3.duration(duration = tl.duration());
-    } else {
-      _this3.timeline = 0; //speed optimization, faster lookups (no going up the prototype chain)
+      // if the route transition has already been confirmed then we weren't
+      // able to call the cbs during confirmation as the component was not
+      // registered yet, so we call it here.
+      handleRouteEntered(route);
+    };
+
+    var configProps = matched.props && matched.props[name];
+    // save route and configProps in cache
+    if (configProps) {
+      extend(cache[name], {
+        route: route,
+        configProps: configProps
+      });
+      fillPropsinData(component, data, route, configProps);
     }
 
-    if (overwrite === true && !_suppressOverwrites) {
-      _overwritingTween = _assertThisInitialized(_this3);
+    return h(component, data, children)
+  }
+};
 
-      _globalTimeline.killTweensOf(parsedTargets);
-
-      _overwritingTween = 0;
+function fillPropsinData (component, data, route, configProps) {
+  // resolve props
+  var propsToPass = data.props = resolveProps(route, configProps);
+  if (propsToPass) {
+    // clone to prevent mutation
+    propsToPass = data.props = extend({}, propsToPass);
+    // pass non-declared props as attrs
+    var attrs = data.attrs = data.attrs || {};
+    for (var key in propsToPass) {
+      if (!component.props || !(key in component.props)) {
+        attrs[key] = propsToPass[key];
+        delete propsToPass[key];
+      }
     }
+  }
+}
 
-    _addToTimeline(parent, _assertThisInitialized(_this3), position);
+function resolveProps (route, config) {
+  switch (typeof config) {
+    case 'undefined':
+      return
+    case 'object':
+      return config
+    case 'function':
+      return config(route)
+    case 'boolean':
+      return config ? route.params : undefined
+    default:
+      if (true) {
+        warn(
+          false,
+          "props in \"" + (route.path) + "\" is a " + (typeof config) + ", " +
+          "expecting an object, function or boolean."
+        );
+      }
+  }
+}
 
-    vars.reversed && _this3.reverse();
-    vars.paused && _this3.paused(true);
+/*  */
 
-    if (immediateRender || !duration && !keyframes && _this3._start === _roundPrecise(parent._time) && _isNotFalse(immediateRender) && _hasNoPausedAncestors(_assertThisInitialized(_this3)) && parent.data !== "nested") {
-      _this3._tTime = -_tinyNum; //forces a render without having to set the render() "force" parameter to true because we want to allow lazying by default (using the "force" parameter always forces an immediate full render)
-
-      _this3.render(Math.max(0, -delay)); //in case delay is negative
-
-    }
-
-    scrollTrigger && _scrollTrigger(_assertThisInitialized(_this3), scrollTrigger);
-    return _this3;
+function resolvePath (
+  relative,
+  base,
+  append
+) {
+  var firstChar = relative.charAt(0);
+  if (firstChar === '/') {
+    return relative
   }
 
-  var _proto3 = Tween.prototype;
+  if (firstChar === '?' || firstChar === '#') {
+    return base + relative
+  }
 
-  _proto3.render = function render(totalTime, suppressEvents, force) {
-    var prevTime = this._time,
-        tDur = this._tDur,
-        dur = this._dur,
-        tTime = totalTime > tDur - _tinyNum && totalTime >= 0 ? tDur : totalTime < _tinyNum ? 0 : totalTime,
-        time,
-        pt,
-        iteration,
-        cycleDuration,
-        prevIteration,
-        isYoyo,
-        ratio,
-        timeline,
-        yoyoEase;
+  var stack = base.split('/');
 
-    if (!dur) {
-      _renderZeroDurationTween(this, totalTime, suppressEvents, force);
-    } else if (tTime !== this._tTime || !totalTime || force || !this._initted && this._tTime || this._startAt && this._zTime < 0 !== totalTime < 0) {
-      //this senses if we're crossing over the start time, in which case we must record _zTime and force the render, but we do it in this lengthy conditional way for performance reasons (usually we can skip the calculations): this._initted && (this._zTime < 0) !== (totalTime < 0)
-      time = tTime;
-      timeline = this.timeline;
+  // remove trailing segment if:
+  // - not appending
+  // - appending to trailing slash (last segment is empty)
+  if (!append || !stack[stack.length - 1]) {
+    stack.pop();
+  }
 
-      if (this._repeat) {
-        //adjust the time for repeats and yoyos
-        cycleDuration = dur + this._rDelay;
+  // resolve relative path
+  var segments = relative.replace(/^\//, '').split('/');
+  for (var i = 0; i < segments.length; i++) {
+    var segment = segments[i];
+    if (segment === '..') {
+      stack.pop();
+    } else if (segment !== '.') {
+      stack.push(segment);
+    }
+  }
 
-        if (this._repeat < -1 && totalTime < 0) {
-          return this.totalTime(cycleDuration * 100 + totalTime, suppressEvents, force);
-        }
+  // ensure leading slash
+  if (stack[0] !== '') {
+    stack.unshift('');
+  }
 
-        time = _roundPrecise(tTime % cycleDuration); //round to avoid floating point errors. (4 % 0.8 should be 0 but some browsers report it as 0.79999999!)
+  return stack.join('/')
+}
 
-        if (tTime === tDur) {
-          // the tDur === tTime is for edge cases where there's a lengthy decimal on the duration and it may reach the very end but the time is rendered as not-quite-there (remember, tDur is rounded to 4 decimals whereas dur isn't)
-          iteration = this._repeat;
-          time = dur;
+function parsePath (path) {
+  var hash = '';
+  var query = '';
+
+  var hashIndex = path.indexOf('#');
+  if (hashIndex >= 0) {
+    hash = path.slice(hashIndex);
+    path = path.slice(0, hashIndex);
+  }
+
+  var queryIndex = path.indexOf('?');
+  if (queryIndex >= 0) {
+    query = path.slice(queryIndex + 1);
+    path = path.slice(0, queryIndex);
+  }
+
+  return {
+    path: path,
+    query: query,
+    hash: hash
+  }
+}
+
+function cleanPath (path) {
+  return path.replace(/\/\//g, '/')
+}
+
+var isarray = Array.isArray || function (arr) {
+  return Object.prototype.toString.call(arr) == '[object Array]';
+};
+
+/**
+ * Expose `pathToRegexp`.
+ */
+var pathToRegexp_1 = pathToRegexp;
+var parse_1 = parse;
+var compile_1 = compile;
+var tokensToFunction_1 = tokensToFunction;
+var tokensToRegExp_1 = tokensToRegExp;
+
+/**
+ * The main path matching regexp utility.
+ *
+ * @type {RegExp}
+ */
+var PATH_REGEXP = new RegExp([
+  // Match escaped characters that would otherwise appear in future matches.
+  // This allows the user to escape special characters that won't transform.
+  '(\\\\.)',
+  // Match Express-style parameters and un-named parameters with a prefix
+  // and optional suffixes. Matches appear as:
+  //
+  // "/:test(\\d+)?" => ["/", "test", "\d+", undefined, "?", undefined]
+  // "/route(\\d+)"  => [undefined, undefined, undefined, "\d+", undefined, undefined]
+  // "/*"            => ["/", undefined, undefined, undefined, undefined, "*"]
+  '([\\/.])?(?:(?:\\:(\\w+)(?:\\(((?:\\\\.|[^\\\\()])+)\\))?|\\(((?:\\\\.|[^\\\\()])+)\\))([+*?])?|(\\*))'
+].join('|'), 'g');
+
+/**
+ * Parse a string for the raw tokens.
+ *
+ * @param  {string}  str
+ * @param  {Object=} options
+ * @return {!Array}
+ */
+function parse (str, options) {
+  var tokens = [];
+  var key = 0;
+  var index = 0;
+  var path = '';
+  var defaultDelimiter = options && options.delimiter || '/';
+  var res;
+
+  while ((res = PATH_REGEXP.exec(str)) != null) {
+    var m = res[0];
+    var escaped = res[1];
+    var offset = res.index;
+    path += str.slice(index, offset);
+    index = offset + m.length;
+
+    // Ignore already escaped sequences.
+    if (escaped) {
+      path += escaped[1];
+      continue
+    }
+
+    var next = str[index];
+    var prefix = res[2];
+    var name = res[3];
+    var capture = res[4];
+    var group = res[5];
+    var modifier = res[6];
+    var asterisk = res[7];
+
+    // Push the current path onto the tokens.
+    if (path) {
+      tokens.push(path);
+      path = '';
+    }
+
+    var partial = prefix != null && next != null && next !== prefix;
+    var repeat = modifier === '+' || modifier === '*';
+    var optional = modifier === '?' || modifier === '*';
+    var delimiter = res[2] || defaultDelimiter;
+    var pattern = capture || group;
+
+    tokens.push({
+      name: name || key++,
+      prefix: prefix || '',
+      delimiter: delimiter,
+      optional: optional,
+      repeat: repeat,
+      partial: partial,
+      asterisk: !!asterisk,
+      pattern: pattern ? escapeGroup(pattern) : (asterisk ? '.*' : '[^' + escapeString(delimiter) + ']+?')
+    });
+  }
+
+  // Match any characters still remaining.
+  if (index < str.length) {
+    path += str.substr(index);
+  }
+
+  // If the path exists, push it onto the end.
+  if (path) {
+    tokens.push(path);
+  }
+
+  return tokens
+}
+
+/**
+ * Compile a string to a template function for the path.
+ *
+ * @param  {string}             str
+ * @param  {Object=}            options
+ * @return {!function(Object=, Object=)}
+ */
+function compile (str, options) {
+  return tokensToFunction(parse(str, options), options)
+}
+
+/**
+ * Prettier encoding of URI path segments.
+ *
+ * @param  {string}
+ * @return {string}
+ */
+function encodeURIComponentPretty (str) {
+  return encodeURI(str).replace(/[\/?#]/g, function (c) {
+    return '%' + c.charCodeAt(0).toString(16).toUpperCase()
+  })
+}
+
+/**
+ * Encode the asterisk parameter. Similar to `pretty`, but allows slashes.
+ *
+ * @param  {string}
+ * @return {string}
+ */
+function encodeAsterisk (str) {
+  return encodeURI(str).replace(/[?#]/g, function (c) {
+    return '%' + c.charCodeAt(0).toString(16).toUpperCase()
+  })
+}
+
+/**
+ * Expose a method for transforming tokens into the path function.
+ */
+function tokensToFunction (tokens, options) {
+  // Compile all the tokens into regexps.
+  var matches = new Array(tokens.length);
+
+  // Compile all the patterns before compilation.
+  for (var i = 0; i < tokens.length; i++) {
+    if (typeof tokens[i] === 'object') {
+      matches[i] = new RegExp('^(?:' + tokens[i].pattern + ')$', flags(options));
+    }
+  }
+
+  return function (obj, opts) {
+    var path = '';
+    var data = obj || {};
+    var options = opts || {};
+    var encode = options.pretty ? encodeURIComponentPretty : encodeURIComponent;
+
+    for (var i = 0; i < tokens.length; i++) {
+      var token = tokens[i];
+
+      if (typeof token === 'string') {
+        path += token;
+
+        continue
+      }
+
+      var value = data[token.name];
+      var segment;
+
+      if (value == null) {
+        if (token.optional) {
+          // Prepend partial segment prefixes.
+          if (token.partial) {
+            path += token.prefix;
+          }
+
+          continue
         } else {
-          iteration = ~~(tTime / cycleDuration);
+          throw new TypeError('Expected "' + token.name + '" to be defined')
+        }
+      }
 
-          if (iteration && iteration === tTime / cycleDuration) {
-            time = dur;
-            iteration--;
-          }
-
-          time > dur && (time = dur);
+      if (isarray(value)) {
+        if (!token.repeat) {
+          throw new TypeError('Expected "' + token.name + '" to not repeat, but received `' + JSON.stringify(value) + '`')
         }
 
-        isYoyo = this._yoyo && iteration & 1;
-
-        if (isYoyo) {
-          yoyoEase = this._yEase;
-          time = dur - time;
-        }
-
-        prevIteration = _animationCycle(this._tTime, cycleDuration);
-
-        if (time === prevTime && !force && this._initted) {
-          //could be during the repeatDelay part. No need to render and fire callbacks.
-          return this;
-        }
-
-        if (iteration !== prevIteration) {
-          timeline && this._yEase && _propagateYoyoEase(timeline, isYoyo); //repeatRefresh functionality
-
-          if (this.vars.repeatRefresh && !isYoyo && !this._lock) {
-            this._lock = force = 1; //force, otherwise if lazy is true, the _attemptInitTween() will return and we'll jump out and get caught bouncing on each tick.
-
-            this.render(_roundPrecise(cycleDuration * iteration), true).invalidate()._lock = 0;
+        if (value.length === 0) {
+          if (token.optional) {
+            continue
+          } else {
+            throw new TypeError('Expected "' + token.name + '" to not be empty')
           }
         }
-      }
 
-      if (!this._initted) {
-        if (_attemptInitTween(this, totalTime < 0 ? totalTime : time, force, suppressEvents)) {
-          this._tTime = 0; // in constructor if immediateRender is true, we set _tTime to -_tinyNum to have the playhead cross the starting point but we can't leave _tTime as a negative number.
+        for (var j = 0; j < value.length; j++) {
+          segment = encode(value[j]);
 
-          return this;
+          if (!matches[i].test(segment)) {
+            throw new TypeError('Expected all "' + token.name + '" to match "' + token.pattern + '", but received `' + JSON.stringify(segment) + '`')
+          }
+
+          path += (j === 0 ? token.prefix : token.delimiter) + segment;
         }
 
-        if (dur !== this._dur) {
-          // while initting, a plugin like InertiaPlugin might alter the duration, so rerun from the start to ensure everything renders as it should.
-          return this.render(totalTime, suppressEvents, force);
+        continue
+      }
+
+      segment = token.asterisk ? encodeAsterisk(value) : encode(value);
+
+      if (!matches[i].test(segment)) {
+        throw new TypeError('Expected "' + token.name + '" to match "' + token.pattern + '", but received "' + segment + '"')
+      }
+
+      path += token.prefix + segment;
+    }
+
+    return path
+  }
+}
+
+/**
+ * Escape a regular expression string.
+ *
+ * @param  {string} str
+ * @return {string}
+ */
+function escapeString (str) {
+  return str.replace(/([.+*?=^!:${}()[\]|\/\\])/g, '\\$1')
+}
+
+/**
+ * Escape the capturing group by escaping special characters and meaning.
+ *
+ * @param  {string} group
+ * @return {string}
+ */
+function escapeGroup (group) {
+  return group.replace(/([=!:$\/()])/g, '\\$1')
+}
+
+/**
+ * Attach the keys as a property of the regexp.
+ *
+ * @param  {!RegExp} re
+ * @param  {Array}   keys
+ * @return {!RegExp}
+ */
+function attachKeys (re, keys) {
+  re.keys = keys;
+  return re
+}
+
+/**
+ * Get the flags for a regexp from the options.
+ *
+ * @param  {Object} options
+ * @return {string}
+ */
+function flags (options) {
+  return options && options.sensitive ? '' : 'i'
+}
+
+/**
+ * Pull out keys from a regexp.
+ *
+ * @param  {!RegExp} path
+ * @param  {!Array}  keys
+ * @return {!RegExp}
+ */
+function regexpToRegexp (path, keys) {
+  // Use a negative lookahead to match only capturing groups.
+  var groups = path.source.match(/\((?!\?)/g);
+
+  if (groups) {
+    for (var i = 0; i < groups.length; i++) {
+      keys.push({
+        name: i,
+        prefix: null,
+        delimiter: null,
+        optional: false,
+        repeat: false,
+        partial: false,
+        asterisk: false,
+        pattern: null
+      });
+    }
+  }
+
+  return attachKeys(path, keys)
+}
+
+/**
+ * Transform an array into a regexp.
+ *
+ * @param  {!Array}  path
+ * @param  {Array}   keys
+ * @param  {!Object} options
+ * @return {!RegExp}
+ */
+function arrayToRegexp (path, keys, options) {
+  var parts = [];
+
+  for (var i = 0; i < path.length; i++) {
+    parts.push(pathToRegexp(path[i], keys, options).source);
+  }
+
+  var regexp = new RegExp('(?:' + parts.join('|') + ')', flags(options));
+
+  return attachKeys(regexp, keys)
+}
+
+/**
+ * Create a path regexp from string input.
+ *
+ * @param  {string}  path
+ * @param  {!Array}  keys
+ * @param  {!Object} options
+ * @return {!RegExp}
+ */
+function stringToRegexp (path, keys, options) {
+  return tokensToRegExp(parse(path, options), keys, options)
+}
+
+/**
+ * Expose a function for taking tokens and returning a RegExp.
+ *
+ * @param  {!Array}          tokens
+ * @param  {(Array|Object)=} keys
+ * @param  {Object=}         options
+ * @return {!RegExp}
+ */
+function tokensToRegExp (tokens, keys, options) {
+  if (!isarray(keys)) {
+    options = /** @type {!Object} */ (keys || options);
+    keys = [];
+  }
+
+  options = options || {};
+
+  var strict = options.strict;
+  var end = options.end !== false;
+  var route = '';
+
+  // Iterate over the tokens and create our regexp string.
+  for (var i = 0; i < tokens.length; i++) {
+    var token = tokens[i];
+
+    if (typeof token === 'string') {
+      route += escapeString(token);
+    } else {
+      var prefix = escapeString(token.prefix);
+      var capture = '(?:' + token.pattern + ')';
+
+      keys.push(token);
+
+      if (token.repeat) {
+        capture += '(?:' + prefix + capture + ')*';
+      }
+
+      if (token.optional) {
+        if (!token.partial) {
+          capture = '(?:' + prefix + '(' + capture + '))?';
+        } else {
+          capture = prefix + '(' + capture + ')?';
+        }
+      } else {
+        capture = prefix + '(' + capture + ')';
+      }
+
+      route += capture;
+    }
+  }
+
+  var delimiter = escapeString(options.delimiter || '/');
+  var endsWithDelimiter = route.slice(-delimiter.length) === delimiter;
+
+  // In non-strict mode we allow a slash at the end of match. If the path to
+  // match already ends with a slash, we remove it for consistency. The slash
+  // is valid at the end of a path match, not in the middle. This is important
+  // in non-ending mode, where "/test/" shouldn't match "/test//route".
+  if (!strict) {
+    route = (endsWithDelimiter ? route.slice(0, -delimiter.length) : route) + '(?:' + delimiter + '(?=$))?';
+  }
+
+  if (end) {
+    route += '$';
+  } else {
+    // In non-ending mode, we need the capturing groups to match as much as
+    // possible by using a positive lookahead to the end or next path segment.
+    route += strict && endsWithDelimiter ? '' : '(?=' + delimiter + '|$)';
+  }
+
+  return attachKeys(new RegExp('^' + route, flags(options)), keys)
+}
+
+/**
+ * Normalize the given path string, returning a regular expression.
+ *
+ * An empty array can be passed in for the keys, which will hold the
+ * placeholder key descriptions. For example, using `/user/:id`, `keys` will
+ * contain `[{ name: 'id', delimiter: '/', optional: false, repeat: false }]`.
+ *
+ * @param  {(string|RegExp|Array)} path
+ * @param  {(Array|Object)=}       keys
+ * @param  {Object=}               options
+ * @return {!RegExp}
+ */
+function pathToRegexp (path, keys, options) {
+  if (!isarray(keys)) {
+    options = /** @type {!Object} */ (keys || options);
+    keys = [];
+  }
+
+  options = options || {};
+
+  if (path instanceof RegExp) {
+    return regexpToRegexp(path, /** @type {!Array} */ (keys))
+  }
+
+  if (isarray(path)) {
+    return arrayToRegexp(/** @type {!Array} */ (path), /** @type {!Array} */ (keys), options)
+  }
+
+  return stringToRegexp(/** @type {string} */ (path), /** @type {!Array} */ (keys), options)
+}
+pathToRegexp_1.parse = parse_1;
+pathToRegexp_1.compile = compile_1;
+pathToRegexp_1.tokensToFunction = tokensToFunction_1;
+pathToRegexp_1.tokensToRegExp = tokensToRegExp_1;
+
+/*  */
+
+// $flow-disable-line
+var regexpCompileCache = Object.create(null);
+
+function fillParams (
+  path,
+  params,
+  routeMsg
+) {
+  params = params || {};
+  try {
+    var filler =
+      regexpCompileCache[path] ||
+      (regexpCompileCache[path] = pathToRegexp_1.compile(path));
+
+    // Fix #2505 resolving asterisk routes { name: 'not-found', params: { pathMatch: '/not-found' }}
+    // and fix #3106 so that you can work with location descriptor object having params.pathMatch equal to empty string
+    if (typeof params.pathMatch === 'string') { params[0] = params.pathMatch; }
+
+    return filler(params, { pretty: true })
+  } catch (e) {
+    if (true) {
+      // Fix #3072 no warn if `pathMatch` is string
+      warn(typeof params.pathMatch === 'string', ("missing param for " + routeMsg + ": " + (e.message)));
+    }
+    return ''
+  } finally {
+    // delete the 0 if it was added
+    delete params[0];
+  }
+}
+
+/*  */
+
+function normalizeLocation (
+  raw,
+  current,
+  append,
+  router
+) {
+  var next = typeof raw === 'string' ? { path: raw } : raw;
+  // named target
+  if (next._normalized) {
+    return next
+  } else if (next.name) {
+    next = extend({}, raw);
+    var params = next.params;
+    if (params && typeof params === 'object') {
+      next.params = extend({}, params);
+    }
+    return next
+  }
+
+  // relative params
+  if (!next.path && next.params && current) {
+    next = extend({}, next);
+    next._normalized = true;
+    var params$1 = extend(extend({}, current.params), next.params);
+    if (current.name) {
+      next.name = current.name;
+      next.params = params$1;
+    } else if (current.matched.length) {
+      var rawPath = current.matched[current.matched.length - 1].path;
+      next.path = fillParams(rawPath, params$1, ("path " + (current.path)));
+    } else if (true) {
+      warn(false, "relative params navigation requires a current route.");
+    }
+    return next
+  }
+
+  var parsedPath = parsePath(next.path || '');
+  var basePath = (current && current.path) || '/';
+  var path = parsedPath.path
+    ? resolvePath(parsedPath.path, basePath, append || next.append)
+    : basePath;
+
+  var query = resolveQuery(
+    parsedPath.query,
+    next.query,
+    router && router.options.parseQuery
+  );
+
+  var hash = next.hash || parsedPath.hash;
+  if (hash && hash.charAt(0) !== '#') {
+    hash = "#" + hash;
+  }
+
+  return {
+    _normalized: true,
+    path: path,
+    query: query,
+    hash: hash
+  }
+}
+
+/*  */
+
+// work around weird flow bug
+var toTypes = [String, Object];
+var eventTypes = [String, Array];
+
+var noop = function () {};
+
+var Link = {
+  name: 'RouterLink',
+  props: {
+    to: {
+      type: toTypes,
+      required: true
+    },
+    tag: {
+      type: String,
+      default: 'a'
+    },
+    exact: Boolean,
+    append: Boolean,
+    replace: Boolean,
+    activeClass: String,
+    exactActiveClass: String,
+    ariaCurrentValue: {
+      type: String,
+      default: 'page'
+    },
+    event: {
+      type: eventTypes,
+      default: 'click'
+    }
+  },
+  render: function render (h) {
+    var this$1 = this;
+
+    var router = this.$router;
+    var current = this.$route;
+    var ref = router.resolve(
+      this.to,
+      current,
+      this.append
+    );
+    var location = ref.location;
+    var route = ref.route;
+    var href = ref.href;
+
+    var classes = {};
+    var globalActiveClass = router.options.linkActiveClass;
+    var globalExactActiveClass = router.options.linkExactActiveClass;
+    // Support global empty active class
+    var activeClassFallback =
+      globalActiveClass == null ? 'router-link-active' : globalActiveClass;
+    var exactActiveClassFallback =
+      globalExactActiveClass == null
+        ? 'router-link-exact-active'
+        : globalExactActiveClass;
+    var activeClass =
+      this.activeClass == null ? activeClassFallback : this.activeClass;
+    var exactActiveClass =
+      this.exactActiveClass == null
+        ? exactActiveClassFallback
+        : this.exactActiveClass;
+
+    var compareTarget = route.redirectedFrom
+      ? createRoute(null, normalizeLocation(route.redirectedFrom), null, router)
+      : route;
+
+    classes[exactActiveClass] = isSameRoute(current, compareTarget);
+    classes[activeClass] = this.exact
+      ? classes[exactActiveClass]
+      : isIncludedRoute(current, compareTarget);
+
+    var ariaCurrentValue = classes[exactActiveClass] ? this.ariaCurrentValue : null;
+
+    var handler = function (e) {
+      if (guardEvent(e)) {
+        if (this$1.replace) {
+          router.replace(location, noop);
+        } else {
+          router.push(location, noop);
         }
       }
+    };
 
-      this._tTime = tTime;
-      this._time = time;
+    var on = { click: guardEvent };
+    if (Array.isArray(this.event)) {
+      this.event.forEach(function (e) {
+        on[e] = handler;
+      });
+    } else {
+      on[this.event] = handler;
+    }
 
-      if (!this._act && this._ts) {
-        this._act = 1; //as long as it's not paused, force it to be active so that if the user renders independent of the parent timeline, it'll be forced to re-render on the next tick.
+    var data = { class: classes };
 
-        this._lazy = 0;
-      }
+    var scopedSlot =
+      !this.$scopedSlots.$hasNormal &&
+      this.$scopedSlots.default &&
+      this.$scopedSlots.default({
+        href: href,
+        route: route,
+        navigate: handler,
+        isActive: classes[activeClass],
+        isExactActive: classes[exactActiveClass]
+      });
 
-      this.ratio = ratio = (yoyoEase || this._ease)(time / dur);
-
-      if (this._from) {
-        this.ratio = ratio = 1 - ratio;
-      }
-
-      if (time && !prevTime && !suppressEvents) {
-        _callback(this, "onStart");
-
-        if (this._tTime !== tTime) {
-          // in case the onStart triggered a render at a different spot, eject. Like if someone did animation.pause(0.5) or something inside the onStart.
-          return this;
+    if (scopedSlot) {
+      if (scopedSlot.length === 1) {
+        return scopedSlot[0]
+      } else if (scopedSlot.length > 1 || !scopedSlot.length) {
+        if (true) {
+          warn(
+            false,
+            ("RouterLink with to=\"" + (this.to) + "\" is trying to use a scoped slot but it didn't provide exactly one child. Wrapping the content with a span element.")
+          );
         }
-      }
-
-      pt = this._pt;
-
-      while (pt) {
-        pt.r(ratio, pt.d);
-        pt = pt._next;
-      }
-
-      timeline && timeline.render(totalTime < 0 ? totalTime : !time && isYoyo ? -_tinyNum : timeline._dur * timeline._ease(time / this._dur), suppressEvents, force) || this._startAt && (this._zTime = totalTime);
-
-      if (this._onUpdate && !suppressEvents) {
-        totalTime < 0 && this._startAt && this._startAt.render(totalTime, true, force); //note: for performance reasons, we tuck this conditional logic inside less traveled areas (most tweens don't have an onUpdate). We'd just have it at the end before the onComplete, but the values should be updated before any onUpdate is called, so we ALSO put it here and then if it's not called, we do so later near the onComplete.
-
-        _callback(this, "onUpdate");
-      }
-
-      this._repeat && iteration !== prevIteration && this.vars.onRepeat && !suppressEvents && this.parent && _callback(this, "onRepeat");
-
-      if ((tTime === this._tDur || !tTime) && this._tTime === tTime) {
-        totalTime < 0 && this._startAt && !this._onUpdate && this._startAt.render(totalTime, true, true);
-        (totalTime || !dur) && (tTime === this._tDur && this._ts > 0 || !tTime && this._ts < 0) && _removeFromParent(this, 1); // don't remove if we're rendering at exactly a time of 0, as there could be autoRevert values that should get set on the next tick (if the playhead goes backward beyond the startTime, negative totalTime). Don't remove if the timeline is reversed and the playhead isn't at 0, otherwise tl.progress(1).reverse() won't work. Only remove if the playhead is at the end and timeScale is positive, or if the playhead is at 0 and the timeScale is negative.
-
-        if (!suppressEvents && !(totalTime < 0 && !prevTime) && (tTime || prevTime)) {
-          // if prevTime and tTime are zero, we shouldn't fire the onReverseComplete. This could happen if you gsap.to(... {paused:true}).play();
-          _callback(this, tTime === tDur ? "onComplete" : "onReverseComplete", true);
-
-          this._prom && !(tTime < tDur && this.timeScale() > 0) && this._prom();
-        }
+        return scopedSlot.length === 0 ? h() : h('span', {}, scopedSlot)
       }
     }
 
-    return this;
+    if (this.tag === 'a') {
+      data.on = on;
+      data.attrs = { href: href, 'aria-current': ariaCurrentValue };
+    } else {
+      // find the first <a> child and apply listener and href
+      var a = findAnchor(this.$slots.default);
+      if (a) {
+        // in case the <a> is a static node
+        a.isStatic = false;
+        var aData = (a.data = extend({}, a.data));
+        aData.on = aData.on || {};
+        // transform existing events in both objects into arrays so we can push later
+        for (var event in aData.on) {
+          var handler$1 = aData.on[event];
+          if (event in on) {
+            aData.on[event] = Array.isArray(handler$1) ? handler$1 : [handler$1];
+          }
+        }
+        // append new listeners for router-link
+        for (var event$1 in on) {
+          if (event$1 in aData.on) {
+            // on[event] is always a function
+            aData.on[event$1].push(on[event$1]);
+          } else {
+            aData.on[event$1] = handler;
+          }
+        }
+
+        var aAttrs = (a.data.attrs = extend({}, a.data.attrs));
+        aAttrs.href = href;
+        aAttrs['aria-current'] = ariaCurrentValue;
+      } else {
+        // doesn't have <a> child, apply listener to self
+        data.on = on;
+      }
+    }
+
+    return h(this.tag, data, this.$slots.default)
+  }
+};
+
+function guardEvent (e) {
+  // don't redirect with control keys
+  if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) { return }
+  // don't redirect when preventDefault called
+  if (e.defaultPrevented) { return }
+  // don't redirect on right click
+  if (e.button !== undefined && e.button !== 0) { return }
+  // don't redirect if `target="_blank"`
+  if (e.currentTarget && e.currentTarget.getAttribute) {
+    var target = e.currentTarget.getAttribute('target');
+    if (/\b_blank\b/i.test(target)) { return }
+  }
+  // this may be a Weex event which doesn't have this method
+  if (e.preventDefault) {
+    e.preventDefault();
+  }
+  return true
+}
+
+function findAnchor (children) {
+  if (children) {
+    var child;
+    for (var i = 0; i < children.length; i++) {
+      child = children[i];
+      if (child.tag === 'a') {
+        return child
+      }
+      if (child.children && (child = findAnchor(child.children))) {
+        return child
+      }
+    }
+  }
+}
+
+var _Vue;
+
+function install (Vue) {
+  if (install.installed && _Vue === Vue) { return }
+  install.installed = true;
+
+  _Vue = Vue;
+
+  var isDef = function (v) { return v !== undefined; };
+
+  var registerInstance = function (vm, callVal) {
+    var i = vm.$options._parentVnode;
+    if (isDef(i) && isDef(i = i.data) && isDef(i = i.registerRouteInstance)) {
+      i(vm, callVal);
+    }
   };
 
-  _proto3.targets = function targets() {
-    return this._targets;
+  Vue.mixin({
+    beforeCreate: function beforeCreate () {
+      if (isDef(this.$options.router)) {
+        this._routerRoot = this;
+        this._router = this.$options.router;
+        this._router.init(this);
+        Vue.util.defineReactive(this, '_route', this._router.history.current);
+      } else {
+        this._routerRoot = (this.$parent && this.$parent._routerRoot) || this;
+      }
+      registerInstance(this, this);
+    },
+    destroyed: function destroyed () {
+      registerInstance(this);
+    }
+  });
+
+  Object.defineProperty(Vue.prototype, '$router', {
+    get: function get () { return this._routerRoot._router }
+  });
+
+  Object.defineProperty(Vue.prototype, '$route', {
+    get: function get () { return this._routerRoot._route }
+  });
+
+  Vue.component('RouterView', View);
+  Vue.component('RouterLink', Link);
+
+  var strats = Vue.config.optionMergeStrategies;
+  // use the same hook merging strategy for route hooks
+  strats.beforeRouteEnter = strats.beforeRouteLeave = strats.beforeRouteUpdate = strats.created;
+}
+
+/*  */
+
+var inBrowser = typeof window !== 'undefined';
+
+/*  */
+
+function createRouteMap (
+  routes,
+  oldPathList,
+  oldPathMap,
+  oldNameMap
+) {
+  // the path list is used to control path matching priority
+  var pathList = oldPathList || [];
+  // $flow-disable-line
+  var pathMap = oldPathMap || Object.create(null);
+  // $flow-disable-line
+  var nameMap = oldNameMap || Object.create(null);
+
+  routes.forEach(function (route) {
+    addRouteRecord(pathList, pathMap, nameMap, route);
+  });
+
+  // ensure wildcard routes are always at the end
+  for (var i = 0, l = pathList.length; i < l; i++) {
+    if (pathList[i] === '*') {
+      pathList.push(pathList.splice(i, 1)[0]);
+      l--;
+      i--;
+    }
+  }
+
+  if (true) {
+    // warn if routes do not include leading slashes
+    var found = pathList
+    // check for missing leading slash
+      .filter(function (path) { return path && path.charAt(0) !== '*' && path.charAt(0) !== '/'; });
+
+    if (found.length > 0) {
+      var pathNames = found.map(function (path) { return ("- " + path); }).join('\n');
+      warn(false, ("Non-nested routes must include a leading slash character. Fix the following routes: \n" + pathNames));
+    }
+  }
+
+  return {
+    pathList: pathList,
+    pathMap: pathMap,
+    nameMap: nameMap
+  }
+}
+
+function addRouteRecord (
+  pathList,
+  pathMap,
+  nameMap,
+  route,
+  parent,
+  matchAs
+) {
+  var path = route.path;
+  var name = route.name;
+  if (true) {
+    assert(path != null, "\"path\" is required in a route configuration.");
+    assert(
+      typeof route.component !== 'string',
+      "route config \"component\" for path: " + (String(
+        path || name
+      )) + " cannot be a " + "string id. Use an actual component instead."
+    );
+
+    warn(
+      // eslint-disable-next-line no-control-regex
+      !/[^\u0000-\u007F]+/.test(path),
+      "Route with path \"" + path + "\" contains unencoded characters, make sure " +
+        "your path is correctly encoded before passing it to the router. Use " +
+        "encodeURI to encode static segments of your path."
+    );
+  }
+
+  var pathToRegexpOptions =
+    route.pathToRegexpOptions || {};
+  var normalizedPath = normalizePath(path, parent, pathToRegexpOptions.strict);
+
+  if (typeof route.caseSensitive === 'boolean') {
+    pathToRegexpOptions.sensitive = route.caseSensitive;
+  }
+
+  var record = {
+    path: normalizedPath,
+    regex: compileRouteRegex(normalizedPath, pathToRegexpOptions),
+    components: route.components || { default: route.component },
+    instances: {},
+    enteredCbs: {},
+    name: name,
+    parent: parent,
+    matchAs: matchAs,
+    redirect: route.redirect,
+    beforeEnter: route.beforeEnter,
+    meta: route.meta || {},
+    props:
+      route.props == null
+        ? {}
+        : route.components
+          ? route.props
+          : { default: route.props }
   };
 
-  _proto3.invalidate = function invalidate() {
-    this._pt = this._op = this._startAt = this._onUpdate = this._lazy = this.ratio = 0;
-    this._ptLookup = [];
-    this.timeline && this.timeline.invalidate();
-    return _Animation2.prototype.invalidate.call(this);
+  if (route.children) {
+    // Warn if route is named, does not redirect and has a default child route.
+    // If users navigate to this route by name, the default child will
+    // not be rendered (GH Issue #629)
+    if (true) {
+      if (
+        route.name &&
+        !route.redirect &&
+        route.children.some(function (child) { return /^\/?$/.test(child.path); })
+      ) {
+        warn(
+          false,
+          "Named Route '" + (route.name) + "' has a default child route. " +
+            "When navigating to this named route (:to=\"{name: '" + (route.name) + "'\"), " +
+            "the default child route will not be rendered. Remove the name from " +
+            "this route and use the name of the default child route for named " +
+            "links instead."
+        );
+      }
+    }
+    route.children.forEach(function (child) {
+      var childMatchAs = matchAs
+        ? cleanPath((matchAs + "/" + (child.path)))
+        : undefined;
+      addRouteRecord(pathList, pathMap, nameMap, child, record, childMatchAs);
+    });
+  }
+
+  if (!pathMap[record.path]) {
+    pathList.push(record.path);
+    pathMap[record.path] = record;
+  }
+
+  if (route.alias !== undefined) {
+    var aliases = Array.isArray(route.alias) ? route.alias : [route.alias];
+    for (var i = 0; i < aliases.length; ++i) {
+      var alias = aliases[i];
+      if ( true && alias === path) {
+        warn(
+          false,
+          ("Found an alias with the same value as the path: \"" + path + "\". You have to remove that alias. It will be ignored in development.")
+        );
+        // skip in dev to make it work
+        continue
+      }
+
+      var aliasRoute = {
+        path: alias,
+        children: route.children
+      };
+      addRouteRecord(
+        pathList,
+        pathMap,
+        nameMap,
+        aliasRoute,
+        parent,
+        record.path || '/' // matchAs
+      );
+    }
+  }
+
+  if (name) {
+    if (!nameMap[name]) {
+      nameMap[name] = record;
+    } else if ( true && !matchAs) {
+      warn(
+        false,
+        "Duplicate named routes definition: " +
+          "{ name: \"" + name + "\", path: \"" + (record.path) + "\" }"
+      );
+    }
+  }
+}
+
+function compileRouteRegex (
+  path,
+  pathToRegexpOptions
+) {
+  var regex = pathToRegexp_1(path, [], pathToRegexpOptions);
+  if (true) {
+    var keys = Object.create(null);
+    regex.keys.forEach(function (key) {
+      warn(
+        !keys[key.name],
+        ("Duplicate param keys in route with path: \"" + path + "\"")
+      );
+      keys[key.name] = true;
+    });
+  }
+  return regex
+}
+
+function normalizePath (
+  path,
+  parent,
+  strict
+) {
+  if (!strict) { path = path.replace(/\/$/, ''); }
+  if (path[0] === '/') { return path }
+  if (parent == null) { return path }
+  return cleanPath(((parent.path) + "/" + path))
+}
+
+/*  */
+
+
+
+function createMatcher (
+  routes,
+  router
+) {
+  var ref = createRouteMap(routes);
+  var pathList = ref.pathList;
+  var pathMap = ref.pathMap;
+  var nameMap = ref.nameMap;
+
+  function addRoutes (routes) {
+    createRouteMap(routes, pathList, pathMap, nameMap);
+  }
+
+  function match (
+    raw,
+    currentRoute,
+    redirectedFrom
+  ) {
+    var location = normalizeLocation(raw, currentRoute, false, router);
+    var name = location.name;
+
+    if (name) {
+      var record = nameMap[name];
+      if (true) {
+        warn(record, ("Route with name '" + name + "' does not exist"));
+      }
+      if (!record) { return _createRoute(null, location) }
+      var paramNames = record.regex.keys
+        .filter(function (key) { return !key.optional; })
+        .map(function (key) { return key.name; });
+
+      if (typeof location.params !== 'object') {
+        location.params = {};
+      }
+
+      if (currentRoute && typeof currentRoute.params === 'object') {
+        for (var key in currentRoute.params) {
+          if (!(key in location.params) && paramNames.indexOf(key) > -1) {
+            location.params[key] = currentRoute.params[key];
+          }
+        }
+      }
+
+      location.path = fillParams(record.path, location.params, ("named route \"" + name + "\""));
+      return _createRoute(record, location, redirectedFrom)
+    } else if (location.path) {
+      location.params = {};
+      for (var i = 0; i < pathList.length; i++) {
+        var path = pathList[i];
+        var record$1 = pathMap[path];
+        if (matchRoute(record$1.regex, location.path, location.params)) {
+          return _createRoute(record$1, location, redirectedFrom)
+        }
+      }
+    }
+    // no match
+    return _createRoute(null, location)
+  }
+
+  function redirect (
+    record,
+    location
+  ) {
+    var originalRedirect = record.redirect;
+    var redirect = typeof originalRedirect === 'function'
+      ? originalRedirect(createRoute(record, location, null, router))
+      : originalRedirect;
+
+    if (typeof redirect === 'string') {
+      redirect = { path: redirect };
+    }
+
+    if (!redirect || typeof redirect !== 'object') {
+      if (true) {
+        warn(
+          false, ("invalid redirect option: " + (JSON.stringify(redirect)))
+        );
+      }
+      return _createRoute(null, location)
+    }
+
+    var re = redirect;
+    var name = re.name;
+    var path = re.path;
+    var query = location.query;
+    var hash = location.hash;
+    var params = location.params;
+    query = re.hasOwnProperty('query') ? re.query : query;
+    hash = re.hasOwnProperty('hash') ? re.hash : hash;
+    params = re.hasOwnProperty('params') ? re.params : params;
+
+    if (name) {
+      // resolved named direct
+      var targetRecord = nameMap[name];
+      if (true) {
+        assert(targetRecord, ("redirect failed: named route \"" + name + "\" not found."));
+      }
+      return match({
+        _normalized: true,
+        name: name,
+        query: query,
+        hash: hash,
+        params: params
+      }, undefined, location)
+    } else if (path) {
+      // 1. resolve relative redirect
+      var rawPath = resolveRecordPath(path, record);
+      // 2. resolve params
+      var resolvedPath = fillParams(rawPath, params, ("redirect route with path \"" + rawPath + "\""));
+      // 3. rematch with existing query and hash
+      return match({
+        _normalized: true,
+        path: resolvedPath,
+        query: query,
+        hash: hash
+      }, undefined, location)
+    } else {
+      if (true) {
+        warn(false, ("invalid redirect option: " + (JSON.stringify(redirect))));
+      }
+      return _createRoute(null, location)
+    }
+  }
+
+  function alias (
+    record,
+    location,
+    matchAs
+  ) {
+    var aliasedPath = fillParams(matchAs, location.params, ("aliased route with path \"" + matchAs + "\""));
+    var aliasedMatch = match({
+      _normalized: true,
+      path: aliasedPath
+    });
+    if (aliasedMatch) {
+      var matched = aliasedMatch.matched;
+      var aliasedRecord = matched[matched.length - 1];
+      location.params = aliasedMatch.params;
+      return _createRoute(aliasedRecord, location)
+    }
+    return _createRoute(null, location)
+  }
+
+  function _createRoute (
+    record,
+    location,
+    redirectedFrom
+  ) {
+    if (record && record.redirect) {
+      return redirect(record, redirectedFrom || location)
+    }
+    if (record && record.matchAs) {
+      return alias(record, location, record.matchAs)
+    }
+    return createRoute(record, location, redirectedFrom, router)
+  }
+
+  return {
+    match: match,
+    addRoutes: addRoutes
+  }
+}
+
+function matchRoute (
+  regex,
+  path,
+  params
+) {
+  var m = path.match(regex);
+
+  if (!m) {
+    return false
+  } else if (!params) {
+    return true
+  }
+
+  for (var i = 1, len = m.length; i < len; ++i) {
+    var key = regex.keys[i - 1];
+    if (key) {
+      // Fix #1994: using * with props: true generates a param named 0
+      params[key.name || 'pathMatch'] = typeof m[i] === 'string' ? decode(m[i]) : m[i];
+    }
+  }
+
+  return true
+}
+
+function resolveRecordPath (path, record) {
+  return resolvePath(path, record.parent ? record.parent.path : '/', true)
+}
+
+/*  */
+
+// use User Timing api (if present) for more accurate key precision
+var Time =
+  inBrowser && window.performance && window.performance.now
+    ? window.performance
+    : Date;
+
+function genStateKey () {
+  return Time.now().toFixed(3)
+}
+
+var _key = genStateKey();
+
+function getStateKey () {
+  return _key
+}
+
+function setStateKey (key) {
+  return (_key = key)
+}
+
+/*  */
+
+var positionStore = Object.create(null);
+
+function setupScroll () {
+  // Prevent browser scroll behavior on History popstate
+  if ('scrollRestoration' in window.history) {
+    window.history.scrollRestoration = 'manual';
+  }
+  // Fix for #1585 for Firefox
+  // Fix for #2195 Add optional third attribute to workaround a bug in safari https://bugs.webkit.org/show_bug.cgi?id=182678
+  // Fix for #2774 Support for apps loaded from Windows file shares not mapped to network drives: replaced location.origin with
+  // window.location.protocol + '//' + window.location.host
+  // location.host contains the port and location.hostname doesn't
+  var protocolAndPath = window.location.protocol + '//' + window.location.host;
+  var absolutePath = window.location.href.replace(protocolAndPath, '');
+  // preserve existing history state as it could be overriden by the user
+  var stateCopy = extend({}, window.history.state);
+  stateCopy.key = getStateKey();
+  window.history.replaceState(stateCopy, '', absolutePath);
+  window.addEventListener('popstate', handlePopState);
+  return function () {
+    window.removeEventListener('popstate', handlePopState);
+  }
+}
+
+function handleScroll (
+  router,
+  to,
+  from,
+  isPop
+) {
+  if (!router.app) {
+    return
+  }
+
+  var behavior = router.options.scrollBehavior;
+  if (!behavior) {
+    return
+  }
+
+  if (true) {
+    assert(typeof behavior === 'function', "scrollBehavior must be a function");
+  }
+
+  // wait until re-render finishes before scrolling
+  router.app.$nextTick(function () {
+    var position = getScrollPosition();
+    var shouldScroll = behavior.call(
+      router,
+      to,
+      from,
+      isPop ? position : null
+    );
+
+    if (!shouldScroll) {
+      return
+    }
+
+    if (typeof shouldScroll.then === 'function') {
+      shouldScroll
+        .then(function (shouldScroll) {
+          scrollToPosition((shouldScroll), position);
+        })
+        .catch(function (err) {
+          if (true) {
+            assert(false, err.toString());
+          }
+        });
+    } else {
+      scrollToPosition(shouldScroll, position);
+    }
+  });
+}
+
+function saveScrollPosition () {
+  var key = getStateKey();
+  if (key) {
+    positionStore[key] = {
+      x: window.pageXOffset,
+      y: window.pageYOffset
+    };
+  }
+}
+
+function handlePopState (e) {
+  saveScrollPosition();
+  if (e.state && e.state.key) {
+    setStateKey(e.state.key);
+  }
+}
+
+function getScrollPosition () {
+  var key = getStateKey();
+  if (key) {
+    return positionStore[key]
+  }
+}
+
+function getElementPosition (el, offset) {
+  var docEl = document.documentElement;
+  var docRect = docEl.getBoundingClientRect();
+  var elRect = el.getBoundingClientRect();
+  return {
+    x: elRect.left - docRect.left - offset.x,
+    y: elRect.top - docRect.top - offset.y
+  }
+}
+
+function isValidPosition (obj) {
+  return isNumber(obj.x) || isNumber(obj.y)
+}
+
+function normalizePosition (obj) {
+  return {
+    x: isNumber(obj.x) ? obj.x : window.pageXOffset,
+    y: isNumber(obj.y) ? obj.y : window.pageYOffset
+  }
+}
+
+function normalizeOffset (obj) {
+  return {
+    x: isNumber(obj.x) ? obj.x : 0,
+    y: isNumber(obj.y) ? obj.y : 0
+  }
+}
+
+function isNumber (v) {
+  return typeof v === 'number'
+}
+
+var hashStartsWithNumberRE = /^#\d/;
+
+function scrollToPosition (shouldScroll, position) {
+  var isObject = typeof shouldScroll === 'object';
+  if (isObject && typeof shouldScroll.selector === 'string') {
+    // getElementById would still fail if the selector contains a more complicated query like #main[data-attr]
+    // but at the same time, it doesn't make much sense to select an element with an id and an extra selector
+    var el = hashStartsWithNumberRE.test(shouldScroll.selector) // $flow-disable-line
+      ? document.getElementById(shouldScroll.selector.slice(1)) // $flow-disable-line
+      : document.querySelector(shouldScroll.selector);
+
+    if (el) {
+      var offset =
+        shouldScroll.offset && typeof shouldScroll.offset === 'object'
+          ? shouldScroll.offset
+          : {};
+      offset = normalizeOffset(offset);
+      position = getElementPosition(el, offset);
+    } else if (isValidPosition(shouldScroll)) {
+      position = normalizePosition(shouldScroll);
+    }
+  } else if (isObject && isValidPosition(shouldScroll)) {
+    position = normalizePosition(shouldScroll);
+  }
+
+  if (position) {
+    // $flow-disable-line
+    if ('scrollBehavior' in document.documentElement.style) {
+      window.scrollTo({
+        left: position.x,
+        top: position.y,
+        // $flow-disable-line
+        behavior: shouldScroll.behavior
+      });
+    } else {
+      window.scrollTo(position.x, position.y);
+    }
+  }
+}
+
+/*  */
+
+var supportsPushState =
+  inBrowser &&
+  (function () {
+    var ua = window.navigator.userAgent;
+
+    if (
+      (ua.indexOf('Android 2.') !== -1 || ua.indexOf('Android 4.0') !== -1) &&
+      ua.indexOf('Mobile Safari') !== -1 &&
+      ua.indexOf('Chrome') === -1 &&
+      ua.indexOf('Windows Phone') === -1
+    ) {
+      return false
+    }
+
+    return window.history && typeof window.history.pushState === 'function'
+  })();
+
+function pushState (url, replace) {
+  saveScrollPosition();
+  // try...catch the pushState call to get around Safari
+  // DOM Exception 18 where it limits to 100 pushState calls
+  var history = window.history;
+  try {
+    if (replace) {
+      // preserve existing history state as it could be overriden by the user
+      var stateCopy = extend({}, history.state);
+      stateCopy.key = getStateKey();
+      history.replaceState(stateCopy, '', url);
+    } else {
+      history.pushState({ key: setStateKey(genStateKey()) }, '', url);
+    }
+  } catch (e) {
+    window.location[replace ? 'replace' : 'assign'](url);
+  }
+}
+
+function replaceState (url) {
+  pushState(url, true);
+}
+
+/*  */
+
+function runQueue (queue, fn, cb) {
+  var step = function (index) {
+    if (index >= queue.length) {
+      cb();
+    } else {
+      if (queue[index]) {
+        fn(queue[index], function () {
+          step(index + 1);
+        });
+      } else {
+        step(index + 1);
+      }
+    }
   };
+  step(0);
+}
 
-  _proto3.kill = function kill(targets, vars) {
-    if (vars === void 0) {
-      vars = "all";
-    }
+// When changing thing, also edit router.d.ts
+var NavigationFailureType = {
+  redirected: 2,
+  aborted: 4,
+  cancelled: 8,
+  duplicated: 16
+};
 
-    if (!targets && (!vars || vars === "all")) {
-      this._lazy = this._pt = 0;
-      return this.parent ? _interrupt(this) : this;
-    }
+function createNavigationRedirectedError (from, to) {
+  return createRouterError(
+    from,
+    to,
+    NavigationFailureType.redirected,
+    ("Redirected when going from \"" + (from.fullPath) + "\" to \"" + (stringifyRoute(
+      to
+    )) + "\" via a navigation guard.")
+  )
+}
 
-    if (this.timeline) {
-      var tDur = this.timeline.totalDuration();
-      this.timeline.killTweensOf(targets, vars, _overwritingTween && _overwritingTween.vars.overwrite !== true)._first || _interrupt(this); // if nothing is left tweening, interrupt.
+function createNavigationDuplicatedError (from, to) {
+  var error = createRouterError(
+    from,
+    to,
+    NavigationFailureType.duplicated,
+    ("Avoided redundant navigation to current location: \"" + (from.fullPath) + "\".")
+  );
+  // backwards compatible with the first introduction of Errors
+  error.name = 'NavigationDuplicated';
+  return error
+}
 
-      this.parent && tDur !== this.timeline.totalDuration() && _setDuration(this, this._dur * this.timeline._tDur / tDur, 0, 1); // if a nested tween is killed that changes the duration, it should affect this tween's duration. We must use the ratio, though, because sometimes the internal timeline is stretched like for keyframes where they don't all add up to whatever the parent tween's duration was set to.
+function createNavigationCancelledError (from, to) {
+  return createRouterError(
+    from,
+    to,
+    NavigationFailureType.cancelled,
+    ("Navigation cancelled from \"" + (from.fullPath) + "\" to \"" + (to.fullPath) + "\" with a new navigation.")
+  )
+}
 
-      return this;
-    }
+function createNavigationAbortedError (from, to) {
+  return createRouterError(
+    from,
+    to,
+    NavigationFailureType.aborted,
+    ("Navigation aborted from \"" + (from.fullPath) + "\" to \"" + (to.fullPath) + "\" via a navigation guard.")
+  )
+}
 
-    var parsedTargets = this._targets,
-        killingTargets = targets ? toArray(targets) : parsedTargets,
-        propTweenLookup = this._ptLookup,
-        firstPT = this._pt,
-        overwrittenProps,
-        curLookup,
-        curOverwriteProps,
-        props,
-        p,
-        pt,
-        i;
+function createRouterError (from, to, type, message) {
+  var error = new Error(message);
+  error._isRouter = true;
+  error.from = from;
+  error.to = to;
+  error.type = type;
 
-    if ((!vars || vars === "all") && _arraysMatch(parsedTargets, killingTargets)) {
-      vars === "all" && (this._pt = 0);
-      return _interrupt(this);
-    }
+  return error
+}
 
-    overwrittenProps = this._op = this._op || [];
+var propertiesToLog = ['params', 'query', 'hash'];
 
-    if (vars !== "all") {
-      //so people can pass in a comma-delimited list of property names
-      if (_isString(vars)) {
-        p = {};
+function stringifyRoute (to) {
+  if (typeof to === 'string') { return to }
+  if ('path' in to) { return to.path }
+  var location = {};
+  propertiesToLog.forEach(function (key) {
+    if (key in to) { location[key] = to[key]; }
+  });
+  return JSON.stringify(location, null, 2)
+}
 
-        _forEachName(vars, function (name) {
-          return p[name] = 1;
+function isError (err) {
+  return Object.prototype.toString.call(err).indexOf('Error') > -1
+}
+
+function isNavigationFailure (err, errorType) {
+  return (
+    isError(err) &&
+    err._isRouter &&
+    (errorType == null || err.type === errorType)
+  )
+}
+
+/*  */
+
+function resolveAsyncComponents (matched) {
+  return function (to, from, next) {
+    var hasAsync = false;
+    var pending = 0;
+    var error = null;
+
+    flatMapComponents(matched, function (def, _, match, key) {
+      // if it's a function and doesn't have cid attached,
+      // assume it's an async component resolve function.
+      // we are not using Vue's default async resolving mechanism because
+      // we want to halt the navigation until the incoming component has been
+      // resolved.
+      if (typeof def === 'function' && def.cid === undefined) {
+        hasAsync = true;
+        pending++;
+
+        var resolve = once(function (resolvedDef) {
+          if (isESModule(resolvedDef)) {
+            resolvedDef = resolvedDef.default;
+          }
+          // save resolved on async factory in case it's used elsewhere
+          def.resolved = typeof resolvedDef === 'function'
+            ? resolvedDef
+            : _Vue.extend(resolvedDef);
+          match.components[key] = resolvedDef;
+          pending--;
+          if (pending <= 0) {
+            next();
+          }
         });
 
-        vars = p;
-      }
+        var reject = once(function (reason) {
+          var msg = "Failed to resolve async component " + key + ": " + reason;
+           true && warn(false, msg);
+          if (!error) {
+            error = isError(reason)
+              ? reason
+              : new Error(msg);
+            next(error);
+          }
+        });
 
-      vars = _addAliasesToVars(parsedTargets, vars);
-    }
-
-    i = parsedTargets.length;
-
-    while (i--) {
-      if (~killingTargets.indexOf(parsedTargets[i])) {
-        curLookup = propTweenLookup[i];
-
-        if (vars === "all") {
-          overwrittenProps[i] = vars;
-          props = curLookup;
-          curOverwriteProps = {};
-        } else {
-          curOverwriteProps = overwrittenProps[i] = overwrittenProps[i] || {};
-          props = vars;
+        var res;
+        try {
+          res = def(resolve, reject);
+        } catch (e) {
+          reject(e);
         }
-
-        for (p in props) {
-          pt = curLookup && curLookup[p];
-
-          if (pt) {
-            if (!("kill" in pt.d) || pt.d.kill(p) === true) {
-              _removeLinkedListItem(this, pt, "_pt");
+        if (res) {
+          if (typeof res.then === 'function') {
+            res.then(resolve, reject);
+          } else {
+            // new syntax in Vue 2.3
+            var comp = res.component;
+            if (comp && typeof comp.then === 'function') {
+              comp.then(resolve, reject);
             }
-
-            delete curLookup[p];
-          }
-
-          if (curOverwriteProps !== "all") {
-            curOverwriteProps[p] = 1;
           }
         }
       }
-    }
-
-    this._initted && !this._pt && firstPT && _interrupt(this); //if all tweening properties are killed, kill the tween. Without this line, if there's a tween with multiple targets and then you killTweensOf() each target individually, the tween would technically still remain active and fire its onComplete even though there aren't any more properties tweening.
-
-    return this;
-  };
-
-  Tween.to = function to(targets, vars) {
-    return new Tween(targets, vars, arguments[2]);
-  };
-
-  Tween.from = function from(targets, vars) {
-    return _createTweenType(1, arguments);
-  };
-
-  Tween.delayedCall = function delayedCall(delay, callback, params, scope) {
-    return new Tween(callback, 0, {
-      immediateRender: false,
-      lazy: false,
-      overwrite: false,
-      delay: delay,
-      onComplete: callback,
-      onReverseComplete: callback,
-      onCompleteParams: params,
-      onReverseCompleteParams: params,
-      callbackScope: scope
     });
-  };
 
-  Tween.fromTo = function fromTo(targets, fromVars, toVars) {
-    return _createTweenType(2, arguments);
-  };
+    if (!hasAsync) { next(); }
+  }
+}
 
-  Tween.set = function set(targets, vars) {
-    vars.duration = 0;
-    vars.repeatDelay || (vars.repeat = 0);
-    return new Tween(targets, vars);
-  };
+function flatMapComponents (
+  matched,
+  fn
+) {
+  return flatten(matched.map(function (m) {
+    return Object.keys(m.components).map(function (key) { return fn(
+      m.components[key],
+      m.instances[key],
+      m, key
+    ); })
+  }))
+}
 
-  Tween.killTweensOf = function killTweensOf(targets, props, onlyActive) {
-    return _globalTimeline.killTweensOf(targets, props, onlyActive);
-  };
+function flatten (arr) {
+  return Array.prototype.concat.apply([], arr)
+}
 
-  return Tween;
-}(Animation);
+var hasSymbol =
+  typeof Symbol === 'function' &&
+  typeof Symbol.toStringTag === 'symbol';
 
-_setDefaults(Tween.prototype, {
-  _targets: [],
-  _lazy: 0,
-  _startAt: 0,
-  _op: 0,
-  _onInit: 0
-}); //add the pertinent timeline methods to Tween instances so that users can chain conveniently and create a timeline automatically. (removed due to concerns that it'd ultimately add to more confusion especially for beginners)
-// _forEachName("to,from,fromTo,set,call,add,addLabel,addPause", name => {
-// 	Tween.prototype[name] = function() {
-// 		let tl = new Timeline();
-// 		return _addToTimeline(tl, this)[name].apply(tl, toArray(arguments));
-// 	}
-// });
-//for backward compatibility. Leverage the timeline calls.
+function isESModule (obj) {
+  return obj.__esModule || (hasSymbol && obj[Symbol.toStringTag] === 'Module')
+}
 
+// in Webpack 2, require.ensure now also returns a Promise
+// so the resolve/reject functions may get called an extra time
+// if the user uses an arrow function shorthand that happens to
+// return that Promise.
+function once (fn) {
+  var called = false;
+  return function () {
+    var args = [], len = arguments.length;
+    while ( len-- ) args[ len ] = arguments[ len ];
 
-_forEachName("staggerTo,staggerFrom,staggerFromTo", function (name) {
-  Tween[name] = function () {
-    var tl = new Timeline(),
-        params = _slice.call(arguments, 0);
+    if (called) { return }
+    called = true;
+    return fn.apply(this, args)
+  }
+}
 
-    params.splice(name === "staggerFromTo" ? 5 : 4, 0, 0);
-    return tl[name].apply(tl, params);
-  };
-});
-/*
- * --------------------------------------------------------------------------------------
- * PROPTWEEN
- * --------------------------------------------------------------------------------------
- */
+/*  */
 
+var History = function History (router, base) {
+  this.router = router;
+  this.base = normalizeBase(base);
+  // start with a route object that stands for "nowhere"
+  this.current = START;
+  this.pending = null;
+  this.ready = false;
+  this.readyCbs = [];
+  this.readyErrorCbs = [];
+  this.errorCbs = [];
+  this.listeners = [];
+};
 
-var _setterPlain = function _setterPlain(target, property, value) {
-  return target[property] = value;
-},
-    _setterFunc = function _setterFunc(target, property, value) {
-  return target[property](value);
-},
-    _setterFuncWithParam = function _setterFuncWithParam(target, property, value, data) {
-  return target[property](data.fp, value);
-},
-    _setterAttribute = function _setterAttribute(target, property, value) {
-  return target.setAttribute(property, value);
-},
-    _getSetter = function _getSetter(target, property) {
-  return _isFunction(target[property]) ? _setterFunc : _isUndefined(target[property]) && target.setAttribute ? _setterAttribute : _setterPlain;
-},
-    _renderPlain = function _renderPlain(ratio, data) {
-  return data.set(data.t, data.p, Math.round((data.s + data.c * ratio) * 1000000) / 1000000, data);
-},
-    _renderBoolean = function _renderBoolean(ratio, data) {
-  return data.set(data.t, data.p, !!(data.s + data.c * ratio), data);
-},
-    _renderComplexString = function _renderComplexString(ratio, data) {
-  var pt = data._pt,
-      s = "";
+History.prototype.listen = function listen (cb) {
+  this.cb = cb;
+};
 
-  if (!ratio && data.b) {
-    //b = beginning string
-    s = data.b;
-  } else if (ratio === 1 && data.e) {
-    //e = ending string
-    s = data.e;
+History.prototype.onReady = function onReady (cb, errorCb) {
+  if (this.ready) {
+    cb();
   } else {
-    while (pt) {
-      s = pt.p + (pt.m ? pt.m(pt.s + pt.c * ratio) : Math.round((pt.s + pt.c * ratio) * 10000) / 10000) + s; //we use the "p" property for the text inbetween (like a suffix). And in the context of a complex string, the modifier (m) is typically just Math.round(), like for RGB colors.
-
-      pt = pt._next;
-    }
-
-    s += data.c; //we use the "c" of the PropTween to store the final chunk of non-numeric text.
-  }
-
-  data.set(data.t, data.p, s, data);
-},
-    _renderPropTweens = function _renderPropTweens(ratio, data) {
-  var pt = data._pt;
-
-  while (pt) {
-    pt.r(ratio, pt.d);
-    pt = pt._next;
-  }
-},
-    _addPluginModifier = function _addPluginModifier(modifier, tween, target, property) {
-  var pt = this._pt,
-      next;
-
-  while (pt) {
-    next = pt._next;
-    pt.p === property && pt.modifier(modifier, tween, target);
-    pt = next;
-  }
-},
-    _killPropTweensOf = function _killPropTweensOf(property) {
-  var pt = this._pt,
-      hasNonDependentRemaining,
-      next;
-
-  while (pt) {
-    next = pt._next;
-
-    if (pt.p === property && !pt.op || pt.op === property) {
-      _removeLinkedListItem(this, pt, "_pt");
-    } else if (!pt.dep) {
-      hasNonDependentRemaining = 1;
-    }
-
-    pt = next;
-  }
-
-  return !hasNonDependentRemaining;
-},
-    _setterWithModifier = function _setterWithModifier(target, property, value, data) {
-  data.mSet(target, property, data.m.call(data.tween, value, data.mt), data);
-},
-    _sortPropTweensByPriority = function _sortPropTweensByPriority(parent) {
-  var pt = parent._pt,
-      next,
-      pt2,
-      first,
-      last; //sorts the PropTween linked list in order of priority because some plugins need to do their work after ALL of the PropTweens were created (like RoundPropsPlugin and ModifiersPlugin)
-
-  while (pt) {
-    next = pt._next;
-    pt2 = first;
-
-    while (pt2 && pt2.pr > pt.pr) {
-      pt2 = pt2._next;
-    }
-
-    if (pt._prev = pt2 ? pt2._prev : last) {
-      pt._prev._next = pt;
-    } else {
-      first = pt;
-    }
-
-    if (pt._next = pt2) {
-      pt2._prev = pt;
-    } else {
-      last = pt;
-    }
-
-    pt = next;
-  }
-
-  parent._pt = first;
-}; //PropTween key: t = target, p = prop, r = renderer, d = data, s = start, c = change, op = overwriteProperty (ONLY populated when it's different than p), pr = priority, _next/_prev for the linked list siblings, set = setter, m = modifier, mSet = modifierSetter (the original setter, before a modifier was added)
-
-
-var PropTween = /*#__PURE__*/function () {
-  function PropTween(next, target, prop, start, change, renderer, data, setter, priority) {
-    this.t = target;
-    this.s = start;
-    this.c = change;
-    this.p = prop;
-    this.r = renderer || _renderPlain;
-    this.d = data || this;
-    this.set = setter || _setterPlain;
-    this.pr = priority || 0;
-    this._next = next;
-
-    if (next) {
-      next._prev = this;
-    }
-  }
-
-  var _proto4 = PropTween.prototype;
-
-  _proto4.modifier = function modifier(func, tween, target) {
-    this.mSet = this.mSet || this.set; //in case it was already set (a PropTween can only have one modifier)
-
-    this.set = _setterWithModifier;
-    this.m = func;
-    this.mt = target; //modifier target
-
-    this.tween = tween;
-  };
-
-  return PropTween;
-}(); //Initialization tasks
-
-_forEachName(_callbackNames + "parent,duration,ease,delay,overwrite,runBackwards,startAt,yoyo,immediateRender,repeat,repeatDelay,data,paused,reversed,lazy,callbackScope,stringFilter,id,yoyoEase,stagger,inherit,repeatRefresh,keyframes,autoRevert,scrollTrigger", function (name) {
-  return _reservedProps[name] = 1;
-});
-
-_globals.TweenMax = _globals.TweenLite = Tween;
-_globals.TimelineLite = _globals.TimelineMax = Timeline;
-_globalTimeline = new Timeline({
-  sortChildren: false,
-  defaults: _defaults,
-  autoRemoveChildren: true,
-  id: "root",
-  smoothChildTiming: true
-});
-_config.stringFilter = _colorStringFilter;
-/*
- * --------------------------------------------------------------------------------------
- * GSAP
- * --------------------------------------------------------------------------------------
- */
-
-var _gsap = {
-  registerPlugin: function registerPlugin() {
-    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      args[_key2] = arguments[_key2];
-    }
-
-    args.forEach(function (config) {
-      return _createPlugin(config);
-    });
-  },
-  timeline: function timeline(vars) {
-    return new Timeline(vars);
-  },
-  getTweensOf: function getTweensOf(targets, onlyActive) {
-    return _globalTimeline.getTweensOf(targets, onlyActive);
-  },
-  getProperty: function getProperty(target, property, unit, uncache) {
-    _isString(target) && (target = toArray(target)[0]); //in case selector text or an array is passed in
-
-    var getter = _getCache(target || {}).get,
-        format = unit ? _passThrough : _numericIfPossible;
-
-    unit === "native" && (unit = "");
-    return !target ? target : !property ? function (property, unit, uncache) {
-      return format((_plugins[property] && _plugins[property].get || getter)(target, property, unit, uncache));
-    } : format((_plugins[property] && _plugins[property].get || getter)(target, property, unit, uncache));
-  },
-  quickSetter: function quickSetter(target, property, unit) {
-    target = toArray(target);
-
-    if (target.length > 1) {
-      var setters = target.map(function (t) {
-        return gsap.quickSetter(t, property, unit);
-      }),
-          l = setters.length;
-      return function (value) {
-        var i = l;
-
-        while (i--) {
-          setters[i](value);
-        }
-      };
-    }
-
-    target = target[0] || {};
-
-    var Plugin = _plugins[property],
-        cache = _getCache(target),
-        p = cache.harness && (cache.harness.aliases || {})[property] || property,
-        // in case it's an alias, like "rotate" for "rotation".
-    setter = Plugin ? function (value) {
-      var p = new Plugin();
-      _quickTween._pt = 0;
-      p.init(target, unit ? value + unit : value, _quickTween, 0, [target]);
-      p.render(1, p);
-      _quickTween._pt && _renderPropTweens(1, _quickTween);
-    } : cache.set(target, p);
-
-    return Plugin ? setter : function (value) {
-      return setter(target, p, unit ? value + unit : value, cache, 1);
-    };
-  },
-  isTweening: function isTweening(targets) {
-    return _globalTimeline.getTweensOf(targets, true).length > 0;
-  },
-  defaults: function defaults(value) {
-    value && value.ease && (value.ease = _parseEase(value.ease, _defaults.ease));
-    return _mergeDeep(_defaults, value || {});
-  },
-  config: function config(value) {
-    return _mergeDeep(_config, value || {});
-  },
-  registerEffect: function registerEffect(_ref3) {
-    var name = _ref3.name,
-        effect = _ref3.effect,
-        plugins = _ref3.plugins,
-        defaults = _ref3.defaults,
-        extendTimeline = _ref3.extendTimeline;
-    (plugins || "").split(",").forEach(function (pluginName) {
-      return pluginName && !_plugins[pluginName] && !_globals[pluginName] && _warn(name + " effect requires " + pluginName + " plugin.");
-    });
-
-    _effects[name] = function (targets, vars, tl) {
-      return effect(toArray(targets), _setDefaults(vars || {}, defaults), tl);
-    };
-
-    if (extendTimeline) {
-      Timeline.prototype[name] = function (targets, vars, position) {
-        return this.add(_effects[name](targets, _isObject(vars) ? vars : (position = vars) && {}, this), position);
-      };
-    }
-  },
-  registerEase: function registerEase(name, ease) {
-    _easeMap[name] = _parseEase(ease);
-  },
-  parseEase: function parseEase(ease, defaultEase) {
-    return arguments.length ? _parseEase(ease, defaultEase) : _easeMap;
-  },
-  getById: function getById(id) {
-    return _globalTimeline.getById(id);
-  },
-  exportRoot: function exportRoot(vars, includeDelayedCalls) {
-    if (vars === void 0) {
-      vars = {};
-    }
-
-    var tl = new Timeline(vars),
-        child,
-        next;
-    tl.smoothChildTiming = _isNotFalse(vars.smoothChildTiming);
-
-    _globalTimeline.remove(tl);
-
-    tl._dp = 0; //otherwise it'll get re-activated when adding children and be re-introduced into _globalTimeline's linked list (then added to itself).
-
-    tl._time = tl._tTime = _globalTimeline._time;
-    child = _globalTimeline._first;
-
-    while (child) {
-      next = child._next;
-
-      if (includeDelayedCalls || !(!child._dur && child instanceof Tween && child.vars.onComplete === child._targets[0])) {
-        _addToTimeline(tl, child, child._start - child._delay);
-      }
-
-      child = next;
-    }
-
-    _addToTimeline(_globalTimeline, tl, 0);
-
-    return tl;
-  },
-  utils: {
-    wrap: wrap,
-    wrapYoyo: wrapYoyo,
-    distribute: distribute,
-    random: random,
-    snap: snap,
-    normalize: normalize,
-    getUnit: getUnit,
-    clamp: clamp,
-    splitColor: splitColor,
-    toArray: toArray,
-    selector: selector,
-    mapRange: mapRange,
-    pipe: pipe,
-    unitize: unitize,
-    interpolate: interpolate,
-    shuffle: shuffle
-  },
-  install: _install,
-  effects: _effects,
-  ticker: _ticker,
-  updateRoot: Timeline.updateRoot,
-  plugins: _plugins,
-  globalTimeline: _globalTimeline,
-  core: {
-    PropTween: PropTween,
-    globals: _addGlobal,
-    Tween: Tween,
-    Timeline: Timeline,
-    Animation: Animation,
-    getCache: _getCache,
-    _removeLinkedListItem: _removeLinkedListItem,
-    suppressOverwrites: function suppressOverwrites(value) {
-      return _suppressOverwrites = value;
+    this.readyCbs.push(cb);
+    if (errorCb) {
+      this.readyErrorCbs.push(errorCb);
     }
   }
 };
 
-_forEachName("to,from,fromTo,delayedCall,set,killTweensOf", function (name) {
-  return _gsap[name] = Tween[name];
-});
+History.prototype.onError = function onError (errorCb) {
+  this.errorCbs.push(errorCb);
+};
 
-_ticker.add(Timeline.updateRoot);
+History.prototype.transitionTo = function transitionTo (
+  location,
+  onComplete,
+  onAbort
+) {
+    var this$1 = this;
 
-_quickTween = _gsap.to({}, {
-  duration: 0
-}); // ---- EXTRA PLUGINS --------------------------------------------------------
-
-var _getPluginPropTween = function _getPluginPropTween(plugin, prop) {
-  var pt = plugin._pt;
-
-  while (pt && pt.p !== prop && pt.op !== prop && pt.fp !== prop) {
-    pt = pt._next;
+  var route;
+  // catch redirect option https://github.com/vuejs/vue-router/issues/3201
+  try {
+    route = this.router.match(location, this.current);
+  } catch (e) {
+    this.errorCbs.forEach(function (cb) {
+      cb(e);
+    });
+    // Exception should still be thrown
+    throw e
   }
+  var prev = this.current;
+  this.confirmTransition(
+    route,
+    function () {
+      this$1.updateRoute(route);
+      onComplete && onComplete(route);
+      this$1.ensureURL();
+      this$1.router.afterHooks.forEach(function (hook) {
+        hook && hook(route, prev);
+      });
 
-  return pt;
-},
-    _addModifiers = function _addModifiers(tween, modifiers) {
-  var targets = tween._targets,
-      p,
-      i,
-      pt;
-
-  for (p in modifiers) {
-    i = targets.length;
-
-    while (i--) {
-      pt = tween._ptLookup[i][p];
-
-      if (pt && (pt = pt.d)) {
-        if (pt._pt) {
-          // is a plugin
-          pt = _getPluginPropTween(pt, p);
+      // fire ready cbs once
+      if (!this$1.ready) {
+        this$1.ready = true;
+        this$1.readyCbs.forEach(function (cb) {
+          cb(route);
+        });
+      }
+    },
+    function (err) {
+      if (onAbort) {
+        onAbort(err);
+      }
+      if (err && !this$1.ready) {
+        // Initial redirection should not mark the history as ready yet
+        // because it's triggered by the redirection instead
+        // https://github.com/vuejs/vue-router/issues/3225
+        // https://github.com/vuejs/vue-router/issues/3331
+        if (!isNavigationFailure(err, NavigationFailureType.redirected) || prev !== START) {
+          this$1.ready = true;
+          this$1.readyErrorCbs.forEach(function (cb) {
+            cb(err);
+          });
         }
-
-        pt && pt.modifier && pt.modifier(modifiers[p], tween, targets[i], p);
       }
     }
+  );
+};
+
+History.prototype.confirmTransition = function confirmTransition (route, onComplete, onAbort) {
+    var this$1 = this;
+
+  var current = this.current;
+  this.pending = route;
+  var abort = function (err) {
+    // changed after adding errors with
+    // https://github.com/vuejs/vue-router/pull/3047 before that change,
+    // redirect and aborted navigation would produce an err == null
+    if (!isNavigationFailure(err) && isError(err)) {
+      if (this$1.errorCbs.length) {
+        this$1.errorCbs.forEach(function (cb) {
+          cb(err);
+        });
+      } else {
+        warn(false, 'uncaught error during route navigation:');
+        console.error(err);
+      }
+    }
+    onAbort && onAbort(err);
+  };
+  var lastRouteIndex = route.matched.length - 1;
+  var lastCurrentIndex = current.matched.length - 1;
+  if (
+    isSameRoute(route, current) &&
+    // in the case the route map has been dynamically appended to
+    lastRouteIndex === lastCurrentIndex &&
+    route.matched[lastRouteIndex] === current.matched[lastCurrentIndex]
+  ) {
+    this.ensureURL();
+    return abort(createNavigationDuplicatedError(current, route))
   }
-},
-    _buildModifierPlugin = function _buildModifierPlugin(name, modifier) {
-  return {
-    name: name,
-    rawVars: 1,
-    //don't pre-process function-based values or "random()" strings.
-    init: function init(target, vars, tween) {
-      tween._onInit = function (tween) {
-        var temp, p;
 
-        if (_isString(vars)) {
-          temp = {};
+  var ref = resolveQueue(
+    this.current.matched,
+    route.matched
+  );
+    var updated = ref.updated;
+    var deactivated = ref.deactivated;
+    var activated = ref.activated;
 
-          _forEachName(vars, function (name) {
-            return temp[name] = 1;
-          }); //if the user passes in a comma-delimited list of property names to roundProps, like "x,y", we round to whole numbers.
+  var queue = [].concat(
+    // in-component leave guards
+    extractLeaveGuards(deactivated),
+    // global before hooks
+    this.router.beforeHooks,
+    // in-component update hooks
+    extractUpdateHooks(updated),
+    // in-config enter guards
+    activated.map(function (m) { return m.beforeEnter; }),
+    // async components
+    resolveAsyncComponents(activated)
+  );
 
-
-          vars = temp;
-        }
-
-        if (modifier) {
-          temp = {};
-
-          for (p in vars) {
-            temp[p] = modifier(vars[p]);
+  var iterator = function (hook, next) {
+    if (this$1.pending !== route) {
+      return abort(createNavigationCancelledError(current, route))
+    }
+    try {
+      hook(route, current, function (to) {
+        if (to === false) {
+          // next(false) -> abort navigation, ensure current URL
+          this$1.ensureURL(true);
+          abort(createNavigationAbortedError(current, route));
+        } else if (isError(to)) {
+          this$1.ensureURL(true);
+          abort(to);
+        } else if (
+          typeof to === 'string' ||
+          (typeof to === 'object' &&
+            (typeof to.path === 'string' || typeof to.name === 'string'))
+        ) {
+          // next('/') or next({ path: '/' }) -> redirect
+          abort(createNavigationRedirectedError(current, route));
+          if (typeof to === 'object' && to.replace) {
+            this$1.replace(to);
+          } else {
+            this$1.push(to);
           }
-
-          vars = temp;
+        } else {
+          // confirm transition and pass on the value
+          next(to);
         }
-
-        _addModifiers(tween, vars);
-      };
+      });
+    } catch (e) {
+      abort(e);
     }
   };
-}; //register core plugins
 
+  runQueue(queue, iterator, function () {
+    // wait until async components are resolved before
+    // extracting in-component enter guards
+    var enterGuards = extractEnterGuards(activated);
+    var queue = enterGuards.concat(this$1.router.resolveHooks);
+    runQueue(queue, iterator, function () {
+      if (this$1.pending !== route) {
+        return abort(createNavigationCancelledError(current, route))
+      }
+      this$1.pending = null;
+      onComplete(route);
+      if (this$1.router.app) {
+        this$1.router.app.$nextTick(function () {
+          handleRouteEntered(route);
+        });
+      }
+    });
+  });
+};
 
-var gsap = _gsap.registerPlugin({
-  name: "attr",
-  init: function init(target, vars, tween, index, targets) {
-    var p, pt;
+History.prototype.updateRoute = function updateRoute (route) {
+  this.current = route;
+  this.cb && this.cb(route);
+};
 
-    for (p in vars) {
-      pt = this.add(target, "setAttribute", (target.getAttribute(p) || 0) + "", vars[p], index, targets, 0, 0, p);
-      pt && (pt.op = p);
+History.prototype.setupListeners = function setupListeners () {
+  // Default implementation is empty
+};
 
-      this._props.push(p);
+History.prototype.teardown = function teardown () {
+  // clean up event listeners
+  // https://github.com/vuejs/vue-router/issues/2341
+  this.listeners.forEach(function (cleanupListener) {
+    cleanupListener();
+  });
+  this.listeners = [];
+
+  // reset current history route
+  // https://github.com/vuejs/vue-router/issues/3294
+  this.current = START;
+  this.pending = null;
+};
+
+function normalizeBase (base) {
+  if (!base) {
+    if (inBrowser) {
+      // respect <base> tag
+      var baseEl = document.querySelector('base');
+      base = (baseEl && baseEl.getAttribute('href')) || '/';
+      // strip full URL origin
+      base = base.replace(/^https?:\/\/[^\/]+/, '');
+    } else {
+      base = '/';
     }
   }
-}, {
-  name: "endArray",
-  init: function init(target, value) {
-    var i = value.length;
+  // make sure there's the starting slash
+  if (base.charAt(0) !== '/') {
+    base = '/' + base;
+  }
+  // remove trailing slash
+  return base.replace(/\/$/, '')
+}
 
-    while (i--) {
-      this.add(target, i, target[i] || 0, value[i]);
+function resolveQueue (
+  current,
+  next
+) {
+  var i;
+  var max = Math.max(current.length, next.length);
+  for (i = 0; i < max; i++) {
+    if (current[i] !== next[i]) {
+      break
     }
   }
-}, _buildModifierPlugin("roundProps", _roundModifier), _buildModifierPlugin("modifiers"), _buildModifierPlugin("snap", snap)) || _gsap; //to prevent the core plugins from being dropped via aggressive tree shaking, we must include them in the variable declaration in this way.
+  return {
+    updated: next.slice(0, i),
+    activated: next.slice(i),
+    deactivated: current.slice(i)
+  }
+}
 
-Tween.version = Timeline.version = gsap.version = "3.9.1";
-_coreReady = 1;
-_windowExists() && _wake();
-var Power0 = _easeMap.Power0,
-    Power1 = _easeMap.Power1,
-    Power2 = _easeMap.Power2,
-    Power3 = _easeMap.Power3,
-    Power4 = _easeMap.Power4,
-    Linear = _easeMap.Linear,
-    Quad = _easeMap.Quad,
-    Cubic = _easeMap.Cubic,
-    Quart = _easeMap.Quart,
-    Quint = _easeMap.Quint,
-    Strong = _easeMap.Strong,
-    Elastic = _easeMap.Elastic,
-    Back = _easeMap.Back,
-    SteppedEase = _easeMap.SteppedEase,
-    Bounce = _easeMap.Bounce,
-    Sine = _easeMap.Sine,
-    Expo = _easeMap.Expo,
-    Circ = _easeMap.Circ;
+function extractGuards (
+  records,
+  name,
+  bind,
+  reverse
+) {
+  var guards = flatMapComponents(records, function (def, instance, match, key) {
+    var guard = extractGuard(def, name);
+    if (guard) {
+      return Array.isArray(guard)
+        ? guard.map(function (guard) { return bind(guard, instance, match, key); })
+        : bind(guard, instance, match, key)
+    }
+  });
+  return flatten(reverse ? guards.reverse() : guards)
+}
 
- //export some internal methods/orojects for use in CSSPlugin so that we can externalize that file and allow custom builds that exclude it.
+function extractGuard (
+  def,
+  key
+) {
+  if (typeof def !== 'function') {
+    // extend now so that global mixins are applied.
+    def = _Vue.extend(def);
+  }
+  return def.options[key]
+}
 
+function extractLeaveGuards (deactivated) {
+  return extractGuards(deactivated, 'beforeRouteLeave', bindGuard, true)
+}
 
+function extractUpdateHooks (updated) {
+  return extractGuards(updated, 'beforeRouteUpdate', bindGuard)
+}
 
-/***/ }),
+function bindGuard (guard, instance) {
+  if (instance) {
+    return function boundRouteGuard () {
+      return guard.apply(instance, arguments)
+    }
+  }
+}
 
-/***/ "./front_ce/node_modules/gsap/index.js":
-/*!*********************************************!*\
-  !*** ./front_ce/node_modules/gsap/index.js ***!
-  \*********************************************/
-/*! exports provided: gsap, default, CSSPlugin, TweenMax, TweenLite, TimelineMax, TimelineLite, Power0, Power1, Power2, Power3, Power4, Linear, Quad, Cubic, Quart, Quint, Strong, Elastic, Back, SteppedEase, Bounce, Sine, Expo, Circ */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+function extractEnterGuards (
+  activated
+) {
+  return extractGuards(
+    activated,
+    'beforeRouteEnter',
+    function (guard, _, match, key) {
+      return bindEnterGuard(guard, match, key)
+    }
+  )
+}
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "gsap", function() { return gsapWithCSS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return gsapWithCSS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TweenMax", function() { return TweenMaxWithCSS; });
-/* harmony import */ var _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./gsap-core.js */ "./front_ce/node_modules/gsap/gsap-core.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TweenLite", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["TweenLite"]; });
+function bindEnterGuard (
+  guard,
+  match,
+  key
+) {
+  return function routeEnterGuard (to, from, next) {
+    return guard(to, from, function (cb) {
+      if (typeof cb === 'function') {
+        if (!match.enteredCbs[key]) {
+          match.enteredCbs[key] = [];
+        }
+        match.enteredCbs[key].push(cb);
+      }
+      next(cb);
+    })
+  }
+}
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TimelineMax", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["TimelineMax"]; });
+/*  */
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TimelineLite", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["TimelineLite"]; });
+var HTML5History = /*@__PURE__*/(function (History) {
+  function HTML5History (router, base) {
+    History.call(this, router, base);
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Power0", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["Power0"]; });
+    this._startLocation = getLocation(this.base);
+  }
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Power1", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["Power1"]; });
+  if ( History ) HTML5History.__proto__ = History;
+  HTML5History.prototype = Object.create( History && History.prototype );
+  HTML5History.prototype.constructor = HTML5History;
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Power2", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["Power2"]; });
+  HTML5History.prototype.setupListeners = function setupListeners () {
+    var this$1 = this;
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Power3", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["Power3"]; });
+    if (this.listeners.length > 0) {
+      return
+    }
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Power4", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["Power4"]; });
+    var router = this.router;
+    var expectScroll = router.options.scrollBehavior;
+    var supportsScroll = supportsPushState && expectScroll;
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Linear", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["Linear"]; });
+    if (supportsScroll) {
+      this.listeners.push(setupScroll());
+    }
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Quad", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["Quad"]; });
+    var handleRoutingEvent = function () {
+      var current = this$1.current;
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Cubic", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["Cubic"]; });
+      // Avoiding first `popstate` event dispatched in some browsers but first
+      // history route not updated since async guard at the same time.
+      var location = getLocation(this$1.base);
+      if (this$1.current === START && location === this$1._startLocation) {
+        return
+      }
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Quart", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["Quart"]; });
+      this$1.transitionTo(location, function (route) {
+        if (supportsScroll) {
+          handleScroll(router, route, current, true);
+        }
+      });
+    };
+    window.addEventListener('popstate', handleRoutingEvent);
+    this.listeners.push(function () {
+      window.removeEventListener('popstate', handleRoutingEvent);
+    });
+  };
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Quint", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["Quint"]; });
+  HTML5History.prototype.go = function go (n) {
+    window.history.go(n);
+  };
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Strong", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["Strong"]; });
+  HTML5History.prototype.push = function push (location, onComplete, onAbort) {
+    var this$1 = this;
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Elastic", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["Elastic"]; });
+    var ref = this;
+    var fromRoute = ref.current;
+    this.transitionTo(location, function (route) {
+      pushState(cleanPath(this$1.base + route.fullPath));
+      handleScroll(this$1.router, route, fromRoute, false);
+      onComplete && onComplete(route);
+    }, onAbort);
+  };
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Back", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["Back"]; });
+  HTML5History.prototype.replace = function replace (location, onComplete, onAbort) {
+    var this$1 = this;
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SteppedEase", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["SteppedEase"]; });
+    var ref = this;
+    var fromRoute = ref.current;
+    this.transitionTo(location, function (route) {
+      replaceState(cleanPath(this$1.base + route.fullPath));
+      handleScroll(this$1.router, route, fromRoute, false);
+      onComplete && onComplete(route);
+    }, onAbort);
+  };
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Bounce", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["Bounce"]; });
+  HTML5History.prototype.ensureURL = function ensureURL (push) {
+    if (getLocation(this.base) !== this.current.fullPath) {
+      var current = cleanPath(this.base + this.current.fullPath);
+      push ? pushState(current) : replaceState(current);
+    }
+  };
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Sine", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["Sine"]; });
+  HTML5History.prototype.getCurrentLocation = function getCurrentLocation () {
+    return getLocation(this.base)
+  };
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Expo", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["Expo"]; });
+  return HTML5History;
+}(History));
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Circ", function() { return _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["Circ"]; });
+function getLocation (base) {
+  var path = window.location.pathname;
+  if (base && path.toLowerCase().indexOf(base.toLowerCase()) === 0) {
+    path = path.slice(base.length);
+  }
+  return (path || '/') + window.location.search + window.location.hash
+}
 
-/* harmony import */ var _CSSPlugin_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CSSPlugin.js */ "./front_ce/node_modules/gsap/CSSPlugin.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "CSSPlugin", function() { return _CSSPlugin_js__WEBPACK_IMPORTED_MODULE_1__["CSSPlugin"]; });
+/*  */
 
+var HashHistory = /*@__PURE__*/(function (History) {
+  function HashHistory (router, base, fallback) {
+    History.call(this, router, base);
+    // check history fallback deeplinking
+    if (fallback && checkFallback(this.base)) {
+      return
+    }
+    ensureSlash();
+  }
 
+  if ( History ) HashHistory.__proto__ = History;
+  HashHistory.prototype = Object.create( History && History.prototype );
+  HashHistory.prototype.constructor = HashHistory;
 
-var gsapWithCSS = _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["gsap"].registerPlugin(_CSSPlugin_js__WEBPACK_IMPORTED_MODULE_1__["CSSPlugin"]) || _gsap_core_js__WEBPACK_IMPORTED_MODULE_0__["gsap"],
-    // to protect from tree shaking
-TweenMaxWithCSS = gsapWithCSS.core.Tween;
+  // this is delayed until the app mounts
+  // to avoid the hashchange listener being fired too early
+  HashHistory.prototype.setupListeners = function setupListeners () {
+    var this$1 = this;
+
+    if (this.listeners.length > 0) {
+      return
+    }
+
+    var router = this.router;
+    var expectScroll = router.options.scrollBehavior;
+    var supportsScroll = supportsPushState && expectScroll;
+
+    if (supportsScroll) {
+      this.listeners.push(setupScroll());
+    }
+
+    var handleRoutingEvent = function () {
+      var current = this$1.current;
+      if (!ensureSlash()) {
+        return
+      }
+      this$1.transitionTo(getHash(), function (route) {
+        if (supportsScroll) {
+          handleScroll(this$1.router, route, current, true);
+        }
+        if (!supportsPushState) {
+          replaceHash(route.fullPath);
+        }
+      });
+    };
+    var eventType = supportsPushState ? 'popstate' : 'hashchange';
+    window.addEventListener(
+      eventType,
+      handleRoutingEvent
+    );
+    this.listeners.push(function () {
+      window.removeEventListener(eventType, handleRoutingEvent);
+    });
+  };
+
+  HashHistory.prototype.push = function push (location, onComplete, onAbort) {
+    var this$1 = this;
+
+    var ref = this;
+    var fromRoute = ref.current;
+    this.transitionTo(
+      location,
+      function (route) {
+        pushHash(route.fullPath);
+        handleScroll(this$1.router, route, fromRoute, false);
+        onComplete && onComplete(route);
+      },
+      onAbort
+    );
+  };
+
+  HashHistory.prototype.replace = function replace (location, onComplete, onAbort) {
+    var this$1 = this;
+
+    var ref = this;
+    var fromRoute = ref.current;
+    this.transitionTo(
+      location,
+      function (route) {
+        replaceHash(route.fullPath);
+        handleScroll(this$1.router, route, fromRoute, false);
+        onComplete && onComplete(route);
+      },
+      onAbort
+    );
+  };
+
+  HashHistory.prototype.go = function go (n) {
+    window.history.go(n);
+  };
+
+  HashHistory.prototype.ensureURL = function ensureURL (push) {
+    var current = this.current.fullPath;
+    if (getHash() !== current) {
+      push ? pushHash(current) : replaceHash(current);
+    }
+  };
+
+  HashHistory.prototype.getCurrentLocation = function getCurrentLocation () {
+    return getHash()
+  };
+
+  return HashHistory;
+}(History));
+
+function checkFallback (base) {
+  var location = getLocation(base);
+  if (!/^\/#/.test(location)) {
+    window.location.replace(cleanPath(base + '/#' + location));
+    return true
+  }
+}
+
+function ensureSlash () {
+  var path = getHash();
+  if (path.charAt(0) === '/') {
+    return true
+  }
+  replaceHash('/' + path);
+  return false
+}
+
+function getHash () {
+  // We can't use window.location.hash here because it's not
+  // consistent across browsers - Firefox will pre-decode it!
+  var href = window.location.href;
+  var index = href.indexOf('#');
+  // empty path
+  if (index < 0) { return '' }
+
+  href = href.slice(index + 1);
+
+  return href
+}
+
+function getUrl (path) {
+  var href = window.location.href;
+  var i = href.indexOf('#');
+  var base = i >= 0 ? href.slice(0, i) : href;
+  return (base + "#" + path)
+}
+
+function pushHash (path) {
+  if (supportsPushState) {
+    pushState(getUrl(path));
+  } else {
+    window.location.hash = path;
+  }
+}
+
+function replaceHash (path) {
+  if (supportsPushState) {
+    replaceState(getUrl(path));
+  } else {
+    window.location.replace(getUrl(path));
+  }
+}
+
+/*  */
+
+var AbstractHistory = /*@__PURE__*/(function (History) {
+  function AbstractHistory (router, base) {
+    History.call(this, router, base);
+    this.stack = [];
+    this.index = -1;
+  }
+
+  if ( History ) AbstractHistory.__proto__ = History;
+  AbstractHistory.prototype = Object.create( History && History.prototype );
+  AbstractHistory.prototype.constructor = AbstractHistory;
+
+  AbstractHistory.prototype.push = function push (location, onComplete, onAbort) {
+    var this$1 = this;
+
+    this.transitionTo(
+      location,
+      function (route) {
+        this$1.stack = this$1.stack.slice(0, this$1.index + 1).concat(route);
+        this$1.index++;
+        onComplete && onComplete(route);
+      },
+      onAbort
+    );
+  };
+
+  AbstractHistory.prototype.replace = function replace (location, onComplete, onAbort) {
+    var this$1 = this;
+
+    this.transitionTo(
+      location,
+      function (route) {
+        this$1.stack = this$1.stack.slice(0, this$1.index).concat(route);
+        onComplete && onComplete(route);
+      },
+      onAbort
+    );
+  };
+
+  AbstractHistory.prototype.go = function go (n) {
+    var this$1 = this;
+
+    var targetIndex = this.index + n;
+    if (targetIndex < 0 || targetIndex >= this.stack.length) {
+      return
+    }
+    var route = this.stack[targetIndex];
+    this.confirmTransition(
+      route,
+      function () {
+        var prev = this$1.current;
+        this$1.index = targetIndex;
+        this$1.updateRoute(route);
+        this$1.router.afterHooks.forEach(function (hook) {
+          hook && hook(route, prev);
+        });
+      },
+      function (err) {
+        if (isNavigationFailure(err, NavigationFailureType.duplicated)) {
+          this$1.index = targetIndex;
+        }
+      }
+    );
+  };
+
+  AbstractHistory.prototype.getCurrentLocation = function getCurrentLocation () {
+    var current = this.stack[this.stack.length - 1];
+    return current ? current.fullPath : '/'
+  };
+
+  AbstractHistory.prototype.ensureURL = function ensureURL () {
+    // noop
+  };
+
+  return AbstractHistory;
+}(History));
+
+/*  */
+
+var VueRouter = function VueRouter (options) {
+  if ( options === void 0 ) options = {};
+
+  this.app = null;
+  this.apps = [];
+  this.options = options;
+  this.beforeHooks = [];
+  this.resolveHooks = [];
+  this.afterHooks = [];
+  this.matcher = createMatcher(options.routes || [], this);
+
+  var mode = options.mode || 'hash';
+  this.fallback =
+    mode === 'history' && !supportsPushState && options.fallback !== false;
+  if (this.fallback) {
+    mode = 'hash';
+  }
+  if (!inBrowser) {
+    mode = 'abstract';
+  }
+  this.mode = mode;
+
+  switch (mode) {
+    case 'history':
+      this.history = new HTML5History(this, options.base);
+      break
+    case 'hash':
+      this.history = new HashHistory(this, options.base, this.fallback);
+      break
+    case 'abstract':
+      this.history = new AbstractHistory(this, options.base);
+      break
+    default:
+      if (true) {
+        assert(false, ("invalid mode: " + mode));
+      }
+  }
+};
+
+var prototypeAccessors = { currentRoute: { configurable: true } };
+
+VueRouter.prototype.match = function match (raw, current, redirectedFrom) {
+  return this.matcher.match(raw, current, redirectedFrom)
+};
+
+prototypeAccessors.currentRoute.get = function () {
+  return this.history && this.history.current
+};
+
+VueRouter.prototype.init = function init (app /* Vue component instance */) {
+    var this$1 = this;
+
+   true &&
+    assert(
+      install.installed,
+      "not installed. Make sure to call `Vue.use(VueRouter)` " +
+        "before creating root instance."
+    );
+
+  this.apps.push(app);
+
+  // set up app destroyed handler
+  // https://github.com/vuejs/vue-router/issues/2639
+  app.$once('hook:destroyed', function () {
+    // clean out app from this.apps array once destroyed
+    var index = this$1.apps.indexOf(app);
+    if (index > -1) { this$1.apps.splice(index, 1); }
+    // ensure we still have a main app or null if no apps
+    // we do not release the router so it can be reused
+    if (this$1.app === app) { this$1.app = this$1.apps[0] || null; }
+
+    if (!this$1.app) { this$1.history.teardown(); }
+  });
+
+  // main app previously initialized
+  // return as we don't need to set up new history listener
+  if (this.app) {
+    return
+  }
+
+  this.app = app;
+
+  var history = this.history;
+
+  if (history instanceof HTML5History || history instanceof HashHistory) {
+    var handleInitialScroll = function (routeOrError) {
+      var from = history.current;
+      var expectScroll = this$1.options.scrollBehavior;
+      var supportsScroll = supportsPushState && expectScroll;
+
+      if (supportsScroll && 'fullPath' in routeOrError) {
+        handleScroll(this$1, routeOrError, from, false);
+      }
+    };
+    var setupListeners = function (routeOrError) {
+      history.setupListeners();
+      handleInitialScroll(routeOrError);
+    };
+    history.transitionTo(
+      history.getCurrentLocation(),
+      setupListeners,
+      setupListeners
+    );
+  }
+
+  history.listen(function (route) {
+    this$1.apps.forEach(function (app) {
+      app._route = route;
+    });
+  });
+};
+
+VueRouter.prototype.beforeEach = function beforeEach (fn) {
+  return registerHook(this.beforeHooks, fn)
+};
+
+VueRouter.prototype.beforeResolve = function beforeResolve (fn) {
+  return registerHook(this.resolveHooks, fn)
+};
+
+VueRouter.prototype.afterEach = function afterEach (fn) {
+  return registerHook(this.afterHooks, fn)
+};
+
+VueRouter.prototype.onReady = function onReady (cb, errorCb) {
+  this.history.onReady(cb, errorCb);
+};
+
+VueRouter.prototype.onError = function onError (errorCb) {
+  this.history.onError(errorCb);
+};
+
+VueRouter.prototype.push = function push (location, onComplete, onAbort) {
+    var this$1 = this;
+
+  // $flow-disable-line
+  if (!onComplete && !onAbort && typeof Promise !== 'undefined') {
+    return new Promise(function (resolve, reject) {
+      this$1.history.push(location, resolve, reject);
+    })
+  } else {
+    this.history.push(location, onComplete, onAbort);
+  }
+};
+
+VueRouter.prototype.replace = function replace (location, onComplete, onAbort) {
+    var this$1 = this;
+
+  // $flow-disable-line
+  if (!onComplete && !onAbort && typeof Promise !== 'undefined') {
+    return new Promise(function (resolve, reject) {
+      this$1.history.replace(location, resolve, reject);
+    })
+  } else {
+    this.history.replace(location, onComplete, onAbort);
+  }
+};
+
+VueRouter.prototype.go = function go (n) {
+  this.history.go(n);
+};
+
+VueRouter.prototype.back = function back () {
+  this.go(-1);
+};
+
+VueRouter.prototype.forward = function forward () {
+  this.go(1);
+};
+
+VueRouter.prototype.getMatchedComponents = function getMatchedComponents (to) {
+  var route = to
+    ? to.matched
+      ? to
+      : this.resolve(to).route
+    : this.currentRoute;
+  if (!route) {
+    return []
+  }
+  return [].concat.apply(
+    [],
+    route.matched.map(function (m) {
+      return Object.keys(m.components).map(function (key) {
+        return m.components[key]
+      })
+    })
+  )
+};
+
+VueRouter.prototype.resolve = function resolve (
+  to,
+  current,
+  append
+) {
+  current = current || this.history.current;
+  var location = normalizeLocation(to, current, append, this);
+  var route = this.match(location, current);
+  var fullPath = route.redirectedFrom || route.fullPath;
+  var base = this.history.base;
+  var href = createHref(base, fullPath, this.mode);
+  return {
+    location: location,
+    route: route,
+    href: href,
+    // for backwards compat
+    normalizedTo: location,
+    resolved: route
+  }
+};
+
+VueRouter.prototype.addRoutes = function addRoutes (routes) {
+  this.matcher.addRoutes(routes);
+  if (this.history.current !== START) {
+    this.history.transitionTo(this.history.getCurrentLocation());
+  }
+};
+
+Object.defineProperties( VueRouter.prototype, prototypeAccessors );
+
+function registerHook (list, fn) {
+  list.push(fn);
+  return function () {
+    var i = list.indexOf(fn);
+    if (i > -1) { list.splice(i, 1); }
+  }
+}
+
+function createHref (base, fullPath, mode) {
+  var path = mode === 'hash' ? '#' + fullPath : fullPath;
+  return base ? cleanPath(base + '/' + path) : path
+}
+
+VueRouter.install = install;
+VueRouter.version = '3.4.9';
+VueRouter.isNavigationFailure = isNavigationFailure;
+VueRouter.NavigationFailureType = NavigationFailureType;
+
+if (inBrowser && window.Vue) {
+  window.Vue.use(VueRouter);
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (VueRouter);
 
 
 /***/ }),
@@ -32663,156 +30017,1386 @@ if (false) {} else {
 
 /***/ }),
 
-/***/ "./front_ce/src/intro.js":
-/*!*******************************!*\
-  !*** ./front_ce/src/intro.js ***!
-  \*******************************/
-/*! exports provided: initIntro */
+/***/ "./front_ce/node_modules/vuex/dist/vuex.esm.js":
+/*!*****************************************************!*\
+  !*** ./front_ce/node_modules/vuex/dist/vuex.esm.js ***!
+  \*****************************************************/
+/*! exports provided: default, Store, createLogger, createNamespacedHelpers, install, mapActions, mapGetters, mapMutations, mapState */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initIntro", function() { return initIntro; });
-/* harmony import */ var gsap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! gsap */ "./front_ce/node_modules/gsap/index.js");
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Store", function() { return Store; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createLogger", function() { return createLogger; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createNamespacedHelpers", function() { return createNamespacedHelpers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "install", function() { return install; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapActions", function() { return mapActions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapGetters", function() { return mapGetters; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapMutations", function() { return mapMutations; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapState", function() { return mapState; });
+/*!
+ * vuex v3.6.0
+ * (c) 2020 Evan You
+ * @license MIT
+ */
+function applyMixin (Vue) {
+  var version = Number(Vue.version.split('.')[0]);
 
+  if (version >= 2) {
+    Vue.mixin({ beforeCreate: vuexInit });
+  } else {
+    // override init and inject vuex init procedure
+    // for 1.x backwards compatibility.
+    var _init = Vue.prototype._init;
+    Vue.prototype._init = function (options) {
+      if ( options === void 0 ) options = {};
 
-function setWithExpiry(key, value, ttl) {
-  var now = new Date(); // `item` is an object which contains the original value
-  // as well as the time when it's supposed to expire
-
-  var item = {
-    value: value,
-    expiry: now.getTime() + ttl
-  };
-  localStorage.setItem(key, JSON.stringify(item));
-}
-
-function getWithExpiry(key) {
-  var itemStr = localStorage.getItem(key); // if the item doesn't exist, return null
-
-  if (!itemStr) {
-    return null;
+      options.init = options.init
+        ? [vuexInit].concat(options.init)
+        : vuexInit;
+      _init.call(this, options);
+    };
   }
 
-  var item = JSON.parse(itemStr);
-  var now = new Date(); // compare the expiry time of the item with the current time
+  /**
+   * Vuex init hook, injected into each instances init hooks list.
+   */
 
-  if (now.getTime() > item.expiry) {
-    // If the item is expired, delete the item from storage
-    // and return null
-    localStorage.removeItem(key);
-    return null;
+  function vuexInit () {
+    var options = this.$options;
+    // store injection
+    if (options.store) {
+      this.$store = typeof options.store === 'function'
+        ? options.store()
+        : options.store;
+    } else if (options.parent && options.parent.$store) {
+      this.$store = options.parent.$store;
+    }
   }
-
-  return item.value;
 }
 
-function initIntro() {
-  var skipIntro = getWithExpiry('introTime');
-  var imgLogo = document.getElementById('logo'),
-      introDiv = document.getElementsByClassName('intro')[0],
-      mainDiv = document.getElementById('main'),
-      downFlag = document.getElementById('down-flag'),
-      debugInfo = document.getElementById('debug-info'); //Get DOM elements to show screen data
+var target = typeof window !== 'undefined'
+  ? window
+  : typeof global !== 'undefined'
+    ? global
+    : {};
+var devtoolHook = target.__VUE_DEVTOOLS_GLOBAL_HOOK__;
 
-  var widthScreen = document.getElementById('width-screen'),
-      heightScreen = document.getElementById('height-screen'); //Get Width and height screen
+function devtoolPlugin (store) {
+  if (!devtoolHook) { return }
 
-  var hScreen = window.innerHeight;
-  var wScreen = window.innerWidth; //write values to DOM
+  store._devtoolHook = devtoolHook;
 
-  widthScreen.innerHTML = wScreen;
-  heightScreen.innerHTML = hScreen; //Get DOM elements to show logo data
+  devtoolHook.emit('vuex:init', store);
 
-  var widthLogo = document.getElementById('width-logo'),
-      heightLogo = document.getElementById('height-logo'); //Get Width and height of logo image
-
-  var wLogo = gsap__WEBPACK_IMPORTED_MODULE_0__["gsap"].getProperty("#logo", "width");
-  var hLogo = gsap__WEBPACK_IMPORTED_MODULE_0__["gsap"].getProperty("#logo", "height"); //write values to DOM
-
-  widthLogo.innerHTML = wLogo;
-  heightLogo.innerHTML = hLogo; //let tlIntro = new TimelineMax();
-
-  var tlIntro = gsap__WEBPACK_IMPORTED_MODULE_0__["gsap"].timeline();
-
-  if (skipIntro) {
-    setWithExpiry('introTime', true, 5000); //Entrada de Logo
-
-    tlIntro.from(imgLogo, 1, {
-      y: -hScreen / 2,
-      x: wScreen,
-      opacity: 0
-    }); //Centrar logo
-
-    tlIntro.to(imgLogo, {
-      y: 0,
-      x: 0,
-      duration: 1,
-      opacity: 1,
-      ease: gsap__WEBPACK_IMPORTED_MODULE_0__["Power2"].easeInOut
-    }); //Animar letras
-
-    tlIntro.fromTo('#text span', {
-      color: '#03a84d'
-    }, {
-      duration: 1,
-      opacity: 1,
-      y: "random(-200, 200)",
-      stagger: 0.1,
-      color: 'white'
-    }, '-=0.4'); //Agrandar y desaparacer
-
-    tlIntro.to(imgLogo, {
-      scale: 5,
-      opacity: 0,
-      boxShadow: "0px 40px 70px 0px rgba(0, 0, 0, 0.22), 0px 27px 24px 0px rgba(0, 0, 0, 0.2)",
-      duration: 2
-    }); //Salida de texto hacia abajo
-
-    tlIntro.fromTo('#text', {
-      color: 'gray'
-    }, {
-      color: 'black',
-      duration: 2,
-      opacity: 0.5,
-      y: '+190',
-      scale: 1.5,
-      ease: gsap__WEBPACK_IMPORTED_MODULE_0__["Power2"].easeOut
-    }, '<'); //Agrandar y desaparecer
-    //tlIntro.to( '#text', { scale: 4, opacity: 0, duration: 1});
-  } //Cambiar fondo a blanco
-
-
-  tlIntro.fromTo(introDiv, {
-    opacity: 1
-  }, {
-    height: 0,
-    backgroundColor: '#ffffff',
-    opacity: 0.0,
-    duration: 2,
-    display: 'none'
+  devtoolHook.on('vuex:travel-to-state', function (targetState) {
+    store.replaceState(targetState);
   });
-  tlIntro.to('#main', {
-    duration: 2,
-    display: 'block',
-    onComplete: animateSections
-  }, '<');
 
-  function animateSections() {//  alert('fin intro');
+  store.subscribe(function (mutation, state) {
+    devtoolHook.emit('vuex:mutation', mutation, state);
+  }, { prepend: true });
+
+  store.subscribeAction(function (action, state) {
+    devtoolHook.emit('vuex:action', action, state);
+  }, { prepend: true });
+}
+
+/**
+ * Get the first item that pass the test
+ * by second argument function
+ *
+ * @param {Array} list
+ * @param {Function} f
+ * @return {*}
+ */
+function find (list, f) {
+  return list.filter(f)[0]
+}
+
+/**
+ * Deep copy the given object considering circular structure.
+ * This function caches all nested objects and its copies.
+ * If it detects circular structure, use cached copy to avoid infinite loop.
+ *
+ * @param {*} obj
+ * @param {Array<Object>} cache
+ * @return {*}
+ */
+function deepCopy (obj, cache) {
+  if ( cache === void 0 ) cache = [];
+
+  // just return if obj is immutable value
+  if (obj === null || typeof obj !== 'object') {
+    return obj
+  }
+
+  // if obj is hit, it is in circular structure
+  var hit = find(cache, function (c) { return c.original === obj; });
+  if (hit) {
+    return hit.copy
+  }
+
+  var copy = Array.isArray(obj) ? [] : {};
+  // put the copy into cache at first
+  // because we want to refer it in recursive deepCopy
+  cache.push({
+    original: obj,
+    copy: copy
+  });
+
+  Object.keys(obj).forEach(function (key) {
+    copy[key] = deepCopy(obj[key], cache);
+  });
+
+  return copy
+}
+
+/**
+ * forEach for object
+ */
+function forEachValue (obj, fn) {
+  Object.keys(obj).forEach(function (key) { return fn(obj[key], key); });
+}
+
+function isObject (obj) {
+  return obj !== null && typeof obj === 'object'
+}
+
+function isPromise (val) {
+  return val && typeof val.then === 'function'
+}
+
+function assert (condition, msg) {
+  if (!condition) { throw new Error(("[vuex] " + msg)) }
+}
+
+function partial (fn, arg) {
+  return function () {
+    return fn(arg)
   }
 }
+
+// Base data struct for store's module, package with some attribute and method
+var Module = function Module (rawModule, runtime) {
+  this.runtime = runtime;
+  // Store some children item
+  this._children = Object.create(null);
+  // Store the origin module object which passed by programmer
+  this._rawModule = rawModule;
+  var rawState = rawModule.state;
+
+  // Store the origin module's state
+  this.state = (typeof rawState === 'function' ? rawState() : rawState) || {};
+};
+
+var prototypeAccessors = { namespaced: { configurable: true } };
+
+prototypeAccessors.namespaced.get = function () {
+  return !!this._rawModule.namespaced
+};
+
+Module.prototype.addChild = function addChild (key, module) {
+  this._children[key] = module;
+};
+
+Module.prototype.removeChild = function removeChild (key) {
+  delete this._children[key];
+};
+
+Module.prototype.getChild = function getChild (key) {
+  return this._children[key]
+};
+
+Module.prototype.hasChild = function hasChild (key) {
+  return key in this._children
+};
+
+Module.prototype.update = function update (rawModule) {
+  this._rawModule.namespaced = rawModule.namespaced;
+  if (rawModule.actions) {
+    this._rawModule.actions = rawModule.actions;
+  }
+  if (rawModule.mutations) {
+    this._rawModule.mutations = rawModule.mutations;
+  }
+  if (rawModule.getters) {
+    this._rawModule.getters = rawModule.getters;
+  }
+};
+
+Module.prototype.forEachChild = function forEachChild (fn) {
+  forEachValue(this._children, fn);
+};
+
+Module.prototype.forEachGetter = function forEachGetter (fn) {
+  if (this._rawModule.getters) {
+    forEachValue(this._rawModule.getters, fn);
+  }
+};
+
+Module.prototype.forEachAction = function forEachAction (fn) {
+  if (this._rawModule.actions) {
+    forEachValue(this._rawModule.actions, fn);
+  }
+};
+
+Module.prototype.forEachMutation = function forEachMutation (fn) {
+  if (this._rawModule.mutations) {
+    forEachValue(this._rawModule.mutations, fn);
+  }
+};
+
+Object.defineProperties( Module.prototype, prototypeAccessors );
+
+var ModuleCollection = function ModuleCollection (rawRootModule) {
+  // register root module (Vuex.Store options)
+  this.register([], rawRootModule, false);
+};
+
+ModuleCollection.prototype.get = function get (path) {
+  return path.reduce(function (module, key) {
+    return module.getChild(key)
+  }, this.root)
+};
+
+ModuleCollection.prototype.getNamespace = function getNamespace (path) {
+  var module = this.root;
+  return path.reduce(function (namespace, key) {
+    module = module.getChild(key);
+    return namespace + (module.namespaced ? key + '/' : '')
+  }, '')
+};
+
+ModuleCollection.prototype.update = function update$1 (rawRootModule) {
+  update([], this.root, rawRootModule);
+};
+
+ModuleCollection.prototype.register = function register (path, rawModule, runtime) {
+    var this$1 = this;
+    if ( runtime === void 0 ) runtime = true;
+
+  if ((true)) {
+    assertRawModule(path, rawModule);
+  }
+
+  var newModule = new Module(rawModule, runtime);
+  if (path.length === 0) {
+    this.root = newModule;
+  } else {
+    var parent = this.get(path.slice(0, -1));
+    parent.addChild(path[path.length - 1], newModule);
+  }
+
+  // register nested modules
+  if (rawModule.modules) {
+    forEachValue(rawModule.modules, function (rawChildModule, key) {
+      this$1.register(path.concat(key), rawChildModule, runtime);
+    });
+  }
+};
+
+ModuleCollection.prototype.unregister = function unregister (path) {
+  var parent = this.get(path.slice(0, -1));
+  var key = path[path.length - 1];
+  var child = parent.getChild(key);
+
+  if (!child) {
+    if ((true)) {
+      console.warn(
+        "[vuex] trying to unregister module '" + key + "', which is " +
+        "not registered"
+      );
+    }
+    return
+  }
+
+  if (!child.runtime) {
+    return
+  }
+
+  parent.removeChild(key);
+};
+
+ModuleCollection.prototype.isRegistered = function isRegistered (path) {
+  var parent = this.get(path.slice(0, -1));
+  var key = path[path.length - 1];
+
+  if (parent) {
+    return parent.hasChild(key)
+  }
+
+  return false
+};
+
+function update (path, targetModule, newModule) {
+  if ((true)) {
+    assertRawModule(path, newModule);
+  }
+
+  // update target module
+  targetModule.update(newModule);
+
+  // update nested modules
+  if (newModule.modules) {
+    for (var key in newModule.modules) {
+      if (!targetModule.getChild(key)) {
+        if ((true)) {
+          console.warn(
+            "[vuex] trying to add a new module '" + key + "' on hot reloading, " +
+            'manual reload is needed'
+          );
+        }
+        return
+      }
+      update(
+        path.concat(key),
+        targetModule.getChild(key),
+        newModule.modules[key]
+      );
+    }
+  }
+}
+
+var functionAssert = {
+  assert: function (value) { return typeof value === 'function'; },
+  expected: 'function'
+};
+
+var objectAssert = {
+  assert: function (value) { return typeof value === 'function' ||
+    (typeof value === 'object' && typeof value.handler === 'function'); },
+  expected: 'function or object with "handler" function'
+};
+
+var assertTypes = {
+  getters: functionAssert,
+  mutations: functionAssert,
+  actions: objectAssert
+};
+
+function assertRawModule (path, rawModule) {
+  Object.keys(assertTypes).forEach(function (key) {
+    if (!rawModule[key]) { return }
+
+    var assertOptions = assertTypes[key];
+
+    forEachValue(rawModule[key], function (value, type) {
+      assert(
+        assertOptions.assert(value),
+        makeAssertionMessage(path, key, type, value, assertOptions.expected)
+      );
+    });
+  });
+}
+
+function makeAssertionMessage (path, key, type, value, expected) {
+  var buf = key + " should be " + expected + " but \"" + key + "." + type + "\"";
+  if (path.length > 0) {
+    buf += " in module \"" + (path.join('.')) + "\"";
+  }
+  buf += " is " + (JSON.stringify(value)) + ".";
+  return buf
+}
+
+var Vue; // bind on install
+
+var Store = function Store (options) {
+  var this$1 = this;
+  if ( options === void 0 ) options = {};
+
+  // Auto install if it is not done yet and `window` has `Vue`.
+  // To allow users to avoid auto-installation in some cases,
+  // this code should be placed here. See #731
+  if (!Vue && typeof window !== 'undefined' && window.Vue) {
+    install(window.Vue);
+  }
+
+  if ((true)) {
+    assert(Vue, "must call Vue.use(Vuex) before creating a store instance.");
+    assert(typeof Promise !== 'undefined', "vuex requires a Promise polyfill in this browser.");
+    assert(this instanceof Store, "store must be called with the new operator.");
+  }
+
+  var plugins = options.plugins; if ( plugins === void 0 ) plugins = [];
+  var strict = options.strict; if ( strict === void 0 ) strict = false;
+
+  // store internal state
+  this._committing = false;
+  this._actions = Object.create(null);
+  this._actionSubscribers = [];
+  this._mutations = Object.create(null);
+  this._wrappedGetters = Object.create(null);
+  this._modules = new ModuleCollection(options);
+  this._modulesNamespaceMap = Object.create(null);
+  this._subscribers = [];
+  this._watcherVM = new Vue();
+  this._makeLocalGettersCache = Object.create(null);
+
+  // bind commit and dispatch to self
+  var store = this;
+  var ref = this;
+  var dispatch = ref.dispatch;
+  var commit = ref.commit;
+  this.dispatch = function boundDispatch (type, payload) {
+    return dispatch.call(store, type, payload)
+  };
+  this.commit = function boundCommit (type, payload, options) {
+    return commit.call(store, type, payload, options)
+  };
+
+  // strict mode
+  this.strict = strict;
+
+  var state = this._modules.root.state;
+
+  // init root module.
+  // this also recursively registers all sub-modules
+  // and collects all module getters inside this._wrappedGetters
+  installModule(this, state, [], this._modules.root);
+
+  // initialize the store vm, which is responsible for the reactivity
+  // (also registers _wrappedGetters as computed properties)
+  resetStoreVM(this, state);
+
+  // apply plugins
+  plugins.forEach(function (plugin) { return plugin(this$1); });
+
+  var useDevtools = options.devtools !== undefined ? options.devtools : Vue.config.devtools;
+  if (useDevtools) {
+    devtoolPlugin(this);
+  }
+};
+
+var prototypeAccessors$1 = { state: { configurable: true } };
+
+prototypeAccessors$1.state.get = function () {
+  return this._vm._data.$$state
+};
+
+prototypeAccessors$1.state.set = function (v) {
+  if ((true)) {
+    assert(false, "use store.replaceState() to explicit replace store state.");
+  }
+};
+
+Store.prototype.commit = function commit (_type, _payload, _options) {
+    var this$1 = this;
+
+  // check object-style commit
+  var ref = unifyObjectStyle(_type, _payload, _options);
+    var type = ref.type;
+    var payload = ref.payload;
+    var options = ref.options;
+
+  var mutation = { type: type, payload: payload };
+  var entry = this._mutations[type];
+  if (!entry) {
+    if ((true)) {
+      console.error(("[vuex] unknown mutation type: " + type));
+    }
+    return
+  }
+  this._withCommit(function () {
+    entry.forEach(function commitIterator (handler) {
+      handler(payload);
+    });
+  });
+
+  this._subscribers
+    .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
+    .forEach(function (sub) { return sub(mutation, this$1.state); });
+
+  if (
+    ( true) &&
+    options && options.silent
+  ) {
+    console.warn(
+      "[vuex] mutation type: " + type + ". Silent option has been removed. " +
+      'Use the filter functionality in the vue-devtools'
+    );
+  }
+};
+
+Store.prototype.dispatch = function dispatch (_type, _payload) {
+    var this$1 = this;
+
+  // check object-style dispatch
+  var ref = unifyObjectStyle(_type, _payload);
+    var type = ref.type;
+    var payload = ref.payload;
+
+  var action = { type: type, payload: payload };
+  var entry = this._actions[type];
+  if (!entry) {
+    if ((true)) {
+      console.error(("[vuex] unknown action type: " + type));
+    }
+    return
+  }
+
+  try {
+    this._actionSubscribers
+      .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
+      .filter(function (sub) { return sub.before; })
+      .forEach(function (sub) { return sub.before(action, this$1.state); });
+  } catch (e) {
+    if ((true)) {
+      console.warn("[vuex] error in before action subscribers: ");
+      console.error(e);
+    }
+  }
+
+  var result = entry.length > 1
+    ? Promise.all(entry.map(function (handler) { return handler(payload); }))
+    : entry[0](payload);
+
+  return new Promise(function (resolve, reject) {
+    result.then(function (res) {
+      try {
+        this$1._actionSubscribers
+          .filter(function (sub) { return sub.after; })
+          .forEach(function (sub) { return sub.after(action, this$1.state); });
+      } catch (e) {
+        if ((true)) {
+          console.warn("[vuex] error in after action subscribers: ");
+          console.error(e);
+        }
+      }
+      resolve(res);
+    }, function (error) {
+      try {
+        this$1._actionSubscribers
+          .filter(function (sub) { return sub.error; })
+          .forEach(function (sub) { return sub.error(action, this$1.state, error); });
+      } catch (e) {
+        if ((true)) {
+          console.warn("[vuex] error in error action subscribers: ");
+          console.error(e);
+        }
+      }
+      reject(error);
+    });
+  })
+};
+
+Store.prototype.subscribe = function subscribe (fn, options) {
+  return genericSubscribe(fn, this._subscribers, options)
+};
+
+Store.prototype.subscribeAction = function subscribeAction (fn, options) {
+  var subs = typeof fn === 'function' ? { before: fn } : fn;
+  return genericSubscribe(subs, this._actionSubscribers, options)
+};
+
+Store.prototype.watch = function watch (getter, cb, options) {
+    var this$1 = this;
+
+  if ((true)) {
+    assert(typeof getter === 'function', "store.watch only accepts a function.");
+  }
+  return this._watcherVM.$watch(function () { return getter(this$1.state, this$1.getters); }, cb, options)
+};
+
+Store.prototype.replaceState = function replaceState (state) {
+    var this$1 = this;
+
+  this._withCommit(function () {
+    this$1._vm._data.$$state = state;
+  });
+};
+
+Store.prototype.registerModule = function registerModule (path, rawModule, options) {
+    if ( options === void 0 ) options = {};
+
+  if (typeof path === 'string') { path = [path]; }
+
+  if ((true)) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+    assert(path.length > 0, 'cannot register the root module by using registerModule.');
+  }
+
+  this._modules.register(path, rawModule);
+  installModule(this, this.state, path, this._modules.get(path), options.preserveState);
+  // reset store to update getters...
+  resetStoreVM(this, this.state);
+};
+
+Store.prototype.unregisterModule = function unregisterModule (path) {
+    var this$1 = this;
+
+  if (typeof path === 'string') { path = [path]; }
+
+  if ((true)) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+  }
+
+  this._modules.unregister(path);
+  this._withCommit(function () {
+    var parentState = getNestedState(this$1.state, path.slice(0, -1));
+    Vue.delete(parentState, path[path.length - 1]);
+  });
+  resetStore(this);
+};
+
+Store.prototype.hasModule = function hasModule (path) {
+  if (typeof path === 'string') { path = [path]; }
+
+  if ((true)) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+  }
+
+  return this._modules.isRegistered(path)
+};
+
+Store.prototype.hotUpdate = function hotUpdate (newOptions) {
+  this._modules.update(newOptions);
+  resetStore(this, true);
+};
+
+Store.prototype._withCommit = function _withCommit (fn) {
+  var committing = this._committing;
+  this._committing = true;
+  fn();
+  this._committing = committing;
+};
+
+Object.defineProperties( Store.prototype, prototypeAccessors$1 );
+
+function genericSubscribe (fn, subs, options) {
+  if (subs.indexOf(fn) < 0) {
+    options && options.prepend
+      ? subs.unshift(fn)
+      : subs.push(fn);
+  }
+  return function () {
+    var i = subs.indexOf(fn);
+    if (i > -1) {
+      subs.splice(i, 1);
+    }
+  }
+}
+
+function resetStore (store, hot) {
+  store._actions = Object.create(null);
+  store._mutations = Object.create(null);
+  store._wrappedGetters = Object.create(null);
+  store._modulesNamespaceMap = Object.create(null);
+  var state = store.state;
+  // init all modules
+  installModule(store, state, [], store._modules.root, true);
+  // reset vm
+  resetStoreVM(store, state, hot);
+}
+
+function resetStoreVM (store, state, hot) {
+  var oldVm = store._vm;
+
+  // bind store public getters
+  store.getters = {};
+  // reset local getters cache
+  store._makeLocalGettersCache = Object.create(null);
+  var wrappedGetters = store._wrappedGetters;
+  var computed = {};
+  forEachValue(wrappedGetters, function (fn, key) {
+    // use computed to leverage its lazy-caching mechanism
+    // direct inline function use will lead to closure preserving oldVm.
+    // using partial to return function with only arguments preserved in closure environment.
+    computed[key] = partial(fn, store);
+    Object.defineProperty(store.getters, key, {
+      get: function () { return store._vm[key]; },
+      enumerable: true // for local getters
+    });
+  });
+
+  // use a Vue instance to store the state tree
+  // suppress warnings just in case the user has added
+  // some funky global mixins
+  var silent = Vue.config.silent;
+  Vue.config.silent = true;
+  store._vm = new Vue({
+    data: {
+      $$state: state
+    },
+    computed: computed
+  });
+  Vue.config.silent = silent;
+
+  // enable strict mode for new vm
+  if (store.strict) {
+    enableStrictMode(store);
+  }
+
+  if (oldVm) {
+    if (hot) {
+      // dispatch changes in all subscribed watchers
+      // to force getter re-evaluation for hot reloading.
+      store._withCommit(function () {
+        oldVm._data.$$state = null;
+      });
+    }
+    Vue.nextTick(function () { return oldVm.$destroy(); });
+  }
+}
+
+function installModule (store, rootState, path, module, hot) {
+  var isRoot = !path.length;
+  var namespace = store._modules.getNamespace(path);
+
+  // register in namespace map
+  if (module.namespaced) {
+    if (store._modulesNamespaceMap[namespace] && ("development" !== 'production')) {
+      console.error(("[vuex] duplicate namespace " + namespace + " for the namespaced module " + (path.join('/'))));
+    }
+    store._modulesNamespaceMap[namespace] = module;
+  }
+
+  // set state
+  if (!isRoot && !hot) {
+    var parentState = getNestedState(rootState, path.slice(0, -1));
+    var moduleName = path[path.length - 1];
+    store._withCommit(function () {
+      if ((true)) {
+        if (moduleName in parentState) {
+          console.warn(
+            ("[vuex] state field \"" + moduleName + "\" was overridden by a module with the same name at \"" + (path.join('.')) + "\"")
+          );
+        }
+      }
+      Vue.set(parentState, moduleName, module.state);
+    });
+  }
+
+  var local = module.context = makeLocalContext(store, namespace, path);
+
+  module.forEachMutation(function (mutation, key) {
+    var namespacedType = namespace + key;
+    registerMutation(store, namespacedType, mutation, local);
+  });
+
+  module.forEachAction(function (action, key) {
+    var type = action.root ? key : namespace + key;
+    var handler = action.handler || action;
+    registerAction(store, type, handler, local);
+  });
+
+  module.forEachGetter(function (getter, key) {
+    var namespacedType = namespace + key;
+    registerGetter(store, namespacedType, getter, local);
+  });
+
+  module.forEachChild(function (child, key) {
+    installModule(store, rootState, path.concat(key), child, hot);
+  });
+}
+
+/**
+ * make localized dispatch, commit, getters and state
+ * if there is no namespace, just use root ones
+ */
+function makeLocalContext (store, namespace, path) {
+  var noNamespace = namespace === '';
+
+  var local = {
+    dispatch: noNamespace ? store.dispatch : function (_type, _payload, _options) {
+      var args = unifyObjectStyle(_type, _payload, _options);
+      var payload = args.payload;
+      var options = args.options;
+      var type = args.type;
+
+      if (!options || !options.root) {
+        type = namespace + type;
+        if (( true) && !store._actions[type]) {
+          console.error(("[vuex] unknown local action type: " + (args.type) + ", global type: " + type));
+          return
+        }
+      }
+
+      return store.dispatch(type, payload)
+    },
+
+    commit: noNamespace ? store.commit : function (_type, _payload, _options) {
+      var args = unifyObjectStyle(_type, _payload, _options);
+      var payload = args.payload;
+      var options = args.options;
+      var type = args.type;
+
+      if (!options || !options.root) {
+        type = namespace + type;
+        if (( true) && !store._mutations[type]) {
+          console.error(("[vuex] unknown local mutation type: " + (args.type) + ", global type: " + type));
+          return
+        }
+      }
+
+      store.commit(type, payload, options);
+    }
+  };
+
+  // getters and state object must be gotten lazily
+  // because they will be changed by vm update
+  Object.defineProperties(local, {
+    getters: {
+      get: noNamespace
+        ? function () { return store.getters; }
+        : function () { return makeLocalGetters(store, namespace); }
+    },
+    state: {
+      get: function () { return getNestedState(store.state, path); }
+    }
+  });
+
+  return local
+}
+
+function makeLocalGetters (store, namespace) {
+  if (!store._makeLocalGettersCache[namespace]) {
+    var gettersProxy = {};
+    var splitPos = namespace.length;
+    Object.keys(store.getters).forEach(function (type) {
+      // skip if the target getter is not match this namespace
+      if (type.slice(0, splitPos) !== namespace) { return }
+
+      // extract local getter type
+      var localType = type.slice(splitPos);
+
+      // Add a port to the getters proxy.
+      // Define as getter property because
+      // we do not want to evaluate the getters in this time.
+      Object.defineProperty(gettersProxy, localType, {
+        get: function () { return store.getters[type]; },
+        enumerable: true
+      });
+    });
+    store._makeLocalGettersCache[namespace] = gettersProxy;
+  }
+
+  return store._makeLocalGettersCache[namespace]
+}
+
+function registerMutation (store, type, handler, local) {
+  var entry = store._mutations[type] || (store._mutations[type] = []);
+  entry.push(function wrappedMutationHandler (payload) {
+    handler.call(store, local.state, payload);
+  });
+}
+
+function registerAction (store, type, handler, local) {
+  var entry = store._actions[type] || (store._actions[type] = []);
+  entry.push(function wrappedActionHandler (payload) {
+    var res = handler.call(store, {
+      dispatch: local.dispatch,
+      commit: local.commit,
+      getters: local.getters,
+      state: local.state,
+      rootGetters: store.getters,
+      rootState: store.state
+    }, payload);
+    if (!isPromise(res)) {
+      res = Promise.resolve(res);
+    }
+    if (store._devtoolHook) {
+      return res.catch(function (err) {
+        store._devtoolHook.emit('vuex:error', err);
+        throw err
+      })
+    } else {
+      return res
+    }
+  });
+}
+
+function registerGetter (store, type, rawGetter, local) {
+  if (store._wrappedGetters[type]) {
+    if ((true)) {
+      console.error(("[vuex] duplicate getter key: " + type));
+    }
+    return
+  }
+  store._wrappedGetters[type] = function wrappedGetter (store) {
+    return rawGetter(
+      local.state, // local state
+      local.getters, // local getters
+      store.state, // root state
+      store.getters // root getters
+    )
+  };
+}
+
+function enableStrictMode (store) {
+  store._vm.$watch(function () { return this._data.$$state }, function () {
+    if ((true)) {
+      assert(store._committing, "do not mutate vuex store state outside mutation handlers.");
+    }
+  }, { deep: true, sync: true });
+}
+
+function getNestedState (state, path) {
+  return path.reduce(function (state, key) { return state[key]; }, state)
+}
+
+function unifyObjectStyle (type, payload, options) {
+  if (isObject(type) && type.type) {
+    options = payload;
+    payload = type;
+    type = type.type;
+  }
+
+  if ((true)) {
+    assert(typeof type === 'string', ("expects string as the type, but found " + (typeof type) + "."));
+  }
+
+  return { type: type, payload: payload, options: options }
+}
+
+function install (_Vue) {
+  if (Vue && _Vue === Vue) {
+    if ((true)) {
+      console.error(
+        '[vuex] already installed. Vue.use(Vuex) should be called only once.'
+      );
+    }
+    return
+  }
+  Vue = _Vue;
+  applyMixin(Vue);
+}
+
+/**
+ * Reduce the code which written in Vue.js for getting the state.
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} states # Object's item can be a function which accept state and getters for param, you can do something for state and getters in it.
+ * @param {Object}
+ */
+var mapState = normalizeNamespace(function (namespace, states) {
+  var res = {};
+  if (( true) && !isValidMap(states)) {
+    console.error('[vuex] mapState: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(states).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedState () {
+      var state = this.$store.state;
+      var getters = this.$store.getters;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapState', namespace);
+        if (!module) {
+          return
+        }
+        state = module.context.state;
+        getters = module.context.getters;
+      }
+      return typeof val === 'function'
+        ? val.call(this, state, getters)
+        : state[val]
+    };
+    // mark vuex getter for devtools
+    res[key].vuex = true;
+  });
+  return res
+});
+
+/**
+ * Reduce the code which written in Vue.js for committing the mutation
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} mutations # Object's item can be a function which accept `commit` function as the first param, it can accept anthor params. You can commit mutation and do any other things in this function. specially, You need to pass anthor params from the mapped function.
+ * @return {Object}
+ */
+var mapMutations = normalizeNamespace(function (namespace, mutations) {
+  var res = {};
+  if (( true) && !isValidMap(mutations)) {
+    console.error('[vuex] mapMutations: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(mutations).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedMutation () {
+      var args = [], len = arguments.length;
+      while ( len-- ) args[ len ] = arguments[ len ];
+
+      // Get the commit method from store
+      var commit = this.$store.commit;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapMutations', namespace);
+        if (!module) {
+          return
+        }
+        commit = module.context.commit;
+      }
+      return typeof val === 'function'
+        ? val.apply(this, [commit].concat(args))
+        : commit.apply(this.$store, [val].concat(args))
+    };
+  });
+  return res
+});
+
+/**
+ * Reduce the code which written in Vue.js for getting the getters
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} getters
+ * @return {Object}
+ */
+var mapGetters = normalizeNamespace(function (namespace, getters) {
+  var res = {};
+  if (( true) && !isValidMap(getters)) {
+    console.error('[vuex] mapGetters: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(getters).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    // The namespace has been mutated by normalizeNamespace
+    val = namespace + val;
+    res[key] = function mappedGetter () {
+      if (namespace && !getModuleByNamespace(this.$store, 'mapGetters', namespace)) {
+        return
+      }
+      if (( true) && !(val in this.$store.getters)) {
+        console.error(("[vuex] unknown getter: " + val));
+        return
+      }
+      return this.$store.getters[val]
+    };
+    // mark vuex getter for devtools
+    res[key].vuex = true;
+  });
+  return res
+});
+
+/**
+ * Reduce the code which written in Vue.js for dispatch the action
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} actions # Object's item can be a function which accept `dispatch` function as the first param, it can accept anthor params. You can dispatch action and do any other things in this function. specially, You need to pass anthor params from the mapped function.
+ * @return {Object}
+ */
+var mapActions = normalizeNamespace(function (namespace, actions) {
+  var res = {};
+  if (( true) && !isValidMap(actions)) {
+    console.error('[vuex] mapActions: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(actions).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedAction () {
+      var args = [], len = arguments.length;
+      while ( len-- ) args[ len ] = arguments[ len ];
+
+      // get dispatch function from store
+      var dispatch = this.$store.dispatch;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapActions', namespace);
+        if (!module) {
+          return
+        }
+        dispatch = module.context.dispatch;
+      }
+      return typeof val === 'function'
+        ? val.apply(this, [dispatch].concat(args))
+        : dispatch.apply(this.$store, [val].concat(args))
+    };
+  });
+  return res
+});
+
+/**
+ * Rebinding namespace param for mapXXX function in special scoped, and return them by simple object
+ * @param {String} namespace
+ * @return {Object}
+ */
+var createNamespacedHelpers = function (namespace) { return ({
+  mapState: mapState.bind(null, namespace),
+  mapGetters: mapGetters.bind(null, namespace),
+  mapMutations: mapMutations.bind(null, namespace),
+  mapActions: mapActions.bind(null, namespace)
+}); };
+
+/**
+ * Normalize the map
+ * normalizeMap([1, 2, 3]) => [ { key: 1, val: 1 }, { key: 2, val: 2 }, { key: 3, val: 3 } ]
+ * normalizeMap({a: 1, b: 2, c: 3}) => [ { key: 'a', val: 1 }, { key: 'b', val: 2 }, { key: 'c', val: 3 } ]
+ * @param {Array|Object} map
+ * @return {Object}
+ */
+function normalizeMap (map) {
+  if (!isValidMap(map)) {
+    return []
+  }
+  return Array.isArray(map)
+    ? map.map(function (key) { return ({ key: key, val: key }); })
+    : Object.keys(map).map(function (key) { return ({ key: key, val: map[key] }); })
+}
+
+/**
+ * Validate whether given map is valid or not
+ * @param {*} map
+ * @return {Boolean}
+ */
+function isValidMap (map) {
+  return Array.isArray(map) || isObject(map)
+}
+
+/**
+ * Return a function expect two param contains namespace and map. it will normalize the namespace and then the param's function will handle the new namespace and the map.
+ * @param {Function} fn
+ * @return {Function}
+ */
+function normalizeNamespace (fn) {
+  return function (namespace, map) {
+    if (typeof namespace !== 'string') {
+      map = namespace;
+      namespace = '';
+    } else if (namespace.charAt(namespace.length - 1) !== '/') {
+      namespace += '/';
+    }
+    return fn(namespace, map)
+  }
+}
+
+/**
+ * Search a special module from store by namespace. if module not exist, print error message.
+ * @param {Object} store
+ * @param {String} helper
+ * @param {String} namespace
+ * @return {Object}
+ */
+function getModuleByNamespace (store, helper, namespace) {
+  var module = store._modulesNamespaceMap[namespace];
+  if (( true) && !module) {
+    console.error(("[vuex] module namespace not found in " + helper + "(): " + namespace));
+  }
+  return module
+}
+
+// Credits: borrowed code from fcomb/redux-logger
+
+function createLogger (ref) {
+  if ( ref === void 0 ) ref = {};
+  var collapsed = ref.collapsed; if ( collapsed === void 0 ) collapsed = true;
+  var filter = ref.filter; if ( filter === void 0 ) filter = function (mutation, stateBefore, stateAfter) { return true; };
+  var transformer = ref.transformer; if ( transformer === void 0 ) transformer = function (state) { return state; };
+  var mutationTransformer = ref.mutationTransformer; if ( mutationTransformer === void 0 ) mutationTransformer = function (mut) { return mut; };
+  var actionFilter = ref.actionFilter; if ( actionFilter === void 0 ) actionFilter = function (action, state) { return true; };
+  var actionTransformer = ref.actionTransformer; if ( actionTransformer === void 0 ) actionTransformer = function (act) { return act; };
+  var logMutations = ref.logMutations; if ( logMutations === void 0 ) logMutations = true;
+  var logActions = ref.logActions; if ( logActions === void 0 ) logActions = true;
+  var logger = ref.logger; if ( logger === void 0 ) logger = console;
+
+  return function (store) {
+    var prevState = deepCopy(store.state);
+
+    if (typeof logger === 'undefined') {
+      return
+    }
+
+    if (logMutations) {
+      store.subscribe(function (mutation, state) {
+        var nextState = deepCopy(state);
+
+        if (filter(mutation, prevState, nextState)) {
+          var formattedTime = getFormattedTime();
+          var formattedMutation = mutationTransformer(mutation);
+          var message = "mutation " + (mutation.type) + formattedTime;
+
+          startMessage(logger, message, collapsed);
+          logger.log('%c prev state', 'color: #9E9E9E; font-weight: bold', transformer(prevState));
+          logger.log('%c mutation', 'color: #03A9F4; font-weight: bold', formattedMutation);
+          logger.log('%c next state', 'color: #4CAF50; font-weight: bold', transformer(nextState));
+          endMessage(logger);
+        }
+
+        prevState = nextState;
+      });
+    }
+
+    if (logActions) {
+      store.subscribeAction(function (action, state) {
+        if (actionFilter(action, state)) {
+          var formattedTime = getFormattedTime();
+          var formattedAction = actionTransformer(action);
+          var message = "action " + (action.type) + formattedTime;
+
+          startMessage(logger, message, collapsed);
+          logger.log('%c action', 'color: #03A9F4; font-weight: bold', formattedAction);
+          endMessage(logger);
+        }
+      });
+    }
+  }
+}
+
+function startMessage (logger, message, collapsed) {
+  var startMessage = collapsed
+    ? logger.groupCollapsed
+    : logger.group;
+
+  // render
+  try {
+    startMessage.call(logger, message);
+  } catch (e) {
+    logger.log(message);
+  }
+}
+
+function endMessage (logger) {
+  try {
+    logger.groupEnd();
+  } catch (e) {
+    logger.log('—— log end ——');
+  }
+}
+
+function getFormattedTime () {
+  var time = new Date();
+  return (" @ " + (pad(time.getHours(), 2)) + ":" + (pad(time.getMinutes(), 2)) + ":" + (pad(time.getSeconds(), 2)) + "." + (pad(time.getMilliseconds(), 3)))
+}
+
+function repeat (str, times) {
+  return (new Array(times + 1)).join(str)
+}
+
+function pad (num, maxLength) {
+  return repeat('0', maxLength - num.toString().length) + num
+}
+
+var index = {
+  Store: Store,
+  install: install,
+  version: '3.6.0',
+  mapState: mapState,
+  mapMutations: mapMutations,
+  mapGetters: mapGetters,
+  mapActions: mapActions,
+  createNamespacedHelpers: createNamespacedHelpers,
+  createLogger: createLogger
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (index);
+
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
 /***/ }),
 
-/***/ "./node_modules/@babel/runtime/regenerator/index.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./front_ce/src/route/index.js":
+/*!*************************************!*\
+  !*** ./front_ce/src/route/index.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/regenerator-runtime/runtime.js");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./front_ce/node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-router */ "./front_ce/node_modules/vue-router/dist/vue-router.esm.js");
 
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes: [{
+    path: '/',
+    name: 'login',
+    component: function component() {
+      return __webpack_require__.e(/*! import() */ 1).then(__webpack_require__.bind(null, /*! ../views/user/Login.vue */ "./front_ce/src/views/user/Login.vue"));
+    }
+  }, {
+    path: '/home',
+    name: 'home',
+    component: function component() {
+      return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ../views/Home.vue */ "./front_ce/src/views/Home.vue"));
+    },
+    meta: {
+      requiresAuth: true
+    }
+  }, {
+    path: '/actas',
+    name: 'actas',
+    meta: {
+      requiresAuth: true
+    },
+    component: function component() {
+      return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! ../views/actas/Actas.vue */ "./front_ce/src/views/actas/Actas.vue"));
+    }
+  }, {
+    path: '*',
+    redirect: 'error-404'
+  }]
+});
+router.beforeEach(function (to, _, next) {
+  //   const isLoggedIn = isUserLoggedIn()
+  // console.log(to, next)
+  // localStorage.getItem('user') && localStorage.getItem('token')
+  // console.log(localStorage.getItem('user'));
+  var auth = localStorage.getItem('token');
+
+  if (to.matched.some(function (record) {
+    return record.meta.requiresAuth;
+  })) {
+    if (auth) {
+      next();
+    } else {
+      next({
+        name: "login"
+      });
+    }
+  } else {
+    next();
+  }
+});
+/* harmony default export */ __webpack_exports__["default"] = (router);
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/process/browser.js */ "./node_modules/process/browser.js")))
+
+/***/ }),
+
+/***/ "./front_ce/src/store/index.js":
+/*!*************************************!*\
+  !*** ./front_ce/src/store/index.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./front_ce/node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./front_ce/node_modules/vuex/dist/vuex.esm.js");
+
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
+/* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
+  state: {
+    userData: null
+  },
+  mutations: {
+    SET_USER_DATA: function SET_USER_DATA(state, user) {
+      console.log('SET_USER_DATA', user);
+      state.userData = user;
+    }
+  },
+  actions: {
+    user: function user(context, queryParams) {
+      axios.get("/user/").then(function (response) {
+        context.commit('SET_USER_DATA', response.data.data);
+      })["catch"](function (error) {
+        console.log("error get user");
+        console.log(error);
+      });
+    }
+  },
+  getters: {
+    getUser: function getUser(state) {
+      console.log('getUser', state);
+      return state.userData;
+    }
+  }
+}));
 
 /***/ }),
 
@@ -34629,178 +33213,15 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/components/actas/Actas.vue?vue&type=script&lang=js&":
-/*!******************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./front_ce/components/actas/Actas.vue?vue&type=script&lang=js& ***!
-  \******************************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/components/user/Login.vue?vue&type=script&lang=js&":
-/*!*****************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./front_ce/components/user/Login.vue?vue&type=script&lang=js& ***!
-  \*****************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/App.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./front_ce/App.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -34808,206 +33229,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'Login',
-  data: function data() {
-    return {
-      data: {
-        email: '',
-        password: ''
-      },
-      processing: false,
-      errorMessage: null,
-      token: null,
-      user: null
-    };
-  },
-  methods: {
-    login: function login() {
-      var _this = this;
-
-      var requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest"
-        },
-        body: JSON.stringify(this.data)
-      };
-      fetch(this.$parent.baseURL + 'auth/login', requestOptions).then( /*#__PURE__*/function () {
-        var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(response) {
-          var data, error, _error;
-
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-            while (1) {
-              switch (_context.prev = _context.next) {
-                case 0:
-                  _context.next = 2;
-                  return response.json();
-
-                case 2:
-                  data = _context.sent;
-
-                  if (response.ok) {
-                    _context.next = 7;
-                    break;
-                  }
-
-                  // get error message from body or default to response status
-                  error = data && data.message || response.status;
-                  _this.errorMessage = error;
-                  return _context.abrupt("return", Promise.reject(error));
-
-                case 7:
-                  if (data.status) {
-                    _context.next = 11;
-                    break;
-                  }
-
-                  _error = data && data.msg || response.status;
-                  _this.errorMessage = _error;
-                  return _context.abrupt("return", Promise.reject(_error));
-
-                case 11:
-                  _this.$parent.user = data.userData;
-                  window.localStorage.setItem('token', data.accessToken);
-                  window.localStorage.setItem('user', JSON.stringify(data.userData));
-
-                  if (_this.$parent.user.role == 'imagenes') {
-                    _this.$parent.seccion = 2;
-                  } else if (_this.$parent.user.role == 'superadmin') {
-                    _this.$parent.seccion = 3;
-                  }
-
-                  window.localStorage.setItem('pagina', _this.$parent.seccion);
-                  _this.errorMessage = '';
-
-                case 17:
-                case "end":
-                  return _context.stop();
-              }
-            }
-          }, _callee);
-        }));
-
-        return function (_x) {
-          return _ref.apply(this, arguments);
-        };
-      }())["catch"](function (error) {
-        console.log(error);
-        _this.errorMessage = error;
-        _this.processing = false;
-      });
-    }
-  },
-  mounted: function mounted() {},
-  setup: function setup() {}
+  name: 'App'
 });
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/components/votos/Votos.vue?vue&type=script&lang=js&":
-/*!******************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./front_ce/components/votos/Votos.vue?vue&type=script&lang=js& ***!
-  \******************************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /***/ }),
 
@@ -35308,765 +33531,6 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 process.umask = function() { return 0; };
-
-
-/***/ }),
-
-/***/ "./node_modules/regenerator-runtime/runtime.js":
-/*!*****************************************************!*\
-  !*** ./node_modules/regenerator-runtime/runtime.js ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-var runtime = (function (exports) {
-  "use strict";
-
-  var Op = Object.prototype;
-  var hasOwn = Op.hasOwnProperty;
-  var undefined; // More compressible than void 0.
-  var $Symbol = typeof Symbol === "function" ? Symbol : {};
-  var iteratorSymbol = $Symbol.iterator || "@@iterator";
-  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
-  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
-  function define(obj, key, value) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-    return obj[key];
-  }
-  try {
-    // IE 8 has a broken Object.defineProperty that only works on DOM objects.
-    define({}, "");
-  } catch (err) {
-    define = function(obj, key, value) {
-      return obj[key] = value;
-    };
-  }
-
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
-    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
-    var generator = Object.create(protoGenerator.prototype);
-    var context = new Context(tryLocsList || []);
-
-    // The ._invoke method unifies the implementations of the .next,
-    // .throw, and .return methods.
-    generator._invoke = makeInvokeMethod(innerFn, self, context);
-
-    return generator;
-  }
-  exports.wrap = wrap;
-
-  // Try/catch helper to minimize deoptimizations. Returns a completion
-  // record like context.tryEntries[i].completion. This interface could
-  // have been (and was previously) designed to take a closure to be
-  // invoked without arguments, but in all the cases we care about we
-  // already have an existing method we want to call, so there's no need
-  // to create a new function object. We can even get away with assuming
-  // the method takes exactly one argument, since that happens to be true
-  // in every case, so we don't have to touch the arguments object. The
-  // only additional allocation required is the completion record, which
-  // has a stable shape and so hopefully should be cheap to allocate.
-  function tryCatch(fn, obj, arg) {
-    try {
-      return { type: "normal", arg: fn.call(obj, arg) };
-    } catch (err) {
-      return { type: "throw", arg: err };
-    }
-  }
-
-  var GenStateSuspendedStart = "suspendedStart";
-  var GenStateSuspendedYield = "suspendedYield";
-  var GenStateExecuting = "executing";
-  var GenStateCompleted = "completed";
-
-  // Returning this object from the innerFn has the same effect as
-  // breaking out of the dispatch switch statement.
-  var ContinueSentinel = {};
-
-  // Dummy constructor functions that we use as the .constructor and
-  // .constructor.prototype properties for functions that return Generator
-  // objects. For full spec compliance, you may wish to configure your
-  // minifier not to mangle the names of these two functions.
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-
-  // This is a polyfill for %IteratorPrototype% for environments that
-  // don't natively support it.
-  var IteratorPrototype = {};
-  IteratorPrototype[iteratorSymbol] = function () {
-    return this;
-  };
-
-  var getProto = Object.getPrototypeOf;
-  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  if (NativeIteratorPrototype &&
-      NativeIteratorPrototype !== Op &&
-      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
-    // This environment has a native %IteratorPrototype%; use it instead
-    // of the polyfill.
-    IteratorPrototype = NativeIteratorPrototype;
-  }
-
-  var Gp = GeneratorFunctionPrototype.prototype =
-    Generator.prototype = Object.create(IteratorPrototype);
-  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
-  GeneratorFunctionPrototype.constructor = GeneratorFunction;
-  GeneratorFunction.displayName = define(
-    GeneratorFunctionPrototype,
-    toStringTagSymbol,
-    "GeneratorFunction"
-  );
-
-  // Helper for defining the .next, .throw, and .return methods of the
-  // Iterator interface in terms of a single ._invoke method.
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function(method) {
-      define(prototype, method, function(arg) {
-        return this._invoke(method, arg);
-      });
-    });
-  }
-
-  exports.isGeneratorFunction = function(genFun) {
-    var ctor = typeof genFun === "function" && genFun.constructor;
-    return ctor
-      ? ctor === GeneratorFunction ||
-        // For the native GeneratorFunction constructor, the best we can
-        // do is to check its .name property.
-        (ctor.displayName || ctor.name) === "GeneratorFunction"
-      : false;
-  };
-
-  exports.mark = function(genFun) {
-    if (Object.setPrototypeOf) {
-      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
-    } else {
-      genFun.__proto__ = GeneratorFunctionPrototype;
-      define(genFun, toStringTagSymbol, "GeneratorFunction");
-    }
-    genFun.prototype = Object.create(Gp);
-    return genFun;
-  };
-
-  // Within the body of any async function, `await x` is transformed to
-  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
-  // `hasOwn.call(value, "__await")` to determine if the yielded value is
-  // meant to be awaited.
-  exports.awrap = function(arg) {
-    return { __await: arg };
-  };
-
-  function AsyncIterator(generator, PromiseImpl) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-      if (record.type === "throw") {
-        reject(record.arg);
-      } else {
-        var result = record.arg;
-        var value = result.value;
-        if (value &&
-            typeof value === "object" &&
-            hasOwn.call(value, "__await")) {
-          return PromiseImpl.resolve(value.__await).then(function(value) {
-            invoke("next", value, resolve, reject);
-          }, function(err) {
-            invoke("throw", err, resolve, reject);
-          });
-        }
-
-        return PromiseImpl.resolve(value).then(function(unwrapped) {
-          // When a yielded Promise is resolved, its final value becomes
-          // the .value of the Promise<{value,done}> result for the
-          // current iteration.
-          result.value = unwrapped;
-          resolve(result);
-        }, function(error) {
-          // If a rejected Promise was yielded, throw the rejection back
-          // into the async generator function so it can be handled there.
-          return invoke("throw", error, resolve, reject);
-        });
-      }
-    }
-
-    var previousPromise;
-
-    function enqueue(method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new PromiseImpl(function(resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
-      }
-
-      return previousPromise =
-        // If enqueue has been called before, then we want to wait until
-        // all previous Promises have been resolved before calling invoke,
-        // so that results are always delivered in the correct order. If
-        // enqueue has not been called before, then it is important to
-        // call invoke immediately, without waiting on a callback to fire,
-        // so that the async generator function has the opportunity to do
-        // any necessary setup in a predictable way. This predictability
-        // is why the Promise constructor synchronously invokes its
-        // executor callback, and why async functions synchronously
-        // execute code before the first await. Since we implement simple
-        // async functions in terms of async generators, it is especially
-        // important to get this right, even though it requires care.
-        previousPromise ? previousPromise.then(
-          callInvokeWithMethodAndArg,
-          // Avoid propagating failures to Promises returned by later
-          // invocations of the iterator.
-          callInvokeWithMethodAndArg
-        ) : callInvokeWithMethodAndArg();
-    }
-
-    // Define the unified helper method that is used to implement .next,
-    // .throw, and .return (see defineIteratorMethods).
-    this._invoke = enqueue;
-  }
-
-  defineIteratorMethods(AsyncIterator.prototype);
-  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
-    return this;
-  };
-  exports.AsyncIterator = AsyncIterator;
-
-  // Note that simple async functions are implemented on top of
-  // AsyncIterator objects; they just return a Promise for the value of
-  // the final result produced by the iterator.
-  exports.async = function(innerFn, outerFn, self, tryLocsList, PromiseImpl) {
-    if (PromiseImpl === void 0) PromiseImpl = Promise;
-
-    var iter = new AsyncIterator(
-      wrap(innerFn, outerFn, self, tryLocsList),
-      PromiseImpl
-    );
-
-    return exports.isGeneratorFunction(outerFn)
-      ? iter // If outerFn is a generator, return the full iterator.
-      : iter.next().then(function(result) {
-          return result.done ? result.value : iter.next();
-        });
-  };
-
-  function makeInvokeMethod(innerFn, self, context) {
-    var state = GenStateSuspendedStart;
-
-    return function invoke(method, arg) {
-      if (state === GenStateExecuting) {
-        throw new Error("Generator is already running");
-      }
-
-      if (state === GenStateCompleted) {
-        if (method === "throw") {
-          throw arg;
-        }
-
-        // Be forgiving, per 25.3.3.3.3 of the spec:
-        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
-        return doneResult();
-      }
-
-      context.method = method;
-      context.arg = arg;
-
-      while (true) {
-        var delegate = context.delegate;
-        if (delegate) {
-          var delegateResult = maybeInvokeDelegate(delegate, context);
-          if (delegateResult) {
-            if (delegateResult === ContinueSentinel) continue;
-            return delegateResult;
-          }
-        }
-
-        if (context.method === "next") {
-          // Setting context._sent for legacy support of Babel's
-          // function.sent implementation.
-          context.sent = context._sent = context.arg;
-
-        } else if (context.method === "throw") {
-          if (state === GenStateSuspendedStart) {
-            state = GenStateCompleted;
-            throw context.arg;
-          }
-
-          context.dispatchException(context.arg);
-
-        } else if (context.method === "return") {
-          context.abrupt("return", context.arg);
-        }
-
-        state = GenStateExecuting;
-
-        var record = tryCatch(innerFn, self, context);
-        if (record.type === "normal") {
-          // If an exception is thrown from innerFn, we leave state ===
-          // GenStateExecuting and loop back for another invocation.
-          state = context.done
-            ? GenStateCompleted
-            : GenStateSuspendedYield;
-
-          if (record.arg === ContinueSentinel) {
-            continue;
-          }
-
-          return {
-            value: record.arg,
-            done: context.done
-          };
-
-        } else if (record.type === "throw") {
-          state = GenStateCompleted;
-          // Dispatch the exception by looping back around to the
-          // context.dispatchException(context.arg) call above.
-          context.method = "throw";
-          context.arg = record.arg;
-        }
-      }
-    };
-  }
-
-  // Call delegate.iterator[context.method](context.arg) and handle the
-  // result, either by returning a { value, done } result from the
-  // delegate iterator, or by modifying context.method and context.arg,
-  // setting context.delegate to null, and returning the ContinueSentinel.
-  function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-    if (method === undefined) {
-      // A .throw or .return when the delegate iterator has no .throw
-      // method always terminates the yield* loop.
-      context.delegate = null;
-
-      if (context.method === "throw") {
-        // Note: ["return"] must be used for ES3 parsing compatibility.
-        if (delegate.iterator["return"]) {
-          // If the delegate iterator has a return method, give it a
-          // chance to clean up.
-          context.method = "return";
-          context.arg = undefined;
-          maybeInvokeDelegate(delegate, context);
-
-          if (context.method === "throw") {
-            // If maybeInvokeDelegate(context) changed context.method from
-            // "return" to "throw", let that override the TypeError below.
-            return ContinueSentinel;
-          }
-        }
-
-        context.method = "throw";
-        context.arg = new TypeError(
-          "The iterator does not provide a 'throw' method");
-      }
-
-      return ContinueSentinel;
-    }
-
-    var record = tryCatch(method, delegate.iterator, context.arg);
-
-    if (record.type === "throw") {
-      context.method = "throw";
-      context.arg = record.arg;
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    var info = record.arg;
-
-    if (! info) {
-      context.method = "throw";
-      context.arg = new TypeError("iterator result is not an object");
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    if (info.done) {
-      // Assign the result of the finished delegate to the temporary
-      // variable specified by delegate.resultName (see delegateYield).
-      context[delegate.resultName] = info.value;
-
-      // Resume execution at the desired location (see delegateYield).
-      context.next = delegate.nextLoc;
-
-      // If context.method was "throw" but the delegate handled the
-      // exception, let the outer generator proceed normally. If
-      // context.method was "next", forget context.arg since it has been
-      // "consumed" by the delegate iterator. If context.method was
-      // "return", allow the original .return call to continue in the
-      // outer generator.
-      if (context.method !== "return") {
-        context.method = "next";
-        context.arg = undefined;
-      }
-
-    } else {
-      // Re-yield the result returned by the delegate method.
-      return info;
-    }
-
-    // The delegate iterator is finished, so forget it and continue with
-    // the outer generator.
-    context.delegate = null;
-    return ContinueSentinel;
-  }
-
-  // Define Generator.prototype.{next,throw,return} in terms of the
-  // unified ._invoke helper method.
-  defineIteratorMethods(Gp);
-
-  define(Gp, toStringTagSymbol, "Generator");
-
-  // A Generator should always return itself as the iterator object when the
-  // @@iterator function is called on it. Some browsers' implementations of the
-  // iterator prototype chain incorrectly implement this, causing the Generator
-  // object to not be returned from this call. This ensures that doesn't happen.
-  // See https://github.com/facebook/regenerator/issues/274 for more details.
-  Gp[iteratorSymbol] = function() {
-    return this;
-  };
-
-  Gp.toString = function() {
-    return "[object Generator]";
-  };
-
-  function pushTryEntry(locs) {
-    var entry = { tryLoc: locs[0] };
-
-    if (1 in locs) {
-      entry.catchLoc = locs[1];
-    }
-
-    if (2 in locs) {
-      entry.finallyLoc = locs[2];
-      entry.afterLoc = locs[3];
-    }
-
-    this.tryEntries.push(entry);
-  }
-
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal";
-    delete record.arg;
-    entry.completion = record;
-  }
-
-  function Context(tryLocsList) {
-    // The root entry object (effectively a try statement without a catch
-    // or a finally block) gives us a place to store values thrown from
-    // locations where there is no enclosing try statement.
-    this.tryEntries = [{ tryLoc: "root" }];
-    tryLocsList.forEach(pushTryEntry, this);
-    this.reset(true);
-  }
-
-  exports.keys = function(object) {
-    var keys = [];
-    for (var key in object) {
-      keys.push(key);
-    }
-    keys.reverse();
-
-    // Rather than returning an object with a next method, we keep
-    // things simple and return the next function itself.
-    return function next() {
-      while (keys.length) {
-        var key = keys.pop();
-        if (key in object) {
-          next.value = key;
-          next.done = false;
-          return next;
-        }
-      }
-
-      // To avoid creating an additional object, we just hang the .value
-      // and .done properties off the next function object itself. This
-      // also ensures that the minifier will not anonymize the function.
-      next.done = true;
-      return next;
-    };
-  };
-
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) {
-        return iteratorMethod.call(iterable);
-      }
-
-      if (typeof iterable.next === "function") {
-        return iterable;
-      }
-
-      if (!isNaN(iterable.length)) {
-        var i = -1, next = function next() {
-          while (++i < iterable.length) {
-            if (hasOwn.call(iterable, i)) {
-              next.value = iterable[i];
-              next.done = false;
-              return next;
-            }
-          }
-
-          next.value = undefined;
-          next.done = true;
-
-          return next;
-        };
-
-        return next.next = next;
-      }
-    }
-
-    // Return an iterator with no values.
-    return { next: doneResult };
-  }
-  exports.values = values;
-
-  function doneResult() {
-    return { value: undefined, done: true };
-  }
-
-  Context.prototype = {
-    constructor: Context,
-
-    reset: function(skipTempReset) {
-      this.prev = 0;
-      this.next = 0;
-      // Resetting context._sent for legacy support of Babel's
-      // function.sent implementation.
-      this.sent = this._sent = undefined;
-      this.done = false;
-      this.delegate = null;
-
-      this.method = "next";
-      this.arg = undefined;
-
-      this.tryEntries.forEach(resetTryEntry);
-
-      if (!skipTempReset) {
-        for (var name in this) {
-          // Not sure about the optimal order of these conditions:
-          if (name.charAt(0) === "t" &&
-              hasOwn.call(this, name) &&
-              !isNaN(+name.slice(1))) {
-            this[name] = undefined;
-          }
-        }
-      }
-    },
-
-    stop: function() {
-      this.done = true;
-
-      var rootEntry = this.tryEntries[0];
-      var rootRecord = rootEntry.completion;
-      if (rootRecord.type === "throw") {
-        throw rootRecord.arg;
-      }
-
-      return this.rval;
-    },
-
-    dispatchException: function(exception) {
-      if (this.done) {
-        throw exception;
-      }
-
-      var context = this;
-      function handle(loc, caught) {
-        record.type = "throw";
-        record.arg = exception;
-        context.next = loc;
-
-        if (caught) {
-          // If the dispatched exception was caught by a catch block,
-          // then let that catch block handle the exception normally.
-          context.method = "next";
-          context.arg = undefined;
-        }
-
-        return !! caught;
-      }
-
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        var record = entry.completion;
-
-        if (entry.tryLoc === "root") {
-          // Exception thrown outside of any try block that could handle
-          // it, so set the completion value of the entire function to
-          // throw the exception.
-          return handle("end");
-        }
-
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc");
-          var hasFinally = hasOwn.call(entry, "finallyLoc");
-
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            } else if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            }
-
-          } else if (hasFinally) {
-            if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else {
-            throw new Error("try statement without catch or finally");
-          }
-        }
-      }
-    },
-
-    abrupt: function(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc <= this.prev &&
-            hasOwn.call(entry, "finallyLoc") &&
-            this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
-          break;
-        }
-      }
-
-      if (finallyEntry &&
-          (type === "break" ||
-           type === "continue") &&
-          finallyEntry.tryLoc <= arg &&
-          arg <= finallyEntry.finallyLoc) {
-        // Ignore the finally entry if control is not jumping to a
-        // location outside the try/catch block.
-        finallyEntry = null;
-      }
-
-      var record = finallyEntry ? finallyEntry.completion : {};
-      record.type = type;
-      record.arg = arg;
-
-      if (finallyEntry) {
-        this.method = "next";
-        this.next = finallyEntry.finallyLoc;
-        return ContinueSentinel;
-      }
-
-      return this.complete(record);
-    },
-
-    complete: function(record, afterLoc) {
-      if (record.type === "throw") {
-        throw record.arg;
-      }
-
-      if (record.type === "break" ||
-          record.type === "continue") {
-        this.next = record.arg;
-      } else if (record.type === "return") {
-        this.rval = this.arg = record.arg;
-        this.method = "return";
-        this.next = "end";
-      } else if (record.type === "normal" && afterLoc) {
-        this.next = afterLoc;
-      }
-
-      return ContinueSentinel;
-    },
-
-    finish: function(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.finallyLoc === finallyLoc) {
-          this.complete(entry.completion, entry.afterLoc);
-          resetTryEntry(entry);
-          return ContinueSentinel;
-        }
-      }
-    },
-
-    "catch": function(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-          if (record.type === "throw") {
-            var thrown = record.arg;
-            resetTryEntry(entry);
-          }
-          return thrown;
-        }
-      }
-
-      // The context.catch method must only be called with a location
-      // argument that corresponds to a known catch block.
-      throw new Error("illegal catch attempt");
-    },
-
-    delegateYield: function(iterable, resultName, nextLoc) {
-      this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      };
-
-      if (this.method === "next") {
-        // Deliberately forget the last sent value so that we don't
-        // accidentally pass it on to the delegate.
-        this.arg = undefined;
-      }
-
-      return ContinueSentinel;
-    }
-  };
-
-  // Regardless of whether this script is executing as a CommonJS module
-  // or not, return the runtime object so that we can declare the variable
-  // regeneratorRuntime in the outer scope, which allows this module to be
-  // injected easily by `bin/regenerator --include-runtime script.js`.
-  return exports;
-
-}(
-  // If this script is executing as a CommonJS module, use module.exports
-  // as the regeneratorRuntime namespace. Otherwise create a new empty
-  // object. Either way, the resulting object will be used to initialize
-  // the regeneratorRuntime variable at the top of this file.
-   true ? module.exports : undefined
-));
-
-try {
-  regeneratorRuntime = runtime;
-} catch (accidentalStrictMode) {
-  // This module should not be running in strict mode, so the above
-  // assignment should always work unless something is misconfigured. Just
-  // in case runtime.js accidentally runs in strict mode, we can escape
-  // strict mode using a global Function call. This could conceivably fail
-  // if a Content Security Policy forbids using Function, but in that case
-  // the proper solution is to fix the accidental strict mode problem. If
-  // you've misconfigured your bundler to force strict mode and applied a
-  // CSP to forbid Function, and you're not willing to fix either of those
-  // problems, please detail your unique predicament in a GitHub issue.
-  Function("r", "regeneratorRuntime = r")(runtime);
-}
 
 
 /***/ }),
@@ -36853,10 +34317,10 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/components/actas/Actas.vue?vue&type=template&id=15622e39&":
-/*!**********************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./front_ce/components/actas/Actas.vue?vue&type=template&id=15622e39& ***!
-  \**********************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/App.vue?vue&type=template&id=8eb2b190&":
+/*!***************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./front_ce/App.vue?vue&type=template&id=8eb2b190& ***!
+  \***************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -36868,908 +34332,9 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      staticClass:
-        "flex items-center justify-center h-screen bg-gradient-to-r from-dark via-plomo-light to-dark"
-    },
-    [
-      _c(
-        "div",
-        {
-          staticClass:
-            "bg-white shadow-xl rounded my-8 bg-dark box-login min-w-[80%]"
-        },
-        [
-          _c("div", { staticClass: "text-center text-blanco py-1" }, [
-            _vm._v(
-              "\n            " + _vm._s(this.$parent.user.name) + "\n        "
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "text-center text-blanco py-1" }, [
-            _vm._v("REGISTRO DE ACTAS ")
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "pt-4 pb-10" }, [
-            _c(
-              "form",
-              {
-                staticClass: "w-full",
-                on: {
-                  submit: function($event) {
-                    $event.preventDefault()
-                    return _vm.addActas($event)
-                  }
-                }
-              },
-              [
-                _c("div", { staticClass: "flex p-4" }, [
-                  _c("div", { staticClass: "min-w-[50%] pr-2" }, [
-                    _c(
-                      "div",
-                      { staticClass: "bg-white shadow-md mb-4 rounded" },
-                      [
-                        _c(
-                          "label",
-                          {
-                            staticClass:
-                              "block pl-5 text-base font-bold mb-2 tracking-wide",
-                            attrs: { for: "grid-password" }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                Recintos\n                            "
-                            )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c("v-select", {
-                          staticClass:
-                            "block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500",
-                          attrs: {
-                            options: this.$parent.recintos,
-                            label: "nombre",
-                            placeholder: "Buscar el recinto"
-                          },
-                          on: { input: _vm.selectRecinto },
-                          scopedSlots: _vm._u([
-                            {
-                              key: "option",
-                              fn: function(option) {
-                                return [
-                                  _vm._v(
-                                    "\n                                    " +
-                                      _vm._s(option.codigo) +
-                                      " / " +
-                                      _vm._s(option.nombre) +
-                                      "  \n                                "
-                                  )
-                                ]
-                              }
-                            },
-                            {
-                              key: "search",
-                              fn: function(ref) {
-                                var attributes = ref.attributes
-                                var events = ref.events
-                                return [
-                                  _c(
-                                    "input",
-                                    _vm._g(
-                                      _vm._b(
-                                        {
-                                          staticClass: "vs__search",
-                                          attrs: { required: !_vm.nombre }
-                                        },
-                                        "input",
-                                        attributes,
-                                        false
-                                      ),
-                                      events
-                                    )
-                                  )
-                                ]
-                              }
-                            }
-                          ])
-                        })
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _vm._m(0),
-                    _vm._v(" "),
-                    _vm._m(1)
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "min-w-[50%] pl-2 flex items-center" },
-                    [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "flex items-center justify-center w-full"
-                        },
-                        [
-                          _c(
-                            "label",
-                            {
-                              staticClass:
-                                "flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600",
-                              attrs: { for: "dropzone-file" }
-                            },
-                            [
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "flex flex-col items-center justify-center pt-5 pb-6"
-                                },
-                                [
-                                  _c(
-                                    "svg",
-                                    {
-                                      staticClass:
-                                        "w-10 h-10 mb-3 text-gray-400",
-                                      attrs: {
-                                        "aria-hidden": "true",
-                                        fill: "none",
-                                        stroke: "currentColor",
-                                        viewBox: "0 0 24 24",
-                                        xmlns: "http://www.w3.org/2000/svg"
-                                      }
-                                    },
-                                    [
-                                      _c("path", {
-                                        attrs: {
-                                          "stroke-linecap": "round",
-                                          "stroke-linejoin": "round",
-                                          "stroke-width": "2",
-                                          d:
-                                            "M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                                        }
-                                      })
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _vm._m(2),
-                                  _vm._v(" "),
-                                  _c(
-                                    "p",
-                                    {
-                                      staticClass:
-                                        "text-xs text-gray-500 dark:text-gray-400"
-                                    },
-                                    [
-                                      _vm._v(
-                                        "SVG, PNG, JPG or GIF (MAX. 800x400px)"
-                                      )
-                                    ]
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c("input", {
-                                staticClass: "hidden",
-                                attrs: { id: "dropzone-file", type: "file" }
-                              })
-                            ]
-                          )
-                        ]
-                      )
-                    ]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "min-w-[100%] p-4" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass:
-                        "flex justify-center w-full border-solid border border-blanco rounded-xl bg-blanco",
-                      attrs: { type: "submit" }
-                    },
-                    [
-                      _c("span", [_vm._v(" GUARDAR ")]),
-                      _vm._v(" "),
-                      _c("span", { staticClass: "pt-2" }, [
-                        _vm.processing
-                          ? _c(
-                              "svg",
-                              {
-                                staticClass: "h-6 w-6 text-white animate-spin",
-                                attrs: {
-                                  xmlns: "http://www.w3.org/2000/svg",
-                                  fill: "none",
-                                  viewBox: "0 0 24 24",
-                                  stroke: "currentColor"
-                                }
-                              },
-                              [
-                                _c("path", {
-                                  attrs: {
-                                    "stroke-linecap": "round",
-                                    "stroke-linejoin": "round",
-                                    "stroke-width": "2",
-                                    d:
-                                      "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                                  }
-                                })
-                              ]
-                            )
-                          : _vm._e()
-                      ])
-                    ]
-                  )
-                ])
-              ]
-            )
-          ])
-        ]
-      )
-    ]
-  )
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "bg-white shadow-md mb-4 rounded" }, [
-      _c(
-        "label",
-        {
-          staticClass: "block pl-5 text-base font-bold mb-2 tracking-wide",
-          attrs: { for: "grid-password" }
-        },
-        [
-          _vm._v(
-            "\n                                Juntas\n                            "
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "select",
-        {
-          staticClass:
-            "block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500",
-          attrs: { id: "grid-state" }
-        },
-        [_c("option", [_vm._v("Junta")])]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "bg-white shadow-md mb-4 rounded" }, [
-      _c(
-        "label",
-        {
-          staticClass: "block pl-5 text-base font-bold mb-2 tracking-wide",
-          attrs: { for: "grid-password" }
-        },
-        [
-          _vm._v(
-            "\n                                Actas\n                            "
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "select",
-        {
-          staticClass:
-            "block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500",
-          attrs: { id: "grid-state" }
-        },
-        [_c("option", [_vm._v("Acta")])]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "p",
-      { staticClass: "mb-2 text-sm text-gray-500 dark:text-gray-400" },
-      [
-        _c("span", { staticClass: "font-semibold" }, [
-          _vm._v("Haga clic para cargar")
-        ]),
-        _vm._v(" o arrastrar y soltar")
-      ]
-    )
-  }
-]
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/components/user/Login.vue?vue&type=template&id=6ae33595&":
-/*!*********************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./front_ce/components/user/Login.vue?vue&type=template&id=6ae33595& ***!
-  \*********************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      staticClass:
-        "grid place-items-center h-screen bg-gradient-to-r from-dark via-plomo-light to-dark"
-    },
-    [
-      _c(
-        "div",
-        {
-          staticClass:
-            "max-w-md mx-auto bg-white shadow-xl rounded my-8 bg-dark box-login"
-        },
-        [
-          _c("div", { staticClass: "text-center text-blanco py-4" }, [
-            _vm._v("INICIO DE SESIÓN")
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "pt-8 pb-10" }, [
-            _c(
-              "form",
-              {
-                on: {
-                  submit: function($event) {
-                    $event.preventDefault()
-                    return _vm.login($event)
-                  }
-                }
-              },
-              [
-                _c("div", { staticClass: "w-4/5 mx-auto" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "flex items-center bg-white rounded-full shadow-md mb-4"
-                    },
-                    [
-                      _c("span", { staticClass: "px-3" }),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.data.email,
-                            expression: "data.email"
-                          }
-                        ],
-                        staticClass:
-                          "rounded-full w-full h-8 focus:outline-none",
-                        attrs: {
-                          type: "email",
-                          name: "email",
-                          placeholder: "Correo electrónico"
-                        },
-                        domProps: { value: _vm.data.email },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.data, "email", $event.target.value)
-                          }
-                        }
-                      })
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "flex items-center bg-white rounded-full shadow-md mb-4"
-                    },
-                    [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.data.password,
-                            expression: "data.password"
-                          }
-                        ],
-                        staticClass:
-                          "pl-3 rounded-full w-full h-8 focus:outline-none",
-                        staticStyle: { "padding-left": "12px" },
-                        attrs: {
-                          type: "password",
-                          name: "password",
-                          placeholder: "Contraseña"
-                        },
-                        domProps: { value: _vm.data.password },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.data, "password", $event.target.value)
-                          }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("span", { staticClass: "px-3" })
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "flex justify-center pt-5 w-full" },
-                    [
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "flex justify-center w-full border-solid border border-blanco rounded-xl bg-blanco",
-                          attrs: { type: "submit" }
-                        },
-                        [
-                          _c("span", [_vm._v(" INGRESAR ")]),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "pt-2" }, [
-                            _vm.processing
-                              ? _c(
-                                  "svg",
-                                  {
-                                    staticClass:
-                                      "h-6 w-6 text-white animate-spin",
-                                    attrs: {
-                                      xmlns: "http://www.w3.org/2000/svg",
-                                      fill: "none",
-                                      viewBox: "0 0 24 24",
-                                      stroke: "currentColor"
-                                    }
-                                  },
-                                  [
-                                    _c("path", {
-                                      attrs: {
-                                        "stroke-linecap": "round",
-                                        "stroke-linejoin": "round",
-                                        "stroke-width": "2",
-                                        d:
-                                          "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                                      }
-                                    })
-                                  ]
-                                )
-                              : _vm._e()
-                          ])
-                        ]
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "pt-5 w-full" }, [
-                    _vm._v(
-                      "\r\n                        " +
-                        _vm._s(_vm.errorMessage) +
-                        "\r\n                    "
-                    )
-                  ])
-                ])
-              ]
-            )
-          ])
-        ]
-      )
-    ]
-  )
+  return _c("div", { attrs: { id: "app" } }, [_c("router-view")], 1)
 }
 var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/components/votos/Votos.vue?vue&type=template&id=d2e51b22&":
-/*!**********************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./front_ce/components/votos/Votos.vue?vue&type=template&id=d2e51b22& ***!
-  \**********************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      staticClass:
-        "flex items-center justify-center h-screen bg-gradient-to-r from-dark via-plomo-light to-dark"
-    },
-    [
-      _c(
-        "div",
-        {
-          staticClass:
-            "bg-white shadow-xl rounded my-8 bg-dark box-login min-w-[80%]"
-        },
-        [
-          _c("div", { staticClass: "text-center text-blanco py-1" }, [
-            _vm._v(
-              "\n            " + _vm._s(this.$parent.user.name) + "\n        "
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "text-center text-blanco py-1" }, [
-            _vm._v("REGISTRO DE VOTOS ")
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "pt-4 pb-10" }, [
-            _c(
-              "form",
-              {
-                staticClass: "w-full",
-                on: {
-                  submit: function($event) {
-                    $event.preventDefault()
-                    return _vm.addActas($event)
-                  }
-                }
-              },
-              [
-                _c("div", { staticClass: "grid grid-cols-2 gap-4" }, [
-                  _c(
-                    "div",
-                    { staticClass: "min-w-[50%] pl-2 flex items-center" },
-                    [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "flex items-center justify-center w-full"
-                        },
-                        [
-                          _c(
-                            "label",
-                            {
-                              staticClass:
-                                "flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600",
-                              attrs: { for: "dropzone-file" }
-                            },
-                            [
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "flex flex-col items-center justify-center pt-5 pb-6"
-                                },
-                                [
-                                  _c(
-                                    "svg",
-                                    {
-                                      staticClass:
-                                        "w-10 h-10 mb-3 text-gray-400",
-                                      attrs: {
-                                        "aria-hidden": "true",
-                                        fill: "none",
-                                        stroke: "currentColor",
-                                        viewBox: "0 0 24 24",
-                                        xmlns: "http://www.w3.org/2000/svg"
-                                      }
-                                    },
-                                    [
-                                      _c("path", {
-                                        attrs: {
-                                          "stroke-linecap": "round",
-                                          "stroke-linejoin": "round",
-                                          "stroke-width": "2",
-                                          d:
-                                            "M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                                        }
-                                      })
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _vm._m(0),
-                                  _vm._v(" "),
-                                  _c(
-                                    "p",
-                                    {
-                                      staticClass:
-                                        "text-xs text-gray-500 dark:text-gray-400"
-                                    },
-                                    [
-                                      _vm._v(
-                                        "SVG, PNG, JPG or GIF (MAX. 800x400px)"
-                                      )
-                                    ]
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c("input", {
-                                staticClass: "hidden",
-                                attrs: { id: "dropzone-file", type: "file" }
-                              })
-                            ]
-                          )
-                        ]
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "min-w-[50%] pr-2" }, [
-                    _vm._m(1),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "grid" }, [
-                      _vm._v(
-                        "\n                            " +
-                          _vm._s() +
-                          "\n                            "
-                      ),
-                      _c(
-                        "table",
-                        {
-                          staticClass:
-                            "w-full text-sm text-left dark:text-gray-400"
-                        },
-                        [
-                          _vm._m(2),
-                          _vm._v(" "),
-                          _c(
-                            "tbody",
-                            _vm._l(_vm.$parent.candidatos, function(candidato) {
-                              return _c(
-                                "tr",
-                                {
-                                  key: candidato.id,
-                                  staticClass:
-                                    "bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                                },
-                                [
-                                  _c("td", { staticClass: "truncate" }, [
-                                    _vm._v(_vm._s(candidato.nombre))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("td", { staticClass: "truncate" }, [
-                                    _vm._v(_vm._s(candidato.nombre_partido))
-                                  ]),
-                                  _vm._v(" "),
-                                  _vm._m(3, true),
-                                  _vm._v(" "),
-                                  _vm._m(4, true),
-                                  _vm._v(" "),
-                                  _vm._m(5, true)
-                                ]
-                              )
-                            }),
-                            0
-                          )
-                        ]
-                      )
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "min-w-[100%] p-4" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass:
-                        "flex justify-center w-full border-solid border border-blanco rounded-xl bg-blanco",
-                      attrs: { type: "submit" }
-                    },
-                    [
-                      _c("span", [_vm._v(" GUARDAR ")]),
-                      _vm._v(" "),
-                      _c("span", { staticClass: "pt-2" }, [
-                        _vm.processing
-                          ? _c(
-                              "svg",
-                              {
-                                staticClass: "h-6 w-6 text-white animate-spin",
-                                attrs: {
-                                  xmlns: "http://www.w3.org/2000/svg",
-                                  fill: "none",
-                                  viewBox: "0 0 24 24",
-                                  stroke: "currentColor"
-                                }
-                              },
-                              [
-                                _c("path", {
-                                  attrs: {
-                                    "stroke-linecap": "round",
-                                    "stroke-linejoin": "round",
-                                    "stroke-width": "2",
-                                    d:
-                                      "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                                  }
-                                })
-                              ]
-                            )
-                          : _vm._e()
-                      ])
-                    ]
-                  )
-                ])
-              ]
-            )
-          ])
-        ]
-      )
-    ]
-  )
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "p",
-      { staticClass: "mb-2 text-sm text-gray-500 dark:text-gray-400" },
-      [
-        _c("span", { staticClass: "font-semibold" }, [
-          _vm._v("Click to upload")
-        ]),
-        _vm._v(" or drag and drop")
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "grid gap-6 md:grid-cols-3" }, [
-      _c("div", { staticClass: "bg-white shadow-md mb-4 rounded" }, [
-        _c(
-          "label",
-          {
-            staticClass:
-              "block mb-2 text-sm font-medium text-gray-900 dark:text-white",
-            attrs: { for: "first_name" }
-          },
-          [_vm._v("Blancos")]
-        ),
-        _vm._v(" "),
-        _c("input", {
-          staticClass:
-            "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
-          attrs: {
-            type: "text",
-            id: "first_name",
-            placeholder: "0",
-            required: ""
-          }
-        })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "bg-white shadow-md mb-4 rounded" }, [
-        _c(
-          "label",
-          {
-            staticClass:
-              "block mb-2 text-sm font-medium text-gray-900 dark:text-white",
-            attrs: { for: "last_name" }
-          },
-          [_vm._v("Nulos")]
-        ),
-        _vm._v(" "),
-        _c("input", {
-          staticClass:
-            "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
-          attrs: {
-            type: "text",
-            id: "last_name",
-            placeholder: "0",
-            required: ""
-          }
-        })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "bg-white shadow-md mb-4 rounded" }, [
-        _c(
-          "label",
-          {
-            staticClass:
-              "block mb-2 text-sm font-medium text-gray-900 dark:text-white",
-            attrs: { for: "last_name" }
-          },
-          [_vm._v("Validos")]
-        ),
-        _vm._v(" "),
-        _c("input", {
-          staticClass:
-            "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
-          attrs: {
-            type: "text",
-            id: "last_name",
-            placeholder: "0",
-            required: ""
-          }
-        })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "thead",
-      {
-        staticClass:
-          "text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
-      },
-      [
-        _c("tr", [
-          _c("th", [_vm._v("Candidato")]),
-          _vm._v(" "),
-          _c("th", [_vm._v("Partido político")]),
-          _vm._v(" "),
-          _c("th", { attrs: { colspan: "3" } }, [_vm._v("Votos")])
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", { staticClass: "border-2 border-curren" }, [
-      _c("input", {
-        staticClass:
-          "px-2 py-1 placeholder-slate-300 text-slate-600 relative bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full",
-        attrs: { type: "text", placeholder: "0" }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", { staticClass: "border-2 border-curren" }, [
-      _c("input", {
-        staticClass:
-          "px-2 py-1 placeholder-slate-300 text-slate-600 relative bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full",
-        attrs: { type: "text", placeholder: "0" }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", { staticClass: "border-2 border-curren" }, [
-      _c("input", {
-        staticClass:
-          "px-2 py-1 placeholder-slate-300 text-slate-600 relative bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full",
-        attrs: { type: "text", placeholder: "0" }
-      })
-    ])
-  }
-]
 render._withStripped = true
 
 

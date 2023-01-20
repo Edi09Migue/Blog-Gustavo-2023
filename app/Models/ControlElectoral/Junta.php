@@ -19,6 +19,10 @@ class Junta extends Model
         'tipo',
     ];
 
+    protected $appends = [
+        'para_select',
+    ];    
+
     //Tipos disponibles para el enum 'tipo'
     public const TIPO_MASCULINO = "masculino";
     public const TIPO_FEMENINO = "femenino";
@@ -33,7 +37,12 @@ class Junta extends Model
         return $this->hasMany(Acta::class);
     }
 
-
-
-
+    /**
+     * Devuelve el el código y tipo de la junta
+     */
+    public function getParaSelectAttribute()
+    {
+        $para_select = strtoupper($this->codigo.' '.$this->tipo);
+        return $para_select;
+    }
 }
