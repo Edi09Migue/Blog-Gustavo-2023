@@ -63,6 +63,7 @@ class CandidatoActaSeeder extends Seeder
                     "votos_validos"     => $votos_validos,
                     "estado"            => true,
                     "ingresada_por"     => 3,
+                    "visualizado"       => true,
                 ]);
 
                 $votados = 0;

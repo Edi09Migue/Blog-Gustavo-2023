@@ -89,20 +89,20 @@ export default{
                         return Promise.reject(error);
                     }
 
+                    this.$parent.user = data.userData
+
                     window.localStorage.setItem('token', data.accessToken);
-                    
-                    this.errorMessage = '';
-                    
                     window.localStorage.setItem('user',  JSON.stringify(data.userData));
 
-                    if(this.user.role=='imagenes'){
+                    if(this.$parent.user.role=='imagenes'){
                         this.$parent.seccion = 2;
                         
-                    }else if(this.user.role=='superadmin'){
+                    }else if(this.$parent.user.role=='superadmin'){
                         this.$parent.seccion = 3;
                     }
 
                     window.localStorage.setItem('pagina', this.$parent.seccion);
+                    this.errorMessage = '';
             })
             .catch((error) => {
                 console.log(error);

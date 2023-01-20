@@ -197,7 +197,7 @@ class Recintos extends Controller
 
 
      /**
-     * Devuelve todos los 
+     * Devuelve el ultimo recinto
     */
     // public function recintosControladpsOptions()
     // {

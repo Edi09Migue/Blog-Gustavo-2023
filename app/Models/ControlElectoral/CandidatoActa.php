@@ -34,7 +34,4 @@ class CandidatoActa extends Model
     {
         return $this->belongsTo(User::class,'procesada_por');
     }
-
-
-
 }
