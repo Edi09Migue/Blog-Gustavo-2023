@@ -4,12 +4,12 @@
 * CSRF token as a header based on the value of the "XSRF" token cookie.
 */
 
-window.axios = require("axios");
-window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+// window.axios = require("axios");
+// window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 window.Vue = require('vue')
 
 import App from './App.vue'
-// import axios from './recursos/axios';
+import axios from './src/axios';
 import store from './src/store'
 import vSelect from 'vue-select'
 // import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -35,7 +35,7 @@ new Vue({
   el: '#main',
   router,
   store,
-  // axios,
+  axios,
   // baseURL: 'http://controlelectoral.local/api/',
   // data: {
       // seccion:  1,

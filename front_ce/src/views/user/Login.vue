@@ -42,7 +42,7 @@
 </div>
 </template>
 <script>
-import { http } from "../../axios"
+import axios from "../../axios";
 
 export default{
     name:'Login',
@@ -61,7 +61,7 @@ export default{
 
             this.processing = true
 
-            http
+            axios
             .post("auth/login",this.data)
             .then( response => {
 

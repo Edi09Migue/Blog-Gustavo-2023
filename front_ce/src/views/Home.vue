@@ -114,7 +114,7 @@
     </div>
 </template>
 <script>
-import { http } from "../axios"
+import axios from "../axios"
 
 export default {
     components: {
@@ -153,7 +153,7 @@ export default {
 
             this.processing = true
 
-            http
+            axios
             .get("control-electoral/recintos/dropdownOptions")
             .then( response => {
 
@@ -171,7 +171,7 @@ export default {
 
             this.processing = true
 
-            http
+            axios
             .get("control-electoral/juntas/dropdownOptions",{
                 params: { recinto:item.id }
             })
@@ -219,7 +219,7 @@ export default {
                 InstFormData.append(key, this.acta[key]);
             }
 
-            http
+            axios
             .post("control-electoral/actas",InstFormData)
             .then( response => {
                 

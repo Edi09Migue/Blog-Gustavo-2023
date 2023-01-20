@@ -1,45 +1,5 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[0],{
 
-/***/ "./front_ce/src/axios.js":
-/*!*******************************!*\
-  !*** ./front_ce/src/axios.js ***!
-  \*******************************/
-/*! exports provided: http */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "http", function() { return http; });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
- // window.axios =  axios
-// axios.defaults.withCredentials = true
-// axios.defaults.baseURL = 'http://controlelectoral.local/api/'
-// axios.interceptors.request.use(function(config){
-//     config.headers.common = {
-//         Autorization:`Bearer ${localStorage.getItem('token')}`,
-//         "Content-Type": "application/json",
-//         Accept: "applicaction/json"
-//     }
-//     return config;
-// })
-
-var http = axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
-  baseURL: "http://controlelectoral.local/api/",
-  headers: {
-    Authorization: "Bearer ".concat(localStorage.getItem('token')),
-    'Content-Type': 'application/json'
-  }
-}); // export const httpFrmData = axios.create({
-//     baseURL: `http://controlelectoral.local/api/`,
-//     headers: {
-//         Authorization: `Bearer ${localStorage.getItem('token')}`,
-//         "Content-Type": "multipart/form-data"
-//     }
-// })
-
-/***/ }),
-
 /***/ "./front_ce/src/views/Home.vue":
 /*!*************************************!*\
   !*** ./front_ce/src/views/Home.vue ***!
@@ -269,7 +229,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.processing = true;
-      _axios__WEBPACK_IMPORTED_MODULE_0__["http"].get("control-electoral/recintos/dropdownOptions").then(function (response) {
+      _axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("control-electoral/recintos/dropdownOptions").then(function (response) {
         _this.recintos = response.data.items;
         _this.processing = false;
       })["catch"](function (error) {
@@ -282,7 +242,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.processing = true;
-      _axios__WEBPACK_IMPORTED_MODULE_0__["http"].get("control-electoral/juntas/dropdownOptions", {
+      _axios__WEBPACK_IMPORTED_MODULE_0__["default"].get("control-electoral/juntas/dropdownOptions", {
         params: {
           recinto: item.id
         }
@@ -327,7 +287,7 @@ __webpack_require__.r(__webpack_exports__);
         InstFormData.append(key, this.acta[key]);
       }
 
-      _axios__WEBPACK_IMPORTED_MODULE_0__["http"].post("control-electoral/actas", InstFormData).then(function (response) {
+      _axios__WEBPACK_IMPORTED_MODULE_0__["default"].post("control-electoral/actas", InstFormData).then(function (response) {
         console.log('ok');
       })["catch"](function (error) {
         console.log(error);

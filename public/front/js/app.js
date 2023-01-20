@@ -280,45 +280,46 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App.vue */ "./front_ce/App.vue");
-/* harmony import */ var _src_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/store */ "./front_ce/src/store/index.js");
-/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-select */ "./front_ce/node_modules/vue-select/dist/vue-select.js");
-/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fortawesome/fontawesome-svg-core */ "./front_ce/node_modules/@fortawesome/fontawesome-svg-core/index.mjs");
-/* harmony import */ var _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @fortawesome/free-solid-svg-icons */ "./front_ce/node_modules/@fortawesome/free-solid-svg-icons/index.mjs");
-/* harmony import */ var _src_route__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./src/route */ "./front_ce/src/route/index.js");
-/* harmony import */ var vue_select_dist_vue_select_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-select/dist/vue-select.css */ "./front_ce/node_modules/vue-select/dist/vue-select.css");
-/* harmony import */ var vue_select_dist_vue_select_css__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(vue_select_dist_vue_select_css__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _src_axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/axios */ "./front_ce/src/axios.js");
+/* harmony import */ var _src_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./src/store */ "./front_ce/src/store/index.js");
+/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-select */ "./front_ce/node_modules/vue-select/dist/vue-select.js");
+/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @fortawesome/fontawesome-svg-core */ "./front_ce/node_modules/@fortawesome/fontawesome-svg-core/index.mjs");
+/* harmony import */ var _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @fortawesome/free-solid-svg-icons */ "./front_ce/node_modules/@fortawesome/free-solid-svg-icons/index.mjs");
+/* harmony import */ var _src_route__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./src/route */ "./front_ce/src/route/index.js");
+/* harmony import */ var vue_select_dist_vue_select_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-select/dist/vue-select.css */ "./front_ce/node_modules/vue-select/dist/vue-select.css");
+/* harmony import */ var vue_select_dist_vue_select_css__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(vue_select_dist_vue_select_css__WEBPACK_IMPORTED_MODULE_7__);
 /**
 * We'll load the axios HTTP library which allows us to easily issue requests
 * to our Laravel back-end. This library automatically handles sending the
 * CSRF token as a header based on the value of the "XSRF" token cookie.
 */
-window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+// window.axios = require("axios");
+// window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 window.Vue = __webpack_require__(/*! vue */ "./front_ce/node_modules/vue/dist/vue.common.js");
- // import axios from './recursos/axios';
+
 
 
  // import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 
 
-_fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_3__["library"].add(_fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_4__["fas"]);
+_fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_4__["library"].add(_fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_5__["fas"]);
  // import Contacto from './components/Contacto/Contacto.vue';
 // import Login from './components/user/Login.vue';
 // import Actas from './components/actas/Actas.vue';
 // Vue.component('font-awesome-icon', FontAwesomeIcon);
 // Vue.component('contacto',Contacto);
 
-Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_2___default.a);
+Vue.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_3___default.a);
  // Vue.component('login',Login);
 // Vue.component('actas',Actas);
 
 new Vue({
   el: '#main',
-  router: _src_route__WEBPACK_IMPORTED_MODULE_5__["default"],
-  store: _src_store__WEBPACK_IMPORTED_MODULE_1__["default"],
-  // axios,
+  router: _src_route__WEBPACK_IMPORTED_MODULE_6__["default"],
+  store: _src_store__WEBPACK_IMPORTED_MODULE_2__["default"],
+  axios: _src_axios__WEBPACK_IMPORTED_MODULE_1__["default"],
   // baseURL: 'http://controlelectoral.local/api/',
   // data: {
   // seccion:  1,
@@ -31279,6 +31280,50 @@ var index = {
 
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
+/***/ "./front_ce/src/axios.js":
+/*!*******************************!*\
+  !*** ./front_ce/src/axios.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./front_ce/node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+
+ // window.axios =  axios
+// axios.defaults.withCredentials = true
+// axios.defaults.baseURL = 'http://controlelectoral.local/api/'
+// axios.interceptors.request.use(function(config){
+//     config.headers.common = {
+//         Autorization:`Bearer ${localStorage.getItem('token')}`,
+//         "Content-Type": "application/json",
+//         Accept: "applicaction/json"
+//     }
+//     return config;
+// })
+
+var http = axios__WEBPACK_IMPORTED_MODULE_1___default.a.create({
+  baseURL: "http://controlelectoral.local/api/",
+  headers: {
+    Authorization: "Bearer ".concat(localStorage.getItem('token')),
+    'Content-Type': 'application/json'
+  }
+});
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.prototype.$http = http;
+/* harmony default export */ __webpack_exports__["default"] = (http); // export const httpFrmData = axios.create({
+//     baseURL: `http://controlelectoral.local/api/`,
+//     headers: {
+//         Authorization: `Bearer ${localStorage.getItem('token')}`,
+//         "Content-Type": "multipart/form-data"
+//     }
+// })
 
 /***/ }),
 
