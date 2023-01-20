@@ -8,7 +8,7 @@
         </div>
 
         <!-- echart -->
-        <app-echart-doughnut :series="series" />
+        <app-echart-doughnut v-if="series" :series="series" />
     </b-card>
 </template>
 
@@ -28,32 +28,45 @@ export default {
         }
     },
     data() {
-        let total = parseFloat(this.totales.validos) +
+        return {
+            total: 0,
+            series: null
+        };
+    },
+    methods:{
+        initGraph(){
+            let total = parseFloat(this.totales.validos) +
                     parseFloat(this.totales.blancos) +
                     parseFloat(this.totales.nulos);
-        return {
-            total: total,
-            series: [
-                {
-                    name: "Votos",
-                    type: "pie",
-                    radius: ["50%", "70%"],
-                    avoidLabelOverlap: false,
-                    label: {
-                        show: false
-                    },
-                    labelLine: {
-                        show: false
-                    },
-                    data: [
-                        { value: this.totales.validos, name: `Válidos (${((this.totales.validos / total)*100).toFixed(2)}%)` },
-                        { value: this.totales.nulos, name: `Nulos  (${((this.totales.nulos / total)*100).toFixed(2)}%)` },
-                        { value: this.totales.blancos, name: `Blancos  (${((this.totales.blancos / total)*100).toFixed(2)}%)` }
-                    ]
-                }
-            ]
-        };
-    }
+            let graphOptions = {
+                name: "Votos",
+                type: "pie",
+                radius: ["50%", "70%"],
+                avoidLabelOverlap: false,
+                label: {
+                    show: false
+                },
+                labelLine: {
+                    show: false
+                },
+                data: [
+                    { value: this.totales.validos, name: `Válidos (${((this.totales.validos / total)*100).toFixed(2)}%)` },
+                    { value: this.totales.nulos, name: `Nulos  (${((this.totales.nulos / total)*100).toFixed(2)}%)` },
+                    { value: this.totales.blancos, name: `Blancos  (${((this.totales.blancos / total)*100).toFixed(2)}%)` }
+                ]
+            };
+            this.total = total;
+            this.series = graphOptions;
+        }
+    },
+    mounted(){
+        this.initGraph();
+    },
+    watch:{
+        totales() { 
+            this.initGraph();
+        },
+    },
 };
 </script>
 

@@ -122,7 +122,23 @@ class Resultados extends Controller
                             DB::raw('sum(votos_nulos) as nulos'),
                             DB::raw('sum(votos_validos) as validos'),
                             )
-                        ->first();
+                        ->join('juntas', 'juntas.id', '=', 'actas.junta_id')
+                        ->join('recintos', 'recintos.id', '=', 'juntas.recinto_id')
+                        ->join('parroquias', 'parroquias.id', '=', 'recintos.parroquia_id');
+
+        if ($request->has('parroquia')) {
+            $totales = $totales->where('parroquias.id', $request->parroquia);
+        }
+
+        if ($request->has('recinto')) {
+            $totales = $totales->where('recintos.id', $request->recinto);
+        }
+
+        if ($request->has('junta')) {
+            $totales = $totales->where('juntas.id', $request->junta);
+        }
+
+        $totales = $totales->first();
                 
         return response()->json([
             'status'    =>  true,
@@ -132,12 +148,33 @@ class Resultados extends Controller
 
     public function totalesEscrutados(Request $request){
 
-        $total_electores = Recinto::sum('cantidad_electores');
-        
+        $total_electores = Recinto::query();
+
         $totales = Acta::select(
-                            DB::raw('sum(votos_blancos) + sum(votos_nulos) + sum(votos_validos) as total_votos')
-                            )
-                        ->first();
+                DB::raw('sum(votos_blancos) + sum(votos_nulos) + sum(votos_validos) as total_votos')
+            )
+            ->join('juntas', 'juntas.id', '=', 'actas.junta_id')
+            ->join('recintos', 'recintos.id', '=', 'juntas.recinto_id')
+            ->join('parroquias', 'parroquias.id', '=', 'recintos.parroquia_id');
+
+
+        if ($request->has('parroquia')) {
+            $total_electores = $total_electores->where('parroquia_id', $request->parroquia);
+            $totales = $totales->where('parroquias.id', $request->parroquia);
+        }
+
+        if ($request->has('recinto')) {
+            $total_electores = $total_electores->where('id', $request->recinto);
+            $totales = $totales->where('recintos.id', $request->recinto);
+        }
+
+        if ($request->has('junta')) {
+            $totales = $totales->where('juntas.id', $request->junta);
+        }
+
+        $total_electores = $total_electores->sum('cantidad_electores');      
+        $totales = $totales->first();
+
         $resultado = [
             'total'         =>  $total_electores,
             'escrutados'    =>  $totales->total_votos,

@@ -8,7 +8,7 @@
         </div>
 
         <!-- echart -->
-        <app-echart-doughnut :series="series" />
+        <app-echart-doughnut  v-if="series" :series="series" />
     </b-card>
 </template>
 
@@ -28,11 +28,15 @@ export default {
         }
     },
     data() {
-        let total = parseFloat(this.totales.total);
         return {
-            total: total,
-            series: [
-                {
+            total: 0,
+            series: null
+        };
+    },
+    methods: {
+        initGraph(){
+            let total = parseFloat(this.totales.total);
+            let graphOptions = {
                     name: "Votos",
                     type: "pie",
                     radius: ["50%", "70%"],
@@ -47,10 +51,19 @@ export default {
                         { value: this.totales.escrutados, name: `Escrutados` },
                         { value: this.totales.por_escrutar, name: `Por Escrutar` },
                     ]
-                }
-            ]
-        };
-    }
+                };
+            this.total = total;
+            this.series = graphOptions;
+        }
+    },
+    mounted(){
+        this.initGraph();
+    },
+    watch:{
+        totales() { 
+            this.initGraph();
+        },
+    },
 };
 </script>
 

@@ -6,7 +6,7 @@ import router from "@/router";
 // Notification
 import { useToast } from "vue-toastification/composition";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
-const toast = useToast();
+
 
 export default function useResultadosView(){
     const totalesPorCandidatoData = ref(null);
@@ -14,7 +14,7 @@ export default function useResultadosView(){
     const totalesPorTipoVotoData = ref(null);
     const totalesEscrutadosData = ref(null);
     const errorServer = ref(null);
-
+    const toast = useToast();
     
     // filters
     const parroquiaFilter = ref(null);

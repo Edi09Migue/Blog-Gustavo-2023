@@ -51,10 +51,19 @@ export default {
   watch:{
       optionData() { 
           this.line.chart.setOption({
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow',
+                },
+            },
+            legend: {
+                left: 0,
+            },
             xAxis: this.optionData.xAxis,
             yAxis: this.optionData.yAxis,
             series: this.optionData.series
-          });
+          }, true);
       },
   },
   setup(props){
