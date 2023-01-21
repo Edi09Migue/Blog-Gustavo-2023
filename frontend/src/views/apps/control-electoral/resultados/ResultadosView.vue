@@ -1,10 +1,27 @@
 <template>
     <b-row>
+        <b-col cols="12">
+            <!-- Filters -->
+            <actas-list-filters
+                :parroquia-filter.sync="parroquiaFilter"
+                :recinto-filter.sync="recintoFilter"
+                :junta-filter.sync="juntaFilter"
+                :parroquias-options="parroquiasOptions"
+                @fetch-recintos-options="fetchRecintosOptions"
+                :recintos-options="recintosOptions"
+                @fetch-juntas-options="fetchJuntasOptions"
+                :juntas-options="juntasOptions"
+                @refetch-data="refetchData"
+            />
+        </b-col>
         <b-col cols="12" v-if="totalesPorCandidatoData">
             <totales-por-candidato :series="totalesPorCandidatoData" />
         </b-col>
         <b-col cols="12" v-if="totalesPorCandidatoParroquiaData">
             <totales-por-candidato-parroquia :series="totalesPorCandidatoParroquiaData" />
+        </b-col>
+        <b-col md="6" v-if="totalesEscrutadosData">
+            <totales-escrutados :totales="totalesEscrutadosData" />
         </b-col>
         <b-col md="6" v-if="totalesPorTipoVotoData">
             <totales-por-tipo-voto :totales="totalesPorTipoVotoData" />
@@ -21,6 +38,9 @@ import resultadosStoreModule from './resultadosStoreModule';
 import TotalesPorCandidato from './graficas/TotalesPorCandidato';
 import TotalesPorCandidatoParroquia from './graficas/TotalesPorCandidatoParroquia';
 import TotalesPorTipoVoto from './graficas/TotalesPorTipoVoto';
+import TotalesEscrutados from './graficas/TotalesEscrutados';
+
+import ActasListFilters from '../actas/actas-list/ActasListFilters.vue';
 
 export default {
     components: {
@@ -29,7 +49,10 @@ export default {
 
         TotalesPorCandidato,
         TotalesPorCandidatoParroquia,
-        TotalesPorTipoVoto
+        TotalesPorTipoVoto,
+        TotalesEscrutados,
+
+        ActasListFilters
     },
     setup() {
         const RESULTADOS_STORE_MODULE_NAME = "control-resultados";
@@ -51,14 +74,42 @@ export default {
             totalesPorCandidatoData,
             totalesPorCandidatoParroquiaData,
             totalesPorTipoVotoData,
-            errorServer
+            totalesEscrutadosData,
+            errorServer,
+            
+            //filters
+            parroquiasOptions,
+            recintosOptions,
+            juntasOptions,
+            parroquiaFilter,
+            recintoFilter,
+            juntaFilter,
+
+            fetchRecintosOptions,
+            fetchJuntasOptions,
+            refetchData
+
         } = useResultadosView();
 
         return {
             totalesPorCandidatoData,
             totalesPorCandidatoParroquiaData,
             totalesPorTipoVotoData,
-            errorServer
+            totalesEscrutadosData,
+            errorServer,
+
+            
+            //filters
+            parroquiasOptions,
+            recintosOptions,
+            juntasOptions,
+            parroquiaFilter,
+            recintoFilter,
+            juntaFilter,
+
+            fetchRecintosOptions,
+            fetchJuntasOptions,
+            refetchData
         }
     },
 }

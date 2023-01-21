@@ -1,6 +1,6 @@
 <template>
   <e-charts
-    ref="line"
+    ref="line2"
     autoresize
     :options="option"
     theme="theme-color"
@@ -50,27 +50,21 @@ export default {
   },
   watch:{
       optionData() { 
-          this.line.chart.setOption({
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow',
-                },
-            },
-            legend: {
-                left: 0,
-            },
+        console.log('this.line2',this.line2);
+        console.log('this.optionData',this.optionData);
+          this.line2.chart.setOption({
             xAxis: this.optionData.xAxis,
             yAxis: this.optionData.yAxis,
             series: this.optionData.series
-          }, true);
+          });
+          this.line2.chart.resize();
       },
   },
   setup(props){
-      let line = ref(null);
+      let line2 = ref(null);
 
       return {
-          line
+          line2
       }
   }
 }

@@ -1,6 +1,6 @@
 <template>
     <b-card title="Votos por Candidato en Parroquias Rurales y Urbanas">
-        <app-echart-bar :option-data="option" />
+        <app-echart-bar v-if="option" :option-data="option" />
     </b-card>
 </template>
 
@@ -20,26 +20,29 @@ export default {
         }
     },
     data() {
-
-        let categorias = this.series.candidatos;
-        let resultados = this.series.parroquias.map((parroquia,i) => {
-            let data = this.series.items[parroquia];
-            let datos = data.map(d => d.total_votos);
-            return {
-                name: parroquia,
-                type: "bar",
-                stack: i%2 == 0 ? 'rural' : 'urbano',
-                label: {
-                    show: true,
-                    position: 'inside'
-                },
-                data: datos,
-            }
-        });
-
-        console.log('categorias',categorias);
         return {
-            option: {
+            option: null
+        }
+    },
+    methods:{
+        initGraph(){
+            let categorias = this.series.candidatos;
+            let resultados = this.series.parroquias.map((parroquia,i) => {
+                let data = this.series.items[parroquia];
+                let datos = data.map(d => d.total_votos);
+                return {
+                    name: parroquia,
+                    type: "bar",
+                    stack: i%2 == 0 ? 'rural' : 'urbano',
+                    label: {
+                        show: true,
+                        position: 'inside'
+                    },
+                    data: datos,
+                }
+            });
+            
+            let graphOptions = {
                 xAxis: [
                     {
                         type: "category",
@@ -54,9 +57,18 @@ export default {
                     }
                 ],
                 series: resultados
-            }
-        };
-    }
+            };
+            this.option = graphOptions;
+        }
+    },
+    mounted(){
+        this.initGraph();
+    },
+    watch:{
+        series() { 
+            this.initGraph();
+        },
+    },
 };
 </script>
 <style scoped>

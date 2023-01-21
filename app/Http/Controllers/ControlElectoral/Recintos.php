@@ -185,9 +185,15 @@ class Recintos extends Controller
         $recintos = Recinto::query();
         
         #Recintos por parroquia
-        if ($request->has('parroquia'))
-            $recintos = $recintos->where('parroquia_id', $request->parroquia);
-             $recintos = $recintos->get();
+        if ($request->has('parroquia')){
+
+            //soporte para buscar una o varias parroquias
+            $parroquiasIds = is_array($request->parroquia) ? $request->parroquia : [$request->parroquia];
+            
+            $recintos = $recintos->whereIn('parroquia_id', $parroquiasIds);
+        }
+
+        $recintos = $recintos->get();
         
         return response()->json([
             'status'    =>  true,
