@@ -15,6 +15,7 @@ export default function useResultadosView(){
     const totalesEscrutadosData = ref(null);
     const errorServer = ref(null);
     const toast = useToast();
+    const ultimaActualizacion = ref(Date());
     
     // filters
     const parroquiaFilter = ref(null);
@@ -27,6 +28,7 @@ export default function useResultadosView(){
         fetchTotalesPorCandidatoParroquia();
         fetchTotalesPorTipoVoto();
         fetchTotalesEscrutados();
+        ultimaActualizacion.value = Date();
     }
 
     watch([parroquiaFilter, recintoFilter, juntaFilter], () => {
@@ -250,7 +252,9 @@ export default function useResultadosView(){
 
         fetchRecintosOptions,
         fetchJuntasOptions,
-        refetchData
+        refetchData,
+
+        ultimaActualizacion
   
     };
 }

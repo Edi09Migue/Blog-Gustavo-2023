@@ -12,6 +12,7 @@
                 @fetch-juntas-options="fetchJuntasOptions"
                 :juntas-options="juntasOptions"
                 @refetch-data="refetchData"
+                :ultima-actualizacion="ultimaActualizacion"
             />
         </b-col>
         <b-col cols="12" v-if="totalesPorCandidatoData">
@@ -87,7 +88,9 @@ export default {
 
             fetchRecintosOptions,
             fetchJuntasOptions,
-            refetchData
+            refetchData,
+
+            ultimaActualizacion
 
         } = useResultadosView();
 
@@ -109,7 +112,9 @@ export default {
 
             fetchRecintosOptions,
             fetchJuntasOptions,
-            refetchData
+            refetchData,
+
+            ultimaActualizacion
         }
     },
 }

@@ -1,9 +1,30 @@
 <template>
     <b-card no-body>
-        <b-card-header class="pb-50">
+        <b-card-header class="pb-50 d-flex">
             <h5>
                 {{ $t("Filters") }}
             </h5>
+            <div v-if="ultimaActualizacion">
+                <small>Generado el:</small>
+                <strong>{{formatDate(ultimaActualizacion,{
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    second: "numeric",
+                }) }}</strong>
+                <b-button
+                    v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                    variant="outline-primary"
+                    size="sm"
+                    @click="$emit('refetch-data')"
+                >
+                    <feather-icon
+                        icon="RefreshCcwIcon"
+                    />
+                </b-button>
+            </div>
         </b-card-header>
         <b-card-body>
             <b-row>
@@ -96,8 +117,10 @@
     </b-card>
 </template>
 <script>
-import { BCard, BCardHeader, BCardBody, BRow, BCol, BBadge } from "bootstrap-vue";
+import { BCard, BCardHeader, BCardBody, BRow, BCol, BBadge, BButton } from "bootstrap-vue";
 import vSelect from "vue-select";
+import Ripple from 'vue-ripple-directive';
+import { formatDate } from "@core/utils/filter";
 
 export default {
     components: {
@@ -108,6 +131,10 @@ export default {
         BCardBody,
         vSelect,
         BBadge,
+        BButton,
+    },
+    directives: {
+        Ripple,
     },
     props: {
        parroquiaFilter: {
@@ -134,7 +161,10 @@ export default {
             type: Array,
             required: true,
         },
-       
+        ultimaActualizacion:{
+            type: Date|String,
+            required: false
+        }
     },
     methods: {
         refetchData() {
@@ -157,7 +187,9 @@ export default {
 
         return {
             selectRecinto,
-            selectJunta
+            selectJunta,
+
+            formatDate
         };
 
     }
