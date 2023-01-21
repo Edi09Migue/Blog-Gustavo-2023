@@ -1,6 +1,6 @@
 <template>
 <div class="grid place-items-center h-screen bg-gradient-to-r from-dark via-plomo-light to-dark">
-    <div class="max-w-md mx-auto bg-white shadow-xl rounded my-8 bg-dark box-login">
+    <div class="max-w-md mx-auto h=1/2 shadow-xl rounded my-8 bg-dark box-login">
         <div class="text-center text-blanco py-4">INICIO DE SESIÓN</div>
         <div class="pt-8 pb-10">
             <form @submit.prevent="login">
@@ -42,7 +42,7 @@
 </div>
 </template>
 <script>
-import axios from "../../axios";
+import { http } from "../../axios";
 
 export default{
     name:'Login',
@@ -57,37 +57,29 @@ export default{
         }
     },
     methods:{
-        login(){
+
+        async login(){
 
             this.processing = true
+        
+            const reseponse = await http.post("auth/login",this.data)
 
-            axios
-            .post("auth/login",this.data)
-            .then( response => {
-
-                    let user = response.data
-                    this.errorMessage = '';
-                    
-                    window.localStorage.setItem('token', user.accessToken);
-                    window.localStorage.setItem('user',  JSON.stringify(user.userData));
-
-                    this.processing = false
-
+            if(reseponse.data){
+                
+                let user = reseponse.data
+                window.localStorage.setItem('token', user.accessToken);
+                window.localStorage.setItem('user',  JSON.stringify(user.userData));
+                
+                if(user.userData.role=='imagenes'){
+                    this.$router.push({ path: 'actas' })
+                }else if(user.userData.role=='superadmin'){
                     this.$router.push({ path: 'home' })
-            })
-            .catch((error) => {
-                console.log(error);
-                this.errorMessage = error
-                this.processing = false
-            });
+                }
+                
+            }
+            
         },
 
-    },
-    mounted() {
-        // console.log(this.$parent.baseURL);
-    },
-    setup() {
-        
     },
 }
 </script>

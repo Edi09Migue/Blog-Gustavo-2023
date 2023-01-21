@@ -1,18 +1,57 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[2],{
 
+/***/ "./front_ce/src/axios.js":
+/*!*******************************!*\
+  !*** ./front_ce/src/axios.js ***!
+  \*******************************/
+/*! exports provided: http */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "http", function() { return http; });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+// import Vue from "vue";
+ // window.axios =  axios
+// axios.defaults.withCredentials = true
+// axios.defaults.baseURL = 'http://controlelectoral.local/api/'
+// axios.interceptors.request.use(function(config){
+//     config.headers.common = {
+//         Autorization:`Bearer ${localStorage.getItem('token')}`,
+//         "Content-Type": "application/json",
+//         Accept: "applicaction/json"
+//     }
+//     return config;
+// })
+// var token = 
+
+var http = axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
+  baseURL: "http://controlelectoral.local/api/"
+}); // Vue.prototype.$http = http;
+// export default http;
+// export const httpFrmData = axios.create({
+//     baseURL: `http://controlelectoral.local/api/`,
+//     headers: {
+//         Authorization: `Bearer ${localStorage.getItem('token')}`,
+//         "Content-Type": "multipart/form-data"
+//     }
+// })
+
+/***/ }),
+
 /***/ "./front_ce/src/views/actas/Actas.vue":
 /*!********************************************!*\
   !*** ./front_ce/src/views/actas/Actas.vue ***!
   \********************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Actas_vue_vue_type_template_id_ef08eaf8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Actas.vue?vue&type=template&id=ef08eaf8& */ "./front_ce/src/views/actas/Actas.vue?vue&type=template&id=ef08eaf8&");
 /* harmony import */ var _Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Actas.vue?vue&type=script&lang=js& */ "./front_ce/src/views/actas/Actas.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -42,15 +81,13 @@ component.options.__file = "front_ce/src/views/actas/Actas.vue"
 /*!*********************************************************************!*\
   !*** ./front_ce/src/views/actas/Actas.vue?vue&type=script&lang=js& ***!
   \*********************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Actas.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/src/views/actas/Actas.vue?vue&type=script&lang=js&");
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
- /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0___default.a); 
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
@@ -76,9 +113,12 @@ __webpack_require__.r(__webpack_exports__);
 /*!*****************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./front_ce/src/views/actas/Actas.vue?vue&type=script&lang=js& ***!
   \*****************************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../axios */ "./front_ce/src/axios.js");
 //
 //
 //
@@ -193,15 +233,170 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {},
+  data: function data() {
+    return {
+      acta: {
+        codigo: '',
+        junta_id: null,
+        votos_blancos: 0,
+        votos_nulos: 0,
+        votos_validos: 0,
+        estado: 0,
+        ingresada_por: true,
+        imagen: null
+      },
+      image: null,
+      processing: false,
+      errorMessage: null,
+      recintos: [],
+      recinto: null,
+      juntas: [],
+      junta: null
+    };
+  },
+  created: function created() {
+    this.fetchRecintos();
+  },
+  computed: {
+    user: function user() {
+      // return this.$store.getters.getUser
+      var x = window.localStorage.getItem('user');
+      return JSON.parse(x);
+    },
+    token: function token() {
+      return window.localStorage.getItem('token');
+    }
+  },
+  methods: {
+    fetchRecintos: function fetchRecintos() {
+      var _this = this;
+
+      this.processing = true;
+      _axios__WEBPACK_IMPORTED_MODULE_0__["http"].get("control-electoral/recintos/dropdownOptions", {
+        headers: {
+          Authorization: "Bearer ".concat(this.token),
+          'Content-Type': 'application/json'
+        }
+      }).then(function (response) {
+        _this.recintos = response.data.items;
+        _this.processing = false;
+      })["catch"](function (error) {
+        console.log(error);
+        _this.errorMessage = error;
+        _this.processing = false;
+      });
+    },
+    selectJuntasXRecinto: function selectJuntasXRecinto(item) {
+      var _this2 = this;
+
+      this.processing = true;
+      _axios__WEBPACK_IMPORTED_MODULE_0__["http"].get("control-electoral/juntas/dropdownOptions", {
+        params: {
+          recinto: item.id
+        },
+        headers: {
+          Authorization: "Bearer ".concat(this.token),
+          'Content-Type': 'application/json'
+        }
+      }).then(function (response) {
+        _this2.acta.junta_id = item.id;
+        _this2.juntas = response.data.items;
+        _this2.processing = false;
+      })["catch"](function (error) {
+        console.log(error);
+        _this2.errorMessage = error;
+        _this2.processing = false;
+      });
+    },
+    selectJunta: function selectJunta(item) {
+      this.acta.junta_id = item.id;
+    },
+    selectImagen: function selectImagen(event) {
+      var selectedImage = event.target.files[0];
+      this.createBase64Image(selectedImage);
+    },
+    createBase64Image: function createBase64Image(fileObject) {
+      var _this3 = this;
+
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        _this3.image = e.target.result;
+      };
+
+      reader.readAsDataURL(fileObject);
+    },
+    addActa: function addActa(event) {
+      var _this4 = this;
+
+      this.processing = true;
+      this.acta.ingresada_por = this.user.id;
+      this.acta.imagen = this.image;
+      var InstFormData = new FormData();
+
+      for (var key in this.acta) {
+        InstFormData.append(key, this.acta[key]);
+      }
+
+      _axios__WEBPACK_IMPORTED_MODULE_0__["http"].post("control-electoral/actas", InstFormData, {
+        headers: {
+          Authorization: "Bearer ".concat(this.token),
+          'Content-Type': 'application/json'
+        }
+      }).then(function (response) {
+        if (response.data.status) {
+          event.target.reset();
+
+          _this4.fetchRecintos();
+
+          _this4.showSucces();
+        } else {
+          event.target.reset();
+
+          _this4.showWarning(response.data.msg);
+        }
+
+        _this4.processing = false;
+      })["catch"](function (error) {
+        console.log(error);
+        _this4.processing = false;
+      });
+    },
+    showSucces: function showSucces() {
+      this.$toast.success("¡Dados guardados correctamente!", {
+        position: "top-right",
+        timeout: 1500,
+        draggablePercent: 0.6,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true
+      });
+    },
+    showWarning: function showWarning(msg) {
+      var _this5 = this;
+
+      this.$swal({
+        icon: 'warning',
+        title: msg,
+        allowOutsideClick: false,
+        text: 'POR FAVOR INFORMA ÉSTE PROBLEMA A UN ADMINISTRADOR',
+        footer: 'Por favor informa éste problema a un administrador ',
+        confirmButtonText: 'Ok registrar otra acta'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          _this5.$refs.frmActas.reset();
+
+          _this5.fetchRecintos();
+        } else if (result.isDenied) {
+          _this5.$swal('Changes are not saved', '', 'info');
+        }
+      });
+    }
+  }
+});
 
 /***/ }),
 
@@ -235,7 +430,7 @@ var render = function() {
         },
         [
           _c("div", { staticClass: "text-center text-blanco py-1" }, [
-            _vm._v("\n                " + _vm._s(_vm.user) + "\n            ")
+            _vm._v("\n            " + _vm._s(_vm.user.name) + "\n        ")
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "text-center text-blanco py-1" }, [
@@ -250,172 +445,300 @@ var render = function() {
                 on: {
                   submit: function($event) {
                     $event.preventDefault()
-                    return _vm.addActas($event)
+                    return _vm.addActa($event)
                   }
                 }
               },
               [
                 _c("div", { staticClass: "flex p-4" }, [
-                  _c("div", { staticClass: "min-w-[50%] pr-2" }, [
-                    _c(
-                      "div",
-                      { staticClass: "bg-white shadow-md mb-4 rounded" },
-                      [
+                  _vm.recintos.length > 0
+                    ? _c("div", { staticClass: "min-w-[50%] pr-2" }, [
                         _c(
-                          "label",
-                          {
-                            staticClass:
-                              "block pl-5 text-base font-bold mb-2 tracking-wide",
-                            attrs: { for: "grid-password" }
-                          },
+                          "div",
+                          { staticClass: "bg-white shadow-md mb-4 rounded" },
                           [
-                            _vm._v(
-                              "\n                                    Recintos\n                                "
+                            _c(
+                              "label",
+                              {
+                                staticClass:
+                                  "block uppercase text-base font-bold mb-2 tracking-wide",
+                                attrs: { for: "grid-password" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Recintos\n                            "
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-select",
+                              {
+                                staticClass:
+                                  "block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500",
+                                attrs: {
+                                  label: "nombre",
+                                  options: _vm.recintos,
+                                  placeholder: "Buscar el recinto"
+                                },
+                                on: { input: _vm.selectJuntasXRecinto },
+                                scopedSlots: _vm._u(
+                                  [
+                                    {
+                                      key: "no-options",
+                                      fn: function(ref) {
+                                        var search = ref.search
+                                        var searching = ref.searching
+                                        return [
+                                          searching
+                                            ? [
+                                                _vm._v(
+                                                  "\n                                        No se encontraron resultados para\n                                        "
+                                                ),
+                                                _c("em", [
+                                                  _vm._v(
+                                                    _vm._s(search) +
+                                                      "\n                                    "
+                                                  )
+                                                ]),
+                                                _vm._v(
+                                                  ".\n                                    "
+                                                )
+                                              ]
+                                            : _c(
+                                                "em",
+                                                {
+                                                  staticStyle: {
+                                                    opacity: "0.5"
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "Comience a escribir para buscar un recinto."
+                                                  )
+                                                ]
+                                              )
+                                        ]
+                                      }
+                                    }
+                                  ],
+                                  null,
+                                  false,
+                                  2451549140
+                                ),
+                                model: {
+                                  value: _vm.recinto,
+                                  callback: function($$v) {
+                                    _vm.recinto = $$v
+                                  },
+                                  expression: "recinto"
+                                }
+                              },
+                              [
+                                _c("v-select", {
+                                  attrs: {
+                                    options: _vm.recintos,
+                                    label: "title"
+                                  },
+                                  scopedSlots: _vm._u(
+                                    [
+                                      {
+                                        key: "option",
+                                        fn: function(option) {
+                                          return [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(option.nombre) +
+                                                "\n                                    "
+                                            )
+                                          ]
+                                        }
+                                      }
+                                    ],
+                                    null,
+                                    false,
+                                    2447399496
+                                  )
+                                })
+                              ],
+                              1
                             )
-                          ]
+                          ],
+                          1
                         ),
                         _vm._v(" "),
-                        _c("v-select", {
-                          staticClass:
-                            "block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500",
-                          attrs: {
-                            options: this.$parent.recintos,
-                            label: "nombre",
-                            placeholder: "Buscar el recinto"
-                          },
-                          scopedSlots: _vm._u([
-                            {
-                              key: "option",
-                              fn: function(option) {
-                                return [
-                                  _vm._v(
-                                    "\n                                        " +
-                                      _vm._s(option.codigo) +
-                                      " / " +
-                                      _vm._s(option.nombre) +
-                                      "  \n                                    "
+                        _c(
+                          "div",
+                          { staticClass: "bg-white shadow-md mb-4 rounded" },
+                          [
+                            _c(
+                              "label",
+                              {
+                                staticClass:
+                                  "block uppercase text-base font-bold mb-2 tracking-wide",
+                                attrs: { for: "grid-password" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Juntas\n                            "
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-select",
+                              {
+                                staticClass:
+                                  "block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500",
+                                attrs: {
+                                  label: "para_select",
+                                  options: _vm.juntas,
+                                  placeholder: "Buscar la junta"
+                                },
+                                on: { input: _vm.selectJunta },
+                                scopedSlots: _vm._u(
+                                  [
+                                    {
+                                      key: "no-options",
+                                      fn: function(ref) {
+                                        var search = ref.search
+                                        var searching = ref.searching
+                                        return [
+                                          searching
+                                            ? [
+                                                _vm._v(
+                                                  "\n                                        No se encontraron resultados para\n                                        "
+                                                ),
+                                                _c("em", [
+                                                  _vm._v(
+                                                    _vm._s(search) +
+                                                      "\n                                    "
+                                                  )
+                                                ]),
+                                                _vm._v(
+                                                  ".\n                                    "
+                                                )
+                                              ]
+                                            : _c(
+                                                "em",
+                                                {
+                                                  staticStyle: {
+                                                    opacity: "0.5"
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "Comience a escribir para buscar una junta."
+                                                  )
+                                                ]
+                                              )
+                                        ]
+                                      }
+                                    }
+                                  ],
+                                  null,
+                                  false,
+                                  2972468057
+                                ),
+                                model: {
+                                  value: _vm.junta,
+                                  callback: function($$v) {
+                                    _vm.junta = $$v
+                                  },
+                                  expression: "junta"
+                                }
+                              },
+                              [
+                                _c("v-select", {
+                                  attrs: {
+                                    options: _vm.juntas,
+                                    label: "title"
+                                  },
+                                  scopedSlots: _vm._u(
+                                    [
+                                      {
+                                        key: "option",
+                                        fn: function(option) {
+                                          return [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(option.codigo) +
+                                                " / " +
+                                                _vm._s(
+                                                  option.tipo.toUpperCase()
+                                                ) +
+                                                "\n                                    "
+                                            )
+                                          ]
+                                        }
+                                      }
+                                    ],
+                                    null,
+                                    false,
+                                    3724895223
                                   )
-                                ]
-                              }
-                            },
-                            {
-                              key: "search",
-                              fn: function(ref) {
-                                var attributes = ref.attributes
-                                var events = ref.events
-                                return [
-                                  _c(
-                                    "input",
-                                    _vm._g(
-                                      _vm._b(
-                                        {
-                                          staticClass: "vs__search",
-                                          attrs: { required: !_vm.nombre }
-                                        },
-                                        "input",
-                                        attributes,
-                                        false
-                                      ),
-                                      events
-                                    )
-                                  )
-                                ]
-                              }
-                            }
-                          ])
-                        })
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _vm._m(0),
-                    _vm._v(" "),
-                    _vm._m(1)
-                  ]),
+                                })
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "bg-white shadow-md mb-4 rounded" },
+                          [
+                            _c(
+                              "label",
+                              {
+                                staticClass:
+                                  "block mb-2 text-sm font-medium text-gray-900",
+                                attrs: { for: "multiple_files" }
+                              },
+                              [_vm._v("Seleccionar la imagen de una acta")]
+                            ),
+                            _vm._v(" "),
+                            _c("input", {
+                              staticClass: "custom-input",
+                              attrs: { type: "file", accept: "image/*" },
+                              on: { change: _vm.selectImagen }
+                            })
+                          ]
+                        )
+                      ])
+                    : _vm._e(),
                   _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "min-w-[50%] pl-2 flex items-center" },
+                    {
+                      staticClass:
+                        "bg-white min-w-[50%] pl-2 flex items-center rounded"
+                    },
                     [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "flex items-center justify-center w-full"
-                        },
-                        [
-                          _c(
-                            "label",
-                            {
-                              staticClass:
-                                "flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600",
-                              attrs: { for: "dropzone-file" }
-                            },
-                            [
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "flex flex-col items-center justify-center pt-5 pb-6"
-                                },
-                                [
-                                  _c(
-                                    "svg",
-                                    {
-                                      staticClass:
-                                        "w-10 h-10 mb-3 text-gray-400",
-                                      attrs: {
-                                        "aria-hidden": "true",
-                                        fill: "none",
-                                        stroke: "currentColor",
-                                        viewBox: "0 0 24 24",
-                                        xmlns: "http://www.w3.org/2000/svg"
-                                      }
-                                    },
-                                    [
-                                      _c("path", {
-                                        attrs: {
-                                          "stroke-linecap": "round",
-                                          "stroke-linejoin": "round",
-                                          "stroke-width": "2",
-                                          d:
-                                            "M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                                        }
-                                      })
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _vm._m(2),
-                                  _vm._v(" "),
-                                  _c(
-                                    "p",
-                                    {
-                                      staticClass:
-                                        "text-xs text-gray-500 dark:text-gray-400"
-                                    },
-                                    [
-                                      _vm._v(
-                                        "SVG, PNG, JPG or GIF (MAX. 800x400px)"
-                                      )
-                                    ]
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c("input", {
-                                staticClass: "hidden",
-                                attrs: { id: "dropzone-file", type: "file" }
-                              })
-                            ]
-                          )
-                        ]
-                      )
+                      _c("figure", { staticClass: "max-w-lg m-auto w-full" }, [
+                        _c("img", {
+                          staticClass: "rounded-lg",
+                          attrs: {
+                            src: _vm.image ? _vm.image : "no-imagen-acta.jpg",
+                            height: "224px",
+                            alt: ""
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "figcaption",
+                          {
+                            staticClass:
+                              "mt-2 text-sm text-center text-gray-500 dark:text-gray-400"
+                          },
+                          [_vm._v("Vista previa de la imagen del acta")]
+                        )
+                      ])
                     ]
                   )
                 ]),
                 _vm._v(" "),
-                _vm._v(
-                  "\n<<<<<<< HEAD:front_ce/components/actas/Actas.vue\n                    "
-                ),
                 _c("div", { staticClass: "min-w-[100%] p-4" }, [
                   _c(
                     "button",
@@ -426,48 +749,6 @@ var render = function() {
                     },
                     [
                       _c("span", [_vm._v(" GUARDAR ")]),
-                      _vm._v(" "),
-                      _c("span", { staticClass: "pt-2" }, [
-                        _vm.processing
-                          ? _c(
-                              "svg",
-                              {
-                                staticClass: "h-6 w-6 text-white animate-spin",
-                                attrs: {
-                                  xmlns: "http://www.w3.org/2000/svg",
-                                  fill: "none",
-                                  viewBox: "0 0 24 24",
-                                  stroke: "currentColor"
-                                }
-                              },
-                              [
-                                _c("path", {
-                                  attrs: {
-                                    "stroke-linecap": "round",
-                                    "stroke-linejoin": "round",
-                                    "stroke-width": "2",
-                                    d:
-                                      "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                                  }
-                                })
-                              ]
-                            )
-                          : _vm._e()
-                      ])
-                    ]
-                  )
-                ]),
-                _vm._v("\n=======\n                        "),
-                _c("div", { staticClass: "min-w-[100%] p-4" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass:
-                        "flex justify-center w-full border-solid border border-blanco rounded-xl bg-blanco",
-                      attrs: { type: "submit" }
-                    },
-                    [
-                      _c("span", [_vm._v(" INGRESAR ")]),
                       _vm._v(" "),
                       _vm.processing
                         ? _c("span", { staticClass: "pt-2" }, [
@@ -498,10 +779,7 @@ var render = function() {
                         : _vm._e()
                     ]
                   )
-                ]),
-                _vm._v(
-                  "\n>>>>>>> route:front_ce/src/views/actas/Actas.vue\n                "
-                )
+                ])
               ]
             )
           ])
@@ -510,81 +788,7 @@ var render = function() {
     ]
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "bg-white shadow-md mb-4 rounded" }, [
-      _c(
-        "label",
-        {
-          staticClass: "block pl-5 text-base font-bold mb-2 tracking-wide",
-          attrs: { for: "grid-password" }
-        },
-        [
-          _vm._v(
-            "\n                                    Juntas\n                                "
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "select",
-        {
-          staticClass:
-            "block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500",
-          attrs: { id: "grid-state" }
-        },
-        [_c("option", [_vm._v("Junta")])]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "bg-white shadow-md mb-4 rounded" }, [
-      _c(
-        "label",
-        {
-          staticClass: "block pl-5 text-base font-bold mb-2 tracking-wide",
-          attrs: { for: "grid-password" }
-        },
-        [
-          _vm._v(
-            "\n                                    Actas\n                                "
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "select",
-        {
-          staticClass:
-            "block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500",
-          attrs: { id: "grid-state" }
-        },
-        [_c("option", [_vm._v("Acta")])]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "p",
-      { staticClass: "mb-2 text-sm text-gray-500 dark:text-gray-400" },
-      [
-        _c("span", { staticClass: "font-semibold" }, [
-          _vm._v("Haga clic para cargar")
-        ]),
-        _vm._v(" o arrastrar y soltar")
-      ]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

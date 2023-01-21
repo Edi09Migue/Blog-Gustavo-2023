@@ -1,112 +1,105 @@
 <template>
     <div class="flex items-center justify-center h-screen bg-gradient-to-r from-dark via-plomo-light to-dark">
-       
         <div class="bg-white shadow-xl rounded my-8 bg-dark box-login min-w-[80%]">
-            
             <div class="text-center text-blanco py-1">
-                <!-- {{ $store.getters.getUser.name }} -->
-                {{ user }}
+                {{ user.name }}
             </div>
-
             <div class="text-center text-blanco py-1">REGISTRO DE ACTAS </div>
             <div class="pt-4 pb-10">
-                <form @submit.prevent="addActas" class="w-full">
+                
+                <form @submit.prevent="addActa" class="w-full" >
                     <div class="flex p-4">
                         
                         <!-- Datos -->
-                        <div class="min-w-[50%] pr-2">
+                        <div class="min-w-[50%] pr-2" v-if="recintos.length>0">
 
                             <!-- select recintos -->
                             <div class="bg-white shadow-md mb-4 rounded">
                                 <label
-                                    class="block pl-5 text-base font-bold mb-2 tracking-wide"
+                                    class="block uppercase text-base font-bold mb-2 tracking-wide"
                                     for="grid-password"
                                 >
                                     Recintos
                                 </label>
                                 <v-select
                                     class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    :options="this.$parent.recintos"
                                     label="nombre"
+                                    :options="recintos"
                                     placeholder="Buscar el recinto"
-                                    
+                                    @input="selectJuntasXRecinto"
+                                    v-model="recinto"
                                 >
-                                <!-- @input="selectRecinto" -->
-                                    <template v-slot:option="option">
-                                        {{ option.codigo }} / {{ option.nombre }}  
-                                    </template>
-
-                                    <template #search="{attributes, events}">
-                                        <input
-                                            class="vs__search"
-                                            :required="!nombre"
-                                            v-bind="attributes"
-                                            v-on="events"
-                                        />
+                                    <v-select :options="recintos" label="title">
+                                        <template v-slot:option="option">
+                                            {{ option.nombre }}
+                                        </template>
+                                    </v-select>
+                                    <template v-slot:no-options="{ search, searching }">
+                                        <template v-if="searching">
+                                            No se encontraron resultados para
+                                            <em>{{ search }}
+                                        </em>.
+                                        </template>
+                                        <em v-else style="opacity: 0.5">Comience a escribir para buscar un recinto.</em>
                                     </template>
                                 </v-select>
-                                    
                             </div>
 
                             <!-- select juntas -->
                             <div class="bg-white shadow-md mb-4 rounded">
                                 <label
-                                    class="block pl-5 text-base font-bold mb-2 tracking-wide"
+                                    class="block uppercase text-base font-bold mb-2 tracking-wide"
                                     for="grid-password"
                                 >
                                     Juntas
                                 </label>
-                                <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                                    <option>Junta</option>
-                                </select>
-                            </div>
-
-                            <!-- select actas -->
-                            <div class="bg-white shadow-md mb-4 rounded">
-                                <label
-                                    class="block pl-5 text-base font-bold mb-2 tracking-wide"
-                                    for="grid-password"
+                                <v-select
+                                    class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    label="para_select"
+                                    :options="juntas"
+                                    placeholder="Buscar la junta"
+                                    @input="selectJunta"
+                                    v-model="junta"
                                 >
-                                    Actas
-                                </label>
-                                <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                                    <option>Acta</option>
-                                </select>
+                                    <v-select :options="juntas" label="title">
+                                        <template v-slot:option="option">
+                                            {{ option.codigo }} / {{ option.tipo.toUpperCase() }}
+                                        </template>
+                                    </v-select>
+                                    <template v-slot:no-options="{ search, searching }">
+                                        <template v-if="searching">
+                                            No se encontraron resultados para
+                                            <em>{{ search }}
+                                        </em>.
+                                        </template>
+                                        <em v-else style="opacity: 0.5">Comience a escribir para buscar una junta.</em>
+                                    </template>
+                                </v-select>
                             </div>
 
-                        </div>
- 
-                        <!-- Imagen preiew -->
-                        <div class="min-w-[50%] pl-2 flex items-center">
-                            <div class="flex items-center justify-center w-full">
-                                <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                        <svg aria-hidden="true" class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Haga clic para cargar</span> o arrastrar y soltar</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                                    </div>
-                                    <input id="dropzone-file" type="file" class="hidden" />
-                                </label>
+                            <div class="bg-white shadow-md mb-4 rounded">
+                                <label class="block mb-2 text-sm font-medium text-gray-900" for="multiple_files">Seleccionar la imagen de una acta</label>
+                                <!-- <input @change="select_file" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="multiple_files" type="file" multiple> -->
+                                <input @change="selectImagen" class="custom-input" type="file" accept="image/*">
                             </div>
+                                
+                        </div>
+
+                        <!-- Imagen preiew -->
+                        <div class="bg-white min-w-[50%] pl-2 flex items-center rounded">
+                            
+                            <figure class="max-w-lg m-auto w-full">
+                                <img class="rounded-lg" :src="image ? image :'no-imagen-acta.jpg'" height="224px" alt="">
+                                <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Vista previa de la imagen del acta</figcaption>
+                            </figure>
+
                         </div>
 
                     </div>
                     <!-- option save  -->
-<<<<<<< HEAD:front_ce/components/actas/Actas.vue
-                    <div class="min-w-[100%] p-4">
-                        <button class="flex justify-center w-full border-solid border border-blanco rounded-xl bg-blanco" type="submit">
-                            <span> GUARDAR </span>
-                            <span class="pt-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" v-if="processing" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                </svg>
-                            </span>
-                        </button>
-                    </div>
-=======
                         <div class="min-w-[100%] p-4">
                             <button class="flex justify-center w-full border-solid border border-blanco rounded-xl bg-blanco" type="submit">
-                                <span> INGRESAR </span>
+                                <span> GUARDAR </span>
                                 <span class="pt-2" v-if="processing">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -114,120 +107,183 @@
                                 </span>
                             </button>
                         </div>
->>>>>>> route:front_ce/src/views/actas/Actas.vue
                 </form>
             </div>
-
         </div>
     </div>
 </template>
 <script>
-export default{
+import { http } from "../../axios"
+
+export default {
+    components: {
+        
+    },
     data(){
         return{
             acta:{
                 codigo:'',
-                junta_id:'',
+                junta_id:null,
                 votos_blancos:0,
                 votos_nulos:0,
                 votos_validos:0,
-                estado:true,
-                procesado_por:true,
+                estado:0,
+                ingresada_por:true,
+                imagen:null
             },
+            image:null,
             processing:false,
             errorMessage:null,
+            recintos:[],
+            recinto:null,
             juntas:[],
-            user:'Mauel'
+            junta:null,
         }
     },
-    // computed: {
-    //     user() {
-    //         console.log('llamando a v global')
-    //         // return this.$store.getters.getUser
-    //         return localStorage.getItem('user')
-    //     },
-    // },
-    methods:{
-        selectRecinto(item) {
-            const requestOptions = {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Requested-With": "XMLHttpRequest",
-                    'Authorization': 'Bearer ' + this.token,
-                },
-                body: JSON.stringify({recinto:item.id})
-            };
-            fetch(this.baseURL+'control-electoral/juntas/dropdownOptions', requestOptions)
-                .then(async response => {
-                    const data = await response.json();
-
-                    // check for error response
-                    if (!response.ok) {
-                        // get error message from body or default to response status
-                        const error = (data && data.message) || response.status;
-                        this.errorMessage = error;
-                        return Promise.reject(error);
-                    }
-
-                    console.log(response, data.items)
-                    this.juntas = data.items;
-                })
-
-                .catch(error => {
-                    this.errorMessage = error;
-                    console.error('There was an error!', error);
-                });
+    created (){
+        this.fetchRecintos()
+    },
+    computed: {
+        user() {
+            // return this.$store.getters.getUser
+            let x = window.localStorage.getItem('user')
+            return JSON.parse(x)
         },
-        addInscrito() {
-            const requestOptions = {
-                method: "POST",
+        token(){
+            return window.localStorage.getItem('token')
+        }
+    },
+    methods:{
+        
+        fetchRecintos(){
+
+            this.processing = true
+
+            http
+            .get("control-electoral/recintos/dropdownOptions",{ headers: {
+                Authorization: `Bearer ${this.token}`,
+                'Content-Type': 'application/json',
+            }})
+            .then( response => {
+
+                this.recintos = response.data.items;
+                this.processing = false
+            })
+            .catch((error) => {
+                console.log(error);
+                this.errorMessage = error
+                this.processing = false
+            });
+        },
+
+        selectJuntasXRecinto(item){
+
+            this.processing = true
+
+            http
+            .get("control-electoral/juntas/dropdownOptions",{
+                params: { recinto:item.id },
                 headers: {
-                    "Content-Type": "application/json",
-                    "X-Requested-With": "XMLHttpRequest",
-                    'Authorization': 'Bearer '+this.$parent.token,
-                },
-                body: JSON.stringify(this.acta)
+                    Authorization: `Bearer ${this.token}`,
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then( response => {
+                
+                this.acta.junta_id = item.id
+                this.juntas = response.data.items;
+                this.processing = false
+            })
+            .catch((error) => {
+                console.log(error);
+                this.errorMessage = error
+                this.processing = false
+            });
+        },
+
+        selectJunta (item) {
+            this.acta.junta_id = item.id
+        },
+
+        selectImagen(event){
+            const selectedImage = event.target.files[0];
+            this.createBase64Image(selectedImage)
+        },
+
+        createBase64Image(fileObject) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                this.image = e.target.result;
             };
-            fetch(this.$parent.baseURL + 'actas', requestOptions)
-                .then(async response => {
-
-                    const data = await response.json();
-
-                    // check for error response
-                    if (!response.ok) {
-                        // get error message from body or default to response status
-                        const error = (data && data.message) || response.status;
-                        this.errorMessage = error;
-                        return Promise.reject(error);
-                    }
-
-                    if (!data.status) {
-                        const error = (data && data.msg) || response.status;
-                        this.errorMessage = error;
-                        return Promise.reject(error);
-                    }
-                    
-                    window.localStorage.setItem('result', this.acta);
-
-                    this.acta = {
-                        codigo:'',
-                        junta_id:'',
-                        votos_blancos:0,
-                        votos_nulos:0,
-                        votos_validos:0,
-                        estado:true,
-                        procesado_por:true,
-                    }
-                })
-                .catch(error => {
-                    this.errorMessage = error;
-                    console.error('There was an error!', error);
-                });
+            reader.readAsDataURL(fileObject);
         },
         
+        addActa(event){
+
+            this.processing = true
+            this.acta.ingresada_por = this.user.id
+            this.acta.imagen = this.image
+
+            let InstFormData = new FormData();
+
+            for (let key in this.acta){
+                InstFormData.append(key, this.acta[key]);
+            }
+
+            http
+            .post("control-electoral/actas",InstFormData,{
+                headers: {
+                    Authorization: `Bearer ${this.token}`,
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then( response => {
+                
+                if(response.data.status){
+                    event.target.reset();
+                    this.fetchRecintos()
+                    this.showSucces()
+                }else{
+                    event.target.reset();
+                    this.showWarning(response.data.msg)
+                }
+                this.processing = false
+            })
+            .catch((error) => {
+                console.log(error);
+                this.processing = false
+            }); 
+        },
+
+        showSucces(){
+            this.$toast.success("¡Dados guardados correctamente!",{
+                position: "top-right",
+                timeout: 1500,
+                draggablePercent: 0.6,
+                hideProgressBar: true,
+                closeButton: "button",
+                icon: true,
+            })
+        },
+
+        showWarning(msg) {
+            
+            this.$swal({
+                icon: 'warning',
+                title: msg,
+                allowOutsideClick: false,
+                text: 'POR FAVOR INFORMA ÉSTE PROBLEMA A UN ADMINISTRADOR',
+                footer: 'Por favor informa éste problema a un administrador ',
+                confirmButtonText: 'Ok registrar otra acta',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$refs.frmActas.reset();
+                    this.fetchRecintos()
+                } else if (result.isDenied) {
+                    this.$swal('Changes are not saved', '', 'info')
+                }
+            });
+        },
     },
-    mounted() {
-        alert('manuel');
-    }
 }
+</script>

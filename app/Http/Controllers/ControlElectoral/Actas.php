@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\ActaStoreRequest;
 
 class Actas extends Controller
 {
@@ -103,52 +104,59 @@ class Actas extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ActaStoreRequest $request)
     {
       
         DB::beginTransaction();
         try {
 
-            // dd($request->all());
-
             $acta = new Acta($request->all());
-            
-            //generar código
+
+            #Generar código del acta a guardar
             $junta = Junta::where('id',$acta->junta_id)->first();
 
             if($junta){
                 $recinto = $junta->recinto;
                 $codigo =  $recinto->codigo.'-'.$junta->codigo;
-                $acta->codigo = $codigo;
-            }
-            // dd($acta);
-            $acta->save();
-
-            // dd($request->all());
-
-             //Imagen
-            if ($request->has('imagen') && !is_null($request->imagen)) {
-                $upload_folder = '/images/control_electoral/actas/';
-                parent::uploadAndConvert($request->imagen, $upload_folder, $acta, 'main', 'codigo');
             }
             
+            #Verificar si la acta no fue ingresar 
+            $existsActa = Acta::where('codigo',$acta->codigo)->first();
+            
+            if($existsActa){ #Si no fue ingresasa guardar
+
+                $acta->codigo = $codigo;
+                $acta->save();
+
+                if ($request->has('imagen') && !is_null($request->imagen)) {
+                    $upload_folder = '/images/control_electoral/actas/';
+                    parent::uploadAndConvert($request->imagen, $upload_folder, $acta, 'main', 'codigo');
+                }
+
+                $msg = "Acta: {$acta->codigo}";
+                $status = true;
+
+            }else{ #Si fue ingresasa enviar un mensaje al usuario
+                $msg = "El acta {$codigo} ya fue ingresada";
+                $status = false;
+            }
 
             DB::commit();
             return response()->json([
-                'status'    => TRUE,
-                'msg'       => "Acta: {$acta->codigo}",
+                'status'    => $status,
+                'msg'       => $msg,
                 'data'      => $acta
-
             ]);
 
-        }catch (Exception $e) {
-                DB::rollback();
-                return response()->json([
-                    'status' => false,
-                    'error' => $e->getMessage(),
-                    'msg' => 'Error al crear acta'
-                ]);
-        } 
+        }catch (Exception  $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => false,
+                'error' => $e->getMessage(),
+                'acta'=>$acta,
+                'msg' => 'Error al crear acta'
+            ]);
+        }
         
     }
 
@@ -198,14 +206,21 @@ class Actas extends Controller
         #Seleccionara una acta que fue no fue visulazada
         $acta = Acta::where('visualizado', false)->orderBy('id', 'asc')->first();
 
-        #Actualizar el row  visualizado a true, PARA que otro usuario no consulte la misma
-        $acta->update(['visualizado'=>true]);
+        if($acta){
 
+            #Actualizar el row  visualizado a true, PARA que otro usuario no consulte la misma
+            $acta->update(['visualizado'=>true]);
+            $status = true;
+
+        }else{
+            $status = false;
+        }
+        
         #Seleccionara los candidatos
         $candidatos = Candidato::all();
-
+        
         return response()->json([
-            'status'    => TRUE,
+            'status'    => $status,
             'acta'      => $acta,
             'candidatos'=> $candidatos,
         ]);
