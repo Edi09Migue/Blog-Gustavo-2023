@@ -42,7 +42,7 @@
 </div>
 </template>
 <script>
-import axios from "../../axios";
+import { http } from "../../axios";
 
 export default{
     name:'Login',
@@ -57,37 +57,22 @@ export default{
         }
     },
     methods:{
-        login(){
+
+        async login(){
 
             this.processing = true
+        
+            const reseponse = await http.post("auth/login",this.data)
 
-            axios
-            .post("auth/login",this.data)
-            .then( response => {
-
-                    let user = response.data
-                    this.errorMessage = '';
-                    
-                    window.localStorage.setItem('token', user.accessToken);
-                    window.localStorage.setItem('user',  JSON.stringify(user.userData));
-
-                    this.processing = false
-
-                    this.$router.push({ path: 'home' })
-            })
-            .catch((error) => {
-                console.log(error);
-                this.errorMessage = error
-                this.processing = false
-            });
+            if(reseponse.data){
+                let user = reseponse.data
+                window.localStorage.setItem('token', user.accessToken);
+                window.localStorage.setItem('user',  JSON.stringify(user.userData));
+                this.$router.push({ path: 'actas' })
+            }
+            
         },
 
-    },
-    mounted() {
-        // console.log(this.$parent.baseURL);
-    },
-    setup() {
-        
     },
 }
 </script>

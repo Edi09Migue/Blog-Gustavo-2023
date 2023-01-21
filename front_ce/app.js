@@ -9,7 +9,7 @@
 window.Vue = require('vue')
 
 import App from './App.vue'
-import axios from './src/axios';
+// import axios from './src/axios';
 import store from './src/store'
 import vSelect from 'vue-select'
 // import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -35,7 +35,7 @@ new Vue({
   el: '#main',
   router,
   store,
-  axios,
+  // axios,
   // baseURL: 'http://controlelectoral.local/api/',
   // data: {
       // seccion:  1,

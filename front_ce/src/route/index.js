@@ -36,7 +36,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, _, next) => {
-//   const isLoggedIn = isUserLoggedIn()
+    //  const isLoggedIn = isUserLoggedIn()
     // console.log(to, next)
     // localStorage.getItem('user') && localStorage.getItem('token')
     // console.log(localStorage.getItem('user'));

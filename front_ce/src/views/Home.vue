@@ -114,7 +114,7 @@
     </div>
 </template>
 <script>
-import axios from "../axios"
+import { http } from "../axios"
 
 export default {
     components: {
@@ -140,21 +140,29 @@ export default {
             actas:[],
         }
     },
+    created (){
+        this.fetchRecintos()
+    },
     computed: {
         user() {
             // return this.$store.getters.getUser
             let x = window.localStorage.getItem('user')
             return JSON.parse(x)
         },
- 
+        token(){
+            return window.localStorage.getItem('token')
+        }
     },
     methods:{
         fetchRecintos(){
 
             this.processing = true
 
-            axios
-            .get("control-electoral/recintos/dropdownOptions")
+            http
+            .get("control-electoral/recintos/dropdownOptions",{ headers: {
+                Authorization: `Bearer ${this.token}`,
+                'Content-Type': 'application/json',
+            }})
             .then( response => {
 
                 this.recintos = response.data.items;
@@ -171,9 +179,13 @@ export default {
 
             this.processing = true
 
-            axios
+            http
             .get("control-electoral/juntas/dropdownOptions",{
-                params: { recinto:item.id }
+                params: { recinto:item.id },
+                headers: {
+                    Authorization: `Bearer ${this.token}`,
+                    'Content-Type': 'application/json',
+                }
             })
             .then( response => {
                 
@@ -219,8 +231,13 @@ export default {
                 InstFormData.append(key, this.acta[key]);
             }
 
-            axios
-            .post("control-electoral/actas",InstFormData)
+            http
+            .post("control-electoral/actas",InstFormData,{
+                headers: {
+                    Authorization: `Bearer ${this.token}`,
+                    'Content-Type': 'application/json',
+                }
+            })
             .then( response => {
                 
                 console.log('ok');
@@ -231,12 +248,6 @@ export default {
                 this.processing = false
             }); 
         }
-    },
-    mounted() {
-        this.fetchRecintos()
-    },
-    setup() {
-        
     },
 }
 </script>

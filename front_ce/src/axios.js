@@ -1,4 +1,4 @@
-import Vue from "vue";
+// import Vue from "vue";
 import axios from "axios"
 
 // window.axios =  axios
@@ -13,17 +13,14 @@ import axios from "axios"
 //     return config;
 // })
 
- const http = axios.create({
+// var token = 
+export const http = axios.create({
     baseURL: `http://controlelectoral.local/api/`,
-    headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json',
-    }
 })
 
-Vue.prototype.$http = http;
+// Vue.prototype.$http = http;
 
-export default http;
+// export default http;
 // export const httpFrmData = axios.create({
 //     baseURL: `http://controlelectoral.local/api/`,
 //     headers: {

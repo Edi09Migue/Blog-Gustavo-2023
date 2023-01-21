@@ -1,4 +1,44 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[1],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[5],{
+
+/***/ "./front_ce/src/axios.js":
+/*!*******************************!*\
+  !*** ./front_ce/src/axios.js ***!
+  \*******************************/
+/*! exports provided: http */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "http", function() { return http; });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+// import Vue from "vue";
+ // window.axios =  axios
+// axios.defaults.withCredentials = true
+// axios.defaults.baseURL = 'http://controlelectoral.local/api/'
+// axios.interceptors.request.use(function(config){
+//     config.headers.common = {
+//         Autorization:`Bearer ${localStorage.getItem('token')}`,
+//         "Content-Type": "application/json",
+//         Accept: "applicaction/json"
+//     }
+//     return config;
+// })
+// var token = 
+
+var http = axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
+  baseURL: "http://controlelectoral.local/api/"
+}); // Vue.prototype.$http = http;
+// export default http;
+// export const httpFrmData = axios.create({
+//     baseURL: `http://controlelectoral.local/api/`,
+//     headers: {
+//         Authorization: `Bearer ${localStorage.getItem('token')}`,
+//         "Content-Type": "multipart/form-data"
+//     }
+// })
+
+/***/ }),
 
 /***/ "./front_ce/src/views/actas/Actas.vue":
 /*!********************************************!*\
@@ -79,7 +119,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-!(function webpackMissingModule() { var e = new Error("Cannot find module '../axios'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+/* harmony import */ var _axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../axios */ "./front_ce/src/axios.js");
 //
 //
 //
@@ -236,7 +276,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.processing = true;
-      !(function webpackMissingModule() { var e = new Error("Cannot find module '../axios'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()).get("control-electoral/recintos/dropdownOptions", {
+      _axios__WEBPACK_IMPORTED_MODULE_0__["http"].get("control-electoral/recintos/dropdownOptions", {
         headers: {
           Authorization: "Bearer ".concat(this.token),
           'Content-Type': 'application/json'
@@ -254,7 +294,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.processing = true;
-      !(function webpackMissingModule() { var e = new Error("Cannot find module '../axios'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()).get("control-electoral/juntas/dropdownOptions", {
+      _axios__WEBPACK_IMPORTED_MODULE_0__["http"].get("control-electoral/juntas/dropdownOptions", {
         params: {
           recinto: item.id
         },
@@ -303,7 +343,7 @@ __webpack_require__.r(__webpack_exports__);
         InstFormData.append(key, this.acta[key]);
       }
 
-      !(function webpackMissingModule() { var e = new Error("Cannot find module '../axios'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()).post("control-electoral/actas", InstFormData, {
+      _axios__WEBPACK_IMPORTED_MODULE_0__["http"].post("control-electoral/actas", InstFormData, {
         headers: {
           Authorization: "Bearer ".concat(this.token),
           'Content-Type': 'application/json'
@@ -600,10 +640,10 @@ var render = function() {
                               "label",
                               {
                                 staticClass:
-                                  "block mb-2 text-sm font-medium text-gray-900 dark:text-white",
+                                  "block mb-2 text-sm font-medium text-gray-900",
                                 attrs: { for: "multiple_files" }
                               },
-                              [_vm._v("Celeccionar la imagen de una acta")]
+                              [_vm._v("Seleccionar la imagen de una acta")]
                             ),
                             _vm._v(" "),
                             _c("input", {
@@ -618,14 +658,18 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "div",
-                    { staticClass: "min-w-[50%] pl-2 flex items-center" },
+                    {
+                      staticClass:
+                        "bg-white min-w-[50%] pl-2 flex items-center rounded"
+                    },
                     [
-                      _c("figure", { staticClass: "max-w-lg" }, [
+                      _c("figure", { staticClass: "max-w-lg m-auto w-full" }, [
                         _c("img", {
-                          staticClass: "h-auto max-w-full rounded-lg",
+                          staticClass: "rounded-lg",
                           attrs: {
                             src: _vm.image ? _vm.image : "no-imagen-acta.jpg",
-                            alt: "Imagen de la Acta"
+                            height: "224px",
+                            alt: ""
                           }
                         }),
                         _vm._v(" "),
@@ -635,7 +679,7 @@ var render = function() {
                             staticClass:
                               "mt-2 text-sm text-center text-gray-500 dark:text-gray-400"
                           },
-                          [_vm._v("Imagen")]
+                          [_vm._v("Vista previa de la imagen del acta")]
                         )
                       ])
                     ]
