@@ -29,6 +29,17 @@ const router = new VueRouter({
             component: () => import('../views/actas/Actas.vue'),
         },
         {
+            path: '/votos',
+            name: 'votos',
+            meta: {
+                requiresAuth: true
+            },
+            component: () => import('../views/votos/Votos.vue'),
+            meta: {
+                requiresAuth: true
+            },
+        },
+        {
             path: '*',
             redirect: 'error-404',
         }

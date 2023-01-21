@@ -8,6 +8,18 @@
 // window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 window.Vue = require('vue')
 
+import Toast from "vue-toastification"
+import "vue-toastification/dist/index.css"
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
+const options = {
+  draggable: false
+}
+
+Vue.use(VueSweetalert2);
+Vue.use(Toast, options);
+
 import App from './App.vue'
 // import axios from './src/axios';
 import store from './src/store'

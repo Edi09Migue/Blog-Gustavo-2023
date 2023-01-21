@@ -4,23 +4,30 @@
         <div class="bg-white shadow-xl rounded my-8 bg-dark box-login min-w-[80%]">
             
             <div class="text-center text-blanco py-1">
-                {{ user.name }}
+                {{ this.$parent.user.name }}
             </div>
 
             <div class="text-center text-blanco py-1">REGISTRO DE VOTOS </div>
             <div class="pt-4 pb-10">
-                <form @submit.prevent="addVoto" class="w-full">
+                <form @submit.prevent="addActas" class="w-full">
                     <div class="grid grid-cols-2 gap-4">
-
-                        <div class="text-center text-blanco py-1">ACTA  <span v-if="acta">{{ acta.codigo }}</span> </div>
+                        
+                        
 
                         <!-- Imagen preiew -->
                         <div class="min-w-[50%] pl-2 flex items-center">
-                            <figure class="max-w-lg m-auto w-full">
-                                <img class="rounded-lg" :src="acta ? acta.imagenURL  :'no-imagen-acta.jpg'" height="224px" alt="">
-                                <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Vista previa de la imagen del acta</figcaption>
-                            </figure>
+                            <div class="flex items-center justify-center w-full">
+                                <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                        <svg aria-hidden="true" class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                                    </div>
+                                    <input id="dropzone-file" type="file" class="hidden" />
+                                </label>
+                            </div>
                         </div>
+
                         <!-- Datos -->
                         <div class="min-w-[50%] pr-2">
 
@@ -42,7 +49,7 @@
                             </div>
                             
                             <div class="grid">
-                                
+                                {{ }}
                                 <table class="w-full text-sm text-left dark:text-gray-400">
                                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
@@ -54,7 +61,7 @@
                                     <tbody>
                                         <tr 
                                             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                                            v-for="candidato in  candidatos" :key="candidato.id"
+                                            v-for="candidato in  $parent.candidatos" :key="candidato.id"
                                         >
                                             <td class="truncate">{{ candidato.nombre }}</td>
                                             <td class="truncate">{{ candidato.nombre_partido }}</td>
@@ -68,6 +75,7 @@
                             </div>
 
                         </div>
+
                     </div>
                     <!-- option save  -->
                     <div class="min-w-[100%] p-4">
@@ -87,127 +95,106 @@
     </div>
 </template>
 <script>
-import { http } from "../axios"
-
-export default {
-    components: {
-        
-    },
+export default{
+    name:'Actas',
     data(){
         return{
             acta:{
-                codigo:null,
-                junta_id:null,
+                codigo:'',
+                junta_id:'',
                 votos_blancos:0,
                 votos_nulos:0,
                 votos_validos:0,
-                estado:0,
-                ingresada_por:true,
-                imagen:null
+                estado:true,
+                procesado_por:true,
             },
-            image:null,
             processing:false,
             errorMessage:null,
-            acta:[],
-            candidatos:[],
-        }
-    },
-    created (){
-        this.fetchJunta()
-    },
-    computed: {
-        user() {
-            // return this.$store.getters.getUser
-            let x = window.localStorage.getItem('user')
-            return JSON.parse(x)
-        },
-        token(){
-            return window.localStorage.getItem('token')
+            user:null,
+            juntas:[],
         }
     },
     methods:{
-        fetchJunta(){
-
-            this.processing = true
-
-            http
-            .get("control-electoral/last-acta",{ headers: {
-                Authorization: `Bearer ${this.token}`,
-                'Content-Type': 'application/json',
-            }})
-            .then( response => {
-
-                this.acta = response.data.acta;
-                this.candidatos = response.data.candidatos;
-                this.processing = false
-            })
-            .catch((error) => {
-                console.log(error);
-                this.errorMessage = error
-                this.processing = false
-            });
-        },
-
-        addVoto(){
-
-            this.processing = true
-            console.log(this.user.id)
-            this.acta.ingresada_por = this.user.id
-
-            http
-            .post("control-electoral/votos",acta,{
+        selectRecinto(item) {
+            const requestOptions = {
+                method: "GET",
                 headers: {
-                    Authorization: `Bearer ${this.token}`,
-                    'Content-Type': 'application/json',
-                }
-            })
-            .then( response => {
-                
-                if(response.data.status){
-                    event.target.reset();
-                    this.fetchJunta()
-                    this.showSucces()
-                }else{
-                    event.target.reset();
-                    this.showWarning(response.data.msg)
-                }
-                this.processing = false
-            })
-            .catch((error) => {
-                console.log(error);
-                this.errorMessage = error
-                this.processing = false
-            }); 
-        },
-        showSucces(){
-            this.$toast.success("¡Dados guardados correctamente!",{
-                position: "top-right",
-                timeout: 1500,
-                draggablePercent: 0.6,
-                hideProgressBar: true,
-                closeButton: "button",
-                icon: true,
-            })
-        },
+                    "Content-Type": "application/json",
+                    "X-Requested-With": "XMLHttpRequest",
+                    'Authorization': 'Bearer ' + this.token,
+                },
+                body: JSON.stringify({recinto:item.id})
+            };
+            fetch(this.baseURL+'control-electoral/juntas/dropdownOptions', requestOptions)
+                .then(async response => {
+                    const data = await response.json();
 
-        showWarning(msg) {
-            
-            this.$swal({
-                icon: 'warning',
-                title: msg,
-                allowOutsideClick: false,
-                text: 'POR FAVOR INFORMA ÉSTE PROBLEMA A UN ADMINISTRADOR',
-                footer: 'Por favor informa éste problema a un administrador ',
-                confirmButtonText: 'Ok registrar otra acta',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    this.$refs.frmActas.reset();
-                    this.fetchRecintos()
-                } else if (result.isDenied) {
-                    this.$swal('Changes are not saved', '', 'info')
-                }
-            });
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        this.errorMessage = error;
+                        return Promise.reject(error);
+                    }
+
+                    console.log(response, data.items)
+                    this.juntas = data.items;
+                })
+
+                .catch(error => {
+                    this.errorMessage = error;
+                    console.error('There was an error!', error);
+                });
         },
+        addInscrito() {
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Requested-With": "XMLHttpRequest",
+                    'Authorization': 'Bearer '+this.$parent.token,
+                },
+                body: JSON.stringify(this.acta)
+            };
+            fetch(this.$parent.baseURL + 'actas', requestOptions)
+                .then(async response => {
+
+                    const data = await response.json();
+
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        this.errorMessage = error;
+                        return Promise.reject(error);
+                    }
+
+                    if (!data.status) {
+                        const error = (data && data.msg) || response.status;
+                        this.errorMessage = error;
+                        return Promise.reject(error);
+                    }
+                    
+                    window.localStorage.setItem('result', this.acta);
+
+                    this.acta = {
+                        codigo:'',
+                        junta_id:'',
+                        votos_blancos:0,
+                        votos_nulos:0,
+                        votos_validos:0,
+                        estado:true,
+                        procesado_por:true,
+                    }
+                })
+                .catch(error => {
+                    this.errorMessage = error;
+                    console.error('There was an error!', error);
+                });
+        },
+        
     },
+    mounted() {
+
+    }
 }
-</script>

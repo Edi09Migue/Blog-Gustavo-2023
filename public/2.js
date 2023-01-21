@@ -40,17 +40,17 @@ var http = axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
 
 /***/ }),
 
-/***/ "./front_ce/src/views/user/Login.vue":
-/*!*******************************************!*\
-  !*** ./front_ce/src/views/user/Login.vue ***!
-  \*******************************************/
+/***/ "./front_ce/src/views/actas/Actas.vue":
+/*!********************************************!*\
+  !*** ./front_ce/src/views/actas/Actas.vue ***!
+  \********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Login_vue_vue_type_template_id_6657a3ea___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Login.vue?vue&type=template&id=6657a3ea& */ "./front_ce/src/views/user/Login.vue?vue&type=template&id=6657a3ea&");
-/* harmony import */ var _Login_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Login.vue?vue&type=script&lang=js& */ "./front_ce/src/views/user/Login.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Actas_vue_vue_type_template_id_ef08eaf8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Actas.vue?vue&type=template&id=ef08eaf8& */ "./front_ce/src/views/actas/Actas.vue?vue&type=template&id=ef08eaf8&");
+/* harmony import */ var _Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Actas.vue?vue&type=script&lang=js& */ "./front_ce/src/views/actas/Actas.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -60,9 +60,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Login_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Login_vue_vue_type_template_id_6657a3ea___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Login_vue_vue_type_template_id_6657a3ea___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Actas_vue_vue_type_template_id_ef08eaf8___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Actas_vue_vue_type_template_id_ef08eaf8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -72,61 +72,124 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "front_ce/src/views/user/Login.vue"
+component.options.__file = "front_ce/src/views/actas/Actas.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./front_ce/src/views/user/Login.vue?vue&type=script&lang=js&":
-/*!********************************************************************!*\
-  !*** ./front_ce/src/views/user/Login.vue?vue&type=script&lang=js& ***!
-  \********************************************************************/
+/***/ "./front_ce/src/views/actas/Actas.vue?vue&type=script&lang=js&":
+/*!*********************************************************************!*\
+  !*** ./front_ce/src/views/actas/Actas.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Login.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/src/views/user/Login.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Actas.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/src/views/actas/Actas.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./front_ce/src/views/user/Login.vue?vue&type=template&id=6657a3ea&":
-/*!**************************************************************************!*\
-  !*** ./front_ce/src/views/user/Login.vue?vue&type=template&id=6657a3ea& ***!
-  \**************************************************************************/
+/***/ "./front_ce/src/views/actas/Actas.vue?vue&type=template&id=ef08eaf8&":
+/*!***************************************************************************!*\
+  !*** ./front_ce/src/views/actas/Actas.vue?vue&type=template&id=ef08eaf8& ***!
+  \***************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_template_id_6657a3ea___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Login.vue?vue&type=template&id=6657a3ea& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/src/views/user/Login.vue?vue&type=template&id=6657a3ea&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_template_id_6657a3ea___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_template_id_ef08eaf8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Actas.vue?vue&type=template&id=ef08eaf8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/src/views/actas/Actas.vue?vue&type=template&id=ef08eaf8&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_template_id_ef08eaf8___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_template_id_6657a3ea___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Actas_vue_vue_type_template_id_ef08eaf8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/src/views/user/Login.vue?vue&type=script&lang=js&":
-/*!****************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./front_ce/src/views/user/Login.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/src/views/actas/Actas.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./front_ce/src/views/actas/Actas.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../axios */ "./front_ce/src/axios.js");
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
+/* harmony import */ var _axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../axios */ "./front_ce/src/axios.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -172,61 +235,175 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'Login',
+  components: {},
   data: function data() {
     return {
-      data: {
-        email: '',
-        password: ''
+      acta: {
+        codigo: '',
+        junta_id: null,
+        votos_blancos: 0,
+        votos_nulos: 0,
+        votos_validos: 0,
+        estado: 0,
+        ingresada_por: true,
+        imagen: null
       },
+      image: null,
       processing: false,
-      errorMessage: null
+      errorMessage: null,
+      recintos: [],
+      recinto: null,
+      juntas: [],
+      junta: null
     };
   },
+  created: function created() {
+    this.fetchRecintos();
+  },
+  computed: {
+    user: function user() {
+      // return this.$store.getters.getUser
+      var x = window.localStorage.getItem('user');
+      return JSON.parse(x);
+    },
+    token: function token() {
+      return window.localStorage.getItem('token');
+    }
+  },
   methods: {
-    login: function login() {
+    fetchRecintos: function fetchRecintos() {
       var _this = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var reseponse, user;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _this.processing = true;
-                _context.next = 3;
-                return _axios__WEBPACK_IMPORTED_MODULE_1__["http"].post("auth/login", _this.data);
+      this.processing = true;
+      _axios__WEBPACK_IMPORTED_MODULE_0__["http"].get("control-electoral/recintos/dropdownOptions", {
+        headers: {
+          Authorization: "Bearer ".concat(this.token),
+          'Content-Type': 'application/json'
+        }
+      }).then(function (response) {
+        _this.recintos = response.data.items;
+        _this.processing = false;
+      })["catch"](function (error) {
+        console.log(error);
+        _this.errorMessage = error;
+        _this.processing = false;
+      });
+    },
+    selectJuntasXRecinto: function selectJuntasXRecinto(item) {
+      var _this2 = this;
 
-              case 3:
-                reseponse = _context.sent;
+      this.processing = true;
+      _axios__WEBPACK_IMPORTED_MODULE_0__["http"].get("control-electoral/juntas/dropdownOptions", {
+        params: {
+          recinto: item.id
+        },
+        headers: {
+          Authorization: "Bearer ".concat(this.token),
+          'Content-Type': 'application/json'
+        }
+      }).then(function (response) {
+        _this2.acta.junta_id = item.id;
+        _this2.juntas = response.data.items;
+        _this2.processing = false;
+      })["catch"](function (error) {
+        console.log(error);
+        _this2.errorMessage = error;
+        _this2.processing = false;
+      });
+    },
+    selectJunta: function selectJunta(item) {
+      this.acta.junta_id = item.id;
+    },
+    selectImagen: function selectImagen(event) {
+      var selectedImage = event.target.files[0];
+      this.createBase64Image(selectedImage);
+    },
+    createBase64Image: function createBase64Image(fileObject) {
+      var _this3 = this;
 
-                if (reseponse.data) {
-                  user = reseponse.data;
-                  window.localStorage.setItem('token', user.accessToken);
-                  window.localStorage.setItem('user', JSON.stringify(user.userData));
+      var reader = new FileReader();
 
-                  _this.$router.push({
-                    path: 'actas'
-                  });
-                }
+      reader.onload = function (e) {
+        _this3.image = e.target.result;
+      };
 
-              case 5:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
+      reader.readAsDataURL(fileObject);
+    },
+    addActa: function addActa(event) {
+      var _this4 = this;
+
+      this.processing = true;
+      this.acta.ingresada_por = this.user.id;
+      this.acta.imagen = this.image;
+      var InstFormData = new FormData();
+
+      for (var key in this.acta) {
+        InstFormData.append(key, this.acta[key]);
+      }
+
+      _axios__WEBPACK_IMPORTED_MODULE_0__["http"].post("control-electoral/actas", InstFormData, {
+        headers: {
+          Authorization: "Bearer ".concat(this.token),
+          'Content-Type': 'application/json'
+        }
+      }).then(function (response) {
+        if (response.data.status) {
+          event.target.reset();
+
+          _this4.fetchRecintos();
+
+          _this4.showSucces();
+        } else {
+          event.target.reset();
+
+          _this4.showWarning(response.data.msg);
+        }
+
+        _this4.processing = false;
+      })["catch"](function (error) {
+        console.log(error);
+        _this4.processing = false;
+      });
+    },
+    showSucces: function showSucces() {
+      this.$toast.success("¡Dados guardados correctamente!", {
+        position: "top-right",
+        timeout: 1500,
+        draggablePercent: 0.6,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true
+      });
+    },
+    showWarning: function showWarning(msg) {
+      var _this5 = this;
+
+      this.$swal({
+        icon: 'warning',
+        title: msg,
+        allowOutsideClick: false,
+        text: 'POR FAVOR INFORMA ÉSTE PROBLEMA A UN ADMINISTRADOR',
+        footer: 'Por favor informa éste problema a un administrador ',
+        confirmButtonText: 'Ok registrar otra acta'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          _this5.$refs.frmActas.reset();
+
+          _this5.fetchRecintos();
+        } else if (result.isDenied) {
+          _this5.$swal('Changes are not saved', '', 'info');
+        }
+      });
     }
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/src/views/user/Login.vue?vue&type=template&id=6657a3ea&":
-/*!********************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./front_ce/src/views/user/Login.vue?vue&type=template&id=6657a3ea& ***!
-  \********************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/src/views/actas/Actas.vue?vue&type=template&id=ef08eaf8&":
+/*!*********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./front_ce/src/views/actas/Actas.vue?vue&type=template&id=ef08eaf8& ***!
+  \*********************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -242,164 +419,366 @@ var render = function() {
     "div",
     {
       staticClass:
-        "grid place-items-center h-screen bg-gradient-to-r from-dark via-plomo-light to-dark"
+        "flex items-center justify-center h-screen bg-gradient-to-r from-dark via-plomo-light to-dark"
     },
     [
       _c(
         "div",
         {
           staticClass:
-            "max-w-md mx-auto bg-white shadow-xl rounded my-8 bg-dark box-login"
+            "bg-white shadow-xl rounded my-8 bg-dark box-login min-w-[80%]"
         },
         [
-          _c("div", { staticClass: "text-center text-blanco py-4" }, [
-            _vm._v("INICIO DE SESIÓN")
+          _c("div", { staticClass: "text-center text-blanco py-1" }, [
+            _vm._v("\n            " + _vm._s(_vm.user.name) + "\n        ")
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "pt-8 pb-10" }, [
+          _c("div", { staticClass: "text-center text-blanco py-1" }, [
+            _vm._v("REGISTRO DE ACTAS ")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "pt-4 pb-10" }, [
             _c(
               "form",
               {
+                staticClass: "w-full",
                 on: {
                   submit: function($event) {
                     $event.preventDefault()
-                    return _vm.login($event)
+                    return _vm.addActa($event)
                   }
                 }
               },
               [
-                _c("div", { staticClass: "w-4/5 mx-auto" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "flex items-center bg-white rounded-full shadow-md mb-4"
-                    },
-                    [
-                      _c("span", { staticClass: "px-3" }),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.data.email,
-                            expression: "data.email"
-                          }
-                        ],
-                        staticClass:
-                          "rounded-full w-full h-8 focus:outline-none",
-                        attrs: {
-                          type: "email",
-                          name: "email",
-                          placeholder: "Correo electrónico"
-                        },
-                        domProps: { value: _vm.data.email },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.data, "email", $event.target.value)
-                          }
-                        }
-                      })
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "flex items-center bg-white rounded-full shadow-md mb-4"
-                    },
-                    [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.data.password,
-                            expression: "data.password"
-                          }
-                        ],
-                        staticClass:
-                          "pl-3 rounded-full w-full h-8 focus:outline-none",
-                        staticStyle: { "padding-left": "12px" },
-                        attrs: {
-                          type: "password",
-                          name: "password",
-                          placeholder: "Contraseña"
-                        },
-                        domProps: { value: _vm.data.password },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.data, "password", $event.target.value)
-                          }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("span", { staticClass: "px-3" })
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "flex justify-center pt-5 w-full" },
-                    [
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "flex justify-center w-full border-solid border border-blanco rounded-xl bg-blanco",
-                          attrs: { type: "submit" }
-                        },
-                        [
-                          _c("span", [_vm._v(" INGRESAR ")]),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "pt-2" }, [
-                            _vm.processing
-                              ? _c(
-                                  "svg",
-                                  {
-                                    staticClass:
-                                      "h-6 w-6 text-white animate-spin",
-                                    attrs: {
-                                      xmlns: "http://www.w3.org/2000/svg",
-                                      fill: "none",
-                                      viewBox: "0 0 24 24",
-                                      stroke: "currentColor"
-                                    }
-                                  },
-                                  [
-                                    _c("path", {
-                                      attrs: {
-                                        "stroke-linecap": "round",
-                                        "stroke-linejoin": "round",
-                                        "stroke-width": "2",
-                                        d:
-                                          "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                                      }
-                                    })
-                                  ]
+                _c("div", { staticClass: "flex p-4" }, [
+                  _vm.recintos.length > 0
+                    ? _c("div", { staticClass: "min-w-[50%] pr-2" }, [
+                        _c(
+                          "div",
+                          { staticClass: "bg-white shadow-md mb-4 rounded" },
+                          [
+                            _c(
+                              "label",
+                              {
+                                staticClass:
+                                  "block uppercase text-base font-bold mb-2 tracking-wide",
+                                attrs: { for: "grid-password" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Recintos\n                            "
                                 )
-                              : _vm._e()
-                          ])
-                        ]
-                      )
-                    ]
-                  ),
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-select",
+                              {
+                                staticClass:
+                                  "block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500",
+                                attrs: {
+                                  label: "nombre",
+                                  options: _vm.recintos,
+                                  placeholder: "Buscar el recinto"
+                                },
+                                on: { input: _vm.selectJuntasXRecinto },
+                                scopedSlots: _vm._u(
+                                  [
+                                    {
+                                      key: "no-options",
+                                      fn: function(ref) {
+                                        var search = ref.search
+                                        var searching = ref.searching
+                                        return [
+                                          searching
+                                            ? [
+                                                _vm._v(
+                                                  "\n                                        No se encontraron resultados para\n                                        "
+                                                ),
+                                                _c("em", [
+                                                  _vm._v(
+                                                    _vm._s(search) +
+                                                      "\n                                    "
+                                                  )
+                                                ]),
+                                                _vm._v(
+                                                  ".\n                                    "
+                                                )
+                                              ]
+                                            : _c(
+                                                "em",
+                                                {
+                                                  staticStyle: {
+                                                    opacity: "0.5"
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "Comience a escribir para buscar un recinto."
+                                                  )
+                                                ]
+                                              )
+                                        ]
+                                      }
+                                    }
+                                  ],
+                                  null,
+                                  false,
+                                  2451549140
+                                ),
+                                model: {
+                                  value: _vm.recinto,
+                                  callback: function($$v) {
+                                    _vm.recinto = $$v
+                                  },
+                                  expression: "recinto"
+                                }
+                              },
+                              [
+                                _c("v-select", {
+                                  attrs: {
+                                    options: _vm.recintos,
+                                    label: "title"
+                                  },
+                                  scopedSlots: _vm._u(
+                                    [
+                                      {
+                                        key: "option",
+                                        fn: function(option) {
+                                          return [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(option.nombre) +
+                                                "\n                                    "
+                                            )
+                                          ]
+                                        }
+                                      }
+                                    ],
+                                    null,
+                                    false,
+                                    2447399496
+                                  )
+                                })
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "bg-white shadow-md mb-4 rounded" },
+                          [
+                            _c(
+                              "label",
+                              {
+                                staticClass:
+                                  "block uppercase text-base font-bold mb-2 tracking-wide",
+                                attrs: { for: "grid-password" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Juntas\n                            "
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-select",
+                              {
+                                staticClass:
+                                  "block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500",
+                                attrs: {
+                                  label: "para_select",
+                                  options: _vm.juntas,
+                                  placeholder: "Buscar la junta"
+                                },
+                                on: { input: _vm.selectJunta },
+                                scopedSlots: _vm._u(
+                                  [
+                                    {
+                                      key: "no-options",
+                                      fn: function(ref) {
+                                        var search = ref.search
+                                        var searching = ref.searching
+                                        return [
+                                          searching
+                                            ? [
+                                                _vm._v(
+                                                  "\n                                        No se encontraron resultados para\n                                        "
+                                                ),
+                                                _c("em", [
+                                                  _vm._v(
+                                                    _vm._s(search) +
+                                                      "\n                                    "
+                                                  )
+                                                ]),
+                                                _vm._v(
+                                                  ".\n                                    "
+                                                )
+                                              ]
+                                            : _c(
+                                                "em",
+                                                {
+                                                  staticStyle: {
+                                                    opacity: "0.5"
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "Comience a escribir para buscar una junta."
+                                                  )
+                                                ]
+                                              )
+                                        ]
+                                      }
+                                    }
+                                  ],
+                                  null,
+                                  false,
+                                  2972468057
+                                ),
+                                model: {
+                                  value: _vm.junta,
+                                  callback: function($$v) {
+                                    _vm.junta = $$v
+                                  },
+                                  expression: "junta"
+                                }
+                              },
+                              [
+                                _c("v-select", {
+                                  attrs: {
+                                    options: _vm.juntas,
+                                    label: "title"
+                                  },
+                                  scopedSlots: _vm._u(
+                                    [
+                                      {
+                                        key: "option",
+                                        fn: function(option) {
+                                          return [
+                                            _vm._v(
+                                              "\n                                        " +
+                                                _vm._s(option.codigo) +
+                                                " / " +
+                                                _vm._s(
+                                                  option.tipo.toUpperCase()
+                                                ) +
+                                                "\n                                    "
+                                            )
+                                          ]
+                                        }
+                                      }
+                                    ],
+                                    null,
+                                    false,
+                                    3724895223
+                                  )
+                                })
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "bg-white shadow-md mb-4 rounded" },
+                          [
+                            _c(
+                              "label",
+                              {
+                                staticClass:
+                                  "block mb-2 text-sm font-medium text-gray-900",
+                                attrs: { for: "multiple_files" }
+                              },
+                              [_vm._v("Seleccionar la imagen de una acta")]
+                            ),
+                            _vm._v(" "),
+                            _c("input", {
+                              staticClass: "custom-input",
+                              attrs: { type: "file", accept: "image/*" },
+                              on: { change: _vm.selectImagen }
+                            })
+                          ]
+                        )
+                      ])
+                    : _vm._e(),
                   _vm._v(" "),
-                  _c("div", { staticClass: "pt-5 w-full" }, [
-                    _vm._v(
-                      "\r\n                        " +
-                        _vm._s(_vm.errorMessage) +
-                        "\r\n                    "
-                    )
-                  ])
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "bg-white min-w-[50%] pl-2 flex items-center rounded"
+                    },
+                    [
+                      _c("figure", { staticClass: "max-w-lg m-auto w-full" }, [
+                        _c("img", {
+                          staticClass: "rounded-lg",
+                          attrs: {
+                            src: _vm.image ? _vm.image : "no-imagen-acta.jpg",
+                            height: "224px",
+                            alt: ""
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "figcaption",
+                          {
+                            staticClass:
+                              "mt-2 text-sm text-center text-gray-500 dark:text-gray-400"
+                          },
+                          [_vm._v("Vista previa de la imagen del acta")]
+                        )
+                      ])
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "min-w-[100%] p-4" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass:
+                        "flex justify-center w-full border-solid border border-blanco rounded-xl bg-blanco",
+                      attrs: { type: "submit" }
+                    },
+                    [
+                      _c("span", [_vm._v(" GUARDAR ")]),
+                      _vm._v(" "),
+                      _vm.processing
+                        ? _c("span", { staticClass: "pt-2" }, [
+                            _c(
+                              "svg",
+                              {
+                                staticClass: "h-6 w-6 text-white animate-spin",
+                                attrs: {
+                                  xmlns: "http://www.w3.org/2000/svg",
+                                  fill: "none",
+                                  viewBox: "0 0 24 24",
+                                  stroke: "currentColor"
+                                }
+                              },
+                              [
+                                _c("path", {
+                                  attrs: {
+                                    "stroke-linecap": "round",
+                                    "stroke-linejoin": "round",
+                                    "stroke-width": "2",
+                                    d:
+                                      "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                                  }
+                                })
+                              ]
+                            )
+                          ])
+                        : _vm._e()
+                    ]
+                  )
                 ])
               ]
             )

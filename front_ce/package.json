@@ -20,11 +20,14 @@
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "gsap": "file:gsap-bonus.tgz",
     "moment": "^2.29.1",
+    "sweetalert2": "^11.7.0",
     "swiper": "^7.4.1",
     "vue": "^2.6.14",
-    "vue-select": "^3.18.3",
+    "vue-awesome-swiper": "^4.1.1",
     "vue-router": "3.4.9",
-    "vuex": "3.6.0",
-    "vue-awesome-swiper": "^4.1.1"
+    "vue-select": "^3.18.3",
+    "vue-sweetalert2": "^5.0.5",
+    "vue-toastification": "1.7.8",
+    "vuex": "3.6.0"
   }
 }

@@ -1,15 +1,13 @@
 <template>
     <div class="flex items-center justify-center h-screen bg-gradient-to-r from-dark via-plomo-light to-dark">
-       
         <div class="bg-white shadow-xl rounded my-8 bg-dark box-login min-w-[80%]">
-            
             <div class="text-center text-blanco py-1">
                 {{ user.name }}
             </div>
-
             <div class="text-center text-blanco py-1">REGISTRO DE ACTAS </div>
             <div class="pt-4 pb-10">
-                <form @submit.prevent="addActa" class="w-full">
+                
+                <form @submit.prevent="addActa" class="w-full" >
                     <div class="flex p-4">
                         
                         <!-- Datos -->
@@ -29,6 +27,7 @@
                                     :options="recintos"
                                     placeholder="Buscar el recinto"
                                     @input="selectJuntasXRecinto"
+                                    v-model="recinto"
                                 >
                                     <v-select :options="recintos" label="title">
                                         <template v-slot:option="option">
@@ -60,6 +59,7 @@
                                     :options="juntas"
                                     placeholder="Buscar la junta"
                                     @input="selectJunta"
+                                    v-model="junta"
                                 >
                                     <v-select :options="juntas" label="title">
                                         <template v-slot:option="option">
@@ -99,7 +99,7 @@
                     <!-- option save  -->
                         <div class="min-w-[100%] p-4">
                             <button class="flex justify-center w-full border-solid border border-blanco rounded-xl bg-blanco" type="submit">
-                                <span> INGRESAR </span>
+                                <span> GUARDAR </span>
                                 <span class="pt-2" v-if="processing">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -109,7 +109,6 @@
                         </div>
                 </form>
             </div>
-
         </div>
     </div>
 </template>
@@ -136,8 +135,9 @@ export default {
             processing:false,
             errorMessage:null,
             recintos:[],
+            recinto:null,
             juntas:[],
-            actas:[],
+            junta:null,
         }
     },
     created (){
@@ -154,6 +154,7 @@ export default {
         }
     },
     methods:{
+        
         fetchRecintos(){
 
             this.processing = true
@@ -217,10 +218,9 @@ export default {
             reader.readAsDataURL(fileObject);
         },
         
-        addActa(){
+        addActa(event){
 
             this.processing = true
-            console.log(this.user.id)
             this.acta.ingresada_por = this.user.id
             this.acta.imagen = this.image
 
@@ -239,14 +239,51 @@ export default {
             })
             .then( response => {
                 
-                console.log('ok');
+                if(response.data.status){
+                    event.target.reset();
+                    this.fetchRecintos()
+                    this.showSucces()
+                }else{
+                    event.target.reset();
+                    this.showWarning(response.data.msg)
+                }
+                this.processing = false
             })
             .catch((error) => {
                 console.log(error);
-                this.errorMessage = error
                 this.processing = false
             }); 
-        }
+        },
+
+        showSucces(){
+            this.$toast.success("¡Dados guardados correctamente!",{
+                position: "top-right",
+                timeout: 1500,
+                draggablePercent: 0.6,
+                hideProgressBar: true,
+                closeButton: "button",
+                icon: true,
+            })
+        },
+
+        showWarning(msg) {
+            
+            this.$swal({
+                icon: 'warning',
+                title: msg,
+                allowOutsideClick: false,
+                text: 'POR FAVOR INFORMA ÉSTE PROBLEMA A UN ADMINISTRADOR',
+                footer: 'Por favor informa éste problema a un administrador ',
+                confirmButtonText: 'Ok registrar otra acta',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$refs.frmActas.reset();
+                    this.fetchRecintos()
+                } else if (result.isDenied) {
+                    this.$swal('Changes are not saved', '', 'info')
+                }
+            });
+        },
     },
 }
 </script>

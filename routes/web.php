@@ -21,6 +21,7 @@ Route::get('/', [ApplicationController::class, 'front_ce'])->name('front.home');
 // Route::view('/actas', [ApplicationController::class, 'front_ce']);
 
 Route::view('/actas', [ApplicationController::class, 'front_ce']);
+Route::view('/votos', [ApplicationController::class, 'front_ce']);
 Route::view('/home', [ApplicationController::class, 'front_ce']);
 
 Route::get('/reset-password/{token}', function ($token) {
