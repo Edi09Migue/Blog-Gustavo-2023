@@ -10,18 +10,19 @@
 
     <title>Control Electoral EC</title>
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('front/front.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('front/front.css') }}"> --}}
 
     <!-- Favicon -->
-    {{-- <link rel="shortcut icon" href="{{ asset('images/logo/favicon.png') }}"> --}}
+    <link rel="shortcut icon" href="{{ asset('images/logo/favicon.png') }}">
 </head>
 
 <body>
     <div id="main">
-        <App>
+        <h1>Mauel sdfsdf</h1>
+        <Actas>    
         {{-- <login v-if="seccion==1"></login>
         <Actas v-if="seccion==2"></Actas>
-        <Votos v-if="seccion==3"></Votos>
+        <login v-if="seccion=='3'"></login>
         <div v-if="seccion==4">
             succes
         </div> --}}

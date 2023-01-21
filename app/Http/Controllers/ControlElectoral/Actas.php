@@ -109,23 +109,22 @@ class Actas extends Controller
         DB::beginTransaction();
         try {
 
-            dd($request->all());
+            // dd($request->all());
 
             $acta = new Acta($request->all());
             
             //generar código
-            $junta = Junta::where($acta->junta_id)->first();
+            $junta = Junta::where('id',$acta->junta_id)->first();
 
             if($junta){
                 $recinto = $junta->recinto;
                 $codigo =  $recinto->codigo.'-'.$junta->codigo;
                 $acta->codigo = $codigo;
             }
-
-            $acta->ingresada_por = Auth::user()->id;
-
+            // dd($acta);
             $acta->save();
 
+            // dd($request->all());
 
              //Imagen
             if ($request->has('imagen') && !is_null($request->imagen)) {
@@ -307,14 +306,21 @@ class Actas extends Controller
 
     /**
      * Devuelve todas las actas
-     * por lo general para usarlos en un componente dropdown
+     * por lo general para actas en un componente dropdown
      */
-    public function dropdownOptions()
+    public function dropdownOptions(Request $request)
     {
-        $acta = Acta::orderBy('id', 'asc')->get();
+        $actas = Acta::orderBy('id', 'asc');
+        
+        #Actas por junta
+        if ($request->has('junta'))
+            $actas = $actas->where('junta_id', $request->junta);
+        
+        $actas = $actas->get();
+
         return response()->json([
             'status'    =>  true,
-            'items'     =>  $acta
+            'items'     =>  $actas
         ]);
     }
 }

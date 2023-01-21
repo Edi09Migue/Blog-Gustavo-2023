@@ -179,6 +179,7 @@ class Juntas extends Controller
     public function dropdownOptions(Request $request)
     {
         $juntas = Junta::query();
+        
         #Juntas por recinto
         if ($request->has('recinto'))
             $juntas = $juntas->where('recinto_id', $request->recinto)->withCount('actas');
