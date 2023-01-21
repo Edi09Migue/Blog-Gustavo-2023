@@ -18,6 +18,7 @@
                         label="nombre"
                         :reduce="val => val.id.toString()"
                         @input="selectRecinto"
+                        multiple
                         placeholder="Seleccione la parroquia"
                         :readonly="true"
                     >
@@ -110,7 +111,7 @@ export default {
     },
     props: {
        parroquiaFilter: {
-            type: [String, null],
+            type: [Array, null],
             default: null
         },
         recintoFilter: {

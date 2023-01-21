@@ -36,15 +36,17 @@ class Actas extends Controller
         }
 
         //Filtro parroquia
-        $parroquia = $request->has('parroquia') ? $request->parroquia : '';
-        if ($parroquia != '') {
-            $actas = $actas->whereIn('junta_id', function($q) use ($parroquia){
+        if ($request->has('parroquia')) {
+            //soporte para buscar una o varias parroquias
+            $parroquiasIds = is_array($request->parroquia) ? $request->parroquia : [$request->parroquia];
+          
+            $actas = $actas->whereIn('junta_id', function($q) use ($parroquiasIds){
                 $q->select('id');
                 $q->from('juntas');
-                $q->whereIn('recinto_id', function($sq) use ($parroquia){
-                $sq->select('id');
-                $sq->from('recintos');
-                $sq->where('parroquia_id', $parroquia);
+                $q->whereIn('recinto_id', function($sq) use ($parroquiasIds){
+                    $sq->select('id');
+                    $sq->from('recintos');
+                    $sq->whereIn('parroquia_id', $parroquiasIds);
                 });
             });
         }
@@ -70,11 +72,18 @@ class Actas extends Controller
         //Filtros basicos, orden y paginacion
         $actas = $actas->where(function ($q) use ($query) {
             $q->where('codigo', 'like', "%$query%")
-                ->orWhereIn('junta_id', function ($q) use ($query) {
+            ->orWhereIn('junta_id', function ($q) use ($query) {
+                $q->select('id');
+                $q->from('juntas');
+                $q->where('codigo','like', "%$query%");
+                $q->orWhereIn('recinto_id', function($q) use ($query){
                     $q->select('id');
-                    $q->from('juntas');
-                    $q->where('codigo','like', "%$query%");
+                    $q->from('recintos');
+                    $q->where('codigo', 'like', "%$query%");
+                    $q->orWhere('nombre', 'like', "%$query%");
                 });
+            });
+            
 
         })
             ->orderBy($sortBy, $sortDesc ? 'desc' : 'asc')

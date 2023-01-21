@@ -15,11 +15,29 @@ export default {
                     .catch(error => reject(error));
             });
         },
+
+        fetchTotalesPorCandidatoParroquia(ctx, queryParams) {
+            return new Promise((resolve, reject) => {
+                axios
+                    .get("/api/control-electoral/resultados/totales-por-candidato-parroquia", { params: queryParams })
+                    .then(response => resolve(response))
+                    .catch(error => reject(error));
+            });
+        },
         
         fetchTotalesPorTipoVoto(ctx, queryParams) {
             return new Promise((resolve, reject) => {
                 axios
                     .get("/api/control-electoral/resultados/totales-por-tipo-voto", { params: queryParams })
+                    .then(response => resolve(response))
+                    .catch(error => reject(error));
+            });
+        },
+        
+        fetchTotalesEscrutados(ctx, queryParams) {
+            return new Promise((resolve, reject) => {
+                axios
+                    .get("/api/control-electoral/resultados/totales-escrutados", { params: queryParams })
                     .then(response => resolve(response))
                     .catch(error => reject(error));
             });
