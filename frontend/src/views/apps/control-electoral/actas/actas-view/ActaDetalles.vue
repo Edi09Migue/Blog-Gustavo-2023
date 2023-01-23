@@ -34,7 +34,7 @@
                 <div>
                     <strong>Junta:</strong>
                     <span>
-                        {{ actaData.junta.codigo}}
+                        {{ actaData.junta.para_select}}
                     </span>
                 </div>
             </div>

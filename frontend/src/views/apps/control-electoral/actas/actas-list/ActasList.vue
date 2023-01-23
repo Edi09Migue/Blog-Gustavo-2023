@@ -128,7 +128,7 @@
 
                 <!-- Column: Junta -->
                 <template #cell(junta)="data">
-                    {{ data.item.junta.codigo }}
+                    {{ data.item.junta.para_select }}
                 </template>
 
                 <template #cell(estado)="data">

@@ -45,7 +45,9 @@ class CandidatoActaSeeder extends Seeder
 
                 //$totalActas += (int) $electores_x_junta;
 
-                $codigo =  $recinto->codigo.'-'.$junta->codigo;
+        
+                $codigo =  strtoupper($recinto->codigo.'-'.$junta->codigo.substr($junta->tipo,0,1));
+
 
                 //la mitad de ley votan
                 $total_votantes = $electores_x_junta/2;

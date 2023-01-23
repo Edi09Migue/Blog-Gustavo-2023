@@ -46,7 +46,7 @@ class RecintosImport implements ToCollection
                     if($recinto->juntas_femeninas > 0){
                         for ($x = 1; $x <= $recinto->juntas_femeninas; $x++) {
                             Junta::create([
-                                "codigo"=> 'F'.$x,
+                                "codigo"=> str_pad($x, 3, "0", STR_PAD_LEFT),
                                 "recinto_id"=>$recinto->id,
                                 "tipo"=>'femenino',
                             ]);
@@ -57,7 +57,7 @@ class RecintosImport implements ToCollection
                     if($recinto->juntas_masculinas > 0){
                         for ($y = 1; $y <= $recinto->juntas_masculinas; $y++) {
                             Junta::create([
-                                "codigo"=> 'M'.$y,
+                                "codigo"=>str_pad($y, 3, "0", STR_PAD_LEFT),
                                 "recinto_id"=>$recinto->id,
                                 "tipo"=>'masculino',
                             ]);

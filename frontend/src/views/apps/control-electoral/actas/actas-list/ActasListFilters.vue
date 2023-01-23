@@ -97,14 +97,14 @@
                         @input="val => $emit('update:juntaFilter', val)"
                         placeholder="Seleccione la junta"
                     >
-                        <template #option="{ codigo, actas_count}">
-                            {{ codigo }}
+                        <template #option="{ para_select, actas_count}">
+                            {{ para_select }}
                             <small>
                                 <b-badge variant="dark"> {{ actas_count }} </b-badge>
                             </small>
                         </template>
-                        <template #selected-option="{ codigo, actas_count}">
-                            {{ codigo }}
+                        <template #selected-option="{ para_select, actas_count}">
+                            {{ para_select }}
                             &nbsp;
                             <small>
                                 <b-badge variant="dark"> {{ actas_count }} </b-badge>
