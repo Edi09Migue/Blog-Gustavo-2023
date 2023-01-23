@@ -123,7 +123,7 @@ class Actas extends Controller
             #Verificar si la acta no fue ingresar 
             $existsActa = Acta::where('codigo',$acta->codigo)->first();
             
-            if($existsActa){ #Si no fue ingresasa guardar
+            if($existsActa){ #Si no fue ingresada guardar
 
                 $acta->codigo = $codigo;
                 $acta->save();
@@ -136,7 +136,7 @@ class Actas extends Controller
                 $msg = "Acta: {$acta->codigo}";
                 $status = true;
 
-            }else{ #Si fue ingresasa enviar un mensaje al usuario
+            }else{ #Si fue ingresada enviar un mensaje al usuario
                 $msg = "El acta {$codigo} ya fue ingresada";
                 $status = false;
             }
@@ -238,30 +238,23 @@ class Actas extends Controller
     {
 
         DB::beginTransaction();
-        
         try {
-            // $acta->fill($request->all());
 
-            //actualiza los campos
-            $acta->update(['votos_blancos' => $request->votos_blancos,
-                          'votos_nulos' => $request->votos_nulos,
-                          'votos_validos' => $request->votos_validos,
+            #actualiza los campos
+            $acta->update(['votos_blancos' => $request->acta['votos_blancos'],
+                          'votos_nulos' => $request->acta['votos_nulos'],
+                          'votos_validos' => $request->acta['votos_validos'],
                           'estado' => true]);
 
-            // $acta->save();
-
-            //Votos para los candidatos
-            if ($request->has('candidatos')) {
-                foreach ($request->candidatos as $candidato) {
+            #Guardar los votos para los candidatos
+            if ($request->has('candidatos_votos')) {
+                foreach ($request->candidatos_votos as $item) {
                     CandidatoActa::create([
-                        "candidato_id" => $candidato['candidato_id'],
-                        "acta_id" => $candidato['acta_id'],
-                        "votos" => $candidato['votos'],
-                        "procesada_por" =>  Auth::user()->id,
-              
+                        "candidato_id" => $item['candidato_id'],
+                        "acta_id" => $item['acta_id'],
+                        "votos" => $item['votos'],
+                        "procesada_por" => $item['procesada_por'],
                     ]);
-
-                
                 }
             }
 
@@ -317,7 +310,6 @@ class Actas extends Controller
 
         ]);
     }
-
 
     /**
      * Devuelve todas las actas

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Optix\Media\HasMedia;
+use Optix\Media\Models\Media;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Acta extends Model implements Auditable
@@ -30,6 +31,7 @@ class Acta extends Model implements Auditable
 
     protected $appends = [
         'imagenURL',
+        'imagenOriginalURL',
     ];
 
     protected $casts = [
@@ -37,52 +39,70 @@ class Acta extends Model implements Auditable
         'visualizado' => 'boolean'
     ];
 
-   
+    /**
+     * Devuelve la junta a la que pertenece la junta
+     */
     public function junta()
     {
         return $this->belongsTo(Junta::class);
     }
 
+    /**
+     * Devuelve el usuario que ingreso el registro del acta
+     */
     public function ingresada()
     {
         return $this->belongsTo(User::class, 'ingresada_por');
     }
 
+    /**
+     * Devuelve los votos de los canditados del acta
+     * Esto luego de subir la imagen del acta
+     */
     public function candidatosActa(){
         return $this->belongsToMany(Candidato::class,'candidato_acta','acta_id','candidato_id')
         ->withPivot(['votos', 'digitalizado_por'])
         ->withTimestamps();  
     }
 
-
-     /**
-     * Devuelve la URL completa de la imagen
+    /**
+     * Devuelve la URL completa de la imagen orginal del acta
      */
-     public function getImagenURLAttribute()
-     {
-         return $this->getFirstMediaUrl('main', 'acta')
-             ? $this->getFirstMediaUrl('main', 'acta')
-             : asset('images/control_electoral/actas/no-image.png');
-     }
- 
-      /**
-      * Registro de conversiones a distintos tamaños
-      *  para iconos asignadas a este modelo
-      */
-     public function registerMediaGroups()
-     {
-         $this->addMediaGroup('main')
-         ->performConversions('acta');
-     }
+    public function getImagenOriginalURLAttribute(Type $var = null)
+    {
+        $acta = $this;
+        $url = asset("images/control_electoral/no-imagen-acta.jpg");
 
+        $media = Media::whereIn('id',  function ($query) use ($acta) {
+            $query->select('media_id')->from('mediables')
+            ->where('mediable_id',$acta->id)
+            ->where('mediable_type',Acta::class);
+        })->first();
+        
+        if ($media) 
+            $url = asset("images/control_electoral/actas/{$media->file_name}");
 
-    public function getIsAdminAttribute(){
-        $is_admin = $this->roles()
-                        ->whereIn('role_id',[1,2])
-                        ->count();
-        return $is_admin > 0;
+        return $url;
     }
 
+    /**
+     * Devuelve la URL completa de la imagen
+     */
+    public function getImagenURLAttribute()
+    {
+        return $this->getFirstMediaUrl('main', 'acta')
+            ? $this->getFirstMediaUrl('main', 'acta')
+            : asset('images/control_electoral/actas/no-image.png');
+    }
 
+    /**
+     * Registro de conversiones a distintos tamaños
+    *  para iconos asignadas a este modelo
+    */
+    public function registerMediaGroups()
+    {
+        $this->addMediaGroup('main')
+        ->performConversions('acta');
+    }
 
 }
