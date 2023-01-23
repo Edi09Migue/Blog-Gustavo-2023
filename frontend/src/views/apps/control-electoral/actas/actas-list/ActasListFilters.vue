@@ -35,7 +35,7 @@
                         :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                         :value="parroquiaFilter"
                         :options="parroquiasOptions"
-                        class="w-100"
+                        class="filter-select-1"
                         label="nombre"
                         :reduce="val => val.id.toString()"
                         @input="selectRecinto"
@@ -58,7 +58,7 @@
                         </template>
                     </v-select>
                 </b-col>
-                <b-col cols="12" md="7" class="mb-md-0 mb-2">
+                <b-col cols="12" md="5" class="mb-md-0 mb-2 pl-0">
                    <label>{{ ("Recinto") }}</label>
                     <v-select
                         :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -85,7 +85,7 @@
                         </template>
                     </v-select>
                 </b-col>
-                <b-col cols="12" md="2" class="mb-md-0 mb-2">
+                <b-col cols="12" md="2" class="mb-md-0 mb-2 pl-0">
                    <label>{{ ("Junta") }}</label>
                     <v-select
                         :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
@@ -112,6 +112,36 @@
                         </template>
                     </v-select>
                 </b-col>
+
+                <b-col cols="12" md="2" class="mb-md-0 mb-2 pl-0">
+                   <label>{{ ("Actas") }}</label>
+                    <v-select
+                        :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                        :value="estadoFilter"
+                        :options="estadosOptions"
+                        class="w-100"
+                        label="label"
+                        :reduce="val => val.value.toString()"
+                        @input="val => $emit('update:estadoFilter', val)"
+                        placeholder="Seleccione el estado"
+                    >
+                        <template #option="{ label, actas_count}">
+                            {{ label }}
+                            <small>
+                                <b-badge variant="dark"> {{ actas_count }} </b-badge>
+                            </small>
+                        </template>
+                        <template #selected-option="{ label, actas_count}">
+                            {{ label }}
+                            &nbsp;
+                            <small>
+                                <b-badge variant="dark"> {{ actas_count }} </b-badge>
+                            </small>
+                        </template>
+                    </v-select>
+                </b-col>
+
+
             </b-row>
         </b-card-body>
     </b-card>
@@ -161,6 +191,15 @@ export default {
             type: Array,
             required: true,
         },
+        estadosOptions: {
+            type: Array,
+            required: true,
+        },
+        estadoFilter: {
+            type: [String, null],
+            default: null
+        },
+        
         ultimaActualizacion:{
             type: Date|String,
             required: false
@@ -195,23 +234,3 @@ export default {
     }
 };
 </script>
-
-
-
-
-<style lang="scss">
-@import '@core/scss/vue/libs/vue-select.scss';
-
-.filter-select {
-  min-width: 10px;
-
-  ::v-deep .vs__selected-options {
-    flex-wrap: nowrap;
-  }
-
-  ::v-deep .vs__selected {
-    width: 10px;
-  }
-}
-
-</style>

@@ -19,13 +19,14 @@ class CreateActasTable extends Migration
             $table->string('codigo')->unique();
             $table->unsignedBigInteger('junta_id');
             $table->foreign('junta_id')->references('id')->on('juntas'); 
+            $table->integer('total_votantes')->default(0);
             $table->integer('votos_blancos')->default(0);
             $table->integer('votos_nulos')->default(0);
-            $table->integer('votos_validos')->default(0);
             $table->unsignedBigInteger('ingresada_por');
             $table->foreign('ingresada_por')->references('id')->on('users');
             $table->boolean('estado')->default(false);
             $table->boolean('visualizado')->default(false);
+            $table->boolean('inconsistente')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

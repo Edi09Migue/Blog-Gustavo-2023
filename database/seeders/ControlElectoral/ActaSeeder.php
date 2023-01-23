@@ -38,7 +38,7 @@ class ActaSeeder extends Seeder
             "junta_id" => $junta_1->id,
             "votos_blancos" => 80,
             "votos_nulos" => 60,
-            "votos_validos" => 230,
+            "total_votantes" => 230,
             "estado" => true,
             "ingresada_por" => 3,
             "visualizado" => true,
@@ -91,9 +91,9 @@ class ActaSeeder extends Seeder
         $acta_2 = Acta::create([
             "codigo" => $codigo_2,
             "junta_id" => $junta_2->id,
+            "total_votantes" => 230,
             "votos_blancos" => 80,
             "votos_nulos" => 60,
-            "votos_validos" => 230,
             "estado" => false,
             "ingresada_por" => 3,
 

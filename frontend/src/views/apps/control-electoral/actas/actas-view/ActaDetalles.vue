@@ -12,6 +12,10 @@
                     <span>
                         <b-badge :variant="`light-${actaData.estado ? 'success' : 'primary'}`"> {{ actaData.codigo}} </b-badge>
                     </span>
+                    &nbsp;
+                    <h3 v-if="actaData.estado && actaData.inconsistente" class="text-danger" >
+                            Inconsistente
+                    </h3>
                 </div>
 
                 <div class="mt-1">
@@ -38,6 +42,30 @@
             <div class="d-flex ml-1 mt-1 justify-content-center">
                 <b-row class="d-flex justify-content-center">
                     <b-media no-body>
+                        <b-media-aside
+                            class="mr-1"
+                        >
+                            <b-avatar
+                                size="28"
+                                variant="light-primary"
+                            >
+                                <feather-icon
+                                    size="16"
+                                    icon="UserIcon"
+                                />
+                            </b-avatar>
+
+                        </b-media-aside>
+                        <b-media-body class="my-auto">
+                            <h5 class="font-weight-bolder mb-0">
+                                {{  actaData.total_votantes }}
+                            </h5>
+                            <b-card-text class="font-small-5 mb-0">
+                               T. Votantes
+                            </b-card-text>
+                        </b-media-body>
+                    </b-media>
+                    <b-media no-body class="ml-4">
                         <b-media-aside
                             class="mr-1"
                         >
@@ -82,30 +110,6 @@
                             </h5>
                             <b-card-text class="font-small-5 mb-0">
                                Nulos
-                            </b-card-text>
-                        </b-media-body>
-                    </b-media>
-                    <b-media no-body class="ml-4">
-                        <b-media-aside
-                            class="mr-1"
-                        >
-                            <b-avatar
-                                size="28"
-                                variant="light-primary"
-                            >
-                                <feather-icon
-                                    size="16"
-                                    icon="ArchiveIcon"
-                                />
-                            </b-avatar>
-
-                        </b-media-aside>
-                        <b-media-body class="my-auto">
-                            <h5 class="font-weight-bolder mb-0">
-                                {{  actaData.votos_validos }}
-                            </h5>
-                            <b-card-text class="font-small-5 mb-0">
-                               Válidos
                             </b-card-text>
                         </b-media-body>
                     </b-media>

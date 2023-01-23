@@ -21,6 +21,7 @@ export default function useActasList(){
     const parroquiaFilter = ref(null);
     const recintoFilter = ref(null);
     const juntaFilter = ref(null);
+    const estadoFilter = ref(null);
 
   
     const dataMeta = computed(() => {
@@ -38,9 +39,9 @@ export default function useActasList(){
 
     const tableColumns = [
         { key: "codigo", sortable: true, label: ("Código") },
-        { key: "parroquia", sortable: true, label: ("Parroquia") },
-        { key: "recinto", sortable: true, label: ("Recinto") },
-        { key: "junta", sortable: true, label: ("Junta") },
+        { key: "parroquia", sortable: false, label: ("Parroquia") },
+        { key: "recinto", sortable: false, label: ("Recinto") },
+        { key: "junta", sortable: false, label: ("Junta") },
         // { key: "votos_blancos", sortable: true, label: ("V. Blancos") },
         // { key: "votos_validos", sortable: true, label: ("V. Válidos") },
         // { key: "votos_nulos", sortable: true, label: ("V. Nulos") },
@@ -54,7 +55,7 @@ export default function useActasList(){
         refUserListTable.value.refresh()
       }
 
-    watch([currentPage, perPage, searchQuery, parroquiaFilter, recintoFilter, juntaFilter], () => {
+    watch([currentPage, perPage, searchQuery, parroquiaFilter, recintoFilter, juntaFilter, estadoFilter], () => {
         refetchData()
       })
 
@@ -71,6 +72,7 @@ export default function useActasList(){
                 parroquia: parroquiaFilter.value,
                 recinto: recintoFilter.value,
                 junta: juntaFilter.value,
+                estado: estadoFilter.value,
             })
             .then(response => {
                 if(response.data.status){
@@ -215,6 +217,41 @@ export default function useActasList(){
     }
 
 
+    const estadosOptions = ref([]);
+   
+    const fetchEstadosOptions = () => {
+        store
+        .dispatch("control-actas/fetchEstadosOptions")
+        .then(response => {
+            if(response.data.status){
+                estadosOptions.value = response.data.items;
+            }else{
+                toast({
+                    component: ToastificationContent,
+                    props: {
+                        title: "Error obteniendo estados",
+                        text: response.data.msg,
+                        icon: "AlertTriangleIcon",
+                        variant: "danger"
+                    }
+                });
+            }
+        })
+        .catch((error) => {
+            toast({
+                component: ToastificationContent,
+                props: {
+                    title: "Error obteniendo estados",
+                    text: error.data ? error.data.msg : error,
+                    icon: "AlertTriangleIcon",
+                    variant: "danger"
+                }
+            });
+        });
+        
+    }
+
+    fetchEstadosOptions();
 
 
 
@@ -293,6 +330,10 @@ export default function useActasList(){
                 }
             });
         };
+
+
+
+        
     
     
    
@@ -323,6 +364,8 @@ export default function useActasList(){
         fetchJuntasOptions,
         juntasOptions,
         juntaFilter,
+        estadoFilter,
+        estadosOptions
 
 
      

@@ -69,6 +69,18 @@ class Actas extends Controller
             $actas = $actas->where('junta_id', $junta);
         }
 
+        
+        //Filtro estado actas
+        $estado = $request->has('estado') ? $request->estado : '';
+        if ($estado != '') {
+            if($estado == 'inconsistentes'){
+                $inconsistente = true;
+            }else if ($estado == 'consistentes'){
+                $inconsistente = false;
+            }
+            $actas = $actas->where('inconsistente',   $inconsistente);
+        }
+
 
         //Filtros basicos, orden y paginacion
         $actas = $actas->where(function ($q) use ($query) {
@@ -338,4 +350,37 @@ class Actas extends Controller
             'items'     =>  $actas
         ]);
     }
+
+
+
+    /**
+     * Devuelve las opciones de los estados de las actas inconsistentes y consistentes
+     */
+    public function estadosOptions()
+    {
+
+        $estados =  [
+            [
+                'label'     =>  'Inconsistes',
+                'value'     =>  'inconsistentes',
+                'actas_count'      =>  Acta::where('inconsistente', true)->count(),
+            ],
+            [
+                'label'     =>  'Consistentes',
+                'value'     =>  'consistentes',
+                'actas_count'      =>  Acta::where('inconsistente', false)->count(),
+            ],
+
+
+
+
+        ];
+
+
+        return response()->json([
+            'status'    =>  true,
+            'items'     =>  $estados
+        ]);
+    }
+
 }

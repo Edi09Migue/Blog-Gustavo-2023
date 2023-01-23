@@ -20,12 +20,13 @@ class Acta extends Model implements Auditable
     protected $fillable  = [
         'codigo',
         'junta_id',
+        'total_votantes',
         'votos_blancos',
         'votos_nulos',
-        'votos_validos',
         'estado',
         'ingresada_por',
         'visualizado', #Para false si no fue consultada, true su fue consultada y están ingresando datos
+        'inconsistente',
     ];
 
     protected $appends = [
@@ -34,7 +35,8 @@ class Acta extends Model implements Auditable
 
     protected $casts = [
         'estado' => 'boolean',
-        'visualizado' => 'boolean'
+        'visualizado' => 'boolean',
+        'inconsistente' => 'boolean',
     ];
 
    

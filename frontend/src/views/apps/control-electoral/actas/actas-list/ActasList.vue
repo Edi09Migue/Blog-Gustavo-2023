@@ -11,6 +11,9 @@
         :recintos-options="recintosOptions"
         @fetch-juntas-options="fetchJuntasOptions"
         :juntas-options="juntasOptions"
+        :estados-options="estadosOptions"
+        :estado-filter.sync="estadoFilter"
+
         @refetch-data="refetchData"
     />
 
@@ -136,7 +139,7 @@
                         <b-badge
                             v-if="data.item.estado"
                             pill
-                            variant="success"
+                            variant="light-success"
                             class="text-capitalize"
                         >
                              Procesada
@@ -151,12 +154,11 @@
                             {{ data.item.visualizado  ? ("Procesando...") : ("Ingresada") }}
                         </b-badge>
 
-                      
+                        <h4 v-if="data.item.estado && data.item.inconsistente" class="text-danger" >
+                            Inconsistente
+                        </h4>
 
-
-                         <!-- <small v-if="data.item.visualizado && data.item.estado == false">
-                                Procesando ...
-                            </small> -->
+                    
                     </b-link>
                 </template>
 
@@ -371,6 +373,9 @@ export default {
             fetchJuntasOptions,
             juntasOptions,
             juntaFilter,
+            estadosOptions,
+            estadoFilter
+
     
         } = useActasList()
 
@@ -404,6 +409,8 @@ export default {
             fetchJuntasOptions,
             juntasOptions,
             juntaFilter,
+            estadosOptions,
+            estadoFilter
         }
     }
 }

@@ -109,6 +109,17 @@ export default {
             })
         },
 
+        fetchEstadosOptions(ctx, params){
+            return new Promise((resolve, reject) => {
+                axios
+                    .get('/api/control-electoral/actas/estadosOptions',{
+                        params: params
+                    })
+                    .then(response => resolve(response))
+                    .catch(error => reject(error))
+            })
+        },
+
 
 
 

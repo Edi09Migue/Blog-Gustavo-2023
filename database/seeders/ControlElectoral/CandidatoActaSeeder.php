@@ -48,28 +48,30 @@ class CandidatoActaSeeder extends Seeder
                 $codigo =  $recinto->codigo.'-'.$junta->codigo;
 
                 //la mitad de ley votan
-                $votos_validos = $electores_x_junta/2;
+                $total_votantes = $electores_x_junta/2;
                 //le aumentamos un randomico entre la mitad restante
-                $votos_validos = $votos_validos + rand(1,$votos_validos);
+                $total_votantes = $total_votantes + rand(1,$total_votantes);
                 //random entre los sobrantes
-                $votos_nulos = rand(1, $electores_x_junta - $votos_validos);
-                $votos_blancos = rand(1, $electores_x_junta - $votos_validos - $votos_nulos);
+                $votos_nulos = rand(1, $electores_x_junta - $total_votantes);
+                $votos_blancos = rand(1, $electores_x_junta - $total_votantes - $votos_nulos);
+
 
                 $acta = Acta::create([
                     "codigo"            => $codigo,
                     "junta_id"          => $junta->id,
+                    "total_votantes"     => $total_votantes,
                     "votos_blancos"     => $votos_blancos,
                     "votos_nulos"       => $votos_nulos,
-                    "votos_validos"     => $votos_validos,
                     "estado"            => true,
                     "ingresada_por"     => 3,
                     "visualizado"       => true,
+                    "inconsistente"       => true,
                 ]);
 
                 $votados = 0;
                 
                 foreach($candidatos as $candidato){
-                    $votos = rand(0, $votos_validos - $votados);
+                    $votos = rand(0, $total_votantes - $votados);
                     $votados += $votos;
                     // echo "\t\t {$candidato->nombre}: {$votos}\n";
                     $ca = CandidatoActa::create([
