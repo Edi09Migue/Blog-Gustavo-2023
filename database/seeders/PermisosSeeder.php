@@ -99,7 +99,7 @@ class PermisosSeeder extends Seeder
 
         //USER 1 con rol de superadmin
         $user_superadmin_1 = User::find(1);
-        $user_superadmin_1->assignRole('superadmin');
+        $user_superadmin_1->assignRole('digitalizador');
 
         //USER 2 con rol de superadmin
         $user_superadmin_2  = User::find(2);
