@@ -4,7 +4,7 @@ module.exports = {
     '../resources/**/*.blade.php',
     '../resources/**/*.js',
     '../resources/**/*.vue',
-    './components/**/*.vue',
+    './src/**/*.vue',
   ],
   theme: {
     extend: {
@@ -20,6 +20,10 @@ module.exports = {
         'negro': '#212121',
         'plomo': '#757575',
         'plomo-light': '#BDBDBD',
+
+        'error':'#ee2f2f4f',
+        'info':'#2fc1ee59',
+        'warning':'#cdee2f59'
 
       },
       fontFamily: {

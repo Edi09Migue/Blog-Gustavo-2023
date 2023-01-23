@@ -170,6 +170,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Login',
@@ -246,23 +252,18 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    {
-      staticClass:
-        "grid place-items-center h-screen bg-gradient-to-r from-dark via-plomo-light to-dark"
-    },
+    { staticClass: "grid place-items-center h-screen box-main" },
     [
       _c(
         "div",
         {
           staticClass:
-            "max-w-md mx-auto h=1/2 shadow-xl rounded my-8 bg-dark box-login"
+            "max-w-lg w-[25%] mx-auto h=1/2 shadow-xl rounded my-8 bg-[#21212196] box-login"
         },
         [
-          _c("div", { staticClass: "text-center text-blanco py-4" }, [
-            _vm._v("INICIO DE SESIÓN")
-          ]),
+          _vm._m(0),
           _vm._v(" "),
-          _c("div", { staticClass: "pt-8 pb-10" }, [
+          _c("div", { staticClass: "pt-6 pb-10" }, [
             _c(
               "form",
               {
@@ -275,6 +276,8 @@ var render = function() {
               },
               [
                 _c("div", { staticClass: "w-4/5 mx-auto" }, [
+                  _vm._m(1),
+                  _vm._v(" "),
                   _c(
                     "div",
                     {
@@ -282,7 +285,19 @@ var render = function() {
                         "flex items-center bg-white rounded-full shadow-md mb-4"
                     },
                     [
-                      _c("span", { staticClass: "px-3" }),
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "px-3 rounded-full w-[35px] h-[35px] border-negro bg-negro flex items-center text-blanco mr-2"
+                        },
+                        [
+                          _c("font-awesome-icon", {
+                            attrs: { icon: "fa-solid fa-user" }
+                          })
+                        ],
+                        1
+                      ),
                       _vm._v(" "),
                       _c("input", {
                         directives: [
@@ -348,7 +363,19 @@ var render = function() {
                         }
                       }),
                       _vm._v(" "),
-                      _c("span", { staticClass: "px-3" })
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "px-3 rounded-full w-[35px] h-[35px] border-negro bg-negro flex items-center text-blanco"
+                        },
+                        [
+                          _c("font-awesome-icon", {
+                            attrs: { icon: "fa-solid fa-unlock" }
+                          })
+                        ],
+                        1
+                      )
                     ]
                   ),
                   _vm._v(" "),
@@ -364,7 +391,7 @@ var render = function() {
                           attrs: { type: "submit" }
                         },
                         [
-                          _c("span", [_vm._v(" INGRESAR ")]),
+                          _c("span", [_vm._v(" Iniciar sesión ")]),
                           _vm._v(" "),
                           _c("span", { staticClass: "pt-2" }, [
                             _vm.processing
@@ -415,7 +442,26 @@ var render = function() {
     ]
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "text-center text-blanco py-4 uppercase text-xl" },
+      [_c("strong", [_vm._v("Control Electoral Ec")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "mb-8" }, [
+      _c("p", [_vm._v("Inicia sesión en tu cuenta")])
+    ])
+  }
+]
 render._withStripped = true
 
 
