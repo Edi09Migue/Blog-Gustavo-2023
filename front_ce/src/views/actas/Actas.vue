@@ -1,116 +1,135 @@
 <template>
-    <div class="flex items-center justify-center h-screen bg-gradient-to-r from-dark via-plomo-light to-dark">
-        <div class="bg-white shadow-xl rounded my-8 bg-dark box-login min-w-[80%]">
-            <div class="text-center text-blanco py-1">
-                {{ user.name }}
-            </div>
-            <div class="text-center text-blanco py-1">REGISTRO DE ACTAS </div>
-            <div class="pt-4 pb-10">
-                
-                <form @submit.prevent="addActa" class="w-full" >
-                    <div class="flex p-4">
-                        
-                        <!-- Datos -->
-                        <div class="min-w-[50%] pr-2" v-if="recintos.length>0">
-
-                            <!-- select recintos -->
-                            <div class="bg-white shadow-md mb-4 rounded">
-                                <label
-                                    class="block uppercase text-base font-bold mb-2 tracking-wide"
-                                    for="grid-password"
-                                >
-                                    Recintos
-                                </label>
-                                <v-select
-                                    class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    label="nombre"
-                                    :options="recintos"
-                                    placeholder="Buscar el recinto"
-                                    @input="selectJuntasXRecinto"
-                                    v-model="recinto"
-                                >
-                                    <v-select :options="recintos" label="title">
-                                        <template v-slot:option="option">
-                                            {{ option.nombre }}
-                                        </template>
-                                    </v-select>
-                                    <template v-slot:no-options="{ search, searching }">
-                                        <template v-if="searching">
-                                            No se encontraron resultados para
-                                            <em>{{ search }}
-                                        </em>.
-                                        </template>
-                                        <em v-else style="opacity: 0.5">Comience a escribir para buscar un recinto.</em>
-                                    </template>
-                                </v-select>
-                            </div>
-
-                            <!-- select juntas -->
-                            <div class="bg-white shadow-md mb-4 rounded">
-                                <label
-                                    class="block uppercase text-base font-bold mb-2 tracking-wide"
-                                    for="grid-password"
-                                >
-                                    Juntas
-                                </label>
-                                <v-select
-                                    class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    label="para_select"
-                                    :options="juntas"
-                                    placeholder="Buscar la junta"
-                                    @input="selectJunta"
-                                    v-model="junta"
-                                >
-                                    <v-select :options="juntas" label="title">
-                                        <template v-slot:option="option">
-                                            {{ option.codigo }} / {{ option.tipo.toUpperCase() }}
-                                        </template>
-                                    </v-select>
-                                    <template v-slot:no-options="{ search, searching }">
-                                        <template v-if="searching">
-                                            No se encontraron resultados para
-                                            <em>{{ search }}
-                                        </em>.
-                                        </template>
-                                        <em v-else style="opacity: 0.5">Comience a escribir para buscar una junta.</em>
-                                    </template>
-                                </v-select>
-                            </div>
-
-                            <div class="bg-white shadow-md mb-4 rounded">
-                                <label class="block mb-2 text-sm font-medium text-gray-900" for="multiple_files">Seleccionar la imagen de una acta</label>
-                                <!-- <input @change="select_file" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="multiple_files" type="file" multiple> -->
-                                <input @change="selectImagen" class="custom-input" type="file" accept="image/*">
-                            </div>
-                                
-                        </div>
-
-                        <!-- Imagen preiew -->
-                        <div class="bg-white min-w-[50%] pl-2 flex items-center rounded">
+<div class="grid place-items-center box-main ">
+    <div class="container mx-auto">
+        <!-- Title page -->
+        <div class="container max-auto text-negro text-xl pt-[78px] pl-4">
+            <h1 class="text-negro underline font-bold decoration-negro">
+                REGISTRO DE VOTOS
+            </h1>
+        </div>
+        <!-- Conete page -->
+        <div class="container max-auto ">
+            <!-- card -->
+            <div class="bg-blanco rounded overflow-hidden shadow-lg min-w-[80%]">
+                <div class="pt-4 w-full">
+                    <form @submit.prevent="addActa" class="w-full" >
+                        <div class="flex flex-wrap px-4 pb-2">
                             
-                            <figure class="max-w-lg m-auto w-full">
-                                <img class="rounded-lg" :src="image ? image :'no-imagen-acta.jpg'" height="224px" alt="">
-                                <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Vista previa de la imagen del acta</figcaption>
-                            </figure>
+                            <!-- Datos -->
+                            <div class="min-w-[50%] sm:min-w-[100%] md:min-w-[50%] pr-2" v-if="recintos.length>0">
+
+                                <!-- select recintos -->
+                                <div class="bg-white mb-4 rounded">
+                                    <label for="resintos" class="block mb-2 text-sm font-medium text-gray-900 dark:text-negro">Recintos</label>
+                                    <v-select
+                                        id="resintos"
+                                        class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                        label="nombre"
+                                        :options="recintos"
+                                        placeholder="Buscar el recinto"
+                                        @input="selectJuntasXRecinto"
+                                        v-model="recinto"
+                                    >
+                                        <template #search="{attributes, events}">
+                                            <input
+                                                class="vs__search"
+                                                :required="!recinto"
+                                                v-bind="attributes"
+                                                v-on="events"
+                                            />
+                                        </template>
+                                        <v-select :options="recintos" label="title">
+                                            <template v-slot:option="option">
+                                                {{ option.nombre }}
+                                            </template>
+                                        </v-select>
+                                        <template v-slot:no-options="{ search, searching }">
+                                            <template v-if="searching">
+                                                No se encontraron resultados para
+                                                <em>{{ search }}
+                                            </em>.
+                                            </template>
+                                            <em v-else style="opacity: 0.5">Comience a escribir para buscar un recinto.</em>
+                                        </template>
+                                    </v-select>
+                                </div>
+
+                                <!-- select juntas -->
+                                <div class="bg-white mb-4 rounded">
+                                    <label for="juntas" class="block mb-2 text-sm font-medium text-gray-900 dark:text-negro">Juntas</label>
+                                    <v-select
+                                        id="juntas"
+                                        class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                        label="para_select"
+                                        :options="juntas"
+                                        placeholder="Buscar la junta"
+                                        @input="selectJunta"
+                                        v-model="junta"
+                                        :loading="loadingJuntas"
+                                    >
+                                        <template #search="{attributes, events}">
+                                            <input
+                                                class="vs__search"
+                                                :required="!junta"
+                                                v-bind="attributes"
+                                                v-on="events"
+                                            />
+                                        </template>
+                                        <v-select :options="juntas" label="title">
+                                            <template v-slot:option="option">
+                                                {{ option.codigo }} / {{ option.tipo.toUpperCase() }} / {{ option.id }} mamnul
+                                            </template>
+                                        </v-select>
+                                        <template v-slot:no-options="{ search, searching }">
+                                            <template v-if="searching">
+                                                No se encontraron resultados para
+                                                <em>{{ search }}
+                                            </em>.
+                                            </template>
+                                            <em v-else style="opacity: 0.5">Comience a escribir para buscar una junta.</em>
+                                        </template>
+                                    </v-select>
+                                </div>
+
+                                <!-- file -->
+                                <div class="bg-white mb-4">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900" for="multiple_files">Seleccionar la imagen de la acta</label>
+                                    <div class="block">
+                                        <span class="sr-only">Choose File</span>
+                                        <input type="file" @change="selectImagen" accept="image/*" required class="block w-full text-sm text-gray-500 file:border-current  file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-negro file:text-blanco hover:file:bg-plomo"/>
+                                    </div>
+                                </div>
+
+                                <!-- option save  -->
+                                <div class="pt-5 w-full">
+                                    <button :class=" 'flex justify-center border-solid border border-negro rounded hover:bg-plomo ' + (processing ? ' bg-plomo' : ' bg-negro') " type="submit" :disabled="processing">
+                                        <span class="text-blanco py-1 px-3"> GUARDAR </span>
+                                        <span class="py-2 px-2" v-if="processing">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                            </svg>
+                                        </span>
+                                    </button>
+                                </div>
+
+                            </div>
+
+                            <!-- Imagen preiew -->
+                            <div class="min-w-[50%] sm:min-w-[100%] md:min-w-[50%] pl-2 flex items-center rounded">
+                                <figure class="max-w-lg m-auto w-full">
+                                    <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Vista previa de la imagen del acta</figcaption>
+                                    <img class="rounded-lg" :src="image ? image :'images/control_electoral/no-imagen-acta.png'" height="224px" alt="">
+                                </figure>
+                            </div>
 
                         </div>
-
-                    </div>
-                    <!-- option save  -->
-                        <div class="min-w-[100%] p-4">
-                            <button class="flex justify-center w-full border-solid border border-blanco rounded-xl bg-blanco" type="submit">
-                                <span> GUARDAR </span>
-                                <span class="pt-2" v-if="processing">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                    </svg>
-                                </span>
-                            </button>
-                        </div>
-                </form>
+                        
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+</div>
 </template>
 <script>
 import { http } from "../../axios"
@@ -129,15 +148,18 @@ export default {
                 votos_validos:0,
                 estado:0,
                 ingresada_por:true,
-                imagen:null
+                imagen:null,
             },
+            selected:null,
             image:null,
             processing:false,
             errorMessage:null,
             recintos:[],
             recinto:null,
+            loadingRecintos:false,
             juntas:[],
             junta:null,
+            loadingJuntas:false
         }
     },
     created (){
@@ -157,32 +179,35 @@ export default {
         
         fetchRecintos(){
 
-            this.processing = true
+            this.loadingRecintos = false
 
             http
-            .get("control-electoral/recintos/dropdownOptions",{ headers: {
-                Authorization: `Bearer ${this.token}`,
-                'Content-Type': 'application/json',
-            }})
+            .get("control-electoral/recintos/dropdownOptions",{
+                params:{ recintos_sin_actas:true },
+                headers: {
+                    Authorization: `Bearer ${this.token}`,
+                    'Content-Type': 'application/json',
+                }
+            })
             .then( response => {
 
                 this.recintos = response.data.items;
-                this.processing = false
+                this.loadingRecintos = false
             })
             .catch((error) => {
                 console.log(error);
                 this.errorMessage = error
-                this.processing = false
+                this.loadingRecintos = false
             });
         },
 
         selectJuntasXRecinto(item){
 
-            this.processing = true
+            this.loadingJuntas = true
 
             http
             .get("control-electoral/juntas/dropdownOptions",{
-                params: { recinto:item.id },
+                params: { recintoId:item.id, junta_sin_acta:true },
                 headers: {
                     Authorization: `Bearer ${this.token}`,
                     'Content-Type': 'application/json',
@@ -192,12 +217,12 @@ export default {
                 
                 this.acta.junta_id = item.id
                 this.juntas = response.data.items;
-                this.processing = false
+                this.loadingJuntas = false
             })
             .catch((error) => {
                 console.log(error);
                 this.errorMessage = error
-                this.processing = false
+                this.loadingJuntas = false
             });
         },
 
@@ -241,6 +266,12 @@ export default {
                 
                 if(response.data.status){
                     event.target.reset();
+
+                    this.acta.imagen = null
+                    this.recinto = null
+                    this.junta = null
+                    this.image = null
+
                     this.fetchRecintos()
                     this.showSucces()
                 }else{
@@ -287,3 +318,19 @@ export default {
     },
 }
 </script>
+<style>
+    .style-chooser .vs__search::placeholder,
+    .style-chooser .vs__dropdown-toggle,
+    .style-chooser .vs__dropdown-menu {
+        background: #dfe5fb;
+        border: none;
+        color: #394066;
+        text-transform: lowercase;
+        font-variant: small-caps;
+    }
+
+    .style-chooser .vs__clear,
+    .style-chooser .vs__open-indicator {
+        fill: #394066;
+    }
+</style>

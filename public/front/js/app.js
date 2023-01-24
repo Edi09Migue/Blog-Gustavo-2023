@@ -33793,7 +33793,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {},
+  data: function data() {
+    return {// user:this.$store.getters.getUser
+    };
+  },
   computed: {
+    // watch: {
     user: function user() {
       if (window.localStorage.getItem('user') != null) return JSON.parse(window.localStorage.getItem('user'));
       return null;

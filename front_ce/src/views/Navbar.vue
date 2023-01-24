@@ -53,7 +53,13 @@ export default {
     components: {
         
     },
+    data(){
+        return{
+            // user:this.$store.getters.getUser
+        }
+    },
     computed: {
+    // watch: {
         user() {
             if(window.localStorage.getItem('user') != null)
                 return JSON.parse(window.localStorage.getItem('user'))

@@ -1,7 +1,7 @@
 <template>
 <!-- <div class="grid place-items-center h-screen bg-gradient-to-r from-[#ffff] via-[#dddddd]-light to-[#0000004d]"> -->
 <div class="grid place-items-center h-screen box-main">
-    <div class="max-w-lg w-[25%] mx-auto h=1/2 shadow-xl rounded my-8 bg-[#21212196] box-login">
+    <div class="max-w-lg sm:w-[90%] md:w-[40%] lg:w-[25%] mx-auto h=1/2 shadow-xl rounded my-8 bg-[#21212196] box-login">
         <div class="text-center text-blanco py-4 uppercase text-xl">
             <strong>Control Electoral Ec</strong>
         </div>
@@ -29,9 +29,9 @@
                     <!-- option save  -->
                     <div class="flex justify-center pt-5 w-full">
                         <button class="flex justify-center w-full border-solid border border-blanco rounded-xl bg-blanco" type="submit">
-                            <span> Iniciar sesión </span>
-                            <span class="pt-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" v-if="processing" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <span class="py-1"> Iniciar sesión </span>
+                            <span class="py-2 px-2 text-black">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 animate-spin" v-if="processing" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                 </svg>
                             </span>
@@ -70,7 +70,7 @@ export default{
         
             const reseponse = await http.post("auth/login",this.data)
 
-            if(reseponse.data){
+            if(reseponse.data.status){
                 
                 let user = reseponse.data
                 window.localStorage.setItem('token', user.accessToken);
@@ -82,8 +82,15 @@ export default{
                     this.$router.push({ path: 'home' })
                 }
                 
+                this.$store.commit('SET_USER_DATA',user.userData);
+
+            }else{
+
+                this.errorMessage = reseponse.data.msg
             }
             
+            this.processing = false
+
         },
 
     },

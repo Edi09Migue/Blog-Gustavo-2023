@@ -135,7 +135,7 @@ class Actas extends Controller
             #Verificar si la acta no fue ingresar 
             $existsActa = Acta::where('codigo',$acta->codigo)->first();
             
-            if($existsActa){ #Si no fue ingresada guardar
+            if(!$existsActa){ #Si no fue ingresada guardar
 
                 $acta->codigo = $codigo;
                 $acta->save();
