@@ -1,5 +1,5 @@
 <template>
-<header v-if="user">
+<header v-if="userData">
     <nav class="top-0 absolute z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 navbar-expand-lg bg-negro">
         <div class="container px-4 mx-auto flex flex-wrap items-center justify-between">
             <div class="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start ">
@@ -32,7 +32,7 @@
                         <a class="lg:text-white lg:hover:text-blueGray-200 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold" href="#">
                             <font-awesome-icon icon="fa-solid fa-circle-user fa-6x" class="text-xl" />
                             <span class="pl-2">
-                                {{ user ? user.name : 'Nombre del usuario' }}
+                                {{ userData ? userData.name : 'Nombre del usuario' }}
                             </span>
                         </a>
                     </li>
@@ -53,18 +53,11 @@ export default {
     components: {
         
     },
-    data(){
-        return{
-            // user:this.$store.getters.getUser
-        }
-    },
     computed: {
-    // watch: {
-        user() {
-            if(window.localStorage.getItem('user') != null)
-                return JSON.parse(window.localStorage.getItem('user'))
-            return null
+        userData(){
+            console.log('this.$store.getters.getUser',this.$store.getters.getUser);
+            return this.$store.getters.getUser;
         },
-    },
+    }
 }
 </script>

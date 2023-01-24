@@ -221,7 +221,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     });
                   }
 
-                  _this.$store.commit('SET_USER_DATA', user.userData);
+                  _this.$store.commit('SET_USER_DATA', user.userData); // alert(1)
+
                 } else {
                   _this.errorMessage = reseponse.data.msg;
                 }

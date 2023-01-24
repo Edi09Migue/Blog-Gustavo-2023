@@ -83,6 +83,7 @@ export default{
                 }
                 
                 this.$store.commit('SET_USER_DATA',user.userData);
+                // alert(1)
 
             }else{
 
