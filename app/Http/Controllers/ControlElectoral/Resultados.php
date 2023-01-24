@@ -21,18 +21,7 @@ class Resultados extends Controller
      */
     public function totalesPorCandidato(Request $request){
 
-        $totales = Candidato::select(
-                                'candidatos.id',
-                                'candidatos.nombre',
-                                'candidatos.nombre_partido',
-                                'candidatos.numero_lista',
-                                DB::raw('sum(votos) as total_votos')
-                            )
-                            ->join('candidato_acta','candidatos.id','=','candidato_acta.candidato_id')
-                            ->join('actas','actas.id','=','candidato_acta.acta_id')
-                            ->join('juntas', 'juntas.id','=','actas.junta_id')
-                            ->join('recintos', 'recintos.id','=','juntas.recinto_id')
-                            ->join('parroquias', 'parroquias.id','=','recintos.parroquia_id');
+        $totales = Candidato::votosTotalesPorCandidato();
                             
         if($request->has('parroquia')){
             $totales = $totales->whereIn('parroquias.id',$request->parroquia);
@@ -54,6 +43,22 @@ class Resultados extends Controller
         );
 
         $totales = $totales->get();
+        
+        foreach($totales as $total){
+
+            $total->total_validos = $total->candidatosActa()
+                                        ->whereIn('acta_id',function($sq){
+                                            $sq->select('id')
+                                                ->from('actas')
+                                                ->where('inconsistente',false);
+                                        })->sum('votos');
+            $total->total_inconsistentes = $total->candidatosActa()
+                                        ->whereIn('acta_id', function ($sq) {
+                                            $sq->select('id')
+                                                ->from('actas')
+                                                ->where('inconsistente', true);
+                                        })->sum('votos');
+        }
         
         return response()->json([
             'status'    =>  true,
@@ -120,7 +125,7 @@ class Resultados extends Controller
         $totales = Acta::select(
                             DB::raw('sum(votos_blancos) as blancos'),
                             DB::raw('sum(votos_nulos) as nulos'),
-                            DB::raw('sum(votos_validos) as validos'),
+                            DB::raw('sum(total_votantes)-sum(votos_blancos)-sum(votos_nulos) as validos'),
                             )
                         ->join('juntas', 'juntas.id', '=', 'actas.junta_id')
                         ->join('recintos', 'recintos.id', '=', 'juntas.recinto_id')
@@ -150,35 +155,39 @@ class Resultados extends Controller
 
         $total_electores = Recinto::query();
 
-        $totales = Acta::select(
-                DB::raw('sum(votos_blancos) + sum(votos_nulos) + sum(votos_validos) as total_votos')
-            )
-            ->join('juntas', 'juntas.id', '=', 'actas.junta_id')
-            ->join('recintos', 'recintos.id', '=', 'juntas.recinto_id')
-            ->join('parroquias', 'parroquias.id', '=', 'recintos.parroquia_id');
-
+        $totales = Acta::sumTotalVotantes()
+                        ->where('inconsistente',false);
+        
+        $totalesInconsistentes = Acta::sumTotalVotantes()
+                                ->where('inconsistente',true);
 
         if ($request->has('parroquia')) {
             $total_electores = $total_electores->whereIn('parroquia_id', $request->parroquia);
             $totales = $totales->whereIn('parroquias.id', $request->parroquia);
+            $totalesInconsistentes = $totalesInconsistentes->whereIn('parroquias.id', $request->parroquia);
         }
 
         if ($request->has('recinto')) {
             $total_electores = $total_electores->where('id', $request->recinto);
             $totales = $totales->where('recintos.id', $request->recinto);
+            $totalesInconsistentes = $totalesInconsistentes->where('recintos.id', $request->recinto);
         }
 
         if ($request->has('junta')) {
             $totales = $totales->where('juntas.id', $request->junta);
+            $totalesInconsistentes = $totalesInconsistentes->where('juntas.id', $request->junta);
         }
 
-        $total_electores = $total_electores->sum('cantidad_electores');      
+        $total_electores = $total_electores->sum('cantidad_electores');
+
         $totales = $totales->first();
+        $totalesInconsistentes = $totalesInconsistentes->first();
 
         $resultado = [
-            'total'         =>  $total_electores,
-            'escrutados'    =>  $totales->total_votos,
-            'por_escrutar'  =>  $total_electores -$totales->total_votos
+            'total'             =>  $total_electores,
+            'escrutados'        =>  $totales->total_votos,
+            'inconsistentes'    =>  $totalesInconsistentes->total_votos,
+            'por_escrutar'      =>  $total_electores - $totales->total_votos - $totalesInconsistentes->total_votos
         ];
 
         return response()->json([

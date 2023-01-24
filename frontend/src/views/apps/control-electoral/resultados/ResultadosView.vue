@@ -6,6 +6,8 @@
                 :parroquia-filter.sync="parroquiaFilter"
                 :recinto-filter.sync="recintoFilter"
                 :junta-filter.sync="juntaFilter"
+                :estado-filter.sync="estadoFilter"
+                :estados-options="estadosOptions"
                 :parroquias-options="parroquiasOptions"
                 @fetch-recintos-options="fetchRecintosOptions"
                 :recintos-options="recintosOptions"
@@ -82,9 +84,11 @@ export default {
             parroquiasOptions,
             recintosOptions,
             juntasOptions,
+            estadosOptions,
             parroquiaFilter,
             recintoFilter,
             juntaFilter,
+            estadoFilter,
 
             fetchRecintosOptions,
             fetchJuntasOptions,
@@ -106,9 +110,11 @@ export default {
             parroquiasOptions,
             recintosOptions,
             juntasOptions,
+            estadosOptions,
             parroquiaFilter,
             recintoFilter,
             juntaFilter,
+            estadoFilter,
 
             fetchRecintosOptions,
             fetchJuntasOptions,

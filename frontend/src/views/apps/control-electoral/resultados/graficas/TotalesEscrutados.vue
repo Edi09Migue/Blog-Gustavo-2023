@@ -41,7 +41,7 @@ export default {
                     type: "pie",
                     radius: ["50%", "70%"],
                     avoidLabelOverlap: false,
-                    color:["#455A64","#607D8B"],
+                    color:["#455A64","#607D8B","#CFD8DC"],
                     label: {
                         show: false
                     },
@@ -49,7 +49,8 @@ export default {
                         show: false
                     },
                     data: [
-                        { value: this.totales.escrutados, name: `Escrutados` },
+                        { value: this.totales.escrutados, name: `Escrutados Validos` },
+                        { value: this.totales.inconsistentes, name: `Escrutados Inconsistentes` },
                         { value: this.totales.por_escrutar, name: `Por Escrutar` },
                     ]
                 };

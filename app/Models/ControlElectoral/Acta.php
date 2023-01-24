@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Optix\Media\HasMedia;
 use Optix\Media\Models\Media;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -107,4 +108,13 @@ class Acta extends Model implements Auditable
         ->performConversions('acta');
     }
 
+    public function scopeSumTotalVotantes($query){
+        return $query->select(
+                //DB::raw('sum(votos_blancos) + sum(votos_nulos) + sum(votos_validos) as total_votos')
+                DB::raw('sum(total_votantes) as total_votos')
+            )
+            ->join('juntas', 'juntas.id', '=', 'actas.junta_id')
+            ->join('recintos', 'recintos.id', '=', 'juntas.recinto_id')
+            ->join('parroquias', 'parroquias.id', '=', 'recintos.parroquia_id');
+    }
 }

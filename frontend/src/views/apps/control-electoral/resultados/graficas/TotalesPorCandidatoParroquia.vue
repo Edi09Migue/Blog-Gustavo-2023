@@ -1,16 +1,36 @@
 <template>
-    <b-card title="Votos por Candidato en Parroquias Rurales y Urbanas">
+    <b-card >
+        <b-card-header class="p-0">
+            <b-card-title class="d-flex justify-content-between w-100">
+                <h4>Votos por Candidato en Parroquias Rurales y Urbanas</h4>
+                <div class="d-flex">
+                    <div>
+                        <b-form-checkbox>
+                            Urbanas
+                        </b-form-checkbox>
+                    </div>
+                    <div class="pl-1">
+                        <b-form-checkbox>
+                            Rurales
+                        </b-form-checkbox>
+                    </div>
+                </div>
+            </b-card-title>
+        </b-card-header>
         <app-echart-bar v-if="option" :option-data="option" />
     </b-card>
 </template>
 
 <script>
-import { BCard } from "bootstrap-vue";
+import { BCard, BCardHeader, BCardTitle, BFormCheckbox } from "bootstrap-vue";
 import AppEchartBar from "@core/components/charts/echart/AppEchartBar.vue";
 
 export default {
     components: {
-        BCard,
+        BCard, 
+        BCardHeader, 
+        BCardTitle, 
+        BFormCheckbox,
         AppEchartBar
     },
     props: {
@@ -39,6 +59,7 @@ export default {
                         position: 'inside'
                     },
                     data: datos,
+                    show: false
                 }
             });
             

@@ -29,6 +29,8 @@ export default {
         initGraph(){
             let categorias = this.series.map(s => s.nombre);
             let resultados = this.series.map(r => r.total_votos);
+            let validos = this.series.map(r => r.total_validos);
+            let inconsistentes = this.series.map(r => r.total_inconsistentes);
             let graphOptions = {
                     xAxis: [
                         {
@@ -45,13 +47,34 @@ export default {
                     ],
                     series: [
                         {
-                            name: "Votos",
+                            name: "Total Votos",
                             type: "bar",
+                            stack: "general",
                             label: {
                                 show: true,
                                 position: 'inside'
                             },
                             data: resultados,
+                        },
+                        {
+                            name: "Votos Válidos",
+                            type: "bar",
+                            stack: "votos",
+                            label: {
+                                show: true,
+                                position: 'inside'
+                            },
+                            data: validos,
+                        },
+                        {
+                            name: "Votos inconsistentes",
+                            type: "bar",
+                            stack: "votos",
+                            label: {
+                                show: true,
+                                position: 'inside'
+                            },
+                            data: inconsistentes,
                         }
                     ]
                 };

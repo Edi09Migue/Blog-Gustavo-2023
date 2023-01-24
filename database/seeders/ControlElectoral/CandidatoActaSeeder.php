@@ -71,10 +71,24 @@ class CandidatoActaSeeder extends Seeder
                 ]);
 
                 $votados = 0;
-                
-                foreach($candidatos as $candidato){
+
+                $total_votantes = $total_votantes - $votos_blancos - $votos_nulos;
+
+                foreach($candidatos as $index => $candidato){
                     $votos = rand(0, $total_votantes - $votados);
                     $votados += $votos;
+
+                    if($index == count($candidatos)-1 && $votados != $acta->total_votantes){
+                        //random para obtener el 20% aproximado de actas inconsistentes
+                        $porcentaje_incosistentes = 20;
+                        $rand = rand(0,100);
+                        if($rand >= $porcentaje_incosistentes){
+                            $votos++;
+                            $acta->update([
+                                'inconsistente'  =>  false
+                            ]);
+                        }
+                    }
                     // echo "\t\t {$candidato->nombre}: {$votos}\n";
                     $ca = CandidatoActa::create([
                         'candidato_id'      =>  $candidato->id,

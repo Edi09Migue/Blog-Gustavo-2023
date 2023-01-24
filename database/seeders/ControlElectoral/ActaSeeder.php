@@ -42,7 +42,6 @@ class ActaSeeder extends Seeder
             "estado" => true,
             "ingresada_por" => 3,
             "visualizado" => true,
-
         ]);
 
         //Subir imagen

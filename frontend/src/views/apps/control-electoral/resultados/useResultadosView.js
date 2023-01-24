@@ -21,6 +21,7 @@ export default function useResultadosView(){
     const parroquiaFilter = ref(null);
     const recintoFilter = ref(null);
     const juntaFilter = ref(null);
+    const estadoFilter = ref(null);
 
 
     const refetchData = () => {
@@ -31,7 +32,7 @@ export default function useResultadosView(){
         ultimaActualizacion.value = Date();
     }
 
-    watch([parroquiaFilter, recintoFilter, juntaFilter], () => {
+    watch([parroquiaFilter, recintoFilter, juntaFilter, estadoFilter], () => {
         refetchData()
     })
 
@@ -40,7 +41,8 @@ export default function useResultadosView(){
         .dispatch("control-resultados/fetchTotalesPorCandidato", {
             parroquia: parroquiaFilter.value,
             recinto: recintoFilter.value,
-            junta: juntaFilter.value
+            junta: juntaFilter.value,
+            estado: estadoFilter.value,
         })
         .then(response => {
             totalesPorCandidatoData.value = response.data.items;  
@@ -231,7 +233,41 @@ export default function useResultadosView(){
         
     }
 
+    const estadosOptions = ref([]);
 
+    const fetchEstadosOptions = () => {
+        store
+            .dispatch("control-resultados/fetchEstadosOptions")
+            .then(response => {
+                if (response.data.status) {
+                    estadosOptions.value = response.data.items;
+                } else {
+                    toast({
+                        component: ToastificationContent,
+                        props: {
+                            title: "Error obteniendo estados",
+                            text: response.data.msg,
+                            icon: "AlertTriangleIcon",
+                            variant: "danger"
+                        }
+                    });
+                }
+            })
+            .catch((error) => {
+                toast({
+                    component: ToastificationContent,
+                    props: {
+                        title: "Error obteniendo estados",
+                        text: error.data ? error.data.msg : error,
+                        icon: "AlertTriangleIcon",
+                        variant: "danger"
+                    }
+                });
+            });
+
+    }
+
+    fetchEstadosOptions();
 
 
 
@@ -246,9 +282,11 @@ export default function useResultadosView(){
         parroquiasOptions,
         recintosOptions,
         juntasOptions,
+        estadosOptions,
         parroquiaFilter,
         recintoFilter,
         juntaFilter,
+        estadoFilter,
 
         fetchRecintosOptions,
         fetchJuntasOptions,
