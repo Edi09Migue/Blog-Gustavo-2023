@@ -135,14 +135,29 @@
                     <b-link
                         :to="{ name: 'control-actas-view', params: { id: data.item.id  } }"
                         class="d-flex align-items-center flex-column"
+                        :id="`invoice-row-${data.item.id}`"
                     >
+                 
                         <b-badge
                             v-if="data.item.estado"
                             pill
                             variant="light-success"
                             class="text-capitalize"
+                            
                         >
                              Procesada
+
+                            <b-tooltip    
+                                :target="`invoice-row-${data.item.id}`" 
+                                triggers="hover">
+                                Votantes:   <b>{{data.item.total_votantes}} </b> <br> <br>
+                                Blancos: {{data.item.votos_blancos}} <br>
+                                Nulos: {{data.item.votos_nulos}} <br>
+                                Candidatos: {{data.item.totalVotosCandidatos}} <br> <br>
+                                BNC: <b> {{data.item.totalBNC}} </b> <br>
+                            </b-tooltip>
+                            
+
                         </b-badge>
 
                         <b-badge
@@ -280,7 +295,7 @@
 
 <script>
 import {BCard, BRow, BCol, BFormInput, BButton, BPagination, BTable, BDropdown,  BDropdownItem,  BLink,
-BImg, BMediaAside,  BMedia, BBadge, BAvatar, BCardHeader, BCardBody}  from "bootstrap-vue";
+BImg, BMediaAside,  BMedia, BBadge, BAvatar, BCardHeader, BCardBody,  BTooltip}  from "bootstrap-vue";
 import vSelect from "vue-select";
 import {ref,onUnmounted}  from '@vue/composition-api'
 import Ripple from 'vue-ripple-directive'
@@ -320,10 +335,15 @@ export default {
       BAvatar,
 
       vSelect,
-      ActasListFilters,
-   
+      ActasListFilters,  
+      
+      BTooltip
 
     },
+
+    // directives: {
+    //     'b-tooltip': VBTooltip,
+    // },
 
 	 methods: {
         rowClass(item, type) {

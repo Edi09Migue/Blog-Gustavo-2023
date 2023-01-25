@@ -33529,13 +33529,13 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     path: '/',
     name: 'login',
     component: function component() {
-      return Promise.all(/*! import() */[__webpack_require__.e(6), __webpack_require__.e(5), __webpack_require__.e(3)]).then(__webpack_require__.bind(null, /*! ../views/user/Login.vue */ "./front_ce/src/views/user/Login.vue"));
+      return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(5), __webpack_require__.e(3)]).then(__webpack_require__.bind(null, /*! ../views/user/Login.vue */ "./front_ce/src/views/user/Login.vue"));
     }
   }, {
     path: '/home',
     name: 'home',
     component: function component() {
-      return Promise.all(/*! import() */[__webpack_require__.e(6), __webpack_require__.e(1)]).then(__webpack_require__.bind(null, /*! ../views/Home.vue */ "./front_ce/src/views/Home.vue"));
+      return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(1)]).then(__webpack_require__.bind(null, /*! ../views/Home.vue */ "./front_ce/src/views/Home.vue"));
     },
     meta: {
       requiresAuth: true
@@ -33547,7 +33547,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       requiresAuth: true
     },
     component: function component() {
-      return Promise.all(/*! import() */[__webpack_require__.e(6), __webpack_require__.e(2)]).then(__webpack_require__.bind(null, /*! ../views/actas/Actas.vue */ "./front_ce/src/views/actas/Actas.vue"));
+      return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(2)]).then(__webpack_require__.bind(null, /*! ../views/actas/Actas.vue */ "./front_ce/src/views/actas/Actas.vue"));
     }
   }, _defineProperty({
     path: '/votos',

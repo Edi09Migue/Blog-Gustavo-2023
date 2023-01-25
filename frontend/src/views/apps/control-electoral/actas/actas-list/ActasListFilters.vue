@@ -4,6 +4,39 @@
             <h5>
                 {{ $t("Filters") }}
             </h5>
+            <b-dropdown
+                variant="link"
+                no-caret
+                dropleft
+                :right="$store.state.appConfig.isRTL"
+            >
+                <template #button-content>
+                    <feather-icon
+                        icon="MoreVerticalIcon"
+                        size="16"
+                        class="align-middle text-body"
+                    />
+                </template>
+
+                <!-- v-if="$can('generar', 'reportes_partes')" -->
+                <b-dropdown-item
+                    id="toggle-btn"
+                    v-b-modal.modal-reports
+                    
+                >
+                    <feather-icon icon="FileTextIcon" />
+                    <span class="align-middle ml-50">{{ $t("Reports") }}</span>
+                </b-dropdown-item>
+                
+                <actas-reports-modal 
+                    :parroquias-options="parroquiasOptions"
+                    :recintos-options="recintosOptions"
+                    :juntas-options="juntasOptions"
+                    :estados-options="estadosOptions"
+                />  
+
+            </b-dropdown>
+
             <div v-if="ultimaActualizacion">
                 <small>Generado el:</small>
                 <strong>{{formatDate(ultimaActualizacion,{
@@ -147,10 +180,13 @@
     </b-card>
 </template>
 <script>
-import { BCard, BCardHeader, BCardBody, BRow, BCol, BBadge, BButton } from "bootstrap-vue";
+import { BCard, BCardHeader, BCardBody, BRow, BCol, BBadge, BButton, BDropdown, BDropdownItem } from "bootstrap-vue";
 import vSelect from "vue-select";
 import Ripple from 'vue-ripple-directive';
 import { formatDate } from "@core/utils/filter";
+
+import ActasReportsModal from "../actas-reports/ActasReportsModal";
+
 
 export default {
     components: {
@@ -162,6 +198,9 @@ export default {
         vSelect,
         BBadge,
         BButton,
+        BDropdown, 
+        BDropdownItem,
+        ActasReportsModal
     },
     directives: {
         Ripple,

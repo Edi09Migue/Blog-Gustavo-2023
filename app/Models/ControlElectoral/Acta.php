@@ -34,6 +34,8 @@ class Acta extends Model implements Auditable
     protected $appends = [
         'imagenURL',
         'imagenOriginalURL',
+        'totalVotosCandidatos',
+        'totalBNC',
     ];
 
     protected $casts = [
@@ -117,4 +119,52 @@ class Acta extends Model implements Auditable
             ->join('recintos', 'recintos.id', '=', 'juntas.recinto_id')
             ->join('parroquias', 'parroquias.id', '=', 'recintos.parroquia_id');
     }
+
+    /**
+     * Devuelve la suma de los votos obtenidos por los candidatos en cada acta
+     */
+    public function getTotalVotosCandidatosAttribute()
+    {
+        $total_votos = 0; 
+
+        $candidatosActa = CandidatoActa::where('acta_id',  $this->id)->get();
+
+        foreach($candidatosActa as $candidato_acta){
+            $total_votos += $candidato_acta->votos;
+        }
+
+        return $total_votos;
+    }
+
+
+     /**
+     * Devuelve la suma de lso votos obtenidos por los candidatos en cada acta
+     */
+    public function getTotalBNCAttribute()
+    {
+        $total_bnc = 0; 
+        $total_votos = 0; 
+
+        $candidatosActa = CandidatoActa::where('acta_id',  $this->id)->get();
+
+        foreach($candidatosActa as $candidato_acta){
+            $total_votos += $candidato_acta->votos;
+        }
+
+        $total_bnc =   $total_votos + $this->votos_blancos + $this->votos_nulos;
+        return $total_bnc;
+    }
+
+
+     /**
+     * Devuelve los votos de cada candidato
+     */
+    public function getVotosCandidatosAttribute()
+    {
+
+        $candidatosActa = CandidatoActa::where('acta_id',  $this->id)->get();
+        return $candidatosActa;
+    }
+    
+
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\ControlElectoral;
 
+use App\Exports\ControlElectoral\ActasProcesadasExport;
 use App\Http\Controllers\Controller;
 use App\Models\ControlElectoral\Acta;
 use App\Models\ControlElectoral\CandidatoActa;
@@ -12,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\ActaStoreRequest;
+use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Actas extends Controller
 {
@@ -88,13 +91,19 @@ class Actas extends Controller
             ->orWhereIn('junta_id', function ($q) use ($query) {
                 $q->select('id');
                 $q->from('juntas');
-                $q->where('codigo','like', "%$query%");
-                $q->orWhereIn('recinto_id', function($q) use ($query){
-                    $q->select('id');
-                    $q->from('recintos');
-                    $q->where('codigo', 'like', "%$query%");
-                    $q->orWhere('nombre', 'like', "%$query%");
-                });
+                $q->where('codigo','like', "%$query%");     
+                $q->orWhereIn('recinto_id', function($sq) use ($query){
+                    $sq->select('id');
+                    $sq->from('recintos');
+                    $sq->where('codigo', 'like', "%$query%");
+                    $sq->orWhere('nombre', 'like', "%$query%");
+                        $sq->orWhereIn('parroquia_id', function($pq) use ($query){
+                            $pq->select('id');
+                            $pq->from('parroquias');
+                            $pq->where('codigo', 'like', "%$query%");
+                            $pq->orWhere('nombre', 'like', "%$query%");
+                        });
+                    });
             });
             
 
@@ -358,13 +367,10 @@ class Actas extends Controller
                 'actas_count'      =>  Acta::where('inconsistente', true)->count(),
             ],
             [
-                'label'     =>  'Consistentes',
+                'label'     =>  'Válidas',
                 'value'     =>  'consistentes',
                 'actas_count'      =>  Acta::where('inconsistente', false)->count(),
             ],
-
-
-
 
         ];
 
@@ -373,6 +379,40 @@ class Actas extends Controller
             'status'    =>  true,
             'items'     =>  $estados
         ]);
+    }
+
+
+
+    public function reportes(Request $request)
+    {
+      
+   
+        $tipo = $request->has('tipo') ? $request->tipo : "procesadas";   
+  
+        $actas = Acta::get();
+
+        $actas_agrupados_recintos = $actas->groupBy('junta.recinto_id')->values();
+
+
+        $datos_reporte = [
+            'actas'        => $actas,  
+            'actas_agrupados_recintos'   => $actas_agrupados_recintos,
+     
+        ];
+        
+
+        $headers = [
+            'Content-Type'  =>  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ];
+
+        if($tipo == "procesadas"){
+            $vista_reporte = "back.control-electoral.actas.reporte_actas_procesadas";
+            return Excel::download(new ActasProcesadasExport($vista_reporte, $datos_reporte), '.xlsx', \Maatwebsite\Excel\Excel::XLSX, $headers);
+        }
+
+
+
+       
     }
 
 }

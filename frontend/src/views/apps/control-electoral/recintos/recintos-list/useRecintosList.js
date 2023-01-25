@@ -38,8 +38,8 @@ export default function useRecintosList(){
 
     const tableColumns = [
         { key: "nombre", sortable: true, label: ("Nombre") },
-        { key: "parroquia", sortable: true, label: ("Parroquia") },
-        { key: "juntas", sortable: true, label: ("Juntas") },
+        { key: "parroquia", sortable: false, label: ("Parroquia") },
+        { key: "juntas", sortable: false, label: ("Juntas") },
         { key: "electores", sortable: true, label: ("Electores") },
         // { key: "actions", label: t("Actions") }
     ];

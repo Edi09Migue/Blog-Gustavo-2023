@@ -42,7 +42,14 @@ class Recintos extends Controller
         //Filtros basicos, orden y paginacion
         $recintos = $recintos->where(function ($q) use ($query) {
             $q->where('nombre', 'like', "%$query%")
-                ->orWhere('direccion', 'like', "%$query%");
+                ->orWhere('codigo', 'like', "%$query%")
+                ->orWhere('direccion', 'like', "%$query%")
+                ->orWhere('cantidad_electores', 'like', "%$query%")
+                ->orWhereIn('parroquia_id', function ($q) use ($query) {
+                    $q->select('id');
+                    $q->from('parroquias');
+                    $q->where('nombre','like', "%$query%");     
+                });
         })
             ->orderBy($sortBy, $sortDesc ? 'desc' : 'asc')
             ->paginate($perPage);

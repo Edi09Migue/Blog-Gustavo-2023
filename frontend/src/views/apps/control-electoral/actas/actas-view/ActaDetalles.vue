@@ -57,11 +57,11 @@
 
                         </b-media-aside>
                         <b-media-body class="my-auto">
-                            <h5 class="font-weight-bolder mb-0">
+                            <h5 class="font-weight-bolder mb-0 text-primary">
                                 {{  actaData.total_votantes }}
                             </h5>
                             <b-card-text class="font-small-5 mb-0">
-                               T. Votantes
+                               Votantes
                             </b-card-text>
                         </b-media-body>
                     </b-media>
@@ -113,6 +113,32 @@
                             </b-card-text>
                         </b-media-body>
                     </b-media>
+
+                    <b-media no-body class="ml-4">
+                        <b-media-aside
+                            class="mr-1"
+                        >
+                            <b-avatar
+                                size="28"
+                                variant="light-info"
+                            >
+                                <feather-icon
+                                    size="16"
+                                    icon="HashIcon"
+                                />
+                            </b-avatar>
+
+                        </b-media-aside>
+                        <b-media-body class="my-auto">
+                            <h5 class="font-weight-bolder mb-0 text-primary">
+                                {{ actaData.totalBNC }}
+                            </h5>
+                            <b-card-text class="font-small-5 mb-0">
+                               BNC
+                            </b-card-text>
+                        </b-media-body>
+                    </b-media>
+
                 </b-row>
             </div>
 
@@ -155,16 +181,25 @@
                             </b-table>
 
 
-                            <b-card-body  v-if="actaData.total_votos" class="invoice-padding mr-1 d-flex justify-content-end pt-0">
-                                <strong>Total:</strong>
-                                &nbsp;
-                                <h4 class="font-weight-bolder mb-0 text-dark">
-                                    {{ actaData.total_votos }}
-                                </h4>
+                            <b-card-body  v-if="actaData.total_votos" class="invoice-padding mr-1 d-flex flex-column align-items-end pt-0">
+
+                                <div class="d-flex">
+                                    <span class='font-small-5'>Candidatos:</span>
+                                    &nbsp;
+                                    <h5 class="font-weight-bolder mb-0">
+                                        {{ actaData.total_votos }}
+                                    </h5>
+                                </div>
+                                <!-- <div class="ml-1 d-flex">
+                                    <span class='font-small-5'>T. BNC: </span>
+                                    &nbsp;
+                                    <h5 class="font-weight-bolder mb-0 text-primary">
+                                        {{ actaData.totalBNC }}
+                                    </h5>
+                                </div> -->
                             </b-card-body>
 
-                            
-
+                
 
                             <b-card-body no-body v-if="actaData.ingresada" class="invoice-padding mx-1 d-flex flex-column align-items-end py-0">
                                 <small>

@@ -124,15 +124,20 @@
                 <!-- Column: juntas -->
                 <template #cell(juntas)="data">
                     <small> JF: {{  data.item.juntas_femeninas }} </small>
-                    <br>
-                    <small> JM: {{  data.item.juntas_masculinas }} </small>
+                    <small class="ml-1"> JM: {{  data.item.juntas_masculinas }} </small>
                     <br>
                     <small style="font-weight: bold;"> Total: {{  data.item.total_juntas }} </small>
                     <br>
                     <b-link
                         :to="{ name: 'control-actas-list', params: { id: data.item.id  } }">
-                    <small> 
-                        <b-badge :variant="data.item.countActas ==  data.item.total_juntas ? 'success' : 'dark'"> Procesadas: {{ data.item.countActas }} </b-badge></small>
+                        <div class="d-flex flex-column">
+                            <small> 
+                                <b-badge :variant="data.item.countActas ==  data.item.total_juntas ? 'success' : 'dark'"> Procesadas: {{ data.item.countActas }} </b-badge>
+                            </small>
+                            <small> 
+                                <b-badge v-if="data.item.countActasInconsistentes > 0"  variant="danger"> Inconsistentes: {{ data.item.countActasInconsistentes }} </b-badge>
+                            </small>
+                        </div>
                     </b-link>
                 </template>
 

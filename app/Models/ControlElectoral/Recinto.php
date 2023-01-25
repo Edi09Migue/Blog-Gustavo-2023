@@ -39,7 +39,8 @@ class Recinto extends Model
     ];
 
     protected $appends = [
-        'countActas'
+        'countActas',
+        'countActasInconsistentes',
     ];
 
     public function canton()
@@ -66,6 +67,24 @@ class Recinto extends Model
             $q->select('id');
             $q->from('juntas');
             $q->where('recinto_id', $this->id);
+        });
+
+        return $actas->count();
+    }
+
+
+      
+    /**
+     * Devuelve la cantidad de actas inconsistentes
+     */
+    public function getCountActasInconsistentesAttribute()
+    {
+        $actas = Acta::whereIn('junta_id', function($q){
+            $q->select('id');
+            $q->from('juntas');
+            $q->where('recinto_id', $this->id);
+            $q->where('estado', true);
+            $q->where('inconsistente', true);
         });
 
         return $actas->count();

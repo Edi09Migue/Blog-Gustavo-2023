@@ -120,6 +120,18 @@ export default {
             })
         },
 
+        generarReportes(ctx, reportFilters) {
+            console.log("reportFilters",reportFilters);
+            return new Promise((resolve, reject) => {
+                axios
+                    .post("/api/control-electoral/actas/reportes", reportFilters, {
+                        responseType: "blob"
+                    })
+                    .then(response => resolve(response))
+                    .catch(error => reject(error));
+            });
+        },
+
 
 
 
