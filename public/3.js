@@ -206,7 +206,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 3:
                 reseponse = _context.sent;
 
-                if (reseponse.data) {
+                if (reseponse.data.status) {
                   user = reseponse.data;
                   window.localStorage.setItem('token', user.accessToken);
                   window.localStorage.setItem('user', JSON.stringify(user.userData));
@@ -220,9 +220,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                       path: 'home'
                     });
                   }
+
+                  _this.$store.commit('SET_USER_DATA', user.userData); // alert(1)
+
+                } else {
+                  _this.errorMessage = reseponse.data.msg;
                 }
 
-              case 5:
+                _this.processing = false;
+
+              case 6:
               case "end":
                 return _context.stop();
             }
@@ -258,7 +265,7 @@ var render = function() {
         "div",
         {
           staticClass:
-            "max-w-lg w-[25%] mx-auto h=1/2 shadow-xl rounded my-8 bg-[#21212196] box-login"
+            "max-w-lg sm:w-[90%] md:w-[40%] lg:w-[25%] mx-auto h=1/2 shadow-xl rounded my-8 bg-[#21212196] box-login"
         },
         [
           _vm._m(0),
@@ -391,15 +398,16 @@ var render = function() {
                           attrs: { type: "submit" }
                         },
                         [
-                          _c("span", [_vm._v(" Iniciar sesión ")]),
+                          _c("span", { staticClass: "py-1" }, [
+                            _vm._v(" Iniciar sesión ")
+                          ]),
                           _vm._v(" "),
-                          _c("span", { staticClass: "pt-2" }, [
+                          _c("span", { staticClass: "py-2 px-2 text-black" }, [
                             _vm.processing
                               ? _c(
                                   "svg",
                                   {
-                                    staticClass:
-                                      "h-6 w-6 text-white animate-spin",
+                                    staticClass: "h-6 w-6 animate-spin",
                                     attrs: {
                                       xmlns: "http://www.w3.org/2000/svg",
                                       fill: "none",

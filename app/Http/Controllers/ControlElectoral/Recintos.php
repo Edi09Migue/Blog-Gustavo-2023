@@ -193,6 +193,19 @@ class Recintos extends Controller
             $recintos = $recintos->whereIn('parroquia_id', $parroquiasIds);
         }
 
+        #Recintos que no tiene actas
+        if ($request->has('recintos_sin_actas')){
+
+            $recintos = $recintos->whereIn('id', function($query){
+                            $query->select('recinto_id')
+                                    ->from('juntas')
+                                    ->whereNotIn('id', function($query){
+                                        $query->select('junta_id')
+                                        ->from('actas');
+                                    });
+                        });
+        }
+
         $recintos = $recintos->get();
         
         return response()->json([

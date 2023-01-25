@@ -33529,13 +33529,13 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     path: '/',
     name: 'login',
     component: function component() {
-      return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(5), __webpack_require__.e(3)]).then(__webpack_require__.bind(null, /*! ../views/user/Login.vue */ "./front_ce/src/views/user/Login.vue"));
+      return Promise.all(/*! import() */[__webpack_require__.e(6), __webpack_require__.e(5), __webpack_require__.e(3)]).then(__webpack_require__.bind(null, /*! ../views/user/Login.vue */ "./front_ce/src/views/user/Login.vue"));
     }
   }, {
     path: '/home',
     name: 'home',
     component: function component() {
-      return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(1)]).then(__webpack_require__.bind(null, /*! ../views/Home.vue */ "./front_ce/src/views/Home.vue"));
+      return Promise.all(/*! import() */[__webpack_require__.e(6), __webpack_require__.e(1)]).then(__webpack_require__.bind(null, /*! ../views/Home.vue */ "./front_ce/src/views/Home.vue"));
     },
     meta: {
       requiresAuth: true
@@ -33547,7 +33547,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       requiresAuth: true
     },
     component: function component() {
-      return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(2)]).then(__webpack_require__.bind(null, /*! ../views/actas/Actas.vue */ "./front_ce/src/views/actas/Actas.vue"));
+      return Promise.all(/*! import() */[__webpack_require__.e(6), __webpack_require__.e(2)]).then(__webpack_require__.bind(null, /*! ../views/actas/Actas.vue */ "./front_ce/src/views/actas/Actas.vue"));
     }
   }, _defineProperty({
     path: '/votos',
@@ -33628,7 +33628,14 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
   },
   getters: {
     getUser: function getUser(state) {
-      console.log('getUser', state);
+      console.log('getUser', state, localStorage.getItem('user'));
+
+      if (localStorage.getItem('user') != null) {
+        console.log('aqui');
+        state.userData = JSON.parse(localStorage.getItem('user'));
+      } // return null
+
+
       return state.userData;
     }
   }
@@ -33794,9 +33801,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {},
   computed: {
-    user: function user() {
-      if (window.localStorage.getItem('user') != null) return JSON.parse(window.localStorage.getItem('user'));
-      return null;
+    userData: function userData() {
+      console.log('this.$store.getters.getUser', this.$store.getters.getUser);
+      return this.$store.getters.getUser;
     }
   }
 });
@@ -34968,7 +34975,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.user
+  return _vm.userData
     ? _c("header", [
         _c(
           "nav",
@@ -35021,8 +35028,8 @@ var render = function() {
                                 _vm._v(
                                   "\r\n                                " +
                                     _vm._s(
-                                      _vm.user
-                                        ? _vm.user.name
+                                      _vm.userData
+                                        ? _vm.userData.name
                                         : "Nombre del usuario"
                                     ) +
                                     "\r\n                            "

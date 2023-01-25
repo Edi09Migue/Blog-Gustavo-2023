@@ -184,6 +184,16 @@ class Juntas extends Controller
         if ($request->has('recinto'))
             $juntas = $juntas->where('recinto_id', $request->recinto)->withCount('actas');
         
+         #Juntas por recinto que aun no tienen actas
+        if ($request->has('junta_sin_acta')){
+            
+            $juntas = $juntas->where('recinto_id', $request->recintoId)->withCount('actas')
+                        ->whereNotIn('id',function($query){
+                            $query->select('junta_id')
+                            ->from('actas');
+                        });
+        }
+
         $juntas = $juntas->get();
 
         return response()->json([
@@ -191,14 +201,5 @@ class Juntas extends Controller
             'items'     =>  $juntas
         ]);
     }
-
-
-
-
-
-
-
-
-
 
 }

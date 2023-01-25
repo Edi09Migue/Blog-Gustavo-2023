@@ -2,17 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
-.box-login::after{
-    width: 279px;
-    height: 278px;
-    content: " ";
-    position: absolute;
-    bottom: 16px;
-    background-image: url('login.png');
-    right: 375px;
-    background-repeat: no-repeat;
-    z-index: 0px;
-    z-index: -1;
+
+
+@media (min-width: 360px) {
+  .box-login::after {
+        width: 279px;
+        height: 278px;
+        content: " ";
+        position: absolute;
+        bottom: 9px;
+        background-image: url('login.png');
+        right: 5px;
+        background-repeat: no-repeat;
+        z-index: 0px;
+        z-index: -1;
+    }
+}
+
+@media (min-width: 768px) {
+  .box-login::after {
+        width: 279px;
+        height: 278px;
+        content: " ";
+        position: absolute;
+        bottom: 36px;
+        background-image: url('login.png');
+        right: 127px;
+        background-repeat: no-repeat;
+        z-index: 0px;
+        z-index: -1;
+    }
+}
+
+@media (min-width: 1024px) {
+    .box-login::after{
+        width: 279px;
+        height: 278px;
+        content: " ";
+        position: absolute;
+        bottom: 16px;
+        background-image: url('login.png');
+        right: 375px;
+        background-repeat: no-repeat;
+        z-index: 0px;
+        z-index: -1;
+    }
 }
 
 .box-main{

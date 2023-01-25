@@ -28,7 +28,12 @@ export default new Vuex.Store({
 	},
 	getters: {
 		getUser: state => {
-			console.log('getUser',state)
+			console.log('getUser',state, localStorage.getItem('user') )
+			if(localStorage.getItem('user') != null){
+				console.log('aqui');
+                state.userData = JSON.parse(localStorage.getItem('user'))
+			}
+            // return null
 			return state.userData
 		}
 	}
