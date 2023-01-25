@@ -12,6 +12,7 @@
 import ECharts from 'vue-echarts'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/legend'
+import 'echarts/lib/component/markPoint'
 import 'echarts/lib/chart/bar'
 import theme from './theme.json'
 

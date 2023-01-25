@@ -46,6 +46,36 @@ export default {
     },
     methods:{
         initGraph(){
+                        const ROOT_PATH = 'http://controlelectoral.local';
+            const weatherIcons = {
+                0: ROOT_PATH + '/images/candidatos/sebastian_davalos.png',
+                1: ROOT_PATH + '/images/candidatos/xavier_vilcacundo.png',
+                2: ROOT_PATH + '/images/candidatos/segundo_bonilla.png',
+                3: ROOT_PATH + '/images/candidatos/cartos_ortega.png',
+                4: ROOT_PATH + '/images/candidatos/myrian_auz.png',
+                5: ROOT_PATH + '/images/candidatos/diana_caiza.png',
+                6: ROOT_PATH + '/images/candidatos/salome.png',
+                7: ROOT_PATH + '/images/candidatos/amoroso.png',
+                8: ROOT_PATH + '/images/candidatos/altamirano.png'
+            };
+
+            const richValues = {
+                value: {
+                    lineHeight: 30,
+                    align: 'center'
+                },
+            };
+            let i = 0;
+            for(const w in weatherIcons){
+                richValues[i++]={
+                                height: 40,
+                                align: 'center',
+                                backgroundColor: {
+                                    image: weatherIcons[w]
+                                }
+                            };
+            }
+
             let categorias = this.series.candidatos;
             let resultados = this.series.parroquias.map((parroquia,i) => {
                 let data = this.series.items[parroquia];
@@ -68,7 +98,15 @@ export default {
                     {
                         type: "category",
                         data: categorias,
-                        axisLabel: { interval: 0, rotate: 30 }
+                        axisLabel: { 
+                            interval: 0,
+                            rotate: 0,
+                            formatter: function (value, x ,y ) {
+                                return value + '\n' + `{${x}|}` ;
+                            },
+                            margin: 10,
+                            rich: richValues
+                        }
                     }
                 ],
                 yAxis: [

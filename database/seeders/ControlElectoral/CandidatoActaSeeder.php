@@ -35,12 +35,12 @@ class CandidatoActaSeeder extends Seeder
 
             $total_electores_recinto = $recinto->cantidad_electores;
             
-            $electores_x_junta = $total_electores_recinto / $recinto->total_juntas;
+            $electores_x_junta = intval($total_electores_recinto / $recinto->total_juntas);
 
             $totalActas = 0;
 
             foreach($recinto->juntas as $junta){
-                // echo "\tJunta: {$junta->codigo} => votantes: {$recinto->electores_x_junta} \n";
+                 echo "\tRecito: {$recinto->id} [{$recinto->cantidad_electores}]  Junta: {$junta->codigo} => votantes: {$electores_x_junta} \n";
 
 
                 //$totalActas += (int) $electores_x_junta;
@@ -55,13 +55,14 @@ class CandidatoActaSeeder extends Seeder
                 $total_votantes = $total_votantes + rand(1,$total_votantes);
                 //random entre los sobrantes
                 $votos_nulos = rand(1, $electores_x_junta - $total_votantes);
-                $votos_blancos = rand(1, $electores_x_junta - $total_votantes - $votos_nulos);
+                $votos_blancos = $electores_x_junta - $total_votantes - $votos_nulos;
 
+                echo "\tVotantes: {$total_votantes} Nulos: {$votos_nulos} Blancos: {$votos_blancos} \n";
 
                 $acta = Acta::create([
                     "codigo"            => $codigo,
                     "junta_id"          => $junta->id,
-                    "total_votantes"     => $total_votantes,
+                    "total_votantes"     => $total_votantes + $votos_blancos + $votos_nulos,
                     "votos_blancos"     => $votos_blancos,
                     "votos_nulos"       => $votos_nulos,
                     "estado"            => true,
@@ -71,8 +72,6 @@ class CandidatoActaSeeder extends Seeder
                 ]);
 
                 $votados = 0;
-
-                $total_votantes = $total_votantes - $votos_blancos - $votos_nulos;
 
                 foreach($candidatos as $index => $candidato){
                     $votos = rand(0, $total_votantes - $votados);

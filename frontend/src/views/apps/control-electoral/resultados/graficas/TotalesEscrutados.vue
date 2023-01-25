@@ -42,11 +42,17 @@ export default {
                     radius: ["50%", "70%"],
                     avoidLabelOverlap: false,
                     color:["#455A64","#607D8B","#CFD8DC"],
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
                     label: {
-                        show: false
+                        show: true,    
+                        formatter: '{b} \n {c} ({d}%)',
                     },
                     labelLine: {
-                        show: false
+                        show: true
                     },
                     data: [
                         { value: this.totales.escrutados, name: `Escrutados Validos` },

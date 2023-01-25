@@ -45,15 +45,16 @@ export default {
                 avoidLabelOverlap: false,
                 color:["#455A64","#607D8B","#CFD8DC"],
                 label: {
-                    show: false
+                    show: true,
+                    formatter: '{b} \n {c} ({d}%)',
                 },
                 labelLine: {
-                    show: false
+                    show: true
                 },
                 data: [
-                    { value: this.totales.validos, name: `Válidos (${((this.totales.validos / total)*100).toFixed(2)}%)` },
-                    { value: this.totales.nulos, name: `Nulos  (${((this.totales.nulos / total)*100).toFixed(2)}%)` },
-                    { value: this.totales.blancos, name: `Blancos  (${((this.totales.blancos / total)*100).toFixed(2)}%)` }
+                    { value: this.totales.validos, name: `Válidos` },
+                    { value: this.totales.nulos, name: `Nulos` },
+                    { value: this.totales.blancos, name: `Blancos` }
                 ]
             };
             this.total = total;

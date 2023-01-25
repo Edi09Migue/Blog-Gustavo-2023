@@ -4,7 +4,8 @@
 /public/js
 /public/css
 /public/fonts
-/public/images
+/public/images/*
+!/public/images/candidatos
 /storage/*.key
 /storage/framework
 /storage/framework/laravel-excel

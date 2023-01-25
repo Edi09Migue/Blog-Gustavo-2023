@@ -45,6 +45,7 @@ class Resultados extends Controller
         $totales = $totales->get();
         
         foreach($totales as $total){
+            $total->nombre_corto = $total->nombreCorto;
 
             $total->total_validos = $total->candidatosActa()
                                         ->whereIn('acta_id',function($sq){
@@ -107,8 +108,12 @@ class Resultados extends Controller
                             );
         $totales = $totales->get();
 
+        foreach($totales as $total){
+            $total->nombre_corto = $total->nombreCorto;
+        }
+
         $parroquias = $totales->groupBy('parroquia');
-        $candidatos = $totales->groupBy('nombre');
+        $candidatos = $totales->groupBy('nombre_corto');
         $nombres_candidatos = array_keys($candidatos->toarray());
         $nombres_parroquias = array_keys($parroquias->toarray());
         

@@ -21,6 +21,11 @@ class Candidato extends Model
         'total_votos',
     ];
 
+    public function getNombreCortoAttribute(){
+        $nombre = explode(" ",$this->nombre);
+        return "{$nombre[0]} {$nombre[1]}";
+    }
+
     public function candidatosActa(){
         return $this->belongsToMany(Acta::class,'candidato_acta','candidato_id','acta_id')
         ->withPivot(['votos','digitalizado_por'])
