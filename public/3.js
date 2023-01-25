@@ -176,18 +176,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Login',
   data: function data() {
     return {
       data: {
-        email: '',
-        password: ''
+        email: null,
+        password: null
       },
       processing: false,
-      errorMessage: null
+      errorMessage: null,
+      errors: [],
+      error: {
+        type: null,
+        error: null
+      }
     };
+  },
+  watch: {
+    errors: function errors(_errors) {
+      this.error = _errors.length > 0 ? _errors[0] : {
+        type: null,
+        error: null
+      };
+    }
   },
   methods: {
     login: function login() {
@@ -199,11 +217,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+                if (!_this.validation()) {
+                  _context.next = 6;
+                  break;
+                }
+
                 _this.processing = true;
-                _context.next = 3;
+                _context.next = 4;
                 return _axios__WEBPACK_IMPORTED_MODULE_1__["http"].post("auth/login", _this.data);
 
-              case 3:
+              case 4:
                 reseponse = _context.sent;
 
                 if (reseponse.data.status) {
@@ -221,21 +244,34 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     });
                   }
 
-                  _this.$store.commit('SET_USER_DATA', user.userData); // alert(1)
-
+                  _this.$store.commit('SET_USER_DATA', user.userData);
                 } else {
                   _this.errorMessage = reseponse.data.msg;
                 }
 
+              case 6:
                 _this.processing = false;
 
-              case 6:
+              case 7:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
       }))();
+    },
+    validation: function validation() {
+      this.errors.splice(0, this.errors.length);
+      if (this.data.email == null || this.data.email == "") this.errors.push({
+        type: 'email',
+        error: 'El correo electrónico es requerido'
+      });
+      if (this.data.password == null || this.data.password == "") this.errors.push({
+        type: 'password',
+        error: 'La contraseña es requerida'
+      });
+      if (this.errors.length > 0) return false;
+      return true;
     }
   }
 });
@@ -285,106 +321,134 @@ var render = function() {
                 _c("div", { staticClass: "w-4/5 mx-auto" }, [
                   _vm._m(1),
                   _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "flex items-center bg-white rounded-full shadow-md mb-4"
-                    },
-                    [
-                      _c(
-                        "div",
-                        {
-                          staticClass:
-                            "px-3 rounded-full w-[35px] h-[35px] border-negro bg-negro flex items-center text-blanco mr-2"
-                        },
-                        [
-                          _c("font-awesome-icon", {
-                            attrs: { icon: "fa-solid fa-user" }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.data.email,
-                            expression: "data.email"
-                          }
-                        ],
+                  _c("div", { staticClass: "w-full" }, [
+                    _c(
+                      "div",
+                      {
                         staticClass:
-                          "rounded-full w-full h-8 focus:outline-none",
-                        attrs: {
-                          type: "email",
-                          name: "email",
-                          placeholder: "Correo electrónico"
-                        },
-                        domProps: { value: _vm.data.email },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
+                          "flex items-center bg-white rounded-full shadow-md"
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "px-3 rounded-full w-[35px] h-[35px] border-negro bg-negro flex items-center text-blanco mr-2"
+                          },
+                          [
+                            _c("font-awesome-icon", {
+                              attrs: { icon: "fa-solid fa-user" }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.data.email,
+                              expression: "data.email"
                             }
-                            _vm.$set(_vm.data, "email", $event.target.value)
+                          ],
+                          staticClass:
+                            "rounded-full w-full h-8 focus:outline-none",
+                          attrs: {
+                            type: "email",
+                            name: "email",
+                            placeholder: "Correo electrónico"
+                          },
+                          domProps: { value: _vm.data.email },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.data, "email", $event.target.value)
+                            }
                           }
-                        }
-                      })
-                    ]
-                  ),
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm.error.type == "email"
+                      ? _c(
+                          "span",
+                          {
+                            staticClass: "pl-2 inline-flex text-sm text-red-700"
+                          },
+                          [_vm._v(_vm._s(_vm.error.error) + "!")]
+                        )
+                      : _vm._e()
+                  ]),
                   _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "flex items-center bg-white rounded-full shadow-md mb-4"
-                    },
-                    [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.data.password,
-                            expression: "data.password"
-                          }
-                        ],
+                  _c("div", { staticClass: "w-full" }, [
+                    _c(
+                      "div",
+                      {
                         staticClass:
-                          "pl-3 rounded-full w-full h-8 focus:outline-none",
-                        staticStyle: { "padding-left": "12px" },
-                        attrs: {
-                          type: "password",
-                          name: "password",
-                          placeholder: "Contraseña"
-                        },
-                        domProps: { value: _vm.data.password },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
+                          "flex items-center bg-white rounded-full shadow-md mt-4"
+                      },
+                      [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.data.password,
+                              expression: "data.password"
                             }
-                            _vm.$set(_vm.data, "password", $event.target.value)
-                          }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
+                          ],
                           staticClass:
-                            "px-3 rounded-full w-[35px] h-[35px] border-negro bg-negro flex items-center text-blanco"
-                        },
-                        [
-                          _c("font-awesome-icon", {
-                            attrs: { icon: "fa-solid fa-unlock" }
-                          })
-                        ],
-                        1
-                      )
-                    ]
-                  ),
+                            "pl-4 rounded-full w-full h-8 focus:outline-none",
+                          staticStyle: { "padding-left": "12px" },
+                          attrs: {
+                            type: "password",
+                            name: "password",
+                            placeholder: "Contraseña"
+                          },
+                          domProps: { value: _vm.data.password },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.data,
+                                "password",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "px-3 rounded-full w-[35px] h-[35px] border-negro bg-negro flex items-center text-blanco"
+                          },
+                          [
+                            _c("font-awesome-icon", {
+                              attrs: { icon: "fa-solid fa-unlock" }
+                            })
+                          ],
+                          1
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm.error.type == "password"
+                      ? _c(
+                          "span",
+                          {
+                            staticClass: "pl-2 inline-flex text-sm text-red-700"
+                          },
+                          [_vm._v(_vm._s(_vm.error.error) + "!")]
+                        )
+                      : _vm._e()
+                  ]),
                   _vm._v(" "),
                   _c(
                     "div",
@@ -402,7 +466,7 @@ var render = function() {
                             _vm._v(" Iniciar sesión ")
                           ]),
                           _vm._v(" "),
-                          _c("span", { staticClass: "py-2 px-2 text-black" }, [
+                          _c("span", { staticClass: "py-1 px-2 text-black" }, [
                             _vm.processing
                               ? _c(
                                   "svg",
@@ -435,10 +499,10 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c("div", { staticClass: "pt-5 w-full" }, [
-                    _vm._v(
-                      "\r\n                        " +
-                        _vm._s(_vm.errorMessage) +
-                        "\r\n                    "
+                    _c(
+                      "p",
+                      { staticClass: "inline-flex text-sm text-indigo-900" },
+                      [_vm._v(" " + _vm._s(_vm.errorMessage) + " ")]
                     )
                   ])
                 ])

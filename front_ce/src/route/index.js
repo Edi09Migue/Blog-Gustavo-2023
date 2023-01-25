@@ -11,6 +11,10 @@ const router = new VueRouter({
             path: '/',
             name: 'login',
             component: () => import('../views/user/Login.vue'),
+            meta: {
+                layout: 'blank',
+                requiresAuth: false
+            },
         },
         {
             path: '/home',
@@ -47,12 +51,8 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, _, next) => {
-    //  const isLoggedIn = isUserLoggedIn()
-    // console.log(to, next)
-    // localStorage.getItem('user') && localStorage.getItem('token')
-    // console.log(localStorage.getItem('user'));
     let auth = localStorage.getItem('token')
-     if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
         if (auth) {
             next();
         } else {
