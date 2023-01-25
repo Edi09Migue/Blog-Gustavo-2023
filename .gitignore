@@ -4,7 +4,9 @@
 /public/js
 /public/css
 /public/fonts
-/public/images
+/public/images/*
+/public/images/control_electoral/actas
+!/public/images/control_electoral
 /storage/*.key
 /storage/framework
 /storage/framework/laravel-excel

@@ -637,6 +637,14 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     }
+  },
+  mounted: function mounted() {
+    console.log('mounted');
+    window.addEventListener('beforeunload', function (e) {
+      e.preventDefault();
+      e.returnValue = '';
+      alert(1);
+    });
   }
 });
 

@@ -24,7 +24,7 @@ class Acta extends Model implements Auditable
         'total_votantes',
         'votos_blancos',
         'votos_nulos',
-        'estado',
+        'estado', #Procesado
         'ingresada_por',
         'visualizado', #Para false si no fue consultada, true su fue consultada y están ingresando datos
         'inconsistente',

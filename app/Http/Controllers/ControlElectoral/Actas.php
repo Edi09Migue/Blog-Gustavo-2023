@@ -216,7 +216,7 @@ class Actas extends Controller
         #Una acta consultada es cuando el row visualizado de la tabla acta es true
 
         #Seleccionara una acta que fue no fue visulazada
-        $acta = Acta::where('visualizado', false)->orderBy('id', 'asc')->first();
+        $acta = Acta::where('visualizado', false)->orWhere('estado', false)->orderBy('id', 'asc')->first();
 
         if($acta){
 

@@ -195,6 +195,11 @@ export default{
         
     },
     mounted() {
-
+        console.log('mounted');
+        window.addEventListener('beforeunload', function (e) {
+            e.preventDefault();
+            e.returnValue = '';
+            alert(1)
+        });
     }
 }
