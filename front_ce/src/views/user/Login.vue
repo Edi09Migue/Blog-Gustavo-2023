@@ -98,7 +98,7 @@ export default{
                     
                     if(user.userData.role=='imagenes'){
                         this.$router.push({ path: 'actas' })
-                    }else if(user.userData.role=='superadmin'){
+                    }else if(user.userData.role=='digitalizador'){
                         this.$router.push({ path: 'home' })
                     }
                     

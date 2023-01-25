@@ -32,111 +32,24 @@
                                 </div>
                                 
                                 <div class="container mx-auto">
-                                    <table class="w-full text-sm text-left">
-                                        <thead class="text-xs text-negro uppercase bg-plomo-light">
-                                            <tr class="bg-plomo-light">
-                                                <th class="py-1"></th>
-                                                <th class="py-1 text-center whitespace-nowrap" colspan="3">TOTAL EN NÚMEROS</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- Total votantes -->
-                                            <tr 
-                                                class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:text-blanco dark:hover:text-blanco"
-                                            >
-                                                <td class="border border-curren hover:text-blanco dark:hover:text-blanco">Total de Votantes</td>
-                                                <td class="border border-curren w-8">
-                                                    <input 
-                                                        type="text"
-                                                        min="0" max="1"
-                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-                                                        @input="calcularTotalVotantes" v-model="acta.tv_1" placeholder="0"
-                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
-                                                    />
-                                                </td>
-                                                <td class="border border-curren w-8">
-                                                    <input 
-                                                        type="text"
-                                                        min="0" max="1"
-                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-                                                        @input="calcularTotalVotantes" v-model="acta.tv_2" placeholder="0"
-                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
-                                                    />
-                                                </td>
-                                                <td class="border border-curren w-8">
-                                                    <input 
-                                                        type="text"
-                                                        min="0" max="1"
-                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-                                                        @input="calcularTotalVotantes" v-model="acta.tv_3" placeholder="0"
-                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
-                                                    />
-                                                </td>
-                                            </tr>
-                                            <!-- Total blancos -->
-                                            <tr>
-                                                <td class="border border-curren hover:text-blanco dark:hover:text-blanco">Votos Blancos</td>
-                                                <td class="border border-curren w-8">
-                                                    <input 
-                                                        type="text"
-                                                        min="0" max="1"
-                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-                                                        @input="calcularTotalBlancos" v-model="acta.vb_1" placeholder="0"
-                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
-                                                    />
-                                                </td>
-                                                <td class="border border-curren w-8">
-                                                    <input 
-                                                        type="text"
-                                                        min="0" max="1"
-                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-                                                        @input="calcularTotalBlancos" v-model="acta.vb_2" placeholder="0"
-                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
-                                                    />
-                                                </td>
-                                                <td class="border border-curren w-8">
-                                                    <input 
-                                                        type="text"
-                                                        min="0" max="1"
-                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-                                                        @input="calcularTotalBlancos" v-model="acta.vb_3" placeholder="0"
-                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
-                                                    />
-                                                </td>
-                                            </tr>
-                                            <!-- Total nulos -->
-                                            <tr>
-                                                <td class="border border-curren hover:text-blanco dark:hover:text-blanco">Votos Nulos</td>
-                                                <td class="border border-curren w-8">
-                                                    <input 
-                                                        type="text"
-                                                        min="0" max="1"
-                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-                                                       @input="calcularTotalNulos" v-model="acta.vn_1" placeholder="0"
-                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
-                                                    />
-                                                </td>
-                                                <td class="border border-curren w-8">
-                                                    <input 
-                                                        type="text"
-                                                        min="0" max="1"
-                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-                                                       @input="calcularTotalNulos" v-model="acta.vn_2" placeholder="0"
-                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
-                                                    />
-                                                </td>
-                                                <td class="border border-curren w-8">
-                                                    <input 
-                                                        type="text"
-                                                        min="0" max="1"
-                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-                                                       @input="calcularTotalNulos" v-model="acta.vn_3" placeholder="0"
-                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
-                                                    />
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="flex flex-wrap">
+                                        <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/4 mb-4">
+                                            <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-negro">Blancos</label>
+                                            <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" @input="calcularTotalActa" min="0" step="1" v-model="acta.votos_blancos" type="text" id="first_name" class="w-full border border-[#e0e0e0] bg-white px-2 py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md" placeholder="0" required>
+                                        </div>
+                                        <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/4 mb-4">
+                                            <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-negro">Nulos</label>
+                                            <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" @input="calcularTotalActa" min="0" step="1" v-model="acta.votos_nulos" type="text" id="last_name" class="w-full border border-[#e0e0e0] bg-white px-2 py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md" placeholder="0" required>
+                                        </div>
+                                        <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/4 mb-4">
+                                            <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-negro">Validos</label>
+                                            <input oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" @input="calcularTotalActa" min="0" step="1" v-model="acta.votos_validos" type="text" id="last_name" class="w-full border border-[#e0e0e0] bg-white px-2 py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md" placeholder="0" required>
+                                        </div>
+                                        <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/4 mb-4">
+                                             <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-negro">TOTAL</label>
+                                            <input :value="totalActa" disabled type="text" id="last_name" class="w-full border border-[#e0e0e0] bg-white px-2 py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md" placeholder="0" required>
+                                        </div>
+                                    </div>
                                 </div>
                                 
                                 <div class="grid">
@@ -146,16 +59,18 @@
                                     <table class="w-full text-sm text-left">
                                         <thead class="text-xs text-negro uppercase bg-plomo-light">
                                             <tr class="bg-plomo-light">
-                                                <th class="py-1">CANDIDATO</th>
-                                                <th class="py-1 text-center whitespace-nowrap" colspan="3">TOTAL EN NÚMEROS</th>
+                                                <th class="py-1">Candidato</th>
+                                                <th class="py-1">Partido político</th>
+                                                <th class="py-1 text-center" colspan="3">Votos</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody v-if="candidatos_votos.length>0">
                                             <tr 
                                                 class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:text-blanco dark:hover:text-blanco"
                                                 v-for="(candidato, index) in  candidatos" :key="candidato.id"
                                             >
                                                 <td class="border border-curren hover:text-blanco dark:hover:text-blanco">{{ candidato.nombre }}</td>
+                                                <td class="border border-curren hover:text-blanco dark:hover:text-blanco">{{ candidato.nombre_partido }}</td>
                                                 <td class="border border-curren w-8">
                                                     <input 
                                                         type="text"
@@ -228,18 +143,9 @@ export default {
                 id:null,
                 codigo:null,
                 junta_id:null,
-                total_votantes:0,
-                tv_1:0,
-                tv_2:0,
-                tv_3:0,
                 votos_blancos:0,
-                vb_1:0,
-                vb_2:0,
-                vb_3:0,
                 votos_nulos:0,
-                vn_1:0,
-                vn_2:0,
-                vn_3:0,
+                votos_validos:0,
                 estado:0,
                 ingresada_por:true
             },
@@ -265,25 +171,14 @@ export default {
         token(){
             return window.localStorage.getItem('token')
         },
-        
     },
     methods:{
-
-        calcularTotalVotantes(value){
-            let total =  this.acta.tv_1 + this.acta.tv_2 + this.acta.tv_3
-            this.acta.total_votantes = parseInt(total)
+        calcularTotalActa(value){
+            let total = 0
+            if(this.acta)
+                total = this.acta.votos_blancos + this.acta.votos_nulos + this.acta.votos_validos;
+            this.totalActa = parseInt(total);
         },
-
-        calcularTotalBlancos(value){
-            let total =  this.acta.tb_1 + this.acta.tb_2 + this.acta.tb_3
-            this.acta.votos_blancos = parseInt(total)
-        },
-
-        calcularTotalNulos(value){
-            let total =  this.acta.tn_1 + this.acta.tn_2 + this.acta.tn_3
-            this.acta.votos_nulos = parseInt(total)
-        },
-        
         calcularVotoCandidato(index){
 
             let v_1 = this.candidatos_votos[index].v_1
@@ -296,7 +191,7 @@ export default {
             if(this.candidatos.length == (index+1)){
                 let suma = this.candidatos_votos.reduce((total, valor) => total + valor.votos, 0)
                 this.infoVotosValidos = ''
-                if(suma!=this.acta.total_votantes)
+                if(suma!=this.totalActa)
                     this.infoVotosValidos = 'Los votos válidos del acta no coinciden con la suma de los votos de los candidatos. Revisar'
             }
         },
@@ -311,29 +206,26 @@ export default {
             }})
             .then( response => {
 
-                let actaId = null
-                let procesadaPor = null
-
                 if (response.data.status) {
                     
                     this.acta = response.data.acta
-                    actaId = this.acta.id;
-                    procesadaPor = this.user.id;
-                    
-                }
+                    this.candidatos = response.data.candidatos
 
-                this.candidatos = response.data.candidatos
-                this.candidatos_votos = response.data.candidatos.map(function(candidato){
-                    return {
-                        candidato_id:candidato.id,
-                        acta_id:actaId,
-                        v_1:0,
-                        v_2:0,
-                        v_3:0,
-                        votos:0,
-                        procesada_por:procesadaPor
-                    }
-                })
+                    let actaId = this.acta.id;
+                    let procesadaPor = this.user.id;
+
+                    this.candidatos_votos = response.data.candidatos.map(function(candidato){
+                        return {
+                            candidato_id:candidato.id,
+                            acta_id:actaId,
+                            v_1:0,
+                            v_2:0,
+                            v_3:0,
+                            votos:0,
+                            procesada_por:procesadaPor
+                        }
+                    })
+                }
                 
                 this.processing = false
             })

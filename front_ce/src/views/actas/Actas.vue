@@ -145,7 +145,7 @@ export default {
                 junta_id:null,
                 votos_blancos:0,
                 votos_nulos:0,
-                votos_validos:0,
+                total_votantes:0,
                 estado:0,
                 ingresada_por:true,
                 imagen:null,

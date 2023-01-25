@@ -129,9 +129,9 @@ class Actas extends Controller
 
             if($junta){
                 $recinto = $junta->recinto;
-                $codigo =  $recinto->codigo.'-'.$junta->codigo;
+                $codigo =  strtoupper($recinto->codigo.'-'.$junta->codigo.substr($junta->tipo,0,1));
             }
-            
+
             #Verificar si la acta no fue ingresar 
             $existsActa = Acta::where('codigo',$acta->codigo)->first();
             
@@ -255,7 +255,7 @@ class Actas extends Controller
             #actualiza los campos
             $acta->update(['votos_blancos' => $request->acta['votos_blancos'],
                           'votos_nulos' => $request->acta['votos_nulos'],
-                          'votos_validos' => $request->acta['votos_validos'],
+                          'total_votantes' => $request->acta['total_votantes'],
                           'estado' => true]);
 
             #Guardar los votos para los candidatos

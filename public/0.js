@@ -343,6 +343,91 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -355,9 +440,18 @@ __webpack_require__.r(__webpack_exports__);
         id: null,
         codigo: null,
         junta_id: null,
+        total_votantes: 0,
+        tv_1: 0,
+        tv_2: 0,
+        tv_3: 0,
         votos_blancos: 0,
+        vb_1: 0,
+        vb_2: 0,
+        vb_3: 0,
         votos_nulos: 0,
-        votos_validos: 0,
+        vn_1: 0,
+        vn_2: 0,
+        vn_3: 0,
         estado: 0,
         ingresada_por: true
       },
@@ -385,10 +479,17 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    calcularTotalActa: function calcularTotalActa(value) {
-      var total = 0;
-      if (this.acta) total = this.acta.votos_blancos + this.acta.votos_nulos + this.acta.votos_validos;
-      this.totalActa = parseInt(total);
+    calcularTotalVotantes: function calcularTotalVotantes(value) {
+      var total = this.acta.tv_1 + this.acta.tv_2 + this.acta.tv_3;
+      this.acta.total_votantes = parseInt(total);
+    },
+    calcularTotalBlancos: function calcularTotalBlancos(value) {
+      var total = this.acta.tb_1 + this.acta.tb_2 + this.acta.tb_3;
+      this.acta.votos_blancos = parseInt(total);
+    },
+    calcularTotalNulos: function calcularTotalNulos(value) {
+      var total = this.acta.tn_1 + this.acta.tn_2 + this.acta.tn_3;
+      this.acta.votos_nulos = parseInt(total);
     },
     calcularVotoCandidato: function calcularVotoCandidato(index) {
       var v_1 = this.candidatos_votos[index].v_1;
@@ -402,7 +503,7 @@ __webpack_require__.r(__webpack_exports__);
           return total + valor.votos;
         }, 0);
         this.infoVotosValidos = '';
-        if (suma != this.totalActa) this.infoVotosValidos = 'Los votos válidos del acta no coinciden con la suma de los votos de los candidatos. Revisar';
+        if (suma != this.acta.total_votantes) this.infoVotosValidos = 'Los votos válidos del acta no coinciden con la suma de los votos de los candidatos. Revisar';
       }
     },
     fetchJunta: function fetchJunta() {
@@ -415,24 +516,27 @@ __webpack_require__.r(__webpack_exports__);
           'Content-Type': 'application/json'
         }
       }).then(function (response) {
+        var actaId = null;
+        var procesadaPor = null;
+
         if (response.data.status) {
           _this.acta = response.data.acta;
-          _this.candidatos = response.data.candidatos;
-          var actaId = _this.acta.id;
-          var procesadaPor = _this.user.id;
-          _this.candidatos_votos = response.data.candidatos.map(function (candidato) {
-            return {
-              candidato_id: candidato.id,
-              acta_id: actaId,
-              v_1: 0,
-              v_2: 0,
-              v_3: 0,
-              votos: 0,
-              procesada_por: procesadaPor
-            };
-          });
+          actaId = _this.acta.id;
+          procesadaPor = _this.user.id;
         }
 
+        _this.candidatos = response.data.candidatos;
+        _this.candidatos_votos = response.data.candidatos.map(function (candidato) {
+          return {
+            candidato_id: candidato.id,
+            acta_id: actaId,
+            v_1: 0,
+            v_2: 0,
+            v_3: 0,
+            votos: 0,
+            procesada_por: procesadaPor
+          };
+        });
         _this.processing = false;
       })["catch"](function (error) {
         console.log(error);
@@ -703,213 +807,442 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       _c("div", { staticClass: "container mx-auto" }, [
-                        _c("div", { staticClass: "flex flex-wrap" }, [
-                          _c(
-                            "div",
-                            {
-                              staticClass:
-                                "w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/4 mb-4"
-                            },
-                            [
+                        _c(
+                          "table",
+                          { staticClass: "w-full text-sm text-left" },
+                          [
+                            _vm._m(1),
+                            _vm._v(" "),
+                            _c("tbody", [
                               _c(
-                                "label",
+                                "tr",
                                 {
                                   staticClass:
-                                    "block mb-2 text-sm font-medium text-gray-900 dark:text-negro",
-                                  attrs: { for: "first_name" }
+                                    "bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:text-blanco dark:hover:text-blanco"
                                 },
-                                [_vm._v("Blancos")]
-                              ),
-                              _vm._v(" "),
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.acta.votos_blancos,
-                                    expression: "acta.votos_blancos"
-                                  }
-                                ],
-                                staticClass:
-                                  "w-full border border-[#e0e0e0] bg-white px-2 py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
-                                attrs: {
-                                  oninput:
-                                    "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
-                                  min: "0",
-                                  step: "1",
-                                  type: "text",
-                                  id: "first_name",
-                                  placeholder: "0",
-                                  required: ""
-                                },
-                                domProps: { value: _vm.acta.votos_blancos },
-                                on: {
-                                  input: [
-                                    function($event) {
-                                      if ($event.target.composing) {
-                                        return
-                                      }
-                                      _vm.$set(
-                                        _vm.acta,
-                                        "votos_blancos",
-                                        $event.target.value
-                                      )
+                                [
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass:
+                                        "border border-curren hover:text-blanco dark:hover:text-blanco"
                                     },
-                                    _vm.calcularTotalActa
-                                  ]
-                                }
-                              })
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            {
-                              staticClass:
-                                "w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/4 mb-4"
-                            },
-                            [
-                              _c(
-                                "label",
-                                {
-                                  staticClass:
-                                    "block mb-2 text-sm font-medium text-gray-900 dark:text-negro",
-                                  attrs: { for: "last_name" }
-                                },
-                                [_vm._v("Nulos")]
+                                    [_vm._v("Total de Votantes")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    { staticClass: "border border-curren w-8" },
+                                    [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.acta.tv_1,
+                                            expression: "acta.tv_1"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                        attrs: {
+                                          type: "text",
+                                          min: "0",
+                                          max: "1",
+                                          oninput:
+                                            "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                          placeholder: "0"
+                                        },
+                                        domProps: { value: _vm.acta.tv_1 },
+                                        on: {
+                                          input: [
+                                            function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.acta,
+                                                "tv_1",
+                                                $event.target.value
+                                              )
+                                            },
+                                            _vm.calcularTotalVotantes
+                                          ]
+                                        }
+                                      })
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    { staticClass: "border border-curren w-8" },
+                                    [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.acta.tv_2,
+                                            expression: "acta.tv_2"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                        attrs: {
+                                          type: "text",
+                                          min: "0",
+                                          max: "1",
+                                          oninput:
+                                            "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                          placeholder: "0"
+                                        },
+                                        domProps: { value: _vm.acta.tv_2 },
+                                        on: {
+                                          input: [
+                                            function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.acta,
+                                                "tv_2",
+                                                $event.target.value
+                                              )
+                                            },
+                                            _vm.calcularTotalVotantes
+                                          ]
+                                        }
+                                      })
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    { staticClass: "border border-curren w-8" },
+                                    [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.acta.tv_3,
+                                            expression: "acta.tv_3"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                        attrs: {
+                                          type: "text",
+                                          min: "0",
+                                          max: "1",
+                                          oninput:
+                                            "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                          placeholder: "0"
+                                        },
+                                        domProps: { value: _vm.acta.tv_3 },
+                                        on: {
+                                          input: [
+                                            function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.acta,
+                                                "tv_3",
+                                                $event.target.value
+                                              )
+                                            },
+                                            _vm.calcularTotalVotantes
+                                          ]
+                                        }
+                                      })
+                                    ]
+                                  )
+                                ]
                               ),
                               _vm._v(" "),
-                              _c("input", {
-                                directives: [
+                              _c("tr", [
+                                _c(
+                                  "td",
                                   {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.acta.votos_nulos,
-                                    expression: "acta.votos_nulos"
-                                  }
-                                ],
-                                staticClass:
-                                  "w-full border border-[#e0e0e0] bg-white px-2 py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
-                                attrs: {
-                                  oninput:
-                                    "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
-                                  min: "0",
-                                  step: "1",
-                                  type: "text",
-                                  id: "last_name",
-                                  placeholder: "0",
-                                  required: ""
-                                },
-                                domProps: { value: _vm.acta.votos_nulos },
-                                on: {
-                                  input: [
-                                    function($event) {
-                                      if ($event.target.composing) {
-                                        return
+                                    staticClass:
+                                      "border border-curren hover:text-blanco dark:hover:text-blanco"
+                                  },
+                                  [_vm._v("Votos Blancos")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  { staticClass: "border border-curren w-8" },
+                                  [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.acta.vb_1,
+                                          expression: "acta.vb_1"
+                                        }
+                                      ],
+                                      staticClass:
+                                        "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                      attrs: {
+                                        type: "text",
+                                        min: "0",
+                                        max: "1",
+                                        oninput:
+                                          "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                        placeholder: "0"
+                                      },
+                                      domProps: { value: _vm.acta.vb_1 },
+                                      on: {
+                                        input: [
+                                          function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              _vm.acta,
+                                              "vb_1",
+                                              $event.target.value
+                                            )
+                                          },
+                                          _vm.calcularTotalBlancos
+                                        ]
                                       }
-                                      _vm.$set(
-                                        _vm.acta,
-                                        "votos_nulos",
-                                        $event.target.value
-                                      )
-                                    },
-                                    _vm.calcularTotalActa
+                                    })
                                   ]
-                                }
-                              })
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            {
-                              staticClass:
-                                "w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/4 mb-4"
-                            },
-                            [
-                              _c(
-                                "label",
-                                {
-                                  staticClass:
-                                    "block mb-2 text-sm font-medium text-gray-900 dark:text-negro",
-                                  attrs: { for: "last_name" }
-                                },
-                                [_vm._v("Validos")]
-                              ),
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  { staticClass: "border border-curren w-8" },
+                                  [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.acta.vb_2,
+                                          expression: "acta.vb_2"
+                                        }
+                                      ],
+                                      staticClass:
+                                        "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                      attrs: {
+                                        type: "text",
+                                        min: "0",
+                                        max: "1",
+                                        oninput:
+                                          "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                        placeholder: "0"
+                                      },
+                                      domProps: { value: _vm.acta.vb_2 },
+                                      on: {
+                                        input: [
+                                          function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              _vm.acta,
+                                              "vb_2",
+                                              $event.target.value
+                                            )
+                                          },
+                                          _vm.calcularTotalBlancos
+                                        ]
+                                      }
+                                    })
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  { staticClass: "border border-curren w-8" },
+                                  [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.acta.vb_3,
+                                          expression: "acta.vb_3"
+                                        }
+                                      ],
+                                      staticClass:
+                                        "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                      attrs: {
+                                        type: "text",
+                                        min: "0",
+                                        max: "1",
+                                        oninput:
+                                          "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                        placeholder: "0"
+                                      },
+                                      domProps: { value: _vm.acta.vb_3 },
+                                      on: {
+                                        input: [
+                                          function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              _vm.acta,
+                                              "vb_3",
+                                              $event.target.value
+                                            )
+                                          },
+                                          _vm.calcularTotalBlancos
+                                        ]
+                                      }
+                                    })
+                                  ]
+                                )
+                              ]),
                               _vm._v(" "),
-                              _c("input", {
-                                directives: [
+                              _c("tr", [
+                                _c(
+                                  "td",
                                   {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.acta.votos_validos,
-                                    expression: "acta.votos_validos"
-                                  }
-                                ],
-                                staticClass:
-                                  "w-full border border-[#e0e0e0] bg-white px-2 py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
-                                attrs: {
-                                  oninput:
-                                    "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
-                                  min: "0",
-                                  step: "1",
-                                  type: "text",
-                                  id: "last_name",
-                                  placeholder: "0",
-                                  required: ""
-                                },
-                                domProps: { value: _vm.acta.votos_validos },
-                                on: {
-                                  input: [
-                                    function($event) {
-                                      if ($event.target.composing) {
-                                        return
+                                    staticClass:
+                                      "border border-curren hover:text-blanco dark:hover:text-blanco"
+                                  },
+                                  [_vm._v("Votos Nulos")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  { staticClass: "border border-curren w-8" },
+                                  [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.acta.vn_1,
+                                          expression: "acta.vn_1"
+                                        }
+                                      ],
+                                      staticClass:
+                                        "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                      attrs: {
+                                        type: "text",
+                                        min: "0",
+                                        max: "1",
+                                        oninput:
+                                          "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                        placeholder: "0"
+                                      },
+                                      domProps: { value: _vm.acta.vn_1 },
+                                      on: {
+                                        input: [
+                                          function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              _vm.acta,
+                                              "vn_1",
+                                              $event.target.value
+                                            )
+                                          },
+                                          _vm.calcularTotalNulos
+                                        ]
                                       }
-                                      _vm.$set(
-                                        _vm.acta,
-                                        "votos_validos",
-                                        $event.target.value
-                                      )
-                                    },
-                                    _vm.calcularTotalActa
+                                    })
                                   ]
-                                }
-                              })
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            {
-                              staticClass:
-                                "w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/4 mb-4"
-                            },
-                            [
-                              _c(
-                                "label",
-                                {
-                                  staticClass:
-                                    "block mb-2 text-sm font-medium text-gray-900 dark:text-negro",
-                                  attrs: { for: "last_name" }
-                                },
-                                [_vm._v("TOTAL")]
-                              ),
-                              _vm._v(" "),
-                              _c("input", {
-                                staticClass:
-                                  "w-full border border-[#e0e0e0] bg-white px-2 py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
-                                attrs: {
-                                  disabled: "",
-                                  type: "text",
-                                  id: "last_name",
-                                  placeholder: "0",
-                                  required: ""
-                                },
-                                domProps: { value: _vm.totalActa }
-                              })
-                            ]
-                          )
-                        ])
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  { staticClass: "border border-curren w-8" },
+                                  [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.acta.vn_2,
+                                          expression: "acta.vn_2"
+                                        }
+                                      ],
+                                      staticClass:
+                                        "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                      attrs: {
+                                        type: "text",
+                                        min: "0",
+                                        max: "1",
+                                        oninput:
+                                          "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                        placeholder: "0"
+                                      },
+                                      domProps: { value: _vm.acta.vn_2 },
+                                      on: {
+                                        input: [
+                                          function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              _vm.acta,
+                                              "vn_2",
+                                              $event.target.value
+                                            )
+                                          },
+                                          _vm.calcularTotalNulos
+                                        ]
+                                      }
+                                    })
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  { staticClass: "border border-curren w-8" },
+                                  [
+                                    _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.acta.vn_3,
+                                          expression: "acta.vn_3"
+                                        }
+                                      ],
+                                      staticClass:
+                                        "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                      attrs: {
+                                        type: "text",
+                                        min: "0",
+                                        max: "1",
+                                        oninput:
+                                          "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                        placeholder: "0"
+                                      },
+                                      domProps: { value: _vm.acta.vn_3 },
+                                      on: {
+                                        input: [
+                                          function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              _vm.acta,
+                                              "vn_3",
+                                              $event.target.value
+                                            )
+                                          },
+                                          _vm.calcularTotalNulos
+                                        ]
+                                      }
+                                    })
+                                  ]
+                                )
+                              ])
+                            ])
+                          ]
+                        )
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "grid" }, [
@@ -927,233 +1260,197 @@ var render = function() {
                           "table",
                           { staticClass: "w-full text-sm text-left" },
                           [
-                            _vm._m(1),
+                            _vm._m(2),
                             _vm._v(" "),
-                            _vm.candidatos_votos.length > 0
-                              ? _c(
-                                  "tbody",
-                                  _vm._l(_vm.candidatos, function(
-                                    candidato,
-                                    index
-                                  ) {
-                                    return _c(
-                                      "tr",
+                            _c(
+                              "tbody",
+                              _vm._l(_vm.candidatos, function(
+                                candidato,
+                                index
+                              ) {
+                                return _c(
+                                  "tr",
+                                  {
+                                    key: candidato.id,
+                                    staticClass:
+                                      "bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:text-blanco dark:hover:text-blanco"
+                                  },
+                                  [
+                                    _c(
+                                      "td",
                                       {
-                                        key: candidato.id,
                                         staticClass:
-                                          "bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:text-blanco dark:hover:text-blanco"
+                                          "border border-curren hover:text-blanco dark:hover:text-blanco"
+                                      },
+                                      [_vm._v(_vm._s(candidato.nombre))]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      {
+                                        staticClass: "border border-curren w-8"
                                       },
                                       [
-                                        _c(
-                                          "td",
-                                          {
-                                            staticClass:
-                                              "border border-curren hover:text-blanco dark:hover:text-blanco"
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.candidatos_votos[index].v_1,
+                                              expression:
+                                                "candidatos_votos[index].v_1"
+                                            }
+                                          ],
+                                          staticClass:
+                                            "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                          attrs: {
+                                            type: "text",
+                                            min: "0",
+                                            max: "1",
+                                            oninput:
+                                              "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                            placeholder: "0"
                                           },
-                                          [_vm._v(_vm._s(candidato.nombre))]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "td",
-                                          {
-                                            staticClass:
-                                              "border border-curren hover:text-blanco dark:hover:text-blanco"
+                                          domProps: {
+                                            value:
+                                              _vm.candidatos_votos[index].v_1
                                           },
-                                          [
-                                            _vm._v(
-                                              _vm._s(candidato.nombre_partido)
-                                            )
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "td",
-                                          {
-                                            staticClass:
-                                              "border border-curren w-8"
-                                          },
-                                          [
-                                            _c("input", {
-                                              directives: [
-                                                {
-                                                  name: "model",
-                                                  rawName: "v-model",
-                                                  value:
-                                                    _vm.candidatos_votos[index]
-                                                      .v_1,
-                                                  expression:
-                                                    "candidatos_votos[index].v_1"
+                                          on: {
+                                            input: [
+                                              function($event) {
+                                                if ($event.target.composing) {
+                                                  return
                                                 }
-                                              ],
-                                              staticClass:
-                                                "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
-                                              attrs: {
-                                                type: "text",
-                                                min: "0",
-                                                max: "1",
-                                                oninput:
-                                                  "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
-                                                placeholder: "0"
+                                                _vm.$set(
+                                                  _vm.candidatos_votos[index],
+                                                  "v_1",
+                                                  $event.target.value
+                                                )
                                               },
-                                              domProps: {
-                                                value:
-                                                  _vm.candidatos_votos[index]
-                                                    .v_1
-                                              },
-                                              on: {
-                                                input: [
-                                                  function($event) {
-                                                    if (
-                                                      $event.target.composing
-                                                    ) {
-                                                      return
-                                                    }
-                                                    _vm.$set(
-                                                      _vm.candidatos_votos[
-                                                        index
-                                                      ],
-                                                      "v_1",
-                                                      $event.target.value
-                                                    )
-                                                  },
-                                                  function($event) {
-                                                    return _vm.calcularVotoCandidato(
-                                                      index
-                                                    )
-                                                  }
-                                                ]
+                                              function($event) {
+                                                return _vm.calcularVotoCandidato(
+                                                  index
+                                                )
                                               }
-                                            })
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "td",
-                                          {
-                                            staticClass:
-                                              "border border-curren w-8"
+                                            ]
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      {
+                                        staticClass: "border border-curren w-8"
+                                      },
+                                      [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.candidatos_votos[index].v_2,
+                                              expression:
+                                                "candidatos_votos[index].v_2"
+                                            }
+                                          ],
+                                          staticClass:
+                                            "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                          attrs: {
+                                            type: "text",
+                                            min: "0",
+                                            max: "1",
+                                            oninput:
+                                              "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                            placeholder: "0"
                                           },
-                                          [
-                                            _c("input", {
-                                              directives: [
-                                                {
-                                                  name: "model",
-                                                  rawName: "v-model",
-                                                  value:
-                                                    _vm.candidatos_votos[index]
-                                                      .v_2,
-                                                  expression:
-                                                    "candidatos_votos[index].v_2"
-                                                }
-                                              ],
-                                              staticClass:
-                                                "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
-                                              attrs: {
-                                                type: "text",
-                                                min: "0",
-                                                max: "1",
-                                                oninput:
-                                                  "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
-                                                placeholder: "0"
-                                              },
-                                              domProps: {
-                                                value:
-                                                  _vm.candidatos_votos[index]
-                                                    .v_2
-                                              },
-                                              on: {
-                                                input: [
-                                                  function($event) {
-                                                    if (
-                                                      $event.target.composing
-                                                    ) {
-                                                      return
-                                                    }
-                                                    _vm.$set(
-                                                      _vm.candidatos_votos[
-                                                        index
-                                                      ],
-                                                      "v_2",
-                                                      $event.target.value
-                                                    )
-                                                  },
-                                                  function($event) {
-                                                    return _vm.calcularVotoCandidato(
-                                                      index
-                                                    )
-                                                  }
-                                                ]
-                                              }
-                                            })
-                                          ]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "td",
-                                          {
-                                            staticClass:
-                                              "border border-curren w-8"
+                                          domProps: {
+                                            value:
+                                              _vm.candidatos_votos[index].v_2
                                           },
-                                          [
-                                            _c("input", {
-                                              directives: [
-                                                {
-                                                  name: "model",
-                                                  rawName: "v-model",
-                                                  value:
-                                                    _vm.candidatos_votos[index]
-                                                      .v_3,
-                                                  expression:
-                                                    "candidatos_votos[index].v_3"
+                                          on: {
+                                            input: [
+                                              function($event) {
+                                                if ($event.target.composing) {
+                                                  return
                                                 }
-                                              ],
-                                              staticClass:
-                                                "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
-                                              attrs: {
-                                                type: "text",
-                                                min: "0",
-                                                max: "1",
-                                                oninput:
-                                                  "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
-                                                placeholder: "0"
+                                                _vm.$set(
+                                                  _vm.candidatos_votos[index],
+                                                  "v_2",
+                                                  $event.target.value
+                                                )
                                               },
-                                              domProps: {
-                                                value:
-                                                  _vm.candidatos_votos[index]
-                                                    .v_3
-                                              },
-                                              on: {
-                                                input: [
-                                                  function($event) {
-                                                    if (
-                                                      $event.target.composing
-                                                    ) {
-                                                      return
-                                                    }
-                                                    _vm.$set(
-                                                      _vm.candidatos_votos[
-                                                        index
-                                                      ],
-                                                      "v_3",
-                                                      $event.target.value
-                                                    )
-                                                  },
-                                                  function($event) {
-                                                    return _vm.calcularVotoCandidato(
-                                                      index
-                                                    )
-                                                  }
-                                                ]
+                                              function($event) {
+                                                return _vm.calcularVotoCandidato(
+                                                  index
+                                                )
                                               }
-                                            })
-                                          ]
-                                        )
+                                            ]
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      {
+                                        staticClass: "border border-curren w-8"
+                                      },
+                                      [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.candidatos_votos[index].v_3,
+                                              expression:
+                                                "candidatos_votos[index].v_3"
+                                            }
+                                          ],
+                                          staticClass:
+                                            "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                          attrs: {
+                                            type: "text",
+                                            min: "0",
+                                            max: "1",
+                                            oninput:
+                                              "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                            placeholder: "0"
+                                          },
+                                          domProps: {
+                                            value:
+                                              _vm.candidatos_votos[index].v_3
+                                          },
+                                          on: {
+                                            input: [
+                                              function($event) {
+                                                if ($event.target.composing) {
+                                                  return
+                                                }
+                                                _vm.$set(
+                                                  _vm.candidatos_votos[index],
+                                                  "v_3",
+                                                  $event.target.value
+                                                )
+                                              },
+                                              function($event) {
+                                                return _vm.calcularVotoCandidato(
+                                                  index
+                                                )
+                                              }
+                                            ]
+                                          }
+                                        })
                                       ]
                                     )
-                                  }),
-                                  0
+                                  ]
                                 )
-                              : _vm._e()
+                              }),
+                              0
+                            )
                           ]
                         )
                       ])
@@ -1256,14 +1553,38 @@ var staticRenderFns = [
       { staticClass: "text-xs text-negro uppercase bg-plomo-light" },
       [
         _c("tr", { staticClass: "bg-plomo-light" }, [
-          _c("th", { staticClass: "py-1" }, [_vm._v("Candidato")]),
-          _vm._v(" "),
-          _c("th", { staticClass: "py-1" }, [_vm._v("Partido político")]),
+          _c("th", { staticClass: "py-1" }),
           _vm._v(" "),
           _c(
             "th",
-            { staticClass: "py-1 text-center", attrs: { colspan: "3" } },
-            [_vm._v("Votos")]
+            {
+              staticClass: "py-1 text-center whitespace-nowrap",
+              attrs: { colspan: "3" }
+            },
+            [_vm._v("TOTAL EN NÚMEROS")]
+          )
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "thead",
+      { staticClass: "text-xs text-negro uppercase bg-plomo-light" },
+      [
+        _c("tr", { staticClass: "bg-plomo-light" }, [
+          _c("th", { staticClass: "py-1" }, [_vm._v("CANDIDATO")]),
+          _vm._v(" "),
+          _c(
+            "th",
+            {
+              staticClass: "py-1 text-center whitespace-nowrap",
+              attrs: { colspan: "3" }
+            },
+            [_vm._v("TOTAL EN NÚMEROS")]
           )
         ])
       ]

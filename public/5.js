@@ -198,7 +198,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     _this.$router.push({
                       path: 'actas'
                     });
-                  } else if (user.userData.role == 'superadmin') {
+                  } else if (user.userData.role == 'digitalizador') {
                     _this.$router.push({
                       path: 'home'
                     });
