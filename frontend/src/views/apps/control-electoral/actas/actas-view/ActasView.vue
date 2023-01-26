@@ -52,7 +52,19 @@
                         width="500"
                         fluid
                         rounded
+                        :id="`invoice-row-${actaData.id}`"
                     />
+                
+                    <b-tooltip    
+                        :target="`invoice-row-${actaData.id}`" 
+                        triggers="hover"
+                    >
+                        <b-link :href="actaData.imagenURL" download class="d-flex justify-content-center text-white">
+                            Descargar
+                        </b-link>
+                    </b-tooltip>  
+                       
+                
                 </b-col>
 
                 <b-col
@@ -86,8 +98,6 @@ import {
     BLink,
     BListGroup,
     BListGroupItem,
-    VBToggle,
-    VBModal,
     BBadge,
     BCardFooter,
     BCardSubTitle,
@@ -96,6 +106,7 @@ import {
     BCardHeader,
     BFormInput,
     BFormCheckbox,
+    BTooltip,
 
     
 } from "bootstrap-vue";
@@ -114,8 +125,6 @@ import ActaDetalles from './ActaDetalles.vue'
 export default {
     directives: {
         Ripple,
-        "b-toggle": VBToggle,
-        "b-modal": VBModal
     },
     filters: {
         title
@@ -145,6 +154,7 @@ export default {
         vSelect,
         BFormCheckbox,
         ActaDetalles,
+        BTooltip,
     
 
       
