@@ -200,7 +200,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     });
                   } else if (user.userData.role == 'digitalizador') {
                     _this.$router.push({
-                      path: 'home'
+                      path: 'votos'
                     });
                   }
 

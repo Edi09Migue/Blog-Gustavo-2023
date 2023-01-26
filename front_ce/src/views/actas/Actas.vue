@@ -16,19 +16,20 @@
                         <div class="flex flex-wrap px-4 pb-2">
                             
                             <!-- Datos -->
-                            <div class="min-w-[50%] sm:min-w-[100%] md:min-w-[50%] pr-2" v-if="recintos.length>0">
+                            <div class="min-w-[50%] sm:min-w-[100%] md:min-w-[50%] pr-2">
 
                                 <!-- select recintos -->
                                 <div class="bg-white mb-4 rounded">
-                                    <label for="resintos" class="block mb-2 text-sm font-medium text-gray-900 dark:text-negro">Recintos</label>
+                                    <label for="recintos" class="block mb-2 text-sm font-medium text-gray-900 dark:text-negro">Recintos</label>
                                     <v-select
-                                        id="resintos"
+                                        id="recintos"
                                         class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                         label="nombre"
                                         :options="recintos"
                                         placeholder="Buscar el recinto"
                                         @input="selectJuntasXRecinto"
                                         v-model="recinto"
+                                        :loading="loadingRecintos"
                                     >
                                         <template #search="{attributes, events}">
                                             <input
@@ -102,15 +103,21 @@
 
                                 <!-- option save  -->
                                 <div class="pt-5 w-full">
-                                    <button :class=" 'flex justify-center border-solid border border-negro rounded hover:bg-plomo ' + (processing ? ' bg-plomo' : ' bg-negro') " type="submit" :disabled="processing">
-                                        <span class="text-blanco py-1 px-3"> GUARDAR </span>
-                                        <span class="py-2 px-2" v-if="processing">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                            </svg>
-                                        </span>
-                                    </button>
+                                    <template v-if="recintos.length>0">
+                                        <button :class=" 'flex justify-center border-solid border border-negro rounded-xl bg-negro hover:bg-plomo' + (processing ? ' bg-plomo' : ' bg-negro') "  type="submit" :disabled="processing">
+                                            <span class="py-1 px-2 text-blanco"> GUARDAR </span>
+                                            <span class="py-1 px-2 text-blanco" v-if="processing">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                                </svg>
+                                            </span>
+                                        </button>
+                                    </template>
+                                    <template v-else>
+                                        <alert :type="'info'" :description="'No existe ningun recinto para registar actas! Gracias por tu trabajo'" />
+                                    </template>
                                 </div>
+
 
                             </div>
 
@@ -133,10 +140,11 @@
 </template>
 <script>
 import { http } from "../../axios"
+import Alert from "../../components/Alert.vue"
 
 export default {
     components: {
-        
+        Alert
     },
     data(){
         return{

@@ -24,10 +24,11 @@ class Acta extends Model implements Auditable
         'total_votantes',
         'votos_blancos',
         'votos_nulos',
-        'estado', #Procesado
+        'estado', #False cuando el escaneado del acta es subida por un usuario
         'ingresada_por',
-        'visualizado', #Para false si no fue consultada, true su fue consultada y están ingresando datos
+        'visualizado', #False para saber si no fue consultada, true cuando fue consultada y están ingresando los votos de los candidatos
         'inconsistente',
+        'visualizado_por', #
     ];
 
     protected $appends = [

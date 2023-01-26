@@ -99,7 +99,7 @@ export default{
                     if(user.userData.role=='imagenes'){
                         this.$router.push({ path: 'actas' })
                     }else if(user.userData.role=='digitalizador'){
-                        this.$router.push({ path: 'home' })
+                        this.$router.push({ path: 'votos' })
                     }
                     
                     this.$store.commit('SET_USER_DATA',user.userData);

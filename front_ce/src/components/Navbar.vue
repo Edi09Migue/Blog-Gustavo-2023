@@ -32,7 +32,7 @@
                         <a class="lg:text-white lg:hover:text-blueGray-200 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold" href="#">
                             <font-awesome-icon icon="fa-solid fa-circle-user fa-6x" class="text-xl" />
                             <span class="pl-2">
-                                {{ userData ? userData.name : 'Nombre del usuario' }}
+                                {{ user ? user.name : 'Nombre del usuario' }}
                             </span>
                         </a>
                     </li>

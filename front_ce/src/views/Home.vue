@@ -25,13 +25,15 @@
                             <!-- Datos -->
                             <div class="min-w-[50%] pr-2">
 
+                                <!-- Titulo acta -->
                                 <div class="text-negro underline font-bold decoration-negro">
                                     <h2>
                                         ACTA  <span v-if="acta">{{ acta.codigo }}</span>
                                     </h2>
                                 </div>
                                 
-                                <div class="container mx-auto">
+                                <!-- Header acta -->
+                                <div class="container mx-auto pb-3">
                                     <table class="w-full text-sm text-left">
                                         <thead class="text-xs text-negro uppercase bg-plomo-light">
                                             <tr class="bg-plomo-light">
@@ -41,10 +43,8 @@
                                         </thead>
                                         <tbody>
                                             <!-- Total votantes -->
-                                            <tr 
-                                                class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:text-blanco dark:hover:text-blanco"
-                                            >
-                                                <td class="border border-curren hover:text-blanco dark:hover:text-blanco">Total de Votantes</td>
+                                            <tr class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-blue-100 dark:hover:text-negro">
+                                                <td class="border border-curren">Total de Votantes</td>
                                                 <td class="border border-curren w-8">
                                                     <input 
                                                         type="text"
@@ -74,8 +74,8 @@
                                                 </td>
                                             </tr>
                                             <!-- Total blancos -->
-                                            <tr>
-                                                <td class="border border-curren hover:text-blanco dark:hover:text-blanco">Votos Blancos</td>
+                                            <tr class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-blue-100 dark:hover:text-blanco">
+                                                <td class="border border-curren">Votos Blancos</td>
                                                 <td class="border border-curren w-8">
                                                     <input 
                                                         type="text"
@@ -105,8 +105,8 @@
                                                 </td>
                                             </tr>
                                             <!-- Total nulos -->
-                                            <tr>
-                                                <td class="border border-curren hover:text-blanco dark:hover:text-blanco">Votos Nulos</td>
+                                            <tr class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-blue-100 dark:hover:text-blanco">
+                                                <td class="border border-curren">Votos Nulos</td>
                                                 <td class="border border-curren w-8">
                                                     <input 
                                                         type="text"
@@ -139,6 +139,7 @@
                                     </table>
                                 </div>
                                 
+                                <!-- body acta  -->
                                 <div class="grid">
                                     <div class="text-red-700">
                                         <h3 class="text-red-700 text-sm" v-if="infoVotosValidos">{{ infoVotosValidos }}</h3>
@@ -152,10 +153,10 @@
                                         </thead>
                                         <tbody>
                                             <tr 
-                                                class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:text-blanco dark:hover:text-blanco"
+                                                class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-blue-100 dark:hover:text-negro"
                                                 v-for="(candidato, index) in  candidatos" :key="candidato.id"
                                             >
-                                                <td class="border border-curren hover:text-blanco dark:hover:text-blanco">{{ candidato.nombre }}</td>
+                                                <td class="border border-curren">{{ candidato.nombre }}</td>
                                                 <td class="border border-curren w-8">
                                                     <input 
                                                         type="text"
@@ -188,25 +189,27 @@
                                     </table>
 
                                 </div>
+                                
+                                <!-- options  -->
+                                <div class="flex justify-center pt-5 w-full">
+                                    <template v-if="acta.id">
+                                        <button :class=" 'flex justify-center w-full border-solid border border-negro rounded-xl bg-negro hover:bg-plomo' + (processing ? ' bg-plomo' : ' bg-negro') "  type="submit" :disabled="processing">
+                                            <span class="py-1 text-blanco"> GUARDAR </span>
+                                            <span class="py-1 px-2 text-blanco" v-if="processing">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                                </svg>
+                                            </span>
+                                        </button>
+                                    </template>
+                                    <template v-else>
+                                        <alert :type="'info'" :description="'No existe ninguna acta para registar los votos! Gracias por tu trabajo'" />
+                                    </template>
+                                </div>
 
                             </div>
                         </div>
-                        <!-- option save  -->
-                        <div class="min-w-[100%] p-4">
-                            <template v-if="acta.id">
-                                <button  class="flex justify-center w-full border-solid border border-negro rounded-xl bg-negro" type="submit">
-                                    <span class="text-blanco"> GUARDAR </span>
-                                    <span class="pt-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" v-if="processing" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                        </svg>
-                                    </span>
-                                </button>
-                            </template>
-                            <template v-else>
-                                <alert :type="'info'" :description="'No existe ninguna acta para revisar los votos! Gracias por tu trabajo'" />
-                            </template>
-                        </div>
+                        
                     </form>
                 </div>
             </div>
@@ -249,8 +252,10 @@ export default {
             errorMessage:null,
             infoVotosValidos:null,
             candidatos:[],
-            totalActa:0,
-            alert:true
+            sumaTotal:0,
+            votos_candidatos:0,
+            alert:true,
+            stop:0,
         }
     },
     created (){
@@ -275,15 +280,30 @@ export default {
         },
 
         calcularTotalBlancos(value){
-            let total =  this.acta.tb_1 + this.acta.tb_2 + this.acta.tb_3
+            let total =  this.acta.vb_1 + this.acta.vb_2 + this.acta.vb_3
             this.acta.votos_blancos = parseInt(total)
         },
 
         calcularTotalNulos(value){
-            let total =  this.acta.tn_1 + this.acta.tn_2 + this.acta.tn_3
+            let total =  this.acta.vn_1 + this.acta.vn_2 + this.acta.vn_3
             this.acta.votos_nulos = parseInt(total)
         },
         
+        calcularSumaTotal(){
+
+            this.votos_candidatos = this.candidatos_votos.reduce((total, valor) => total + valor.votos, 0)
+            this.sumaTotal = this.votos_candidatos + (this.acta.votos_blancos + this.acta.votos_nulos)
+
+            this.infoVotosValidos = ''
+            if(this.sumaTotal!=this.acta.total_votantes){
+                this.infoVotosValidos = 'Esta acta puede estar inconsistente, revisar que todo este correcto, dar click en Guardar, y luego Guardar acta inconsistente.'
+                return false
+            }else{
+                return true
+            }
+
+        },
+
         calcularVotoCandidato(index){
 
             let v_1 = this.candidatos_votos[index].v_1
@@ -292,20 +312,18 @@ export default {
 
             let total  = v_1 + v_2 + v_3
             this.candidatos_votos[index].votos = parseInt(total)
+
+            this.infoVotosValidos = ''
             
-            if(this.candidatos.length == (index+1)){
-                let suma = this.candidatos_votos.reduce((total, valor) => total + valor.votos, 0)
-                this.infoVotosValidos = ''
-                if(suma!=this.acta.total_votantes)
-                    this.infoVotosValidos = 'Los votos válidos del acta no coinciden con la suma de los votos de los candidatos. Revisar'
-            }
         },
         fetchJunta(){
 
             this.processing = true
 
             http
-            .get("control-electoral/last-acta",{ headers: {
+            .get("control-electoral/last-acta", { 
+                params:{ user:this.user.id },
+                headers: {
                 Authorization: `Bearer ${this.token}`,
                 'Content-Type': 'application/json',
             }})
@@ -317,9 +335,25 @@ export default {
                 if (response.data.status) {
                     
                     this.acta = response.data.acta
+                    // Celdas para total votantes
+                    this.acta.tv_1 = 0
+                    this.acta.tv_2 = 0
+                    this.acta.tv_3 = 0
+                    // Celdas para botos blancos
+                    this.acta.vb_1 = 0
+                    this.acta.vb_2 = 0
+                    this.acta.vb_3 = 0
+                    // Celdas para votos nulos
+                    this.acta.vn_1 = 0
+                    this.acta.vn_2 = 0
+                    this.acta.vn_3 = 0
+
                     actaId = this.acta.id;
                     procesadaPor = this.user.id;
                     
+                }else{
+                    this.stop++
+                    this.showNoActas()
                 }
 
                 this.candidatos = response.data.candidatos
@@ -345,47 +379,57 @@ export default {
         },
         addVoto(event){
 
-            // Verificar si todos esta bien
-            let sumaVotos = this.candidatos_votos.reduce((total, valor) => total + valor.votos, 0)
+            let buttonText = 'Ok Guardar'
+            // Verificar si todo esta bien
             let infromacion = ''
-            if(sumaVotos!=this.totalActa)
-                infromacion = 'Si los votos válidos no coinciden con la suma de los votos de los candidatos, por favor hacer una captura, e informar al a una persona encargada.'
+            if(!this.calcularSumaTotal()){
+                infromacion = `<p class="text-red-500">Esta es una Acta Inconsistente porque el el Total de Votantes no coincide con el Total votos, por favor revisar. </p>
+                <p class="text-blue-900"> Si ya lo hizo, puede dar click en Guardar acta inconsistente</p>`
+                buttonText = 'Guardar acta inconsistente'
+                this.acta.inconsistente = true
+            }
 
             this.$swal({
                 title: 'Resumen',
                 position: 'top-end',
                 allowOutsideClick: false,
                 text: 'POR FAVOR INFORMA ÉSTE PROBLEMA A UN ADMINISTRADOR',
-                html: `<div class="text-orange-600">
+                html: `<div class="text-negro">
                         <table class="w-full text-sm text-left">
-                            <tr class="border-blanco dark:bg-blanco dark:border-gray-700 text-center" colspan="2">
-                                <th class="border border-curren text-lg">ACTA ${this.acta.codigo}</th>
+                            <tr class="border-blanco dark:bg-blanco dark:border-gray-700 text-center">
+                                <th class="border border-curren text-lg" colspan="2">ACTA ${ this.acta.codigo } </th>
+                            </tr>
+                            <tr class="border-blanco dark:bg-blanco dark:border-gray-700 ${ this.sumaTotal != this.acta.total_votantes ? 'bg-red-50' : 'bg-lime-50' } ">
+                                <td class="border border-curren text-lg">Total de Votantes</td>
+                                <td class="border border-curren text-lg"> ${ this.acta.total_votantes } </td>
                             </tr>
                             <tr class="border-blanco dark:bg-blanco dark:border-gray-700">
-                                <td class="border border-curren text-lg">Votos blanco</td>
-                                <td class="border border-curren text-lg">${this.acta.votos_blancos}</td>
+                                <td class="border border-curren text-lg">Votos Blancos</td>
+                                <td class="border border-curren text-lg"> ${ this.acta.votos_blancos } </td>
                             </tr>
                             <tr class="border-blanco dark:bg-blanco dark:border-gray-700">
-                                <td class="border border-curren text-lg">Votos nulos</td>
-                                <td class="border border-curren text-lg">${this.acta.votos_nulos}</td>
+                                <td class="border border-curren text-lg">Votos Nulos</td>
+                                <td class="border border-curren text-lg"> ${ this.acta.votos_nulos } </td>
                             </tr>
                             <tr class="border-blanco dark:bg-blanco dark:border-gray-700">
-                                <td class="border border-curren text-lg">Votos nalidos</td>
-                                <td class="border border-curren text-lg">${this.acta.votos_validos}</td>
+                                <td class="border border-curren text-lg">Votos Candidatos</td>
+                                <td class="border border-curren text-lg"> ${ this.votos_candidatos } </td>
                             </tr>
-                            <tr class="border-blanco dark:bg-blanco dark:border-gray-700">
-                                <td class="border border-curren text-lg">Total votos de los candidatos</td>
-                                <td class="border border-curren text-lg">${this.acta.votos_validos}</td>
+                            <tr class="border-blanco dark:bg-blanco dark:border-gray-700 ${ this.sumaTotal != this.acta.total_votantes ? 'bg-red-50' : 'bg-lime-50' }">
+                                <td class="border border-curren text-lg">Total Votos</td>
+                                <td class="border border-curren text-lg"> ${ this.sumaTotal } </td>
                             </tr>
                         </table>
-                        <p class="text-sm text-justify text-blue-900">
+                        <div class="text-sm text-justify w-full">
                             ${infromacion}
-                        </p>
+                        </div>
                 <div>`,
-                confirmButtonText: 'Ok Guardar',
+                confirmButtonText: buttonText,
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Confirma y enviar a guarda
+                    // Confirma y enviar a guardar
                     this.save(event)
 
                 } else if (result.isDenied) {
@@ -433,9 +477,11 @@ export default {
                     event.target.reset();
                     this.fetchJunta()
                     this.showSucces()
-                    this.totalActa = 0
+                    this.sumaTotal = 0
+                    this.infoVotosValidos = ''
                 }else{
                     event.target.reset();
+                    this.infoVotosValidos = ''
                     this.showWarning(response.data.msg)
                 }
                 this.processing = false
@@ -447,6 +493,44 @@ export default {
             });
         },
 
+        showNoActas(){
+
+            let timerInterval
+            this.$swal({
+                title: 'Aun no existe actas para revisar los votos!',
+                html: `${this.stop==1 ? '<p> Por favor espere </p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>'} 
+                       <p> <b></b> Minuto. <strong></strong> Segundos </p>`,
+                timer: 60000,
+                timerProgressBar: true,
+                didOpen: () => {
+                    this.$swal.showLoading()
+                    const minutos = this.$swal.getHtmlContainer().querySelector('b')
+                    const segundos = this.$swal.getHtmlContainer().querySelector('strong')
+                    timerInterval = setInterval(() => {
+                        let m = (this.$swal.getTimerLeft() / 60000).toFixed(0) 
+                        let s = (this.$swal.getTimerLeft() / 1000).toFixed(0)
+                        minutos.textContent = m
+                        segundos.textContent = s
+                        if(m==0 && this.stop == 1){
+                            this.fetchJunta()
+                        }
+                    }, 1000)
+                },
+                willClose: () => {
+                    clearInterval(timerInterval)
+                }
+            }).then((result) => {
+                /* Read more about handling dismissals below */
+                if (result.dismiss === this.$swal.DismissReason.timer) {
+                    this.$swal({
+                        icon: 'info',
+                        title: 'Gracias por tu trabajo',
+                        text: 'Ya no existe ninguna acta para registar los votos!'
+                    })
+                }
+            })
+        },
+
         showWarning(msg) {
             
             this.$swal({
@@ -455,24 +539,16 @@ export default {
                 allowOutsideClick: false,
                 text: 'POR FAVOR INFORMA ÉSTE PROBLEMA A UN ADMINISTRADOR',
                 footer: 'Por favor informa éste problema a un administrador ',
-                confirmButtonText: 'Ok registrar otra acta',
+                confirmButtonText: 'Ok',
             }).then((result) => {
                 if (result.isConfirmed) {
                     this.$refs.frmVotos.reset();
-                    this.fetchRecintos()
+                    this.fetchJunta()
                 } else if (result.isDenied) {
                     this.$swal('Changes are not saved', '', 'info')
                 }
             });
         },
     },
-    mounted() {
-        console.log('mounted');
-        window.addEventListener('beforeunload', function (e) {
-            e.preventDefault();
-            e.returnValue = '';
-            alert(1)
-        });
-    }
 }
 </script>

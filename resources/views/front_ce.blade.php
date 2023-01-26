@@ -28,11 +28,11 @@
     </div>
     <script src="{{ asset('front/js/app.js') }}"></script>
     <script>
-        window.addEventListener('beforeunload', function (e) {
-            e.preventDefault();
-            e.returnValue = '';
-            alert(1)
-        });
+        // window.addEventListener('beforeunload', function (e) {
+        //     e.preventDefault();
+        //     e.returnValue = '';
+        //     alert(1)
+        // });
     </script>
 </body>
 </html>

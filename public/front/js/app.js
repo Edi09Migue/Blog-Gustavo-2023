@@ -36932,8 +36932,8 @@ var render = function() {
                                 _vm._v(
                                   "\r\n                                " +
                                     _vm._s(
-                                      _vm.userData
-                                        ? _vm.userData.name
+                                      _vm.user
+                                        ? _vm.user.name
                                         : "Nombre del usuario"
                                     ) +
                                     "\r\n                            "
