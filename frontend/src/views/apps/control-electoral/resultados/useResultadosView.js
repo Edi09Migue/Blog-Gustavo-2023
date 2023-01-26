@@ -16,6 +16,8 @@ export default function useResultadosView(){
     const errorServer = ref(null);
     const toast = useToast();
     const ultimaActualizacion = ref(Date());
+    const runInterval = ref(false);
+    const intervalo = ref(null);
     
     // filters
     const parroquiaFilter = ref(null);
@@ -31,6 +33,18 @@ export default function useResultadosView(){
         fetchTotalesEscrutados();
         ultimaActualizacion.value = Date();
     }
+
+    const resetInterval = () => {
+        runInterval.value = !runInterval.value;
+        if(!runInterval.value){
+            console.log('detenerInterval',runInterval.value);
+            clearInterval(intervalo.value);
+        }else{
+            console.log('iniciarInterval',runInterval.value)
+            intervalo.value = setInterval(refetchData, 15000);
+        }
+    }
+
 
     watch([parroquiaFilter, recintoFilter, juntaFilter, estadoFilter], () => {
         refetchData()
@@ -292,7 +306,9 @@ export default function useResultadosView(){
         fetchJuntasOptions,
         refetchData,
 
-        ultimaActualizacion
+        ultimaActualizacion,
+        runInterval,
+        resetInterval
   
     };
 }
