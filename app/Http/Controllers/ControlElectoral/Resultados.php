@@ -216,17 +216,18 @@ class Resultados extends Controller
         $total_electores = Recinto::sum('cantidad_electores');
 
         $pesos = [
-            1   =>  2,  //sebastian sanches
-            2   =>  2,  //xavier vilcacundo
-            3   =>  3,  //felipe bonilla
-            4   =>  3,  //carlos ortega
-            5   =>  2,  //myrian auz
-            6   =>  20, //diana caiza,
-            7   =>  18, //salome Marin
-            8   =>  25, //amoros
-            9   =>  27 //altamirano
+            1   =>  5.3,  //sebastian davalos sanches
+            2   =>  6,  //xavier vilcacundo
+            3   =>  8,  //felipe bonilla
+            4   =>  2.2,  //carlos ortega
+            5   =>  0.3,  //myrian auz
+            6   =>  21.4, //diana caiza,
+            7   =>  15.1, //salome Marin
+            8   =>  20.2, //amoros
+            9   =>  21.5 //altamirano
         ];
 
+        
         foreach ($totales as $total) {
             $total->nombre_corto = $total->nombreCorto;
 
