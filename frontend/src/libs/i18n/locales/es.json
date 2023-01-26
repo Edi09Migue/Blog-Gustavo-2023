@@ -154,7 +154,14 @@
   "Restore": "Restaurar",
   "Will be restored": "Se restaurará",
   "Yes restore it": "Si, restaurarlo",
-  "Restored":"Restaurado"
+  "Restored":"Restaurado",
+  "Audit":"Auditoría",
+  "Date": "Fecha",
+  "User": "Usuario",
+  "Action": "Acción",
+  "Event":"Evento",
+  "Entity":"Entidad"
+
 
 
 

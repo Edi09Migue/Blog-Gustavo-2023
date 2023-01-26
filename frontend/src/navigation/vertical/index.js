@@ -102,6 +102,15 @@ export default [
       }
     ],
   },
+
+  {
+    title: 'Audit',
+    route: 'apps-audit-list',
+    icon: 'EyeIcon',
+    action: 'listar',
+    resource: 'auditoria'
+  },
+  
   {
     title: 'Settings',
     route: 'apps-settings-list',
@@ -109,4 +118,7 @@ export default [
     action: 'listar',
     resource: 'configuraciones'
   },
+
+ 
+
 ]

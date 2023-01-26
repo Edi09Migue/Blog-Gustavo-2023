@@ -319,6 +319,31 @@ export default [
         ],
       }
     },
+
+    // *===============================================---*
+    // *------------ AUDIT -------------------------------*
+    // *===============================================---*
+    {
+      path: '/apps/audit/list',
+      name: 'apps-audit-list',
+      component: () => import('@/views/apps/staff/audit/AuditList.vue'),
+      meta:{
+        action: 'listar',
+        resource: 'auditoria',
+        pageTitle: 'Auditoría',
+        breadcrumb: [
+          {
+            text: 'Security',
+          },
+          {
+            text: 'Audit',
+            active: true,
+          },
+        ],
+      }
+    },
+
+    
     // *===============================================---*
     // *--------- SETTINGS -------------------------------*
     // *===============================================---*

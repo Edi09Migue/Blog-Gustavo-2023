@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Auditoria;
 use App\Http\Controllers\Admin\Configuraciones;
 use App\Http\Controllers\Admin\Permisos;
 use App\Http\Controllers\Admin\Roles;
@@ -99,6 +100,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:api'], function () {
       
   Route::apiResource('configs', Configuraciones::class);
   Route::post('configs/validate/{field}', [Configuraciones::class, 'isUniqueField']);
+
+  Route::get('audits', [Auditoria::class,'index']);
+  Route::get('audit_entidades/dropdownOptions', [Auditoria::class,'entidadesOptions']);
+  Route::get('audit_acciones/dropdownOptions', [Auditoria::class,'accionesOptions']);
+  Route::get('audit_usuarios/dropdownOptions', [Auditoria::class,'usuariosOptions']);
+  Route::post('audit/reportes', [Auditoria::class,'reportes']);
+  
 
 });
 
