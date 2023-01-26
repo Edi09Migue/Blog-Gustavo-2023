@@ -384,14 +384,12 @@ class Actas extends Controller
 
 
     public function reportes(Request $request)
-    {
-      
-   
-        $tipo = $request->has('tipo') ? $request->tipo : "procesadas";   
+    {   
+        // $tipo = $request->has('tipo') ? $request->tipo : "procesadas";   
   
-        $actas = Acta::get();
-
-        $actas_agrupados_recintos = $actas->groupBy('junta.recinto_id')->values();
+        $actas = Acta::paraReporte($request);
+        $actas =   $actas->get();
+        $actas_agrupados_recintos = $actas->groupBy('junta.recinto_id');
 
 
         $datos_reporte = [
@@ -405,11 +403,10 @@ class Actas extends Controller
             'Content-Type'  =>  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         ];
 
-        if($tipo == "procesadas"){
-            $vista_reporte = "back.control-electoral.actas.reporte_actas_procesadas";
-            return Excel::download(new ActasProcesadasExport($vista_reporte, $datos_reporte), '.xlsx', \Maatwebsite\Excel\Excel::XLSX, $headers);
-        }
-
+     
+        $vista_reporte = "back.control-electoral.actas.reporte_actas_procesadas";
+        return Excel::download(new ActasProcesadasExport($vista_reporte, $datos_reporte), '.xlsx', \Maatwebsite\Excel\Excel::XLSX, $headers);
+        
 
 
        

@@ -7,7 +7,7 @@
         ok-title="Generar"
         @hidden="resetModal"
         @ok="handleOk"
-        size="md"
+        size="lg"
         centered
         cancel-variant="outline-secondary"
     >
@@ -35,6 +35,8 @@
                     <b-card no-body class="mb-0">
                         <b-card-body class="pt-0">
                             <b-row class="mt-2">
+
+                                
                                 <b-col cols="12" md="12">
                                     <validation-provider
                                         #default="{ errors }"
@@ -56,6 +58,82 @@
                                         </b-form-group>
                                     </validation-provider>
                                 </b-col>
+
+                                <b-col cols="12" md="12">
+                                    <validation-provider
+                                        #default="{ errors }"
+                                        name="Parroquia"
+                                    >
+                                        <b-form-group label="Parroquia" label-for="parroquias">
+                                            <v-select
+                                                id="parroquias"
+                                                v-model="filtros.parroquias"
+                                                label="nombre"
+                                                multiple
+                                                :options="parroquiasOptions"
+                                                :clearable="false"
+                                                :reduce="val => val.id"
+                                                placeholder="Seleccione la parroquia"
+                                                @input="selectRecinto"
+                                            >
+                                                <template #option="{ nombre, countActas}">
+                                                    {{ nombre }}
+                                                    <small>
+                                                        <b-badge variant="dark"> {{ countActas }} </b-badge>
+                                                    </small>
+                                                </template>
+                                                <template #selected-option="{ nombre, countActas}">
+                                                    {{ nombre }}
+                                                    &nbsp;
+                                                    <small>
+                                                        <b-badge variant="dark"> {{ countActas }} </b-badge>
+                                                    </small>
+                                                </template>            
+                                             </v-select>
+                                            <small class="text-danger">{{
+                                                errors[0]
+                                            }}</small>
+                                        </b-form-group>
+                                    </validation-provider>
+                                </b-col>
+
+                                <b-col cols="12" md="12">
+                                    <validation-provider
+                                        #default="{ errors }"
+                                        name="Recinto"
+                                    >
+                                        <b-form-group label="Recinto" label-for="recintos">
+                                            <v-select
+                                                id="recintos"
+                                                v-model="filtros.recintos"
+                                                label="nombre"
+                                                multiple
+                                                :options="recintosReportOptions"
+                                                :clearable="false"
+                                                :reduce="val => val.id"
+                                                placeholder="Seleccione el recinto"
+                                            >
+                                                <template #option="{ nombre, countActas}">
+                                                    {{ nombre }}
+                                                    <small>
+                                                        <b-badge variant="dark"> {{ countActas }} </b-badge>
+                                                    </small>
+                                                </template>
+                                                <template #selected-option="{ nombre, countActas}">
+                                                    {{ nombre }}
+                                                    &nbsp;
+                                                    <small>
+                                                        <b-badge variant="dark"> {{ countActas }} </b-badge>
+                                                    </small>
+                                                </template>         
+                                             </v-select>
+                                            <small class="text-danger">{{
+                                                errors[0]
+                                            }}</small>
+                                        </b-form-group>
+                                    </validation-provider>
+                                </b-col>
+
                             </b-row>
                         </b-card-body>
                         <!-- <b-card-footer>
@@ -258,7 +336,6 @@ import { required } from "@validations";
 import store from "@/store";
 
 import moment from 'moment';
-// import useActasReports from './useActasReports'
 
 
 export default {
@@ -467,17 +544,26 @@ export default {
         }
     },
    props: {
+        parroquiasOptions: {
+            type: Array,
+            required: true,
+        },
+        recintosReportOptions: {
+            type: Array,
+            required: true,
+        },
 
     },
-    setup() {
+  
+    setup(props , { emit }) {
         const toast = useToast();
 
        const filtros = ref({
             tipo: "procesadas",
             formato: "view",
 
-            tipos_partes:[],
-            eventos:[],
+            parroquias:[],
+            recintos:[],
            
             created_at: false,
             created_at_desde: moment().set({'hour': 0, 'minute': 0, 'second': 0}).format('YYYY-MM-DD H:mm:ss'),
@@ -523,14 +609,15 @@ export default {
      
         const formatearDate = (item) =>{
             moment.locale('es')
-            let date = moment(item).format("LLL");
+            let date = moment(item).format("LL");
             return date
         }
 
-        // const{
-        //     eventosOptions,
-        // } = useActasReports()
 
+
+        const selectRecinto = (parroquiaId) => {
+            emit("fetch-recintos-report-options", parroquiaId);
+        };
 
 
         return {
@@ -542,7 +629,8 @@ export default {
 
             formatearDate,
 
-            // eventosOptions,
+            selectRecinto,
+
         };
     }
 };

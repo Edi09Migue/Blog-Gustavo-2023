@@ -28,11 +28,11 @@
                     <span class="align-middle ml-50">{{ $t("Reports") }}</span>
                 </b-dropdown-item>
                 
+              
                 <actas-reports-modal 
                     :parroquias-options="parroquiasOptions"
-                    :recintos-options="recintosOptions"
-                    :juntas-options="juntasOptions"
-                    :estados-options="estadosOptions"
+                    :recintos-report-options="recintosReportOptions"
+                    @fetch-recintos-report-options="fetchRecintosReportOptions"
                 />  
 
             </b-dropdown>
@@ -187,6 +187,7 @@ import { formatDate } from "@core/utils/filter";
 
 import ActasReportsModal from "../actas-reports/ActasReportsModal";
 
+import useActasReports from './useActasReports'
 
 export default {
     components: {
@@ -242,7 +243,9 @@ export default {
         ultimaActualizacion:{
             type: Date|String,
             required: false
-        }
+        },
+    
+
     },
     methods: {
         refetchData() {
@@ -262,12 +265,22 @@ export default {
             emit("fetch-juntas-options", recintoId);
         };
 
+          const{
+            fetchRecintosReportOptions,
+            recintosReportOptions,
+        } = useActasReports()
+
+
+
 
         return {
             selectRecinto,
             selectJunta,
 
-            formatDate
+            formatDate,
+
+            fetchRecintosReportOptions,
+            recintosReportOptions,
         };
 
     }

@@ -119,11 +119,11 @@
           class="text-white"    
         />
         <b-img   
-          width="100px"
-          height="50px" 
+          width="120px"
+          height="60px" 
           :src="('/images/login/solidariamente.png')" rounded fluid>
-        </b-img>
-      </div> -->
+        </b-img> -->
+      </div>
 
     </div>
   </div>

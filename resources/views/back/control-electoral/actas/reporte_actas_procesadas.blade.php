@@ -11,57 +11,44 @@
         <thead>
             @foreach ($actas_agrupados_recintos as $key=>$actas_agrupados_recinto)
                 <tr>
-                    <td colspan="16" style="text-align: center;">
-                        <span style="font-weight: bold;">RECINTO:<span> {{$actas_agrupados_recinto[0]->junta->recinto->nombre}}
-                        &nbsp;
-                        PARROQUIA: {{$actas_agrupados_recinto[0]->junta->recinto->parroquia->nombre}}
+                    <td colspan="34" style="background-color: #CFD8DC">
+                        RECINTO: {{ $actas_agrupados_recinto[0]->junta->recinto->nombre}}, PARROQUIA: {{$actas_agrupados_recinto[0]->junta->recinto->parroquia->nombre}}
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="2" style="text-align: center; font-weight: bold;">ACTA</td>
-                    <td colspan="2"  style="text-align: center; font-weight: bold;">JUNTA</td>
-                    <td colspan="2" style="text-align: center; font-weight: bold;">ESTADO</td>
-                    <td colspan="2" style="text-align: center; font-weight: bold;">VOTANTES</td>
-                    <td colspan="2" style="text-align: center; font-weight: bold;">BLANCOS</td>
-                    <td colspan="2" style="text-align: center; font-weight: bold;">NULOS</td>
-                    <td colspan="2" style="text-align: center; font-weight: bold;">CANDIDATOS</td>
-                    <td colspan="2" style="text-align: center; font-weight: bold;">BNC</td>
-                </tr>
-
-                @foreach ($actas_agrupados_recinto as $key=>$acta)
+               
                     <tr>
-                        <td colspan="2"  style="text-align: center;">{{$acta->codigo}}</td>
-                        <td colspan="2"  style="text-align: center;">{{$acta->junta->para_select}}</td>
-                        <td colspan="2"  style="text-align: center;">{{$acta->inconsistente ? 'Inconsistente' : 'Válida' }}</td>
-                        <td colspan="2"  style="text-align: center;">{{$acta->total_votantes}}</td>
-                        <td colspan="2"  style="text-align: center;">{{$acta->votos_blancos}}</td>
-                        <td colspan="2"  style="text-align: center;">{{$acta->votos_nulos}}</td>
-                        <td colspan="2"  style="text-align: center;">{{$acta->totalVotosCandidatos}}</td>
-                        <td colspan="2"  style="text-align: center;">{{$acta->totalBNC}}</td>
+                        <td colspan="2" style="text-align: center; font-weight: bold;">ACTA</td>
+                        <td colspan="2"  style="text-align: center; font-weight: bold;">JUNTA</td>
+                        <td colspan="2" style="text-align: center; font-weight: bold;">ESTADO</td>
+                        <td colspan="2" style="text-align: center; font-weight: bold;">VOTANTES</td>
+                        <td colspan="2" style="text-align: center; font-weight: bold;">BLANCOS</td>
+                        <td colspan="2" style="text-align: center; font-weight: bold;">NULOS</td>
+                        <td colspan="2" style="text-align: center; font-weight: bold;">CANDIDATOS</td>
+                        <td colspan="2" style="text-align: center; font-weight: bold;">BNC</td>
+                            @foreach ($actas_agrupados_recinto[0]->votosCandidatos as $key=>$voto_candidato)
+                                <td colspan="2" style="text-align: center; font-weight: bold;">{{$voto_candidato->candidato->nombreCorto}}</td>
+                            @endforeach
                     </tr>
 
-                 
+                    @foreach ($actas_agrupados_recinto as $key=>$acta)
                         <tr>
+                            <td colspan="2"  style="text-align: center;">{{$acta->codigo}}</td>
+                            <td colspan="2"  style="text-align: center;">{{$acta->junta->para_select}}</td>
+                            <td colspan="2"  style="text-align: center;">{{$acta->inconsistente ? 'Inconsistente' : 'Válida' }}</td>
+                            <td colspan="2"  style="text-align: center;">{{$acta->total_votantes}}</td>
+                            <td colspan="2"  style="text-align: center;">{{$acta->votos_blancos}}</td>
+                            <td colspan="2"  style="text-align: center;">{{$acta->votos_nulos}}</td>
+                            <td colspan="2"  style="text-align: center;">{{$acta->totalVotosCandidatos}}</td>
+                            <td colspan="2"  style="text-align: center;">{{$acta->totalBNC}}</td>
                             @foreach ($acta->votosCandidatos as $key=>$voto_candidato)
-                                <td colspan="3" style="text-align: center; font-weight: bold;">{{$voto_candidato->candidato->nombre}}</td>
+                                <td colspan="2" style="text-align: center">{{$voto_candidato->votos}}</td>
                             @endforeach
                         </tr>
-                        <tr>
-                            @foreach ($acta->votosCandidatos as $key=>$voto_candidato)
-                                <td colspan="3" style="text-align: center; font-weight: bold;">{{$voto_candidato->votos}}</td>
-                            @endforeach
-                        </tr>
-                        <tr></tr>
-                   
-
-
-                @endforeach
-
-
-
-                <tr></tr>
+                    @endforeach
 
             @endforeach
+
+      
         </thead>
         <tbody>
           

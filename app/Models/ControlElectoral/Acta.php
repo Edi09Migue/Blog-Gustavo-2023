@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Optix\Media\HasMedia;
 use Optix\Media\Models\Media;
@@ -165,6 +166,53 @@ class Acta extends Model implements Auditable
         $candidatosActa = CandidatoActa::where('acta_id',  $this->id)->get();
         return $candidatosActa;
     }
+
+
+    /**
+     * Aplica los filtros del formulario de reporte
+     */
+    public function scopeParaReporte($query, Request $request)
+    {
+        
+        //si ha seleccionado un tipo de acta
+        if ($request->has('tipo') && !empty($request->tipo)) {
+            if($request->tipo == 'procesadas'){
+                $query->where('estado', true);
+            } else if ($request->tipo == 'inconsistentes'){
+                $query->where('estado', true)->where('inconsistente', true);
+            } else if ($request->tipo == 'consistentes'){
+                $query->where('estado', true)->where('inconsistente', false);
+            }
+        }
+
+        //si ha seleccionado parroquias
+          if ($request->has('parroquias') && !empty($request->parroquias)) {
+            $query->whereIn('junta_id', function($q) use ($request){
+                $q->select('id');
+                $q->from('juntas');
+                $q->whereIn('recinto_id', function($sq) use ($request){
+                    $sq->select('id');
+                    $sq->from('recintos');
+                    $sq->whereIn('parroquia_id', $request->parroquias);
+                });
+            });
+        }
+
+
+         //si ha seleccionado recintos
+         if ($request->has('recintos') && !empty($request->recintos)) {
+            $query->whereIn('junta_id', function($q) use ($request){
+                $q->select('id');
+                $q->from('juntas');
+                $q->whereIn('recinto_id', $request->recintos);
+            });
+        }
+
+        //Falta controlar sin seleccionar todas los recintos dos parroquias
+
+        return $query;
+    }
+
     
 
 }
