@@ -29,6 +29,13 @@ export default {
       type: Object,
       default: null,
     },
+    seriesActivas: {
+      type: Array,
+      required: false,
+      default(){
+        return [];
+      }
+    }
   },
   data() {
     return {
@@ -68,6 +75,31 @@ export default {
             series: this.optionData.series
           }, true);
       },
+      seriesActivas() {
+        let chart = this.line.chart;
+        // DISPONIBLE CON echar v5
+        // let series = chart.getModel().getSeries();
+        // let seriesIds = [];
+        // series.forEach(serie => {
+        //   let tipoSeries = serie.option.stack;
+        //   if(this.seriesActivas.includes(tipoSeries)){
+        //     seriesIds.push(serie.id);
+        //   }
+        // });
+        // chart.dispatchAction({
+        //   type: 'toggleSelect',
+        //   seriesId: seriesIds
+        // });
+        if(this.seriesActivas.length>0){
+          chart.dispatchAction({
+            type: 'legendAllSelect'
+          })
+        }else{
+          chart.dispatchAction({
+              type: 'legendInverseSelect'
+          })
+        }
+      }
   },
   setup(props){
       let line = ref(null);

@@ -5,19 +5,19 @@
                 <h4>Votos por Candidato en Parroquias Rurales y Urbanas</h4>
                 <div class="d-flex">
                     <div>
-                        <b-form-checkbox>
-                            Urbanas
+                        <b-form-checkbox v-model="seriesActivas" value="urbano">
+                            Seleccionar todos
                         </b-form-checkbox>
                     </div>
-                    <div class="pl-1">
-                        <b-form-checkbox>
+                    <!-- <div class="pl-1">
+                        <b-form-checkbox v-model="seriesActivas" value="rural">
                             Rurales
                         </b-form-checkbox>
-                    </div>
+                    </div> -->
                 </div>
             </b-card-title>
         </b-card-header>
-        <app-echart-bar v-if="option" :option-data="option" />
+        <app-echart-bar v-if="option" :option-data="option" :series-activas="seriesActivas" />
     </b-card>
 </template>
 
@@ -41,7 +41,11 @@ export default {
     },
     data() {
         return {
-            option: null
+            option: null,
+            seriesActivas:[
+                //'rural',
+                'urbano'
+            ]
         }
     },
     methods:{
@@ -80,10 +84,14 @@ export default {
             let resultados = this.series.parroquias.map((parroquia,i) => {
                 let data = this.series.items[parroquia];
                 let datos = data.map(d => d.total_votos);
+                //obtengo un dato de la serie
+                let unDato = data.reduce(a => a);
+                let tipo = unDato ? unDato.tipo : "";
                 return {
+                    id: 'serie'+i,
                     name: parroquia,
                     type: "bar",
-                    stack: i%2 == 0 ? 'rural' : 'urbano',
+                    stack: tipo.includes("Rural") ? 'rural' : 'urbano',
                     label: {
                         show: true,
                         position: 'inside'

@@ -76,7 +76,7 @@ class Resultados extends Controller
                                 'candidatos.numero_lista',
                                 'parroquias.id',
                                 'parroquias.nombre as parroquia',
-                                'parroquias.engtype as tipo',
+                                'parroquias.tipo as tipo',
                                 DB::raw('sum(votos) as total_votos')
                             )
                             ->join('candidato_acta','candidatos.id','=','candidato_acta.candidato_id')
