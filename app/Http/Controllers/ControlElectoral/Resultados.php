@@ -76,7 +76,7 @@ class Resultados extends Controller
                                 'candidatos.numero_lista',
                                 'parroquias.id',
                                 'parroquias.nombre as parroquia',
-                                'parroquias.engtype as tipo',
+                                'parroquias.tipo as tipo',
                                 DB::raw('sum(votos) as total_votos')
                             )
                             ->join('candidato_acta','candidatos.id','=','candidato_acta.candidato_id')
@@ -199,5 +199,47 @@ class Resultados extends Controller
             'status'    =>  true,
             'items'     =>  $resultado
         ]);            
+    }
+
+    /**
+     * Devuelve el total de votos registrados en las actas agrupados por candidato
+     * 
+     * @param $parroquia int
+     * @param $recinto int
+     * @param $junta int
+     */
+    public function totalesPorCandidatoFake(Request $request)
+    {
+
+        $totales = Candidato::all();
+
+        $total_electores = Recinto::sum('cantidad_electores');
+
+        $pesos = [
+            1   =>  5.3,  //sebastian davalos sanches
+            2   =>  6,  //xavier vilcacundo
+            3   =>  8,  //felipe bonilla
+            4   =>  2.2,  //carlos ortega
+            5   =>  0.3,  //myrian auz
+            6   =>  21.4, //diana caiza,
+            7   =>  15.1, //salome Marin
+            8   =>  20.2, //amoros
+            9   =>  21.5 //altamirano
+        ];
+
+        
+        foreach ($totales as $total) {
+            $total->nombre_corto = $total->nombreCorto;
+
+            $votos = $total_electores * ($pesos[$total->id]/100);
+            $total->total_votos = $votos;
+            $total->total_validos = $votos;
+            $total->total_inconsistentes = $votos;
+        }
+
+        return response()->json([
+            'status'    =>  true,
+            'items'     =>  $totales
+        ]);
     }
 }

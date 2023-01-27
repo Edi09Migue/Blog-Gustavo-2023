@@ -14,6 +14,8 @@
                 @fetch-juntas-options="fetchJuntasOptions"
                 :juntas-options="juntasOptions"
                 @refetch-data="refetchData"
+                :run-interval="runInterval"
+                @reset-interval="resetInterval"
                 :ultima-actualizacion="ultimaActualizacion"
             />
         </b-col>
@@ -94,7 +96,9 @@ export default {
             fetchJuntasOptions,
             refetchData,
 
-            ultimaActualizacion
+            ultimaActualizacion,
+            runInterval,
+            resetInterval
 
         } = useResultadosView();
 
@@ -120,7 +124,9 @@ export default {
             fetchJuntasOptions,
             refetchData,
 
-            ultimaActualizacion
+            ultimaActualizacion,
+            runInterval,
+            resetInterval
         }
     },
 }

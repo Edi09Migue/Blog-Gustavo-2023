@@ -52,9 +52,21 @@
                     variant="outline-primary"
                     size="sm"
                     @click="$emit('refetch-data')"
+                    title="Recargar resultados"
                 >
                     <feather-icon
                         icon="RefreshCcwIcon"
+                    />
+                </b-button>
+                <b-button
+                    v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                    variant="outline-primary"
+                    size="sm"
+                    @click="$emit('reset-interval')"
+                    title="Recargar cada 15 segundos automáticamente"
+                >
+                    <feather-icon
+                        :icon="runInterval ? 'PlayIcon' : 'PauseIcon'"
                     />
                 </b-button>
             </div>
@@ -244,8 +256,10 @@ export default {
             type: Date|String,
             required: false
         },
-    
-
+        runInterval:{
+            type: Boolean,
+            required: false
+        }
     },
     methods: {
         refetchData() {
