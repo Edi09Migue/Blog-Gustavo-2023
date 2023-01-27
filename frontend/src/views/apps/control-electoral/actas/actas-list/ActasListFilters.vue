@@ -9,6 +9,7 @@
                 no-caret
                 dropleft
                 :right="$store.state.appConfig.isRTL"
+                v-if="$can('generar', 'reportes_actas')"
             >
                 <template #button-content>
                     <feather-icon
