@@ -7,9 +7,12 @@
         <b-link class="brand-logo">
           <vuexy-logo />
 
-          <h2 class="brand-text text-primary ml-1">
+          <!-- <h2 class="brand-text text-primary ml-1">
             Control Electoral Ec
-          </h2>
+          </h2> -->
+          <b-img   
+            :src="('/images/login/ceec.png')" rounded fluid>
+          </b-img>
         </b-link>
 
         <!-- <b-card-title class="mb-1">
@@ -112,17 +115,11 @@
         </validation-observer>
       </b-card>
       <!-- /Login v1 -->
-      <!-- <div style="background-color: #212121;" class="d-flex justify-content-center mt-1 p-1">
-        <feather-icon
-          icon="BarChart2Icon"
-          size="50" 
-          class="text-white"    
-        />
+      <div class="d-flex justify-content-center mt-1 p-1">
         <b-img   
-          width="120px"
-          height="60px" 
+          width="160px"
           :src="('/images/login/solidariamente.png')" rounded fluid>
-        </b-img> -->
+        </b-img>
       </div>
 
     </div>

@@ -30,9 +30,15 @@
                   alt="logo"
                 />
               </span> -->
+              <!-- <b-img  
+              blank-color="red"
+                :src="('/images/login/icono1.png')" rounded fluid
+                width="30px"
+                >
+              </b-img> -->
+
               <h2 class="brand-text">
-                <!-- {{ appName }} -->
-                CE.ec
+                ceec
               </h2>
             </b-link>
           </li>
