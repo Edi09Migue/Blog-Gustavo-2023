@@ -138,9 +138,9 @@ class Actas extends Controller
 
             if($junta){
                 $recinto = $junta->recinto;
-                $codigo =  $recinto->codigo.'-'.$junta->codigo;
+                $codigo =  strtoupper($recinto->codigo.'-'.$junta->codigo.substr($junta->tipo,0,1));
             }
-            
+
             #Verificar si la acta no fue ingresar 
             $existsActa = Acta::where('codigo',$acta->codigo)->first();
             
@@ -219,20 +219,21 @@ class Actas extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function lastActa()
+    public function lastActa(Request  $request)
     {
-        #Obtener una acta que no fue consultada
-        #Una acta consultada es cuando el row visualizado de la tabla acta es true
+        
+        #Una acta visulazada es cuando el row visualizado de la tabla acta es true
 
-        #Seleccionara una acta que fue no fue visulazada
-        $acta = Acta::where('visualizado', false)->orderBy('id', 'asc')->first();
+        #Seleccionar una acta que fue visulazada pero no fue guardada
+        $acta = Acta::where('estado', false)->where('visualizado', true)->where('visualizado_por', $request->user)->orderBy('id', 'asc')->first();
+        if(!$acta)
+            #Seleccionar una acta que fue no fue visulazada
+            $acta = Acta::where('estado', false)->where('visualizado', false)->orderBy('id', 'asc')->first();
 
-        if($acta){
-
-            #Actualizar el row  visualizado a true, PARA que otro usuario no consulte la misma
-            $acta->update(['visualizado'=>true]);
+        #Actualizar el row  visualizado a true, PARA que otro usuario no consulte la misma
+        if ($acta) {
+            $acta->update(['visualizado'=>true,'visualizado_por'=>$request->user]);
             $status = true;
-
         }else{
             $status = false;
         }
@@ -264,7 +265,8 @@ class Actas extends Controller
             #actualiza los campos
             $acta->update(['votos_blancos' => $request->acta['votos_blancos'],
                           'votos_nulos' => $request->acta['votos_nulos'],
-                          'votos_validos' => $request->acta['votos_validos'],
+                          'total_votantes' => $request->acta['total_votantes'],
+                          'inconsistente' => $request->acta['inconsistente'],
                           'estado' => true]);
 
             #Guardar los votos para los candidatos

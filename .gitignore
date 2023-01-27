@@ -6,6 +6,8 @@
 /public/fonts
 /public/images/*
 !/public/images/candidatos
+/public/images/control_electoral/actas
+!/public/images/control_electoral
 /storage/*.key
 /storage/framework
 /storage/framework/laravel-excel

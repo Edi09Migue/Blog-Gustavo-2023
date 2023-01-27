@@ -6,11 +6,16 @@ Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
 		userData:null,
+		token:null,
 	},
 	mutations: {
 		SET_USER_DATA(state, user){
 			console.log('SET_USER_DATA',user);
 			state.userData = user
+		},
+		SET_TOKEN(state, token){
+			console.log('SET_TOKEN',token);
+			state.token = token
 		},
 	},
 	actions: {
@@ -28,13 +33,10 @@ export default new Vuex.Store({
 	},
 	getters: {
 		getUser: state => {
-			console.log('getUser',state, localStorage.getItem('user') )
-			if(localStorage.getItem('user') != null){
-				console.log('aqui');
-                state.userData = JSON.parse(localStorage.getItem('user'))
-			}
-            // return null
 			return state.userData
+		},
+		getToken: state => {
+			return state.token
 		}
 	}
 })

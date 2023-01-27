@@ -28,7 +28,7 @@ class ActaStoreRequest extends FormRequest
             'junta_id'=>'required',
             'votos_blancos'=>'required',
             'votos_nulos'=>'required',
-            'votos_validos'=>'required',
+            'total_votantes'=>'required',
             'estado'=>'required',
             'ingresada_por'=>'required',
             // 'visualizado'=>'required',

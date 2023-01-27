@@ -1,200 +1,553 @@
 <template>
-    <div class="flex items-center justify-center h-screen bg-gradient-to-r from-dark via-plomo-light to-dark">
-       
-        <div class="bg-white shadow-xl rounded my-8 bg-dark box-login min-w-[80%]">
-            
-            <div class="text-center text-blanco py-1">
-                {{ this.$parent.user.name }}
-            </div>
-
-            <div class="text-center text-blanco py-1">REGISTRO DE VOTOS </div>
-            <div class="pt-4 pb-10">
-                <form @submit.prevent="addActas" class="w-full">
-                    <div class="grid grid-cols-2 gap-4">
+<div class="grid place-items-center box-main ">
+    <div class="container mx-auto">
+        <!-- Title page -->
+        <div class="container max-auto text-negro text-xl pt-[78px] pl-4">
+            <h1 class="text-negro underline font-bold decoration-negro">
+                REGISTRO DE VOTOS
+            </h1>
+        </div>
+        <!-- Conete page -->
+        <div class="container max-auto ">
+            <!-- card -->
+            <div class="bg-blanco rounded overflow-hidden shadow-lg min-w-[80%]">
+                <div class="pt-4 pb-10">
+                    <form @submit.prevent="addVoto" class="w-full" ref="frmVotos">
                         
-                        
+                        <div class="grid lg:grid-cols-2 gap-4">
+                            <!-- Imagen preiew -->
+                            <div class="min-w-[50%] pl-2 flex items-center">
+                                <figure class="max-w-lg m-auto w-full">
+                                    <img class="rounded-lg max-h-[500px]" :src="acta ? acta.imagenOriginalURL  :'no-imagen-acta.jpg'" height="224px" alt="">
+                                    <figcaption v-if="!acta.imagenOriginalURL" class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Vista previa de la imagen del acta</figcaption>
+                                </figure>
+                            </div>
+                            <!-- Datos -->
+                            <div class="min-w-[50%] pr-2 px-2">
 
-                        <!-- Imagen preiew -->
-                        <div class="min-w-[50%] pl-2 flex items-center">
-                            <div class="flex items-center justify-center w-full">
-                                <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                        <svg aria-hidden="true" class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                                <!-- Titulo acta -->
+                                <div class="text-negro underline font-bold decoration-negro pb-4">
+                                    <h2 class="">
+                                        ACTA  <span v-if="acta">{{ acta.codigo }}</span>
+                                    </h2>
+                                </div>
+                                
+                                <!-- Header acta -->
+                                <div class="container mx-auto pb-4">
+                                    <table class="w-full text-sm text-left">
+                                        <thead class="text-xs text-negro uppercase bg-plomo-light">
+                                            <tr class="bg-plomo-light">
+                                                <th class="py-1"></th>
+                                                <th class="py-1 text-center whitespace-nowrap" colspan="3">TOTAL EN NÚMEROS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Total votantes -->
+                                            <tr class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-[#bdbdbd40] dark:hover:text-negro">
+                                                <td class="border border-curren">Total de Votantes</td>
+                                                <td class="border border-curren w-8">
+                                                    <input 
+                                                        type="text"
+                                                        min="0" max="1"
+                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                                        @input="calcularTotalVotantes" v-model="acta.tv_1" placeholder="0"
+                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
+                                                    />
+                                                </td>
+                                                <td class="border border-curren w-8">
+                                                    <input 
+                                                        type="text"
+                                                        min="0" max="1"
+                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                                        @input="calcularTotalVotantes" v-model="acta.tv_2" placeholder="0"
+                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
+                                                    />
+                                                </td>
+                                                <td class="border border-curren w-8">
+                                                    <input 
+                                                        type="text"
+                                                        min="0" max="1"
+                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                                        @input="calcularTotalVotantes" v-model="acta.tv_3" placeholder="0"
+                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <!-- Total blancos -->
+                                            <tr class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-[#bdbdbd40] dark:hover:text-blanco">
+                                                <td class="border border-curren">Votos Blancos</td>
+                                                <td class="border border-curren w-8">
+                                                    <input 
+                                                        type="text"
+                                                        min="0" max="1"
+                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                                        @input="calcularTotalBlancos" v-model="acta.vb_1" placeholder="0"
+                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
+                                                    />
+                                                </td>
+                                                <td class="border border-curren w-8">
+                                                    <input 
+                                                        type="text"
+                                                        min="0" max="1"
+                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                                        @input="calcularTotalBlancos" v-model="acta.vb_2" placeholder="0"
+                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
+                                                    />
+                                                </td>
+                                                <td class="border border-curren w-8">
+                                                    <input 
+                                                        type="text"
+                                                        min="0" max="1"
+                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                                        @input="calcularTotalBlancos" v-model="acta.vb_3" placeholder="0"
+                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <!-- Total nulos -->
+                                            <tr class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-[#bdbdbd40] dark:hover:text-blanco">
+                                                <td class="border border-curren">Votos Nulos</td>
+                                                <td class="border border-curren w-8">
+                                                    <input 
+                                                        type="text"
+                                                        min="0" max="1"
+                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                                       @input="calcularTotalNulos" v-model="acta.vn_1" placeholder="0"
+                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
+                                                    />
+                                                </td>
+                                                <td class="border border-curren w-8">
+                                                    <input 
+                                                        type="text"
+                                                        min="0" max="1"
+                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                                       @input="calcularTotalNulos" v-model="acta.vn_2" placeholder="0"
+                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
+                                                    />
+                                                </td>
+                                                <td class="border border-curren w-8">
+                                                    <input 
+                                                        type="text"
+                                                        min="0" max="1"
+                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                                       @input="calcularTotalNulos" v-model="acta.vn_3" placeholder="0"
+                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
+                                                    />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <!-- body acta  -->
+                                <div class="grid">
+                                    <div class="text-red-700">
+                                        <h3 class="text-red-700 text-sm" v-if="infoVotosValidos">{{ infoVotosValidos }}</h3>
                                     </div>
-                                    <input id="dropzone-file" type="file" class="hidden" />
-                                </label>
+                                    <table class="w-full text-sm text-left">
+                                        <thead class="text-xs text-negro uppercase bg-plomo-light">
+                                            <tr class="bg-plomo-light">
+                                                <th class="py-1">CANDIDATO</th>
+                                                <th class="py-1 text-center whitespace-nowrap" colspan="3">TOTAL EN NÚMEROS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr 
+                                                class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-[#bdbdbd40] dark:hover:text-negro"
+                                                v-for="(candidato, index) in  candidatos" :key="candidato.id"
+                                            >
+                                                <td class="border border-curren">{{ candidato.nombre }}</td>
+                                                <td class="border border-curren w-8">
+                                                    <input 
+                                                        type="text"
+                                                        min="0" max="1"
+                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                                        @input="calcularVotoCandidato(index)" v-model="candidatos_votos[index].v_1" placeholder="0"
+                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
+                                                    />
+                                                </td>
+                                                <td class="border border-curren w-8">
+                                                    <input 
+                                                        type="text"
+                                                        min="0" max="1"
+                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                                        @input="calcularVotoCandidato(index)" v-model="candidatos_votos[index].v_2" placeholder="0"
+                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
+                                                    />
+                                                </td>
+                                                <td class="border border-curren w-8">
+                                                    <input 
+                                                        type="text"
+                                                        min="0" max="1"
+                                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                                        @input="calcularVotoCandidato(index)" v-model="candidatos_votos[index].v_3" placeholder="0"
+                                                        class="w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md"
+                                                    />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                                
+                                <!-- options  -->
+                                <div class="flex justify-center pt-5 w-full">
+                                    <template v-if="acta.id">
+                                        <button :class=" 'flex justify-center w-32 border-solid border border-negro rounded-xl bg-negro hover:bg-plomo' + (processing ? ' bg-plomo' : ' bg-negro') "  type="submit" :disabled="processing">
+                                            <span class="py-1 text-blanco"> GUARDAR </span>
+                                            <span class="py-1 px-2 text-blanco" v-if="processing">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                                </svg>
+                                            </span>
+                                        </button>
+                                    </template>
+                                    <template v-else>
+                                        <alert :type="'info'" :description="'No existe ninguna acta para registar los votos! Gracias por tu trabajo'" />
+                                    </template>
+                                </div>
+
                             </div>
                         </div>
-
-                        <!-- Datos -->
-                        <div class="min-w-[50%] pr-2">
-
-                            <div class="grid gap-6 md:grid-cols-3">
-                                <div class="bg-white shadow-md mb-4 rounded">
-                                    <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Blancos</label>
-                                    <input type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" required>
-                                </div>
-
-                                <div class="bg-white shadow-md mb-4 rounded">
-                                    <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nulos</label>
-                                    <input type="text" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" required>
-                                </div>
-
-                                <div class="bg-white shadow-md mb-4 rounded">
-                                    <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Validos</label>
-                                    <input type="text" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0" required>
-                                </div>
-                            </div>
-                            
-                            <div class="grid">
-                                {{ }}
-                                <table class="w-full text-sm text-left dark:text-gray-400">
-                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                        <tr>
-                                            <th>Candidato</th>
-                                            <th>Partido político</th>
-                                            <th colspan="3">Votos</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr 
-                                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                                            v-for="candidato in  $parent.candidatos" :key="candidato.id"
-                                        >
-                                            <td class="truncate">{{ candidato.nombre }}</td>
-                                            <td class="truncate">{{ candidato.nombre_partido }}</td>
-                                            <td class="border-2 border-curren"><input type="text" placeholder="0" class="px-2 py-1 placeholder-slate-300 text-slate-600 relative bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"/></td>
-                                            <td class="border-2 border-curren"><input type="text" placeholder="0" class="px-2 py-1 placeholder-slate-300 text-slate-600 relative bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"/></td>
-                                            <td class="border-2 border-curren"><input type="text" placeholder="0" class="px-2 py-1 placeholder-slate-300 text-slate-600 relative bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"/></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-                    <!-- option save  -->
-                    <div class="min-w-[100%] p-4">
-                        <button class="flex justify-center w-full border-solid border border-blanco rounded-xl bg-blanco" type="submit">
-                            <span> GUARDAR </span>
-                            <span class="pt-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" v-if="processing" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                </svg>
-                            </span>
-                        </button>
-                    </div>
-                </form>
+                        
+                    </form>
+                </div>
             </div>
-
         </div>
     </div>
+</div>
 </template>
 <script>
-export default{
-    name:'Actas',
+import { http } from "../../axios"
+import Alert from "../../components/Alert.vue"
+
+export default {
+    components: {
+        Alert
+    },
     data(){
         return{
             acta:{
-                codigo:'',
-                junta_id:'',
+                id:null,
+                codigo:null,
+                junta_id:null,
+                total_votantes:0,
+                tv_1:0,
+                tv_2:0,
+                tv_3:0,
                 votos_blancos:0,
+                vb_1:0,
+                vb_2:0,
+                vb_3:0,
                 votos_nulos:0,
-                votos_validos:0,
-                estado:true,
-                procesado_por:true,
+                vn_1:0,
+                vn_2:0,
+                vn_3:0,
+                estado:0,
+                ingresada_por:true
             },
+            candidatos_votos:[],
+            image:null,
             processing:false,
             errorMessage:null,
-            user:null,
-            juntas:[],
+            infoVotosValidos:null,
+            candidatos:[],
+            sumaTotal:0,
+            votos_candidatos:0,
+            alert:true,
+            stop:0,
         }
     },
-    methods:{
-        selectRecinto(item) {
-            const requestOptions = {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Requested-With": "XMLHttpRequest",
-                    'Authorization': 'Bearer ' + this.token,
-                },
-                body: JSON.stringify({recinto:item.id})
-            };
-            fetch(this.baseURL+'control-electoral/juntas/dropdownOptions', requestOptions)
-                .then(async response => {
-                    const data = await response.json();
-
-                    // check for error response
-                    if (!response.ok) {
-                        // get error message from body or default to response status
-                        const error = (data && data.message) || response.status;
-                        this.errorMessage = error;
-                        return Promise.reject(error);
-                    }
-
-                    console.log(response, data.items)
-                    this.juntas = data.items;
-                })
-
-                .catch(error => {
-                    this.errorMessage = error;
-                    console.error('There was an error!', error);
-                });
+    created (){
+        this.fetchJunta()
+    },
+    computed: {
+        user() {
+            // return this.$store.getters.getUser
+            let x = window.localStorage.getItem('user')
+            return JSON.parse(x)
         },
-        addInscrito() {
-            const requestOptions = {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Requested-With": "XMLHttpRequest",
-                    'Authorization': 'Bearer '+this.$parent.token,
-                },
-                body: JSON.stringify(this.acta)
-            };
-            fetch(this.$parent.baseURL + 'actas', requestOptions)
-                .then(async response => {
-
-                    const data = await response.json();
-
-                    // check for error response
-                    if (!response.ok) {
-                        // get error message from body or default to response status
-                        const error = (data && data.message) || response.status;
-                        this.errorMessage = error;
-                        return Promise.reject(error);
-                    }
-
-                    if (!data.status) {
-                        const error = (data && data.msg) || response.status;
-                        this.errorMessage = error;
-                        return Promise.reject(error);
-                    }
-                    
-                    window.localStorage.setItem('result', this.acta);
-
-                    this.acta = {
-                        codigo:'',
-                        junta_id:'',
-                        votos_blancos:0,
-                        votos_nulos:0,
-                        votos_validos:0,
-                        estado:true,
-                        procesado_por:true,
-                    }
-                })
-                .catch(error => {
-                    this.errorMessage = error;
-                    console.error('There was an error!', error);
-                });
+        token(){
+            return window.localStorage.getItem('token')
         },
         
     },
-    mounted() {
+    methods:{
 
-    }
+        calcularTotalVotantes(value){
+            let total =  this.acta.tv_1 + this.acta.tv_2 + this.acta.tv_3
+            this.acta.total_votantes = parseInt(total)
+        },
+
+        calcularTotalBlancos(value){
+            let total =  this.acta.vb_1 + this.acta.vb_2 + this.acta.vb_3
+            this.acta.votos_blancos = parseInt(total)
+        },
+
+        calcularTotalNulos(value){
+            let total =  this.acta.vn_1 + this.acta.vn_2 + this.acta.vn_3
+            this.acta.votos_nulos = parseInt(total)
+        },
+        
+        calcularSumaTotal(){
+
+            this.votos_candidatos = this.candidatos_votos.reduce((total, valor) => total + valor.votos, 0)
+            this.sumaTotal = this.votos_candidatos + (this.acta.votos_blancos + this.acta.votos_nulos)
+
+            this.infoVotosValidos = ''
+            if(this.sumaTotal!=this.acta.total_votantes){
+                this.infoVotosValidos = 'Esta acta puede estar inconsistente, revisar que todo este correcto, dar click en Guardar, y luego Guardar acta inconsistente.'
+                return false
+            }else{
+                return true
+            }
+
+        },
+
+        calcularVotoCandidato(index){
+
+            let v_1 = this.candidatos_votos[index].v_1
+            let v_2 = this.candidatos_votos[index].v_2
+            let v_3 = this.candidatos_votos[index].v_3
+
+            let total  = v_1 + v_2 + v_3
+            this.candidatos_votos[index].votos = parseInt(total)
+
+            this.infoVotosValidos = ''
+            
+        },
+        fetchJunta(){
+
+            this.processing = true
+
+            http
+            .get("control-electoral/last-acta", { 
+                params:{ user:this.user.id },
+                headers: {
+                Authorization: `Bearer ${this.token}`,
+                'Content-Type': 'application/json',
+            }})
+            .then( response => {
+
+                let actaId = null
+                let procesadaPor = null
+
+                if (response.data.status) {
+                    
+                    this.acta = response.data.acta
+                    // Celdas para total votantes
+                    this.acta.tv_1 = 0
+                    this.acta.tv_2 = 0
+                    this.acta.tv_3 = 0
+                    // Celdas para botos blancos
+                    this.acta.vb_1 = 0
+                    this.acta.vb_2 = 0
+                    this.acta.vb_3 = 0
+                    // Celdas para votos nulos
+                    this.acta.vn_1 = 0
+                    this.acta.vn_2 = 0
+                    this.acta.vn_3 = 0
+
+                    actaId = this.acta.id;
+                    procesadaPor = this.user.id;
+                    
+                }else{
+                    this.stop++
+                    this.showNoActas()
+                }
+
+                this.candidatos = response.data.candidatos
+                this.candidatos_votos = response.data.candidatos.map(function(candidato){
+                    return {
+                        candidato_id:candidato.id,
+                        acta_id:actaId,
+                        v_1:0,
+                        v_2:0,
+                        v_3:0,
+                        votos:0,
+                        procesada_por:procesadaPor
+                    }
+                })
+                
+                this.processing = false
+            })
+            .catch((error) => {
+                console.log(error);
+                this.errorMessage = error
+                this.processing = false
+            });
+        },
+        addVoto(event){
+
+            let buttonText = 'Ok Guardar'
+            // Verificar si todo esta bien
+            let infromacion = ''
+            if(!this.calcularSumaTotal()){
+                infromacion = `<p class="text-red-500">Esta es una Acta Inconsistente porque el el Total de Votantes no coincide con el Total votos, por favor revisar. </p>
+                <p class="text-blue-900"> Si ya lo hizo, puede dar click en Guardar acta inconsistente</p>`
+                buttonText = 'Guardar acta inconsistente'
+                this.acta.inconsistente = true
+            }
+
+            this.$swal({
+                title: 'Resumen',
+                position: 'top-end',
+                allowOutsideClick: false,
+                text: 'POR FAVOR INFORMA ÉSTE PROBLEMA A UN ADMINISTRADOR',
+                html: `<div class="text-negro">
+                        <table class="w-full text-sm text-left">
+                            <tr class="border-blanco dark:bg-blanco dark:border-gray-700 text-center">
+                                <th class="border border-curren text-lg" colspan="2">ACTA ${ this.acta.codigo } </th>
+                            </tr>
+                            <tr class="border-blanco dark:bg-blanco dark:border-gray-700 ${ this.sumaTotal != this.acta.total_votantes ? 'bg-red-50' : 'bg-lime-50' } ">
+                                <td class="border border-curren text-lg">Total de Votantes</td>
+                                <td class="border border-curren text-lg"> ${ this.acta.total_votantes } </td>
+                            </tr>
+                            <tr class="border-blanco dark:bg-blanco dark:border-gray-700">
+                                <td class="border border-curren text-lg">Votos Blancos</td>
+                                <td class="border border-curren text-lg"> ${ this.acta.votos_blancos } </td>
+                            </tr>
+                            <tr class="border-blanco dark:bg-blanco dark:border-gray-700">
+                                <td class="border border-curren text-lg">Votos Nulos</td>
+                                <td class="border border-curren text-lg"> ${ this.acta.votos_nulos } </td>
+                            </tr>
+                            <tr class="border-blanco dark:bg-blanco dark:border-gray-700">
+                                <td class="border border-curren text-lg">Votos Candidatos</td>
+                                <td class="border border-curren text-lg"> ${ this.votos_candidatos } </td>
+                            </tr>
+                            <tr class="border-blanco dark:bg-blanco dark:border-gray-700 ${ this.sumaTotal != this.acta.total_votantes ? 'bg-red-50' : 'bg-lime-50' }">
+                                <td class="border border-curren text-lg">Total Votos</td>
+                                <td class="border border-curren text-lg"> ${ this.sumaTotal } </td>
+                            </tr>
+                        </table>
+                        <div class="text-sm text-justify w-full">
+                            ${infromacion}
+                        </div>
+                <div>`,
+                confirmButtonText: buttonText,
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Confirma y enviar a guardar
+                    this.save(event)
+
+                } else if (result.isDenied) {
+                    this.$swal('Changes are not saved', '', 'info')
+                }
+            });
+
+             
+        },
+
+        save(event){
+
+            this.processing = true
+
+            // Eliminar datos innecesarios 
+            delete this.acta.imagenURL
+            delete this.acta.media;
+
+            this.candidatos_votos = this.candidatos_votos.map(function(item){
+                return {
+                    candidato_id:item.candidato_id,
+                    acta_id:item.acta_id,
+                    votos:item.votos,
+                    procesada_por:item.procesada_por
+                }
+            })
+
+            // Crear data para el put
+            let data  = {
+                acta:this.acta,
+                candidatos_votos:this.candidatos_votos
+            }
+
+            // Envar a guardar
+            http
+            .put(`control-electoral/actas/${this.acta.id}`,data,{
+                headers: {
+                    Authorization: `Bearer ${this.token}`,
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then( response => {
+                
+                if(response.data.status){
+                    event.target.reset();
+                    this.fetchJunta()
+                    this.showSucces()
+                    this.sumaTotal = 0
+                    this.infoVotosValidos = ''
+                }else{
+                    event.target.reset();
+                    this.infoVotosValidos = ''
+                    this.showWarning(response.data.msg)
+                }
+                this.processing = false
+            })
+            .catch((error) => {
+                console.log(error);
+                this.errorMessage = error
+                this.processing = false
+            });
+        },
+
+        showNoActas(){
+            // <p> <b></b> Minuto. <strong></strong> Segundos </p>
+            let timerInterval
+            this.$swal({
+                title: 'Aun no existe actas para revisar los votos!',
+                html: `${this.stop==1 ? '<p> Por favor espere </p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>'} `,
+                timer: 60000,
+                timerProgressBar: true,
+                didOpen: () => {
+                    this.$swal.showLoading()
+                    // const minutos = this.$swal.getHtmlContainer().querySelector('b')
+                    // const segundos = this.$swal.getHtmlContainer().querySelector('strong')
+                    timerInterval = setInterval(() => {
+                        let m = (this.$swal.getTimerLeft() / 60000).toFixed(0) 
+                        let s = (this.$swal.getTimerLeft() / 1000).toFixed(0)
+                        minutos.textContent = m
+                        segundos.textContent = s
+                        if(m==0 && this.stop == 1){
+                            this.fetchJunta()
+                        }
+                    }, 1000)
+                },
+                willClose: () => {
+                    clearInterval(timerInterval)
+                }
+            }).then((result) => {
+                /* Read more about handling dismissals below */
+                if (result.dismiss === this.$swal.DismissReason.timer) {
+                    this.$swal({
+                        icon: 'info',
+                        title: 'Gracias por tu trabajo',
+                        text: 'Ya no existe ninguna acta para registar los votos!'
+                    })
+                }
+            })
+        },
+
+        showWarning(msg) {
+            
+            this.$swal({
+                icon: 'warning',
+                title: msg,
+                allowOutsideClick: false,
+                text: 'POR FAVOR INFORMA ÉSTE PROBLEMA A UN ADMINISTRADOR',
+                footer: 'Por favor informa éste problema a un administrador ',
+                confirmButtonText: 'Ok',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$refs.frmVotos.reset();
+                    this.fetchJunta()
+                } else if (result.isDenied) {
+                    this.$swal('Changes are not saved', '', 'info')
+                }
+            });
+        },
+    },
 }
+</script>
