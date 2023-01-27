@@ -102,7 +102,7 @@
                                 </div>
 
                                 <!-- option save  -->
-                                <div class="pt-5 w-full">
+                                <div class="pt-5 w-full flex justify-center">
                                     <template v-if="recintos.length>0">
                                         <button :class=" 'flex justify-center border-solid border border-negro rounded-xl bg-negro hover:bg-plomo' + (processing ? ' bg-plomo' : ' bg-negro') "  type="submit" :disabled="processing">
                                             <span class="py-1 px-2 text-blanco"> GUARDAR </span>

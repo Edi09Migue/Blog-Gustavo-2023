@@ -14,7 +14,7 @@
                 <div class="pt-4 pb-10">
                     <form @submit.prevent="addVoto" class="w-full" ref="frmVotos">
                         
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid lg:grid-cols-2 gap-4">
                             <!-- Imagen preiew -->
                             <div class="min-w-[50%] pl-2 flex items-center">
                                 <figure class="max-w-lg m-auto w-full">
@@ -23,17 +23,17 @@
                                 </figure>
                             </div>
                             <!-- Datos -->
-                            <div class="min-w-[50%] pr-2">
+                            <div class="min-w-[50%] pr-2 px-2">
 
                                 <!-- Titulo acta -->
-                                <div class="text-negro underline font-bold decoration-negro">
-                                    <h2>
+                                <div class="text-negro underline font-bold decoration-negro pb-4">
+                                    <h2 class="">
                                         ACTA  <span v-if="acta">{{ acta.codigo }}</span>
                                     </h2>
                                 </div>
                                 
                                 <!-- Header acta -->
-                                <div class="container mx-auto pb-3">
+                                <div class="container mx-auto pb-4">
                                     <table class="w-full text-sm text-left">
                                         <thead class="text-xs text-negro uppercase bg-plomo-light">
                                             <tr class="bg-plomo-light">
@@ -43,7 +43,7 @@
                                         </thead>
                                         <tbody>
                                             <!-- Total votantes -->
-                                            <tr class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-blue-100 dark:hover:text-negro">
+                                            <tr class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-[#bdbdbd40] dark:hover:text-negro">
                                                 <td class="border border-curren">Total de Votantes</td>
                                                 <td class="border border-curren w-8">
                                                     <input 
@@ -74,7 +74,7 @@
                                                 </td>
                                             </tr>
                                             <!-- Total blancos -->
-                                            <tr class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-blue-100 dark:hover:text-blanco">
+                                            <tr class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-[#bdbdbd40] dark:hover:text-blanco">
                                                 <td class="border border-curren">Votos Blancos</td>
                                                 <td class="border border-curren w-8">
                                                     <input 
@@ -105,7 +105,7 @@
                                                 </td>
                                             </tr>
                                             <!-- Total nulos -->
-                                            <tr class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-blue-100 dark:hover:text-blanco">
+                                            <tr class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-[#bdbdbd40] dark:hover:text-blanco">
                                                 <td class="border border-curren">Votos Nulos</td>
                                                 <td class="border border-curren w-8">
                                                     <input 
@@ -153,7 +153,7 @@
                                         </thead>
                                         <tbody>
                                             <tr 
-                                                class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-blue-100 dark:hover:text-negro"
+                                                class="bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-[#bdbdbd40] dark:hover:text-negro"
                                                 v-for="(candidato, index) in  candidatos" :key="candidato.id"
                                             >
                                                 <td class="border border-curren">{{ candidato.nombre }}</td>
@@ -193,7 +193,7 @@
                                 <!-- options  -->
                                 <div class="flex justify-center pt-5 w-full">
                                     <template v-if="acta.id">
-                                        <button :class=" 'flex justify-center w-full border-solid border border-negro rounded-xl bg-negro hover:bg-plomo' + (processing ? ' bg-plomo' : ' bg-negro') "  type="submit" :disabled="processing">
+                                        <button :class=" 'flex justify-center w-32 border-solid border border-negro rounded-xl bg-negro hover:bg-plomo' + (processing ? ' bg-plomo' : ' bg-negro') "  type="submit" :disabled="processing">
                                             <span class="py-1 text-blanco"> GUARDAR </span>
                                             <span class="py-1 px-2 text-blanco" v-if="processing">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -494,18 +494,17 @@ export default {
         },
 
         showNoActas(){
-
+            // <p> <b></b> Minuto. <strong></strong> Segundos </p>
             let timerInterval
             this.$swal({
                 title: 'Aun no existe actas para revisar los votos!',
-                html: `${this.stop==1 ? '<p> Por favor espere </p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>'} 
-                       <p> <b></b> Minuto. <strong></strong> Segundos </p>`,
+                html: `${this.stop==1 ? '<p> Por favor espere </p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>'} `,
                 timer: 60000,
                 timerProgressBar: true,
                 didOpen: () => {
                     this.$swal.showLoading()
-                    const minutos = this.$swal.getHtmlContainer().querySelector('b')
-                    const segundos = this.$swal.getHtmlContainer().querySelector('strong')
+                    // const minutos = this.$swal.getHtmlContainer().querySelector('b')
+                    // const segundos = this.$swal.getHtmlContainer().querySelector('strong')
                     timerInterval = setInterval(() => {
                         let m = (this.$swal.getTimerLeft() / 60000).toFixed(0) 
                         let s = (this.$swal.getTimerLeft() / 1000).toFixed(0)

@@ -33638,7 +33638,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     path: '/',
     name: 'login',
     component: function component() {
-      return Promise.all(/*! import() */[__webpack_require__.e(4), __webpack_require__.e(2)]).then(__webpack_require__.bind(null, /*! ../views/user/Login.vue */ "./front_ce/src/views/user/Login.vue"));
+      return Promise.all(/*! import() */[__webpack_require__.e(4), __webpack_require__.e(3)]).then(__webpack_require__.bind(null, /*! ../views/user/Login.vue */ "./front_ce/src/views/user/Login.vue"));
     },
     meta: {
       layout: 'blank',
@@ -33648,7 +33648,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     path: '/home',
     name: 'home',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ../views/Home.vue */ "./front_ce/src/views/Home.vue"));
+      return __webpack_require__.e(/*! import() */ 1).then(__webpack_require__.bind(null, /*! ../views/Home.vue */ "./front_ce/src/views/Home.vue"));
     },
     meta: {
       requiresAuth: true
@@ -33660,7 +33660,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       requiresAuth: true
     },
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 1).then(__webpack_require__.bind(null, /*! ../views/actas/Actas.vue */ "./front_ce/src/views/actas/Actas.vue"));
+      return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ../views/actas/Actas.vue */ "./front_ce/src/views/actas/Actas.vue"));
     }
   }, _defineProperty({
     path: '/votos',
@@ -33669,7 +33669,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
       requiresAuth: true
     },
     component: function component() {
-      return __webpack_require__.e(/*! import() */ 3).then(__webpack_require__.bind(null, /*! ../views/votos/Votos.vue */ "./front_ce/src/views/votos/Votos.vue"));
+      return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! ../views/votos/Votos.vue */ "./front_ce/src/views/votos/Votos.vue"));
     }
   }, "meta", {
     requiresAuth: true
@@ -35652,6 +35652,51 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {},
@@ -35708,6 +35753,10 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error);
       });
+    },
+    mostrarMenu: function mostrarMenu() {
+      var menu = document.querySelector('#menu');
+      menu.classList.toggle('hidden');
     }
   }
 });
@@ -36892,7 +36941,7 @@ var render = function() {
               "div",
               {
                 staticClass:
-                  "container px-4 mx-auto flex flex-wrap items-center justify-between"
+                  "container px-4 mx-auto flex  items-center justify-between"
               },
               [
                 _vm._m(0),
@@ -36949,7 +36998,7 @@ var render = function() {
                             "button",
                             {
                               staticClass:
-                                "bg-white text-blueGray-700 active:bg-blueGray-50 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150",
+                                "bg-white text-blueGray-700 active:bg-blueGray-50 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:bg-plomo hover:text-blanco outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150",
                               attrs: { href: "#" },
                               on: { click: _vm.logout }
                             },
@@ -36966,7 +37015,127 @@ var render = function() {
                       ]
                     )
                   ]
-                )
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "sm:[90%] lg:hidden" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass:
+                        "\r\n                    navbar-toggler\r\n                    text-gray-500\r\n                    border-0\r\n                    hover:shadow-none hover:no-underline\r\n                    py-2\r\n                    px-2.5\r\n                    bg-transparent\r\n                    focus:outline-none focus:ring-0 focus:shadow-none focus:no-underline\r\n                    hover:bg-plomo hover:text-blanco",
+                      attrs: {
+                        type: "button",
+                        "data-bs-toggle": "collapse",
+                        "data-bs-target": "#navbarSupportedContent",
+                        "aria-controls": "navbarSupportedContent",
+                        "aria-expanded": "false",
+                        "aria-label": "Toggle navigation"
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.mostrarMenu()
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "svg",
+                        {
+                          staticClass: "w-6 text-blanco",
+                          attrs: {
+                            "aria-hidden": "true",
+                            focusable: "false",
+                            "data-prefix": "fas",
+                            "data-icon": "bars",
+                            role: "img",
+                            xmlns: "http://www.w3.org/2000/svg",
+                            viewBox: "0 0 448 512"
+                          }
+                        },
+                        [
+                          _c("path", {
+                            attrs: {
+                              fill: "currentColor",
+                              d:
+                                "M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"
+                            }
+                          })
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        " absolute top-[66px] left-0 w-full z-10 bg-gray-100 hidden",
+                      attrs: { id: "menu" }
+                    },
+                    [
+                      _c(
+                        "ul",
+                        {
+                          staticClass:
+                            "flex flex-col list-none items-end container px-4 mx-auto"
+                        },
+                        [
+                          _c("li", { staticClass: "flex items-center" }, [
+                            _c(
+                              "a",
+                              {
+                                staticClass:
+                                  "lg:text-white lg:hover:text-blueGray-200 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold",
+                                attrs: { href: "#" }
+                              },
+                              [
+                                _c("font-awesome-icon", {
+                                  staticClass: "text-xl",
+                                  attrs: {
+                                    icon: "fa-solid fa-circle-user fa-6x"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("span", { staticClass: "pl-2" }, [
+                                  _vm._v(
+                                    "\r\n                                    " +
+                                      _vm._s(
+                                        _vm.user
+                                          ? _vm.user.name
+                                          : "Nombre del usuario"
+                                      ) +
+                                      "\r\n                                "
+                                  )
+                                ])
+                              ],
+                              1
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("li", { staticClass: "flex items-center" }, [
+                            _c(
+                              "button",
+                              {
+                                staticClass:
+                                  "bg-white text-blueGray-700 active:bg-blueGray-50 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150",
+                                attrs: { href: "#" },
+                                on: { click: _vm.logout }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "fas fa-arrow-alt-circle-down"
+                                }),
+                                _vm._v(
+                                  "\r\n                                Cerrar sesión\r\n                            "
+                                )
+                              ]
+                            )
+                          ])
+                        ]
+                      )
+                    ]
+                  )
+                ])
               ]
             )
           ]
@@ -36983,14 +37152,14 @@ var staticRenderFns = [
       "div",
       {
         staticClass:
-          "w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start "
+          "w-full sm:w-[10%] relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start "
       },
       [
         _c(
           "a",
           {
             staticClass:
-              "text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white",
+              "text-sm font-bold leading-relaxed inline-block py-2 whitespace-nowrap uppercase text-white",
             attrs: { href: "#" }
           },
           [
