@@ -508,19 +508,28 @@ export default {
                     timerInterval = setInterval(() => {
                         let m = (this.$swal.getTimerLeft() / 60000).toFixed(0) 
                         let s = (this.$swal.getTimerLeft() / 1000).toFixed(0)
-                        minutos.textContent = m
-                        segundos.textContent = s
-                        if(m==0 && this.stop == 1){
+                        console.log(s)
+                        // minutos.textContent = m
+                        // segundos.textContent = s
+                        if(s==30 && this.stop == 1)
                             this.fetchJunta()
-                        }
-                    }, 1000)
+
+                        if(s==5 && this.stop == 2)
+                            this.fetchJunta()
+                        
+
+                    }, 5000)
                 },
                 willClose: () => {
                     clearInterval(timerInterval)
+                },
+                onClose: () => {
+                    clearInterval(timerInterval)
                 }
             }).then((result) => {
+                
                 /* Read more about handling dismissals below */
-                if (result.dismiss === this.$swal.DismissReason.timer) {
+                if (result.dismiss === this.$swal.DismissReason.timer && this.acta.id==null) {
                     this.$swal({
                         icon: 'info',
                         title: 'Gracias por tu trabajo',
