@@ -41,13 +41,13 @@
                     />
                 </template>
 
-                <b-dropdown-item
+                <!-- <b-dropdown-item
                     :to="{ name: 'pages-profile' }"
                     link-class="d-flex align-items-center"
                 >
                     <feather-icon size="16" icon="UserIcon" class="mr-50" />
                     <span>{{ $t("Profile") }}</span>
-                </b-dropdown-item>
+                </b-dropdown-item> -->
 
                 <!-- <b-dropdown-item link-class="d-flex align-items-center">
           <feather-icon
@@ -75,7 +75,7 @@
           />
           <span>Chat</span>
         </b-dropdown-item> -->
-                <b-dropdown-divider />
+                <!-- <b-dropdown-divider />
 
                 <b-dropdown-item
                     v-if="$can('editar', 'perfil_user')"
@@ -86,7 +86,7 @@
                     <span>{{ $t("Settings") }}</span>
                 </b-dropdown-item>
 
-                <b-dropdown-divider />
+                <b-dropdown-divider /> -->
 
                 <b-dropdown-item
                     link-class="d-flex align-items-center"

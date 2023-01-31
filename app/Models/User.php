@@ -143,7 +143,7 @@ class User extends Authenticatable implements Auditable
     {
         return $this->getFirstMediaUrl('main', 'preview')
             ? $this->getFirstMediaUrl('main', 'preview')
-            : asset('images/profiles/no-image.png');
+            : '';
     }
 
     /**
@@ -151,7 +151,7 @@ class User extends Authenticatable implements Auditable
      */
     public function scopeImageURL($query, $collection = "default", $type = "")
     {
-        $thumb = asset('images/profiles/no-image.png');
+        $thumb = '';
 
         if ($this->getFirstMediaUrl($collection, $type)) {
             $thumb = $this->getFirstMediaUrl($collection, $type);

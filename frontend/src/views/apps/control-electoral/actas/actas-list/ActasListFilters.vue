@@ -40,14 +40,9 @@
 
             <div v-if="ultimaActualizacion">
                 <small>Generado el:</small>
-                <strong>{{formatDate(ultimaActualizacion,{
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                    second: "numeric",
-                }) }}</strong>
+                <strong class="mr-1">
+                    {{ formatearDateTime(ultimaActualizacion)}}
+                </strong>
                 <b-button
                     v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                     variant="outline-primary"
@@ -67,7 +62,7 @@
                     title="Recargar cada 15 segundos automáticamente"
                 >
                     <feather-icon
-                        :icon="runInterval ? 'PlayIcon' : 'PauseIcon'"
+                        :icon="runInterval ? 'PauseIcon' : 'PlayIcon'"
                     />
                 </b-button>
             </div>
@@ -196,11 +191,11 @@
 import { BCard, BCardHeader, BCardBody, BRow, BCol, BBadge, BButton, BDropdown, BDropdownItem } from "bootstrap-vue";
 import vSelect from "vue-select";
 import Ripple from 'vue-ripple-directive';
-import { formatDate } from "@core/utils/filter";
 
 import ActasReportsModal from "../actas-reports/ActasReportsModal";
 
 import useActasReports from './useActasReports'
+import moment from 'moment';
 
 export default {
     components: {
@@ -285,6 +280,12 @@ export default {
             recintosReportOptions,
         } = useActasReports()
 
+        const formatearDateTime = (item) =>{
+			moment.locale('es')
+			let date = moment(item).format("D MMMM YYYY, h:mm:ss a");
+			return date
+		}
+
 
 
 
@@ -292,10 +293,9 @@ export default {
             selectRecinto,
             selectJunta,
 
-            formatDate,
-
             fetchRecintosReportOptions,
             recintosReportOptions,
+            formatearDateTime,
         };
 
     }

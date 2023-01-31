@@ -104,10 +104,21 @@
                         >
                             {{ data.item.name }}
                         </b-link>
-                        <small class="text-muted"
-                            >@{{ data.item.username }}</small
-                        >
+                        <small>
+                            {{ data.item.user_info.telefono }}    
+                        </small>  
                     </b-media>
+                </template>
+
+
+                <template #cell(email)="data">
+                    <span>
+                        {{ data.item.email }} 
+                    </span>
+                    <br>
+                    <small>
+                        {{ data.item.username }}    
+                    </small>
                 </template>
 
                 <!-- Column: Role -->
