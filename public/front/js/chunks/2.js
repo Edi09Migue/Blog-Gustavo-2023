@@ -505,7 +505,7 @@ __webpack_require__.r(__webpack_exports__);
       this.infoVotosValidos = '';
 
       if (this.sumaTotal != this.acta.total_votantes) {
-        this.infoVotosValidos = 'Esta acta puede estar inconsistente, revisar que todo este correcto, dar click en Guardar, y luego Guardar acta inconsistente.';
+        this.infoVotosValidos = 'Esta acta puede estar inconsistente, por favor revisar que todo este correcto y dar click en Guardar Acta Inconsistente.';
         return false;
       } else {
         return true;
@@ -583,13 +583,13 @@ __webpack_require__.r(__webpack_exports__);
     addVoto: function addVoto(event) {
       var _this2 = this;
 
-      var buttonText = 'Ok Guardar'; // Verificar si todo esta bien
+      var buttonText = 'Guardar'; // Verificar si todo esta bien
 
       var infromacion = '';
 
       if (!this.calcularSumaTotal()) {
-        infromacion = "<p class=\"text-red-500\">Esta es una Acta Inconsistente porque el el Total de Votantes no coincide con el Total votos, por favor revisar. </p>\n                <p class=\"text-blue-900\"> Si ya lo hizo, puede dar click en Guardar acta inconsistente</p>";
-        buttonText = 'Guardar acta inconsistente';
+        infromacion = "<p class=\"text-red-500\">Esta es una Acta Inconsistente porque el Total de Votantes no coincide con el Total de Votos BNC, por favor revisar. </p>\n                <p class=\"text-blue-900\"> Si ya lo hizo, puede dar click en Guardar Acta Inconsistente</p>";
+        buttonText = 'Guardar Acta Inconsistente';
         this.acta.inconsistente = true;
       }
 
@@ -598,7 +598,7 @@ __webpack_require__.r(__webpack_exports__);
         position: 'top-end',
         allowOutsideClick: false,
         text: 'POR FAVOR INFORMA ÉSTE PROBLEMA A UN ADMINISTRADOR',
-        html: "<div class=\"text-negro\">\n                        <table class=\"w-full text-sm text-left\">\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700 text-center\">\n                                <th class=\"border border-curren text-lg\" colspan=\"2\">ACTA ".concat(this.acta.codigo, " </th>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700 ").concat(this.sumaTotal != this.acta.total_votantes ? 'bg-red-50' : 'bg-lime-50', " \">\n                                <td class=\"border border-curren text-lg\">Total de Votantes</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.acta.total_votantes, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700\">\n                                <td class=\"border border-curren text-lg\">Votos Blancos</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.acta.votos_blancos, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700\">\n                                <td class=\"border border-curren text-lg\">Votos Nulos</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.acta.votos_nulos, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700\">\n                                <td class=\"border border-curren text-lg\">Votos Candidatos</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.votos_candidatos, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700 ").concat(this.sumaTotal != this.acta.total_votantes ? 'bg-red-50' : 'bg-lime-50', "\">\n                                <td class=\"border border-curren text-lg\">Total Votos</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.sumaTotal, " </td>\n                            </tr>\n                        </table>\n                        <div class=\"text-sm text-justify w-full\">\n                            ").concat(infromacion, "\n                        </div>\n                <div>"),
+        html: "<div class=\"text-negro\">\n                        <table class=\"w-full text-sm text-left\">\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700 text-center\">\n                                <th class=\"border border-curren text-lg\" colspan=\"2\">ACTA ".concat(this.acta.codigo, " </th>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700 ").concat(this.sumaTotal != this.acta.total_votantes ? 'bg-red-50' : 'bg-lime-50', " \">\n                                <td class=\"border border-curren text-lg\">Total de Votantes</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.acta.total_votantes, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700\">\n                                <td class=\"border border-curren text-lg\">Votos Blancos</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.acta.votos_blancos, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700\">\n                                <td class=\"border border-curren text-lg\">Votos Nulos</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.acta.votos_nulos, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700\">\n                                <td class=\"border border-curren text-lg\">Votos Candidatos</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.votos_candidatos, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700 ").concat(this.sumaTotal != this.acta.total_votantes ? 'bg-red-50' : 'bg-lime-50', "\">\n                                <td class=\"border border-curren text-lg\">Total Votos BNC</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.sumaTotal, " </td>\n                            </tr>\n                        </table>\n                        <div class=\"text-sm text-justify w-full\">\n                            ").concat(infromacion, "\n                        </div>\n                <div>"),
         confirmButtonText: buttonText,
         showCancelButton: true,
         cancelButtonText: 'Cancelar'
@@ -668,8 +668,8 @@ __webpack_require__.r(__webpack_exports__);
       // <p> <b></b> Minuto. <strong></strong> Segundos </p>
       var timerInterval;
       this.$swal({
-        title: 'Aun no existe actas para revisar los votos!',
-        html: "".concat(this.stop == 1 ? '<p> Por favor espere </p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>', " "),
+        title: '¡Aún no existen actas para digitalizar los votos!',
+        html: "".concat(this.stop == 1 ? '<p> Por favor espere. </p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>', " "),
         timer: 60000,
         timerProgressBar: true,
         didOpen: function didOpen() {
@@ -699,7 +699,8 @@ __webpack_require__.r(__webpack_exports__);
           _this4.$swal({
             icon: 'info',
             title: 'Gracias por tu trabajo',
-            text: 'Ya no existe ninguna acta para registar los votos!'
+            text: '¡Ya no existen actas para digitalizar los votos!',
+            confirmButtonText: 'Aceptar'
           });
         }
       });
@@ -713,7 +714,7 @@ __webpack_require__.r(__webpack_exports__);
         allowOutsideClick: false,
         text: 'POR FAVOR INFORMA ÉSTE PROBLEMA A UN ADMINISTRADOR',
         footer: 'Por favor informa éste problema a un administrador ',
-        confirmButtonText: 'Ok'
+        confirmButtonText: 'Aceptar'
       }).then(function (result) {
         if (result.isConfirmed) {
           _this5.$refs.frmVotos.reset();
@@ -1353,16 +1354,6 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "grid" }, [
-                        _c("div", { staticClass: "text-red-700" }, [
-                          _vm.infoVotosValidos
-                            ? _c(
-                                "h3",
-                                { staticClass: "text-red-700 text-sm" },
-                                [_vm._v(_vm._s(_vm.infoVotosValidos))]
-                              )
-                            : _vm._e()
-                        ]),
-                        _vm._v(" "),
                         _c(
                           "table",
                           { staticClass: "w-full text-sm text-left" },

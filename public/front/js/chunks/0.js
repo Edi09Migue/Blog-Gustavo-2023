@@ -746,7 +746,7 @@ var render = function() {
                                   id: "recintos",
                                   label: "nombre",
                                   options: _vm.recintos,
-                                  placeholder: "Buscar el recinto",
+                                  placeholder: "Seleccione el recinto",
                                   loading: _vm.loadingRecintos
                                 },
                                 on: { input: _vm.selectJuntasXRecinto },
@@ -793,10 +793,7 @@ var render = function() {
                                                   _vm._s(search) +
                                                     "\r\n                                            "
                                                 )
-                                              ]),
-                                              _vm._v(
-                                                ".\r\n                                            "
-                                              )
+                                              ])
                                             ]
                                           : _c(
                                               "em",
@@ -805,7 +802,7 @@ var render = function() {
                                               },
                                               [
                                                 _vm._v(
-                                                  "Comience a escribir para buscar un recinto."
+                                                  "Comience a escribir para buscar un recinto"
                                                 )
                                               ]
                                             )
@@ -873,7 +870,7 @@ var render = function() {
                                   id: "juntas",
                                   label: "para_select",
                                   options: _vm.juntas,
-                                  placeholder: "Buscar la junta",
+                                  placeholder: "Seleccione la junta",
                                   loading: _vm.loadingJuntas
                                 },
                                 on: { input: _vm.selectJunta },
@@ -918,10 +915,7 @@ var render = function() {
                                                   _vm._s(search) +
                                                     "\r\n                                            "
                                                 )
-                                              ]),
-                                              _vm._v(
-                                                ".\r\n                                            "
-                                              )
+                                              ])
                                             ]
                                           : _c(
                                               "em",
@@ -930,7 +924,7 @@ var render = function() {
                                               },
                                               [
                                                 _vm._v(
-                                                  "Comience a escribir para buscar una junta."
+                                                  "Comience a escribir para buscar una junta"
                                                 )
                                               ]
                                             )
@@ -989,7 +983,7 @@ var render = function() {
                                 "block mb-2 text-sm font-medium text-gray-900",
                               attrs: { for: "multiple_files" }
                             },
-                            [_vm._v("Seleccionar la imagen de la acta")]
+                            [_vm._v("Seleccione la imágen del acta")]
                           ),
                           _vm._v(" "),
                           _c("div", { staticClass: "block" }, [
@@ -1083,7 +1077,7 @@ var render = function() {
                                     attrs: {
                                       type: "info",
                                       description:
-                                        "No existe ningun recinto para registar actas! Gracias por tu trabajo"
+                                        "¡No existe ningún recinto para registar actas! Gracias por tu trabajo"
                                     }
                                   })
                                 ]
@@ -1110,7 +1104,7 @@ var render = function() {
                                 staticClass:
                                   "mt-2 text-sm text-center text-gray-500 dark:text-gray-400"
                               },
-                              [_vm._v("Vista previa de la imagen del acta")]
+                              [_vm._v("Vista previa del acta")]
                             ),
                             _vm._v(" "),
                             _c("img", {

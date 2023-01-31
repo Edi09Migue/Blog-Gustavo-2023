@@ -37160,14 +37160,10 @@ var staticRenderFns = [
           "a",
           {
             staticClass:
-              "text-sm font-bold leading-relaxed inline-block py-2 whitespace-nowrap uppercase text-white",
+              "text-lg font-bold leading-relaxed inline-block py-2 whitespace-nowrap text-white",
             attrs: { href: "#" }
           },
-          [
-            _vm._v(
-              "\r\n                    Control Electoral Ec\r\n                "
-            )
-          ]
+          [_vm._v("\r\n                    ceec\r\n                ")]
         )
       ]
     )

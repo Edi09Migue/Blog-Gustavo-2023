@@ -141,9 +141,9 @@
                                 
                                 <!-- body acta  -->
                                 <div class="grid">
-                                    <div class="text-red-700">
+                                    <!-- <div class="text-red-700">
                                         <h3 class="text-red-700 text-sm" v-if="infoVotosValidos">{{ infoVotosValidos }}</h3>
-                                    </div>
+                                    </div> -->
                                     <table class="w-full text-sm text-left">
                                         <thead class="text-xs text-negro uppercase bg-plomo-light">
                                             <tr class="bg-plomo-light">
@@ -296,7 +296,7 @@ export default {
 
             this.infoVotosValidos = ''
             if(this.sumaTotal!=this.acta.total_votantes){
-                this.infoVotosValidos = 'Esta acta puede estar inconsistente, revisar que todo este correcto, dar click en Guardar, y luego Guardar acta inconsistente.'
+                this.infoVotosValidos = 'Esta acta puede estar inconsistente, por favor revisar que todo este correcto y dar click en Guardar Acta Inconsistente.'
                 return false
             }else{
                 return true
@@ -382,13 +382,13 @@ export default {
         },
         addVoto(event){
 
-            let buttonText = 'Ok Guardar'
+            let buttonText = 'Guardar'
             // Verificar si todo esta bien
             let infromacion = ''
             if(!this.calcularSumaTotal()){
-                infromacion = `<p class="text-red-500">Esta es una Acta Inconsistente porque el el Total de Votantes no coincide con el Total votos, por favor revisar. </p>
-                <p class="text-blue-900"> Si ya lo hizo, puede dar click en Guardar acta inconsistente</p>`
-                buttonText = 'Guardar acta inconsistente'
+                infromacion = `<p class="text-red-500">Esta es una Acta Inconsistente porque el Total de Votantes no coincide con el Total de Votos BNC, por favor revisar. </p>
+                <p class="text-blue-900"> Si ya lo hizo, puede dar click en Guardar Acta Inconsistente</p>`
+                buttonText = 'Guardar Acta Inconsistente'
                 this.acta.inconsistente = true
             }
 
@@ -419,7 +419,7 @@ export default {
                                 <td class="border border-curren text-lg"> ${ this.votos_candidatos } </td>
                             </tr>
                             <tr class="border-blanco dark:bg-blanco dark:border-gray-700 ${ this.sumaTotal != this.acta.total_votantes ? 'bg-red-50' : 'bg-lime-50' }">
-                                <td class="border border-curren text-lg">Total Votos</td>
+                                <td class="border border-curren text-lg">Total Votos BNC</td>
                                 <td class="border border-curren text-lg"> ${ this.sumaTotal } </td>
                             </tr>
                         </table>
@@ -502,8 +502,8 @@ export default {
             // <p> <b></b> Minuto. <strong></strong> Segundos </p>
             let timerInterval
             this.$swal({
-                title: 'Aun no existe actas para revisar los votos!',
-                html: `${this.stop==1 ? '<p> Por favor espere </p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>'} `,
+                title: '¡Aún no existen actas para digitalizar los votos!',
+                html: `${this.stop==1 ? '<p> Por favor espere. </p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>'} `,
                 timer: 60000,
                 timerProgressBar: true,
                 didOpen: () => {
@@ -538,7 +538,8 @@ export default {
                     this.$swal({
                         icon: 'info',
                         title: 'Gracias por tu trabajo',
-                        text: 'Ya no existe ninguna acta para registar los votos!'
+                        text: '¡Ya no existen actas para digitalizar los votos!',
+                        confirmButtonText: 'Aceptar',
                     })
                 }
             })
@@ -552,7 +553,7 @@ export default {
                 allowOutsideClick: false,
                 text: 'POR FAVOR INFORMA ÉSTE PROBLEMA A UN ADMINISTRADOR',
                 footer: 'Por favor informa éste problema a un administrador ',
-                confirmButtonText: 'Ok',
+                confirmButtonText: 'Aceptar',
             }).then((result) => {
                 if (result.isConfirmed) {
                     this.$refs.frmVotos.reset();

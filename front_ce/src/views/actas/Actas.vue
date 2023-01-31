@@ -26,7 +26,7 @@
                                         class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                         label="nombre"
                                         :options="recintos"
-                                        placeholder="Buscar el recinto"
+                                        placeholder="Seleccione el recinto"
                                         @input="selectJuntasXRecinto"
                                         v-model="recinto"
                                         :loading="loadingRecintos"
@@ -48,9 +48,9 @@
                                             <template v-if="searching">
                                                 No se encontraron resultados para
                                                 <em>{{ search }}
-                                            </em>.
+                                            </em>
                                             </template>
-                                            <em v-else style="opacity: 0.5">Comience a escribir para buscar un recinto.</em>
+                                            <em v-else style="opacity: 0.5">Comience a escribir para buscar un recinto</em>
                                         </template>
                                     </v-select>
                                 </div>
@@ -63,7 +63,7 @@
                                         class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                         label="para_select"
                                         :options="juntas"
-                                        placeholder="Buscar la junta"
+                                        placeholder="Seleccione la junta"
                                         @input="selectJunta"
                                         v-model="junta"
                                         :loading="loadingJuntas"
@@ -85,16 +85,16 @@
                                             <template v-if="searching">
                                                 No se encontraron resultados para
                                                 <em>{{ search }}
-                                            </em>.
+                                            </em>
                                             </template>
-                                            <em v-else style="opacity: 0.5">Comience a escribir para buscar una junta.</em>
+                                            <em v-else style="opacity: 0.5">Comience a escribir para buscar una junta</em>
                                         </template>
                                     </v-select>
                                 </div>
 
                                 <!-- file -->
                                 <div class="bg-white mb-4">
-                                    <label class="block mb-2 text-sm font-medium text-gray-900" for="multiple_files">Seleccionar la imagen de la acta</label>
+                                    <label class="block mb-2 text-sm font-medium text-gray-900" for="multiple_files">Seleccione la imágen del acta</label>
                                     <div class="block">
                                         <span class="sr-only">Choose File</span>
                                         <input type="file" @change="selectImagen" accept="image/*" required class="block w-full text-sm text-gray-500 file:border-current  file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-negro file:text-blanco hover:file:bg-plomo"/>
@@ -114,7 +114,7 @@
                                         </button>
                                     </template>
                                     <template v-else>
-                                        <alert :type="'info'" :description="'No existe ningun recinto para registar actas! Gracias por tu trabajo'" />
+                                        <alert :type="'info'" :description="'¡No existe ningún recinto para registar actas! Gracias por tu trabajo'" />
                                     </template>
                                 </div>
 
@@ -124,7 +124,7 @@
                             <!-- Imagen preiew -->
                             <div class="min-w-[50%] sm:min-w-[100%] md:min-w-[50%] pl-2 flex items-center rounded">
                                 <figure class="max-w-lg m-auto w-full">
-                                    <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Vista previa de la imagen del acta</figcaption>
+                                    <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Vista previa del acta</figcaption>
                                     <img class="rounded-lg" :src="image ? image :'images/control_electoral/no-imagen-acta.png'" height="224px" alt="">
                                 </figure>
                             </div>
