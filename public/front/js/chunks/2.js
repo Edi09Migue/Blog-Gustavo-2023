@@ -1,1 +1,1740 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[2],{AWuV:function(t,e,r){"use strict";r.r(e);var n=r("o0o1"),o=r.n(n),a=r("3fBN");function i(t,e,r,n,o,a,i){try{var s=t[a](i),l=s.value}catch(t){return void r(t)}s.done?e(l):Promise.resolve(l).then(n,o)}var s={name:"Login",data:function(){return{data:{email:null,password:null},processing:!1,errorMessage:null,errors:[],error:{type:null,error:null}}},watch:{errors:function(t){this.error=t.length>0?t[0]:{type:null,error:null}}},methods:{login:function(){var t,e=this;return(t=o.a.mark((function t(){var r,n;return o.a.wrap((function(t){for(;;)switch(t.prev=t.next){case 0:if(!e.validation()){t.next=6;break}return e.processing=!0,t.next=4,a.a.post("auth/login",e.data);case 4:(r=t.sent).data.status?(n=r.data,window.localStorage.setItem("token",n.accessToken),window.localStorage.setItem("user",JSON.stringify(n.userData)),"imagenes"==n.userData.role?e.$router.push({path:"actas"}):"digitalizador"==n.userData.role&&e.$router.push({path:"votos"}),e.$store.commit("SET_USER_DATA",n.userData),e.$store.commit("SET_TOKEN",n.accessToken)):e.errorMessage=r.data.msg;case 6:e.processing=!1;case 7:case"end":return t.stop()}}),t)})),function(){var e=this,r=arguments;return new Promise((function(n,o){var a=t.apply(e,r);function s(t){i(a,n,o,s,l,"next",t)}function l(t){i(a,n,o,s,l,"throw",t)}s(void 0)}))})()},validation:function(){return this.errors.splice(0,this.errors.length),null!=this.data.email&&""!=this.data.email||this.errors.push({type:"email",error:"El correo electrónico es requerido"}),null!=this.data.password&&""!=this.data.password||this.errors.push({type:"password",error:"La contraseña es requerida"}),!(this.errors.length>0)}}},l=r("KHd+"),c=Object(l.a)(s,(function(){var t=this,e=t.$createElement,r=t._self._c||e;return r("div",{staticClass:"grid place-items-center h-screen box-main"},[r("div",{staticClass:"max-w-lg sm:w-[90%] md:w-[40%] lg:w-[25%] mx-auto h=1/2 shadow-xl rounded my-8"},[r("div",{staticClass:" bg-[#21212196] box-login"},[t._m(0),t._v(" "),r("div",{staticClass:"pt-2 pb-1"},[r("form",{on:{submit:function(e){return e.preventDefault(),t.login(e)}}},[r("div",{staticClass:"w-4/5 mx-auto"},[t._m(1),t._v(" "),r("div",{staticClass:"w-full"},[r("div",{staticClass:"flex items-center bg-white rounded-full shadow-md"},[r("div",{staticClass:"px-3 rounded-full w-[35px] h-[35px] border-negro bg-negro flex items-center text-blanco mr-2"},[r("font-awesome-icon",{attrs:{icon:"fa-solid fa-user"}})],1),t._v(" "),r("input",{directives:[{name:"model",rawName:"v-model",value:t.data.email,expression:"data.email"}],staticClass:"rounded-full w-full h-8 focus:outline-none",attrs:{type:"email",name:"email",placeholder:"Correo electrónico"},domProps:{value:t.data.email},on:{input:function(e){e.target.composing||t.$set(t.data,"email",e.target.value)}}})]),t._v(" "),"email"==t.error.type?r("span",{staticClass:"pl-2 inline-flex text-sm text-red-700"},[t._v(t._s(t.error.error)+"!")]):t._e()]),t._v(" "),r("div",{staticClass:"w-full"},[r("div",{staticClass:"flex items-center bg-white rounded-full shadow-md mt-4"},[r("input",{directives:[{name:"model",rawName:"v-model",value:t.data.password,expression:"data.password"}],staticClass:"pl-4 rounded-full w-full h-8 focus:outline-none",staticStyle:{"padding-left":"12px"},attrs:{type:"password",name:"password",placeholder:"Contraseña"},domProps:{value:t.data.password},on:{input:function(e){e.target.composing||t.$set(t.data,"password",e.target.value)}}}),t._v(" "),r("div",{staticClass:"px-3 rounded-full w-[35px] h-[35px] border-negro bg-negro flex items-center text-blanco"},[r("font-awesome-icon",{attrs:{icon:"fa-solid fa-unlock"}})],1)]),t._v(" "),"password"==t.error.type?r("span",{staticClass:"pl-2 inline-flex text-sm text-red-700"},[t._v(t._s(t.error.error)+"!")]):t._e()]),t._v(" "),r("div",{staticClass:"flex justify-center pt-5 w-full"},[r("button",{staticClass:"flex justify-center w-full border-solid border border-blanco rounded-xl bg-blanco",attrs:{type:"submit"}},[r("span",{staticClass:"py-1"},[t._v(" Iniciar sesión ")]),t._v(" "),r("span",{staticClass:"py-1 px-2 text-black"},[t.processing?r("svg",{staticClass:"h-6 w-6 animate-spin",attrs:{xmlns:"http://www.w3.org/2000/svg",fill:"none",viewBox:"0 0 24 24",stroke:"currentColor"}},[r("path",{attrs:{"stroke-linecap":"round","stroke-linejoin":"round","stroke-width":"2",d:"M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"}})]):t._e()])])]),t._v(" "),r("div",{staticClass:"pt-5 w-full"},[r("p",{staticClass:"inline-flex text-sm text-indigo-900"},[t._v(" "+t._s(t.errorMessage)+" ")])])])])])]),t._v(" "),t._m(2)])])}),[function(){var t=this.$createElement,e=this._self._c||t;return e("div",{staticClass:"text-center text-blanco py-4 uppercase text-xl flex justify-center"},[e("img",{staticClass:"sm:w-1/2 md:1/2",attrs:{src:"/images/login/ceec.png",alt:"Control Electoral"}})])},function(){var t=this.$createElement,e=this._self._c||t;return e("div",{staticClass:"mb-8"},[e("p",[this._v("Inicia sesión en tu cuenta")])])},function(){var t=this.$createElement,e=this._self._c||t;return e("div",{staticClass:"text-center text-blanco py-1 uppercase text-xl flex justify-center"},[e("img",{staticClass:"sm:w-1/2 md:1/2",attrs:{src:"/images/login/solidariamente.png",alt:"Control Electoral"}})])}],!1,null,null,null);e.default=c.exports},ls82:function(t,e,r){var n=function(t){"use strict";var e=Object.prototype,r=e.hasOwnProperty,n="function"==typeof Symbol?Symbol:{},o=n.iterator||"@@iterator",a=n.asyncIterator||"@@asyncIterator",i=n.toStringTag||"@@toStringTag";function s(t,e,r){return Object.defineProperty(t,e,{value:r,enumerable:!0,configurable:!0,writable:!0}),t[e]}try{s({},"")}catch(t){s=function(t,e,r){return t[e]=r}}function l(t,e,r,n){var o=e&&e.prototype instanceof f?e:f,a=Object.create(o.prototype),i=new E(n||[]);return a._invoke=function(t,e,r){var n="suspendedStart";return function(o,a){if("executing"===n)throw new Error("Generator is already running");if("completed"===n){if("throw"===o)throw a;return L()}for(r.method=o,r.arg=a;;){var i=r.delegate;if(i){var s=x(i,r);if(s){if(s===u)continue;return s}}if("next"===r.method)r.sent=r._sent=r.arg;else if("throw"===r.method){if("suspendedStart"===n)throw n="completed",r.arg;r.dispatchException(r.arg)}else"return"===r.method&&r.abrupt("return",r.arg);n="executing";var l=c(t,e,r);if("normal"===l.type){if(n=r.done?"completed":"suspendedYield",l.arg===u)continue;return{value:l.arg,done:r.done}}"throw"===l.type&&(n="completed",r.method="throw",r.arg=l.arg)}}}(t,r,i),a}function c(t,e,r){try{return{type:"normal",arg:t.call(e,r)}}catch(t){return{type:"throw",arg:t}}}t.wrap=l;var u={};function f(){}function h(){}function d(){}var p={};p[o]=function(){return this};var v=Object.getPrototypeOf,m=v&&v(v(C([])));m&&m!==e&&r.call(m,o)&&(p=m);var g=d.prototype=f.prototype=Object.create(p);function y(t){["next","throw","return"].forEach((function(e){s(t,e,(function(t){return this._invoke(e,t)}))}))}function w(t,e){var n;this._invoke=function(o,a){function i(){return new e((function(n,i){!function n(o,a,i,s){var l=c(t[o],t,a);if("throw"!==l.type){var u=l.arg,f=u.value;return f&&"object"==typeof f&&r.call(f,"__await")?e.resolve(f.__await).then((function(t){n("next",t,i,s)}),(function(t){n("throw",t,i,s)})):e.resolve(f).then((function(t){u.value=t,i(u)}),(function(t){return n("throw",t,i,s)}))}s(l.arg)}(o,a,n,i)}))}return n=n?n.then(i,i):i()}}function x(t,e){var r=t.iterator[e.method];if(void 0===r){if(e.delegate=null,"throw"===e.method){if(t.iterator.return&&(e.method="return",e.arg=void 0,x(t,e),"throw"===e.method))return u;e.method="throw",e.arg=new TypeError("The iterator does not provide a 'throw' method")}return u}var n=c(r,t.iterator,e.arg);if("throw"===n.type)return e.method="throw",e.arg=n.arg,e.delegate=null,u;var o=n.arg;return o?o.done?(e[t.resultName]=o.value,e.next=t.nextLoc,"return"!==e.method&&(e.method="next",e.arg=void 0),e.delegate=null,u):o:(e.method="throw",e.arg=new TypeError("iterator result is not an object"),e.delegate=null,u)}function _(t){var e={tryLoc:t[0]};1 in t&&(e.catchLoc=t[1]),2 in t&&(e.finallyLoc=t[2],e.afterLoc=t[3]),this.tryEntries.push(e)}function b(t){var e=t.completion||{};e.type="normal",delete e.arg,t.completion=e}function E(t){this.tryEntries=[{tryLoc:"root"}],t.forEach(_,this),this.reset(!0)}function C(t){if(t){var e=t[o];if(e)return e.call(t);if("function"==typeof t.next)return t;if(!isNaN(t.length)){var n=-1,a=function e(){for(;++n<t.length;)if(r.call(t,n))return e.value=t[n],e.done=!1,e;return e.value=void 0,e.done=!0,e};return a.next=a}}return{next:L}}function L(){return{value:void 0,done:!0}}return h.prototype=g.constructor=d,d.constructor=h,h.displayName=s(d,i,"GeneratorFunction"),t.isGeneratorFunction=function(t){var e="function"==typeof t&&t.constructor;return!!e&&(e===h||"GeneratorFunction"===(e.displayName||e.name))},t.mark=function(t){return Object.setPrototypeOf?Object.setPrototypeOf(t,d):(t.__proto__=d,s(t,i,"GeneratorFunction")),t.prototype=Object.create(g),t},t.awrap=function(t){return{__await:t}},y(w.prototype),w.prototype[a]=function(){return this},t.AsyncIterator=w,t.async=function(e,r,n,o,a){void 0===a&&(a=Promise);var i=new w(l(e,r,n,o),a);return t.isGeneratorFunction(r)?i:i.next().then((function(t){return t.done?t.value:i.next()}))},y(g),s(g,i,"Generator"),g[o]=function(){return this},g.toString=function(){return"[object Generator]"},t.keys=function(t){var e=[];for(var r in t)e.push(r);return e.reverse(),function r(){for(;e.length;){var n=e.pop();if(n in t)return r.value=n,r.done=!1,r}return r.done=!0,r}},t.values=C,E.prototype={constructor:E,reset:function(t){if(this.prev=0,this.next=0,this.sent=this._sent=void 0,this.done=!1,this.delegate=null,this.method="next",this.arg=void 0,this.tryEntries.forEach(b),!t)for(var e in this)"t"===e.charAt(0)&&r.call(this,e)&&!isNaN(+e.slice(1))&&(this[e]=void 0)},stop:function(){this.done=!0;var t=this.tryEntries[0].completion;if("throw"===t.type)throw t.arg;return this.rval},dispatchException:function(t){if(this.done)throw t;var e=this;function n(r,n){return i.type="throw",i.arg=t,e.next=r,n&&(e.method="next",e.arg=void 0),!!n}for(var o=this.tryEntries.length-1;o>=0;--o){var a=this.tryEntries[o],i=a.completion;if("root"===a.tryLoc)return n("end");if(a.tryLoc<=this.prev){var s=r.call(a,"catchLoc"),l=r.call(a,"finallyLoc");if(s&&l){if(this.prev<a.catchLoc)return n(a.catchLoc,!0);if(this.prev<a.finallyLoc)return n(a.finallyLoc)}else if(s){if(this.prev<a.catchLoc)return n(a.catchLoc,!0)}else{if(!l)throw new Error("try statement without catch or finally");if(this.prev<a.finallyLoc)return n(a.finallyLoc)}}}},abrupt:function(t,e){for(var n=this.tryEntries.length-1;n>=0;--n){var o=this.tryEntries[n];if(o.tryLoc<=this.prev&&r.call(o,"finallyLoc")&&this.prev<o.finallyLoc){var a=o;break}}a&&("break"===t||"continue"===t)&&a.tryLoc<=e&&e<=a.finallyLoc&&(a=null);var i=a?a.completion:{};return i.type=t,i.arg=e,a?(this.method="next",this.next=a.finallyLoc,u):this.complete(i)},complete:function(t,e){if("throw"===t.type)throw t.arg;return"break"===t.type||"continue"===t.type?this.next=t.arg:"return"===t.type?(this.rval=this.arg=t.arg,this.method="return",this.next="end"):"normal"===t.type&&e&&(this.next=e),u},finish:function(t){for(var e=this.tryEntries.length-1;e>=0;--e){var r=this.tryEntries[e];if(r.finallyLoc===t)return this.complete(r.completion,r.afterLoc),b(r),u}},catch:function(t){for(var e=this.tryEntries.length-1;e>=0;--e){var r=this.tryEntries[e];if(r.tryLoc===t){var n=r.completion;if("throw"===n.type){var o=n.arg;b(r)}return o}}throw new Error("illegal catch attempt")},delegateYield:function(t,e,r){return this.delegate={iterator:C(t),resultName:e,nextLoc:r},"next"===this.method&&(this.arg=void 0),u}},t}(t.exports);try{regeneratorRuntime=n}catch(t){Function("r","regeneratorRuntime = r")(n)}},o0o1:function(t,e,r){t.exports=r("ls82")}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[2],{
+
+/***/ "./front_ce/src/components/Alert.vue":
+/*!*******************************************!*\
+  !*** ./front_ce/src/components/Alert.vue ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Alert_vue_vue_type_template_id_41b477b2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Alert.vue?vue&type=template&id=41b477b2& */ "./front_ce/src/components/Alert.vue?vue&type=template&id=41b477b2&");
+/* harmony import */ var _Alert_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Alert.vue?vue&type=script&lang=js& */ "./front_ce/src/components/Alert.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Alert_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Alert_vue_vue_type_template_id_41b477b2___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Alert_vue_vue_type_template_id_41b477b2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "front_ce/src/components/Alert.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./front_ce/src/components/Alert.vue?vue&type=script&lang=js&":
+/*!********************************************************************!*\
+  !*** ./front_ce/src/components/Alert.vue?vue&type=script&lang=js& ***!
+  \********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Alert_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Alert.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/src/components/Alert.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Alert_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./front_ce/src/components/Alert.vue?vue&type=template&id=41b477b2&":
+/*!**************************************************************************!*\
+  !*** ./front_ce/src/components/Alert.vue?vue&type=template&id=41b477b2& ***!
+  \**************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Alert_vue_vue_type_template_id_41b477b2___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Alert.vue?vue&type=template&id=41b477b2& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/src/components/Alert.vue?vue&type=template&id=41b477b2&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Alert_vue_vue_type_template_id_41b477b2___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Alert_vue_vue_type_template_id_41b477b2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./front_ce/src/views/votos/Votos.vue":
+/*!********************************************!*\
+  !*** ./front_ce/src/views/votos/Votos.vue ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Votos_vue_vue_type_template_id_09a6ceba___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Votos.vue?vue&type=template&id=09a6ceba& */ "./front_ce/src/views/votos/Votos.vue?vue&type=template&id=09a6ceba&");
+/* harmony import */ var _Votos_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Votos.vue?vue&type=script&lang=js& */ "./front_ce/src/views/votos/Votos.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Votos_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Votos_vue_vue_type_template_id_09a6ceba___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Votos_vue_vue_type_template_id_09a6ceba___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "front_ce/src/views/votos/Votos.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./front_ce/src/views/votos/Votos.vue?vue&type=script&lang=js&":
+/*!*********************************************************************!*\
+  !*** ./front_ce/src/views/votos/Votos.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Votos_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Votos.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/src/views/votos/Votos.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Votos_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./front_ce/src/views/votos/Votos.vue?vue&type=template&id=09a6ceba&":
+/*!***************************************************************************!*\
+  !*** ./front_ce/src/views/votos/Votos.vue?vue&type=template&id=09a6ceba& ***!
+  \***************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Votos_vue_vue_type_template_id_09a6ceba___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Votos.vue?vue&type=template&id=09a6ceba& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/src/views/votos/Votos.vue?vue&type=template&id=09a6ceba&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Votos_vue_vue_type_template_id_09a6ceba___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Votos_vue_vue_type_template_id_09a6ceba___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/src/components/Alert.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./front_ce/src/components/Alert.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {},
+  props: {
+    type: {
+      type: String,
+      requiere: true
+    },
+    description: {
+      type: String,
+      requiere: true
+    }
+  },
+  data: function data() {
+    return {
+      color: ''
+    };
+  },
+  computed: {
+    title: function title() {
+      var title = '';
+
+      switch (this.type) {
+        case 'error':
+          this.color = 'error';
+          title = 'Error';
+          break;
+
+        case 'info':
+          this.color = 'info';
+          title = 'Info';
+          break;
+
+        default:
+          this.color = 'warning';
+          title = 'Warning';
+          break;
+      }
+
+      return title;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/src/views/votos/Votos.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./front_ce/src/views/votos/Votos.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../axios */ "./front_ce/src/axios.js");
+/* harmony import */ var _components_Alert_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/Alert.vue */ "./front_ce/src/components/Alert.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    Alert: _components_Alert_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      acta: {
+        id: null,
+        codigo: null,
+        junta_id: null,
+        total_votantes: 0,
+        tv_1: 0,
+        tv_2: 0,
+        tv_3: 0,
+        votos_blancos: 0,
+        vb_1: 0,
+        vb_2: 0,
+        vb_3: 0,
+        votos_nulos: 0,
+        vn_1: 0,
+        vn_2: 0,
+        vn_3: 0,
+        estado: 0,
+        ingresada_por: true
+      },
+      candidatos_votos: [],
+      image: null,
+      processing: false,
+      errorMessage: null,
+      infoVotosValidos: null,
+      candidatos: [],
+      sumaTotal: 0,
+      votos_candidatos: 0,
+      alert: true,
+      stop: 0
+    };
+  },
+  created: function created() {
+    this.fetchJunta();
+  },
+  computed: {
+    user: function user() {
+      // return this.$store.getters.getUser
+      var x = window.localStorage.getItem('user');
+      return JSON.parse(x);
+    },
+    token: function token() {
+      return window.localStorage.getItem('token');
+    }
+  },
+  methods: {
+    calcularTotalVotantes: function calcularTotalVotantes(value) {
+      var total = this.acta.tv_1 + this.acta.tv_2 + this.acta.tv_3;
+      this.acta.total_votantes = parseInt(total);
+    },
+    calcularTotalBlancos: function calcularTotalBlancos(value) {
+      var total = this.acta.vb_1 + this.acta.vb_2 + this.acta.vb_3;
+      this.acta.votos_blancos = parseInt(total);
+    },
+    calcularTotalNulos: function calcularTotalNulos(value) {
+      var total = this.acta.vn_1 + this.acta.vn_2 + this.acta.vn_3;
+      this.acta.votos_nulos = parseInt(total);
+    },
+    calcularSumaTotal: function calcularSumaTotal() {
+      this.votos_candidatos = this.candidatos_votos.reduce(function (total, valor) {
+        return total + valor.votos;
+      }, 0);
+      this.sumaTotal = this.votos_candidatos + (this.acta.votos_blancos + this.acta.votos_nulos);
+      this.infoVotosValidos = '';
+
+      if (this.sumaTotal != this.acta.total_votantes) {
+        this.infoVotosValidos = 'Esta acta puede estar inconsistente, por favor revisar que todo este correcto y dar click en Guardar Acta Inconsistente.';
+        return false;
+      } else {
+        return true;
+      }
+    },
+    calcularVotoCandidato: function calcularVotoCandidato(index) {
+      var v_1 = this.candidatos_votos[index].v_1;
+      var v_2 = this.candidatos_votos[index].v_2;
+      var v_3 = this.candidatos_votos[index].v_3;
+      var total = v_1 + v_2 + v_3;
+      this.candidatos_votos[index].votos = parseInt(total);
+      this.infoVotosValidos = '';
+    },
+    fetchJunta: function fetchJunta() {
+      var _this = this;
+
+      this.processing = true;
+      _axios__WEBPACK_IMPORTED_MODULE_0__["http"].get("control-electoral/last-acta", {
+        params: {
+          user: this.user.id
+        },
+        headers: {
+          Authorization: "Bearer ".concat(this.token),
+          'Content-Type': 'application/json'
+        }
+      }).then(function (response) {
+        var actaId = null;
+        var procesadaPor = null;
+
+        if (response.data.status) {
+          _this.acta = response.data.acta;
+          actaId = _this.acta.id;
+          procesadaPor = _this.user.id;
+          _this.stop = 0;
+        } else {
+          _this.stop++;
+
+          _this.showNoActas();
+
+          _this.acta.imagenOriginalURL = null;
+          _this.acta.id = null;
+          _this.acta.codigo = null;
+        } // Celdas para total votantes
+
+
+        _this.acta.tv_1 = 0;
+        _this.acta.tv_2 = 0;
+        _this.acta.tv_3 = 0; // Celdas para botos blancos
+
+        _this.acta.vb_1 = 0;
+        _this.acta.vb_2 = 0;
+        _this.acta.vb_3 = 0; // Celdas para votos nulos
+
+        _this.acta.vn_1 = 0;
+        _this.acta.vn_2 = 0;
+        _this.acta.vn_3 = 0;
+        _this.candidatos = response.data.candidatos;
+        _this.candidatos_votos = response.data.candidatos.map(function (candidato) {
+          return {
+            candidato_id: candidato.id,
+            acta_id: actaId,
+            v_1: 0,
+            v_2: 0,
+            v_3: 0,
+            votos: 0,
+            procesada_por: procesadaPor
+          };
+        });
+        _this.processing = false;
+      })["catch"](function (error) {
+        console.log(error);
+        _this.errorMessage = error;
+        _this.processing = false;
+      });
+    },
+    addVoto: function addVoto(event) {
+      var _this2 = this;
+
+      var buttonText = 'Guardar'; // Verificar si todo esta bien
+
+      var infromacion = '';
+
+      if (!this.calcularSumaTotal()) {
+        infromacion = "<p class=\"text-red-500\">Esta es una Acta Inconsistente porque el Total de Votantes no coincide con el Total de Votos BNC, por favor revisar. </p>\n                <p class=\"text-blue-900\"> Si ya lo hizo, puede dar click en Guardar Acta Inconsistente</p>";
+        buttonText = 'Guardar Acta Inconsistente';
+        this.acta.inconsistente = true;
+      }
+
+      this.$swal({
+        title: 'Resumen',
+        position: 'top-end',
+        allowOutsideClick: false,
+        text: 'POR FAVOR INFORMA ÉSTE PROBLEMA A UN ADMINISTRADOR',
+        html: "<div class=\"text-negro\">\n                        <table class=\"w-full text-sm text-left\">\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700 text-center\">\n                                <th class=\"border border-curren text-lg\" colspan=\"2\">ACTA ".concat(this.acta.codigo, " </th>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700 ").concat(this.sumaTotal != this.acta.total_votantes ? 'bg-red-50' : 'bg-lime-50', " \">\n                                <td class=\"border border-curren text-lg\">Total de Votantes</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.acta.total_votantes, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700\">\n                                <td class=\"border border-curren text-lg\">Votos Blancos</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.acta.votos_blancos, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700\">\n                                <td class=\"border border-curren text-lg\">Votos Nulos</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.acta.votos_nulos, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700\">\n                                <td class=\"border border-curren text-lg\">Votos Candidatos</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.votos_candidatos, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700 ").concat(this.sumaTotal != this.acta.total_votantes ? 'bg-red-50' : 'bg-lime-50', "\">\n                                <td class=\"border border-curren text-lg\">Total Votos BNC</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.sumaTotal, " </td>\n                            </tr>\n                        </table>\n                        <div class=\"text-sm text-justify w-full\">\n                            ").concat(infromacion, "\n                        </div>\n                <div>"),
+        confirmButtonText: buttonText,
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          // Confirma y enviar a guardar
+          _this2.save(event);
+        } else if (result.isDenied) {
+          _this2.$swal('Changes are not saved', '', 'info');
+        }
+      });
+    },
+    save: function save(event) {
+      var _this3 = this;
+
+      this.processing = true; // Eliminar datos innecesarios 
+
+      delete this.acta.imagenURL;
+      delete this.acta.media;
+      this.candidatos_votos = this.candidatos_votos.map(function (item) {
+        return {
+          candidato_id: item.candidato_id,
+          acta_id: item.acta_id,
+          votos: item.votos,
+          procesada_por: item.procesada_por
+        };
+      }); // Crear data para el put
+
+      var data = {
+        acta: this.acta,
+        candidatos_votos: this.candidatos_votos
+      }; // Envar a guardar
+
+      _axios__WEBPACK_IMPORTED_MODULE_0__["http"].put("control-electoral/actas/".concat(this.acta.id), data, {
+        headers: {
+          Authorization: "Bearer ".concat(this.token),
+          'Content-Type': 'application/json'
+        }
+      }).then(function (response) {
+        if (response.data.status) {
+          event.target.reset();
+
+          _this3.fetchJunta();
+
+          _this3.showSucces();
+
+          _this3.sumaTotal = 0;
+          _this3.infoVotosValidos = '';
+          _this3.acta.imagenOriginalURL = null;
+        } else {
+          event.target.reset();
+          _this3.infoVotosValidos = '';
+
+          _this3.showWarning(response.data.msg);
+        }
+
+        _this3.processing = false;
+      })["catch"](function (error) {
+        console.log(error);
+        _this3.errorMessage = error;
+        _this3.processing = false;
+      });
+    },
+    showNoActas: function showNoActas() {
+      var _this4 = this;
+
+      // <p> <b></b> Minuto. <strong></strong> Segundos </p>
+      var timerInterval;
+      this.$swal({
+        title: '¡Aún no existen actas para digitalizar los votos!',
+        html: "".concat(this.stop == 1 ? '<p> Por favor espere. estamos buscando actas</p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>'),
+        footer: "<div class=\"flex\">\n                            <button id=\"buscar_ahora\" class=\"flex justify-center w-32 border-solid border border-negro rounded bg-negro hover:bg-plomo\">\n                                <span class=\"py-2 text-blanco\"> Buscar Ahora </span>\n                            </button>\n                            <button id=\"cancelar_timer\" class=\"ml-2 flex justify-center w-32 border-solid border border-red-500 rounded bg-red-500 hover:bg-red-400\">\n                                <span class=\"py-2 text-blanco\"> Cancelar </span>\n                            </button>\n                        </div>\n                        ",
+        timer: 60000,
+        timerProgressBar: true,
+        didOpen: function didOpen() {
+          var content = _this4.$swal.getFooter();
+
+          console.log(content, _this4.$swal);
+          var $ = content.querySelector.bind(content);
+
+          _this4.$swal.showLoading();
+
+          var buscar_ahora = $('#buscar_ahora');
+          buscar_ahora.addEventListener('click', function () {
+            _this4.$swal.stopTimer();
+
+            clearInterval(timerInterval);
+
+            _this4.$swal.close();
+
+            _this4.stop = 0;
+
+            _this4.fetchJunta();
+          });
+          var cancelar_timer = $('#cancelar_timer');
+          cancelar_timer.addEventListener('click', function () {
+            _this4.$swal.stopTimer();
+
+            clearInterval(timerInterval);
+
+            _this4.$swal.close();
+
+            _this4.stop = 0;
+          }); // const minutos = this.$swal.getHtmlContainer().querySelector('b')
+          // const segundos = this.$swal.getHtmlContainer().querySelector('strong')
+
+          timerInterval = setInterval(function () {
+            var m = (_this4.$swal.getTimerLeft() / 60000).toFixed(0);
+            var s = (_this4.$swal.getTimerLeft() / 1000).toFixed(0);
+            console.log(s); // minutos.textContent = m
+            // segundos.textContent = s
+
+            if (s == 30 && _this4.stop == 1) _this4.fetchJunta();
+            if (s == 5 && _this4.stop == 2) _this4.fetchJunta();
+            if (_this4.acta.id) _this4.$swal.close();
+          }, 5000);
+        },
+        willClose: function willClose() {
+          clearInterval(timerInterval);
+          console.log('willClose');
+        }
+      }).then(function (result) {
+        console.log('result');
+        /* Read more about handling dismissals below */
+
+        if (result.dismiss === _this4.$swal.DismissReason.timer && _this4.acta.id == null) {
+          _this4.$swal({
+            icon: 'info',
+            title: 'Gracias por tu trabajo',
+            text: '¡Ya no existen actas para digitalizar los votos!',
+            confirmButtonText: 'Aceptar'
+          });
+        }
+      });
+    },
+    showWarning: function showWarning(msg) {
+      var _this5 = this;
+
+      this.$swal({
+        icon: 'warning',
+        title: msg,
+        allowOutsideClick: false,
+        text: 'POR FAVOR INFORMA ÉSTE PROBLEMA A UN ADMINISTRADOR',
+        footer: 'Por favor informa éste problema a un administrador ',
+        confirmButtonText: 'Aceptar'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          _this5.$refs.frmVotos.reset();
+
+          _this5.fetchJunta();
+        } else if (result.isDenied) {
+          _this5.$swal('Changes are not saved', '', 'info');
+        }
+      });
+    },
+    showSucces: function showSucces() {
+      this.$toast.success("¡Dados guardados correctamente!", {
+        position: "top-right",
+        timeout: 1500,
+        draggablePercent: 0.6,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/src/components/Alert.vue?vue&type=template&id=41b477b2&":
+/*!********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./front_ce/src/components/Alert.vue?vue&type=template&id=41b477b2& ***!
+  \********************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      class:
+        "bg-" +
+        _vm.color +
+        " border border-" +
+        _vm.color +
+        " text-" +
+        _vm.color +
+        "-700 px-4 py-3 rounded relative",
+      attrs: { role: "alert" }
+    },
+    [
+      _c("strong", { staticClass: "font-bold" }, [
+        _vm._v(_vm._s(_vm.title) + "!")
+      ]),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "bg-error bg-info bg-warning",
+        attrs: { type: "hidden" }
+      }),
+      _vm._v(" "),
+      _c("span", { staticClass: "block sm:inline" }, [
+        _vm._v(_vm._s(_vm.description))
+      ]),
+      _vm._v(" "),
+      _c("span", { staticClass: "absolute top-0 bottom-0 right-0 px-4 py-3" }, [
+        _c(
+          "svg",
+          {
+            class: "fill-current h-6 w-6 text-" + _vm.color + "-500",
+            attrs: {
+              role: "button",
+              xmlns: "http://www.w3.org/2000/svg",
+              viewBox: "0 0 20 20"
+            }
+          },
+          [
+            _c("title", [_vm._v("Close")]),
+            _c("path", {
+              attrs: {
+                d:
+                  "M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"
+              }
+            })
+          ]
+        )
+      ])
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./front_ce/src/views/votos/Votos.vue?vue&type=template&id=09a6ceba&":
+/*!*********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./front_ce/src/views/votos/Votos.vue?vue&type=template&id=09a6ceba& ***!
+  \*********************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "grid place-items-center box-main " }, [
+    _c("div", { staticClass: "container mx-auto" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("div", { staticClass: "container max-auto " }, [
+        _c(
+          "div",
+          {
+            staticClass:
+              "bg-blanco rounded overflow-hidden shadow-lg min-w-[80%]"
+          },
+          [
+            _c("div", { staticClass: "pt-4 pb-10" }, [
+              _c(
+                "form",
+                {
+                  ref: "frmVotos",
+                  staticClass: "w-full",
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.addVoto($event)
+                    }
+                  }
+                },
+                [
+                  _c("div", { staticClass: "grid lg:grid-cols-2 gap-4" }, [
+                    _c(
+                      "div",
+                      { staticClass: "min-w-[50%] pl-2 flex items-center" },
+                      [
+                        _c(
+                          "figure",
+                          { staticClass: "max-w-lg m-auto w-full" },
+                          [
+                            !_vm.acta.imagenOriginalURL
+                              ? _c(
+                                  "figcaption",
+                                  {
+                                    staticClass:
+                                      "mt-2 text-sm text-center text-gray-500 dark:text-gray-400"
+                                  },
+                                  [_vm._v("Vista previa de la imagen del acta")]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _c("img", {
+                              staticClass: "rounded-lg max-h-[500px]",
+                              attrs: {
+                                src: _vm.acta.imagenOriginalURL
+                                  ? _vm.acta.imagenOriginalURL
+                                  : "images/control_electoral/no-imagen-acta.png",
+                                height: "224px",
+                                alt: ""
+                              }
+                            })
+                          ]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "min-w-[50%] pr-2 px-2" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "text-negro underline font-bold decoration-negro pb-4"
+                        },
+                        [
+                          _c("h2", {}, [
+                            _vm._v(
+                              "\r\n                                        ACTA  "
+                            ),
+                            _vm.acta
+                              ? _c("span", [_vm._v(_vm._s(_vm.acta.codigo))])
+                              : _vm._e()
+                          ])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "container mx-auto pb-4" }, [
+                        _c(
+                          "table",
+                          { staticClass: "w-full text-sm text-left" },
+                          [
+                            _vm._m(1),
+                            _vm._v(" "),
+                            _c("tbody", [
+                              _c(
+                                "tr",
+                                {
+                                  staticClass:
+                                    "bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-[#bdbdbd40] dark:hover:text-negro"
+                                },
+                                [
+                                  _c(
+                                    "td",
+                                    { staticClass: "border border-curren" },
+                                    [_vm._v("Total de Votantes")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    { staticClass: "border border-curren w-8" },
+                                    [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.acta.tv_1,
+                                            expression: "acta.tv_1"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                        attrs: {
+                                          type: "text",
+                                          min: "0",
+                                          max: "1",
+                                          oninput:
+                                            "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                          placeholder: "0"
+                                        },
+                                        domProps: { value: _vm.acta.tv_1 },
+                                        on: {
+                                          input: [
+                                            function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.acta,
+                                                "tv_1",
+                                                $event.target.value
+                                              )
+                                            },
+                                            _vm.calcularTotalVotantes
+                                          ]
+                                        }
+                                      })
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    { staticClass: "border border-curren w-8" },
+                                    [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.acta.tv_2,
+                                            expression: "acta.tv_2"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                        attrs: {
+                                          type: "text",
+                                          min: "0",
+                                          max: "1",
+                                          oninput:
+                                            "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                          placeholder: "0"
+                                        },
+                                        domProps: { value: _vm.acta.tv_2 },
+                                        on: {
+                                          input: [
+                                            function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.acta,
+                                                "tv_2",
+                                                $event.target.value
+                                              )
+                                            },
+                                            _vm.calcularTotalVotantes
+                                          ]
+                                        }
+                                      })
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    { staticClass: "border border-curren w-8" },
+                                    [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.acta.tv_3,
+                                            expression: "acta.tv_3"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                        attrs: {
+                                          type: "text",
+                                          min: "0",
+                                          max: "1",
+                                          oninput:
+                                            "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                          placeholder: "0"
+                                        },
+                                        domProps: { value: _vm.acta.tv_3 },
+                                        on: {
+                                          input: [
+                                            function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.acta,
+                                                "tv_3",
+                                                $event.target.value
+                                              )
+                                            },
+                                            _vm.calcularTotalVotantes
+                                          ]
+                                        }
+                                      })
+                                    ]
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "tr",
+                                {
+                                  staticClass:
+                                    "bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-[#bdbdbd40] dark:hover:text-blanco"
+                                },
+                                [
+                                  _c(
+                                    "td",
+                                    { staticClass: "border border-curren" },
+                                    [_vm._v("Votos Blancos")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    { staticClass: "border border-curren w-8" },
+                                    [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.acta.vb_1,
+                                            expression: "acta.vb_1"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                        attrs: {
+                                          type: "text",
+                                          min: "0",
+                                          max: "1",
+                                          oninput:
+                                            "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                          placeholder: "0"
+                                        },
+                                        domProps: { value: _vm.acta.vb_1 },
+                                        on: {
+                                          input: [
+                                            function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.acta,
+                                                "vb_1",
+                                                $event.target.value
+                                              )
+                                            },
+                                            _vm.calcularTotalBlancos
+                                          ]
+                                        }
+                                      })
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    { staticClass: "border border-curren w-8" },
+                                    [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.acta.vb_2,
+                                            expression: "acta.vb_2"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                        attrs: {
+                                          type: "text",
+                                          min: "0",
+                                          max: "1",
+                                          oninput:
+                                            "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                          placeholder: "0"
+                                        },
+                                        domProps: { value: _vm.acta.vb_2 },
+                                        on: {
+                                          input: [
+                                            function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.acta,
+                                                "vb_2",
+                                                $event.target.value
+                                              )
+                                            },
+                                            _vm.calcularTotalBlancos
+                                          ]
+                                        }
+                                      })
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    { staticClass: "border border-curren w-8" },
+                                    [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.acta.vb_3,
+                                            expression: "acta.vb_3"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                        attrs: {
+                                          type: "text",
+                                          min: "0",
+                                          max: "1",
+                                          oninput:
+                                            "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                          placeholder: "0"
+                                        },
+                                        domProps: { value: _vm.acta.vb_3 },
+                                        on: {
+                                          input: [
+                                            function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.acta,
+                                                "vb_3",
+                                                $event.target.value
+                                              )
+                                            },
+                                            _vm.calcularTotalBlancos
+                                          ]
+                                        }
+                                      })
+                                    ]
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "tr",
+                                {
+                                  staticClass:
+                                    "bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-[#bdbdbd40] dark:hover:text-blanco"
+                                },
+                                [
+                                  _c(
+                                    "td",
+                                    { staticClass: "border border-curren" },
+                                    [_vm._v("Votos Nulos")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    { staticClass: "border border-curren w-8" },
+                                    [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.acta.vn_1,
+                                            expression: "acta.vn_1"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                        attrs: {
+                                          type: "text",
+                                          min: "0",
+                                          max: "1",
+                                          oninput:
+                                            "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                          placeholder: "0"
+                                        },
+                                        domProps: { value: _vm.acta.vn_1 },
+                                        on: {
+                                          input: [
+                                            function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.acta,
+                                                "vn_1",
+                                                $event.target.value
+                                              )
+                                            },
+                                            _vm.calcularTotalNulos
+                                          ]
+                                        }
+                                      })
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    { staticClass: "border border-curren w-8" },
+                                    [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.acta.vn_2,
+                                            expression: "acta.vn_2"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                        attrs: {
+                                          type: "text",
+                                          min: "0",
+                                          max: "1",
+                                          oninput:
+                                            "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                          placeholder: "0"
+                                        },
+                                        domProps: { value: _vm.acta.vn_2 },
+                                        on: {
+                                          input: [
+                                            function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.acta,
+                                                "vn_2",
+                                                $event.target.value
+                                              )
+                                            },
+                                            _vm.calcularTotalNulos
+                                          ]
+                                        }
+                                      })
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    { staticClass: "border border-curren w-8" },
+                                    [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.acta.vn_3,
+                                            expression: "acta.vn_3"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                        attrs: {
+                                          type: "text",
+                                          min: "0",
+                                          max: "1",
+                                          oninput:
+                                            "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                          placeholder: "0"
+                                        },
+                                        domProps: { value: _vm.acta.vn_3 },
+                                        on: {
+                                          input: [
+                                            function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                _vm.acta,
+                                                "vn_3",
+                                                $event.target.value
+                                              )
+                                            },
+                                            _vm.calcularTotalNulos
+                                          ]
+                                        }
+                                      })
+                                    ]
+                                  )
+                                ]
+                              )
+                            ])
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "grid" }, [
+                        _c(
+                          "table",
+                          { staticClass: "w-full text-sm text-left" },
+                          [
+                            _vm._m(2),
+                            _vm._v(" "),
+                            _c(
+                              "tbody",
+                              _vm._l(_vm.candidatos, function(
+                                candidato,
+                                index
+                              ) {
+                                return _c(
+                                  "tr",
+                                  {
+                                    key: candidato.id,
+                                    staticClass:
+                                      "bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-[#bdbdbd40] dark:hover:text-negro"
+                                  },
+                                  [
+                                    _c(
+                                      "td",
+                                      { staticClass: "border border-curren" },
+                                      [_vm._v(_vm._s(candidato.nombre))]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      {
+                                        staticClass: "border border-curren w-8"
+                                      },
+                                      [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.candidatos_votos[index].v_1,
+                                              expression:
+                                                "candidatos_votos[index].v_1"
+                                            }
+                                          ],
+                                          staticClass:
+                                            "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                          attrs: {
+                                            type: "text",
+                                            min: "0",
+                                            max: "1",
+                                            oninput:
+                                              "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                            placeholder: "0"
+                                          },
+                                          domProps: {
+                                            value:
+                                              _vm.candidatos_votos[index].v_1
+                                          },
+                                          on: {
+                                            input: [
+                                              function($event) {
+                                                if ($event.target.composing) {
+                                                  return
+                                                }
+                                                _vm.$set(
+                                                  _vm.candidatos_votos[index],
+                                                  "v_1",
+                                                  $event.target.value
+                                                )
+                                              },
+                                              function($event) {
+                                                return _vm.calcularVotoCandidato(
+                                                  index
+                                                )
+                                              }
+                                            ]
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      {
+                                        staticClass: "border border-curren w-8"
+                                      },
+                                      [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.candidatos_votos[index].v_2,
+                                              expression:
+                                                "candidatos_votos[index].v_2"
+                                            }
+                                          ],
+                                          staticClass:
+                                            "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                          attrs: {
+                                            type: "text",
+                                            min: "0",
+                                            max: "1",
+                                            oninput:
+                                              "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                            placeholder: "0"
+                                          },
+                                          domProps: {
+                                            value:
+                                              _vm.candidatos_votos[index].v_2
+                                          },
+                                          on: {
+                                            input: [
+                                              function($event) {
+                                                if ($event.target.composing) {
+                                                  return
+                                                }
+                                                _vm.$set(
+                                                  _vm.candidatos_votos[index],
+                                                  "v_2",
+                                                  $event.target.value
+                                                )
+                                              },
+                                              function($event) {
+                                                return _vm.calcularVotoCandidato(
+                                                  index
+                                                )
+                                              }
+                                            ]
+                                          }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "td",
+                                      {
+                                        staticClass: "border border-curren w-8"
+                                      },
+                                      [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value:
+                                                _vm.candidatos_votos[index].v_3,
+                                              expression:
+                                                "candidatos_votos[index].v_3"
+                                            }
+                                          ],
+                                          staticClass:
+                                            "w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",
+                                          attrs: {
+                                            type: "text",
+                                            min: "0",
+                                            max: "1",
+                                            oninput:
+                                              "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",
+                                            placeholder: "0"
+                                          },
+                                          domProps: {
+                                            value:
+                                              _vm.candidatos_votos[index].v_3
+                                          },
+                                          on: {
+                                            input: [
+                                              function($event) {
+                                                if ($event.target.composing) {
+                                                  return
+                                                }
+                                                _vm.$set(
+                                                  _vm.candidatos_votos[index],
+                                                  "v_3",
+                                                  $event.target.value
+                                                )
+                                              },
+                                              function($event) {
+                                                return _vm.calcularVotoCandidato(
+                                                  index
+                                                )
+                                              }
+                                            ]
+                                          }
+                                        })
+                                      ]
+                                    )
+                                  ]
+                                )
+                              }),
+                              0
+                            )
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "flex justify-center pt-5 w-full" },
+                        [
+                          _vm.acta.id
+                            ? [
+                                _c(
+                                  "button",
+                                  {
+                                    class:
+                                      "flex justify-center w-32 border-solid border border-negro rounded bg-negro hover:bg-plomo" +
+                                      (_vm.processing
+                                        ? " bg-plomo"
+                                        : " bg-negro"),
+                                    attrs: {
+                                      type: "submit",
+                                      disabled: _vm.processing
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "span",
+                                      { staticClass: "py-2 px-3 text-blanco" },
+                                      [_vm._v(" GUARDAR ")]
+                                    ),
+                                    _vm._v(" "),
+                                    _vm.processing
+                                      ? _c(
+                                          "span",
+                                          {
+                                            staticClass: "py-2 px-3 text-blanco"
+                                          },
+                                          [
+                                            _c(
+                                              "svg",
+                                              {
+                                                staticClass:
+                                                  "h-6 w-6 text-white animate-spin",
+                                                attrs: {
+                                                  xmlns:
+                                                    "http://www.w3.org/2000/svg",
+                                                  fill: "none",
+                                                  viewBox: "0 0 24 24",
+                                                  stroke: "currentColor"
+                                                }
+                                              },
+                                              [
+                                                _c("path", {
+                                                  attrs: {
+                                                    "stroke-linecap": "round",
+                                                    "stroke-linejoin": "round",
+                                                    "stroke-width": "2",
+                                                    d:
+                                                      "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                                                  }
+                                                })
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      : _vm._e()
+                                  ]
+                                )
+                              ]
+                            : [
+                                _c("alert", {
+                                  attrs: {
+                                    type: "info",
+                                    description:
+                                      "No existe ninguna acta para registar los votos!"
+                                  }
+                                })
+                              ]
+                        ],
+                        2
+                      )
+                    ])
+                  ])
+                ]
+              )
+            ])
+          ]
+        )
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "container max-auto text-negro text-xl pt-[78px] pl-4" },
+      [
+        _c(
+          "h1",
+          { staticClass: "text-negro underline font-bold decoration-negro" },
+          [_vm._v("\r\n                DIGITALIZAR\r\n            ")]
+        )
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "thead",
+      { staticClass: "text-xs text-negro uppercase bg-plomo-light" },
+      [
+        _c("tr", { staticClass: "bg-plomo-light" }, [
+          _c("th", { staticClass: "py-1" }),
+          _vm._v(" "),
+          _c(
+            "th",
+            {
+              staticClass: "py-1 text-center whitespace-nowrap",
+              attrs: { colspan: "3" }
+            },
+            [_vm._v("TOTAL EN NÚMEROS")]
+          )
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "thead",
+      { staticClass: "text-xs text-negro uppercase bg-plomo-light" },
+      [
+        _c("tr", { staticClass: "bg-plomo-light" }, [
+          _c("th", { staticClass: "py-1" }, [_vm._v("CANDIDATO")]),
+          _vm._v(" "),
+          _c(
+            "th",
+            {
+              staticClass: "py-1 text-center whitespace-nowrap",
+              attrs: { colspan: "3" }
+            },
+            [_vm._v("TOTAL EN NÚMEROS")]
+          )
+        ])
+      ]
+    )
+  }
+]
+render._withStripped = true
+
+
+
+/***/ })
+
+}]);

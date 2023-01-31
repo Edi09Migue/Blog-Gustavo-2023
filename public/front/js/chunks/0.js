@@ -1014,7 +1014,7 @@ var render = function() {
                                     "button",
                                     {
                                       class:
-                                        "flex justify-center border-solid border border-negro rounded-xl bg-negro hover:bg-plomo" +
+                                        "flex justify-center border-solid border border-negro rounded bg-negro hover:bg-plomo" +
                                         (_vm.processing
                                           ? " bg-plomo"
                                           : " bg-negro"),
@@ -1027,7 +1027,7 @@ var render = function() {
                                       _c(
                                         "span",
                                         {
-                                          staticClass: "py-1 px-2 text-blanco"
+                                          staticClass: "py-2 px-3 text-blanco"
                                         },
                                         [_vm._v(" GUARDAR ")]
                                       ),
@@ -1037,7 +1037,7 @@ var render = function() {
                                             "span",
                                             {
                                               staticClass:
-                                                "py-1 px-2 text-blanco"
+                                                "py-2 px-3 text-blanco"
                                             },
                                             [
                                               _c(
