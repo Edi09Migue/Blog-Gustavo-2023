@@ -4,7 +4,7 @@
         <!-- Title page -->
         <div class="container max-auto text-negro text-xl pt-[78px] pl-4">
             <h1 class="text-negro underline font-bold decoration-negro">
-                REGISTRO DE VOTOS
+                IMÁGENES
             </h1>
         </div>
         <!-- Conete page -->

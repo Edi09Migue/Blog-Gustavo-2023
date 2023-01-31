@@ -536,27 +536,31 @@ __webpack_require__.r(__webpack_exports__);
         var procesadaPor = null;
 
         if (response.data.status) {
-          _this.acta = response.data.acta; // Celdas para total votantes
-
-          _this.acta.tv_1 = 0;
-          _this.acta.tv_2 = 0;
-          _this.acta.tv_3 = 0; // Celdas para botos blancos
-
-          _this.acta.vb_1 = 0;
-          _this.acta.vb_2 = 0;
-          _this.acta.vb_3 = 0; // Celdas para votos nulos
-
-          _this.acta.vn_1 = 0;
-          _this.acta.vn_2 = 0;
-          _this.acta.vn_3 = 0;
+          _this.acta = response.data.acta;
           actaId = _this.acta.id;
           procesadaPor = _this.user.id;
         } else {
           _this.stop++;
 
           _this.showNoActas();
-        }
 
+          _this.acta.imagenOriginalURL = null;
+          _this.acta.id = null;
+          _this.acta.codigo = null;
+        } // Celdas para total votantes
+
+
+        _this.acta.tv_1 = 0;
+        _this.acta.tv_2 = 0;
+        _this.acta.tv_3 = 0; // Celdas para botos blancos
+
+        _this.acta.vb_1 = 0;
+        _this.acta.vb_2 = 0;
+        _this.acta.vb_3 = 0; // Celdas para votos nulos
+
+        _this.acta.vn_1 = 0;
+        _this.acta.vn_2 = 0;
+        _this.acta.vn_3 = 0;
         _this.candidatos = response.data.candidatos;
         _this.candidatos_votos = response.data.candidatos.map(function (candidato) {
           return {
@@ -643,6 +647,7 @@ __webpack_require__.r(__webpack_exports__);
 
           _this3.sumaTotal = 0;
           _this3.infoVotosValidos = '';
+          _this3.acta.imagenOriginalURL = null;
         } else {
           event.target.reset();
           _this3.infoVotosValidos = '';
@@ -717,6 +722,16 @@ __webpack_require__.r(__webpack_exports__);
         } else if (result.isDenied) {
           _this5.$swal('Changes are not saved', '', 'info');
         }
+      });
+    },
+    showSucces: function showSucces() {
+      this.$toast.success("¡Dados guardados correctamente!", {
+        position: "top-right",
+        timeout: 1500,
+        draggablePercent: 0.6,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true
       });
     }
   }
@@ -848,17 +863,6 @@ var render = function() {
                           "figure",
                           { staticClass: "max-w-lg m-auto w-full" },
                           [
-                            _c("img", {
-                              staticClass: "rounded-lg max-h-[500px]",
-                              attrs: {
-                                src: _vm.acta
-                                  ? _vm.acta.imagenOriginalURL
-                                  : "no-imagen-acta.jpg",
-                                height: "224px",
-                                alt: ""
-                              }
-                            }),
-                            _vm._v(" "),
                             !_vm.acta.imagenOriginalURL
                               ? _c(
                                   "figcaption",
@@ -868,7 +872,18 @@ var render = function() {
                                   },
                                   [_vm._v("Vista previa de la imagen del acta")]
                                 )
-                              : _vm._e()
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _c("img", {
+                              staticClass: "rounded-lg max-h-[500px]",
+                              attrs: {
+                                src: _vm.acta.imagenOriginalURL
+                                  ? _vm.acta.imagenOriginalURL
+                                  : "images/control_electoral/no-imagen-acta.png",
+                                height: "224px",
+                                alt: ""
+                              }
+                            })
                           ]
                         )
                       ]
@@ -1613,7 +1628,7 @@ var render = function() {
                                   attrs: {
                                     type: "info",
                                     description:
-                                      "No existe ninguna acta para registar los votos! Gracias por tu trabajo"
+                                      "No existe ninguna acta para registar los votos!"
                                   }
                                 })
                               ]
@@ -1643,7 +1658,7 @@ var staticRenderFns = [
         _c(
           "h1",
           { staticClass: "text-negro underline font-bold decoration-negro" },
-          [_vm._v("\r\n                REGISTRO DE VOTOS\r\n            ")]
+          [_vm._v("\r\n                DIGITALIZADOR\r\n            ")]
         )
       ]
     )

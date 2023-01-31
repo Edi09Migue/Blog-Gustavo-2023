@@ -1149,7 +1149,7 @@ var staticRenderFns = [
         _c(
           "h1",
           { staticClass: "text-negro underline font-bold decoration-negro" },
-          [_vm._v("\r\n                REGISTRO DE VOTOS\r\n            ")]
+          [_vm._v("\r\n                IMÁGENES\r\n            ")]
         )
       ]
     )
