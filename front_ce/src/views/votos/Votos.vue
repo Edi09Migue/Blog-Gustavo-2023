@@ -18,8 +18,8 @@
                             <!-- Imagen preiew -->
                             <div class="min-w-[50%] pl-2 flex items-center">
                                 <figure class="max-w-lg m-auto w-full">
-                                    <img class="rounded-lg max-h-[500px]" :src="acta ? acta.imagenOriginalURL  :'no-imagen-acta.jpg'" height="224px" alt="">
                                     <figcaption v-if="!acta.imagenOriginalURL" class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">Vista previa de la imagen del acta</figcaption>
+                                    <img class="rounded-lg max-h-[500px]" :src="acta.imagenOriginalURL ? acta.imagenOriginalURL  :'images/control_electoral/no-imagen-acta.png'" height="224px" alt="">
                                 </figure>
                             </div>
                             <!-- Datos -->
@@ -203,7 +203,7 @@
                                         </button>
                                     </template>
                                     <template v-else>
-                                        <alert :type="'info'" :description="'No existe ninguna acta para registar los votos! Gracias por tu trabajo'" />
+                                        <alert :type="'info'" :description="'No existe ninguna acta para registar los votos!'" />
                                     </template>
                                 </div>
 
@@ -333,28 +333,31 @@ export default {
                 let procesadaPor = null
 
                 if (response.data.status) {
-                    
                     this.acta = response.data.acta
-                    // Celdas para total votantes
-                    this.acta.tv_1 = 0
-                    this.acta.tv_2 = 0
-                    this.acta.tv_3 = 0
-                    // Celdas para botos blancos
-                    this.acta.vb_1 = 0
-                    this.acta.vb_2 = 0
-                    this.acta.vb_3 = 0
-                    // Celdas para votos nulos
-                    this.acta.vn_1 = 0
-                    this.acta.vn_2 = 0
-                    this.acta.vn_3 = 0
-
                     actaId = this.acta.id;
                     procesadaPor = this.user.id;
                     
                 }else{
                     this.stop++
                     this.showNoActas()
+                    this.acta.imagenOriginalURL = null
+                    this.acta.id =  null
+                    this.acta.codigo =  null
                 }
+
+                // Celdas para total votantes
+                this.acta.tv_1 = 0
+                this.acta.tv_2 = 0
+                this.acta.tv_3 = 0
+                // Celdas para botos blancos
+                this.acta.vb_1 = 0
+                this.acta.vb_2 = 0
+                this.acta.vb_3 = 0
+                // Celdas para votos nulos
+                this.acta.vn_1 = 0
+                this.acta.vn_2 = 0
+                this.acta.vn_3 = 0
+
 
                 this.candidatos = response.data.candidatos
                 this.candidatos_votos = response.data.candidatos.map(function(candidato){
@@ -479,6 +482,7 @@ export default {
                     this.showSucces()
                     this.sumaTotal = 0
                     this.infoVotosValidos = ''
+                    this.acta.imagenOriginalURL = null
                 }else{
                     event.target.reset();
                     this.infoVotosValidos = ''
@@ -494,6 +498,7 @@ export default {
         },
 
         showNoActas(){
+            
             // <p> <b></b> Minuto. <strong></strong> Segundos </p>
             let timerInterval
             this.$swal({
@@ -556,6 +561,17 @@ export default {
                     this.$swal('Changes are not saved', '', 'info')
                 }
             });
+        },
+
+        showSucces(){
+            this.$toast.success("¡Dados guardados correctamente!",{
+                position: "top-right",
+                timeout: 1500,
+                draggablePercent: 0.6,
+                hideProgressBar: true,
+                closeButton: "button",
+                icon: true,
+            })
         },
     },
 }

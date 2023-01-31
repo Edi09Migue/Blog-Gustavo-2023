@@ -142,6 +142,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Login',
@@ -264,214 +269,224 @@ var render = function() {
         "div",
         {
           staticClass:
-            "max-w-lg sm:w-[90%] md:w-[40%] lg:w-[25%] mx-auto h=1/2 shadow-xl rounded my-8 bg-[#21212196] box-login"
+            "max-w-lg sm:w-[90%] md:w-[40%] lg:w-[25%] mx-auto h=1/2 shadow-xl rounded my-8"
         },
         [
-          _vm._m(0),
-          _vm._v(" "),
-          _c("div", { staticClass: "pt-6 pb-10" }, [
-            _c(
-              "form",
-              {
-                on: {
-                  submit: function($event) {
-                    $event.preventDefault()
-                    return _vm.login($event)
+          _c("div", { staticClass: " bg-[#21212196] box-login" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "pt-2 pb-1" }, [
+              _c(
+                "form",
+                {
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.login($event)
+                    }
                   }
-                }
-              },
-              [
-                _c("div", { staticClass: "w-4/5 mx-auto" }, [
-                  _vm._m(1),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "w-full" }, [
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "flex items-center bg-white rounded-full shadow-md"
-                      },
-                      [
-                        _c(
-                          "div",
-                          {
-                            staticClass:
-                              "px-3 rounded-full w-[35px] h-[35px] border-negro bg-negro flex items-center text-blanco mr-2"
-                          },
-                          [
-                            _c("font-awesome-icon", {
-                              attrs: { icon: "fa-solid fa-user" }
-                            })
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.data.email,
-                              expression: "data.email"
-                            }
-                          ],
-                          staticClass:
-                            "rounded-full w-full h-8 focus:outline-none",
-                          attrs: {
-                            type: "email",
-                            name: "email",
-                            placeholder: "Correo electrónico"
-                          },
-                          domProps: { value: _vm.data.email },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(_vm.data, "email", $event.target.value)
-                            }
-                          }
-                        })
-                      ]
-                    ),
+                },
+                [
+                  _c("div", { staticClass: "w-4/5 mx-auto" }, [
+                    _vm._m(1),
                     _vm._v(" "),
-                    _vm.error.type == "email"
-                      ? _c(
-                          "span",
-                          {
-                            staticClass: "pl-2 inline-flex text-sm text-red-700"
-                          },
-                          [_vm._v(_vm._s(_vm.error.error) + "!")]
-                        )
-                      : _vm._e()
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "w-full" }, [
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "flex items-center bg-white rounded-full shadow-md mt-4"
-                      },
-                      [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.data.password,
-                              expression: "data.password"
-                            }
-                          ],
-                          staticClass:
-                            "pl-4 rounded-full w-full h-8 focus:outline-none",
-                          staticStyle: { "padding-left": "12px" },
-                          attrs: {
-                            type: "password",
-                            name: "password",
-                            placeholder: "Contraseña"
-                          },
-                          domProps: { value: _vm.data.password },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.data,
-                                "password",
-                                $event.target.value
-                              )
-                            }
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          {
-                            staticClass:
-                              "px-3 rounded-full w-[35px] h-[35px] border-negro bg-negro flex items-center text-blanco"
-                          },
-                          [
-                            _c("font-awesome-icon", {
-                              attrs: { icon: "fa-solid fa-unlock" }
-                            })
-                          ],
-                          1
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _vm.error.type == "password"
-                      ? _c(
-                          "span",
-                          {
-                            staticClass: "pl-2 inline-flex text-sm text-red-700"
-                          },
-                          [_vm._v(_vm._s(_vm.error.error) + "!")]
-                        )
-                      : _vm._e()
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "flex justify-center pt-5 w-full" },
-                    [
+                    _c("div", { staticClass: "w-full" }, [
                       _c(
-                        "button",
+                        "div",
                         {
                           staticClass:
-                            "flex justify-center w-full border-solid border border-blanco rounded-xl bg-blanco",
-                          attrs: { type: "submit" }
+                            "flex items-center bg-white rounded-full shadow-md"
                         },
                         [
-                          _c("span", { staticClass: "py-1" }, [
-                            _vm._v(" Iniciar sesión ")
-                          ]),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "px-3 rounded-full w-[35px] h-[35px] border-negro bg-negro flex items-center text-blanco mr-2"
+                            },
+                            [
+                              _c("font-awesome-icon", {
+                                attrs: { icon: "fa-solid fa-user" }
+                              })
+                            ],
+                            1
+                          ),
                           _vm._v(" "),
-                          _c("span", { staticClass: "py-1 px-2 text-black" }, [
-                            _vm.processing
-                              ? _c(
-                                  "svg",
-                                  {
-                                    staticClass: "h-6 w-6 animate-spin",
-                                    attrs: {
-                                      xmlns: "http://www.w3.org/2000/svg",
-                                      fill: "none",
-                                      viewBox: "0 0 24 24",
-                                      stroke: "currentColor"
-                                    }
-                                  },
-                                  [
-                                    _c("path", {
-                                      attrs: {
-                                        "stroke-linecap": "round",
-                                        "stroke-linejoin": "round",
-                                        "stroke-width": "2",
-                                        d:
-                                          "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                                      }
-                                    })
-                                  ]
-                                )
-                              : _vm._e()
-                          ])
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.data.email,
+                                expression: "data.email"
+                              }
+                            ],
+                            staticClass:
+                              "rounded-full w-full h-8 focus:outline-none",
+                            attrs: {
+                              type: "email",
+                              name: "email",
+                              placeholder: "Correo electrónico"
+                            },
+                            domProps: { value: _vm.data.email },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(_vm.data, "email", $event.target.value)
+                              }
+                            }
+                          })
                         ]
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "pt-5 w-full" }, [
+                      ),
+                      _vm._v(" "),
+                      _vm.error.type == "email"
+                        ? _c(
+                            "span",
+                            {
+                              staticClass:
+                                "pl-2 inline-flex text-sm text-red-700"
+                            },
+                            [_vm._v(_vm._s(_vm.error.error) + "!")]
+                          )
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "w-full" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "flex items-center bg-white rounded-full shadow-md mt-4"
+                        },
+                        [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.data.password,
+                                expression: "data.password"
+                              }
+                            ],
+                            staticClass:
+                              "pl-4 rounded-full w-full h-8 focus:outline-none",
+                            staticStyle: { "padding-left": "12px" },
+                            attrs: {
+                              type: "password",
+                              name: "password",
+                              placeholder: "Contraseña"
+                            },
+                            domProps: { value: _vm.data.password },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.data,
+                                  "password",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "px-3 rounded-full w-[35px] h-[35px] border-negro bg-negro flex items-center text-blanco"
+                            },
+                            [
+                              _c("font-awesome-icon", {
+                                attrs: { icon: "fa-solid fa-unlock" }
+                              })
+                            ],
+                            1
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _vm.error.type == "password"
+                        ? _c(
+                            "span",
+                            {
+                              staticClass:
+                                "pl-2 inline-flex text-sm text-red-700"
+                            },
+                            [_vm._v(_vm._s(_vm.error.error) + "!")]
+                          )
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
                     _c(
-                      "p",
-                      { staticClass: "inline-flex text-sm text-indigo-900" },
-                      [_vm._v(" " + _vm._s(_vm.errorMessage) + " ")]
-                    )
+                      "div",
+                      { staticClass: "flex justify-center pt-5 w-full" },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "flex justify-center w-full border-solid border border-blanco rounded-xl bg-blanco",
+                            attrs: { type: "submit" }
+                          },
+                          [
+                            _c("span", { staticClass: "py-1" }, [
+                              _vm._v(" Iniciar sesión ")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              { staticClass: "py-1 px-2 text-black" },
+                              [
+                                _vm.processing
+                                  ? _c(
+                                      "svg",
+                                      {
+                                        staticClass: "h-6 w-6 animate-spin",
+                                        attrs: {
+                                          xmlns: "http://www.w3.org/2000/svg",
+                                          fill: "none",
+                                          viewBox: "0 0 24 24",
+                                          stroke: "currentColor"
+                                        }
+                                      },
+                                      [
+                                        _c("path", {
+                                          attrs: {
+                                            "stroke-linecap": "round",
+                                            "stroke-linejoin": "round",
+                                            "stroke-width": "2",
+                                            d:
+                                              "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                                          }
+                                        })
+                                      ]
+                                    )
+                                  : _vm._e()
+                              ]
+                            )
+                          ]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "pt-5 w-full" }, [
+                      _c(
+                        "p",
+                        { staticClass: "inline-flex text-sm text-indigo-900" },
+                        [_vm._v(" " + _vm._s(_vm.errorMessage) + " ")]
+                      )
+                    ])
                   ])
-                ])
-              ]
-            )
-          ])
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _vm._m(2)
         ]
       )
     ]
@@ -490,6 +505,7 @@ var staticRenderFns = [
       },
       [
         _c("img", {
+          staticClass: "sm:w-1/2 md:1/2",
           attrs: { src: "/images/login/ceec.png", alt: "Control Electoral" }
         })
       ]
@@ -502,6 +518,27 @@ var staticRenderFns = [
     return _c("div", { staticClass: "mb-8" }, [
       _c("p", [_vm._v("Inicia sesión en tu cuenta")])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "text-center text-blanco py-1 uppercase text-xl flex justify-center"
+      },
+      [
+        _c("img", {
+          staticClass: "sm:w-1/2 md:1/2",
+          attrs: {
+            src: "/images/login/solidariamente.png",
+            alt: "Control Electoral"
+          }
+        })
+      ]
+    )
   }
 ]
 render._withStripped = true
