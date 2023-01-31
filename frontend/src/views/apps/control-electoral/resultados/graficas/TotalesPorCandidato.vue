@@ -27,7 +27,7 @@ export default {
     },
     methods:{
         initGraph(){
-            const ROOT_PATH = 'http://controlelectoral.local';
+            const ROOT_PATH = 'https://ceec.ec/';
             const weatherIcons = {
                 0: ROOT_PATH + '/images/candidatos/sebastian_davalos.png',
                 1: ROOT_PATH + '/images/candidatos/xavier_vilcacundo.png',
