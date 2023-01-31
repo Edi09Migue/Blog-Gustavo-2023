@@ -10,11 +10,11 @@ export default new Vuex.Store({
 	},
 	mutations: {
 		SET_USER_DATA(state, user){
-			console.log('SET_USER_DATA',user);
+			// console.log('SET_USER_DATA',user);
 			state.userData = user
 		},
 		SET_TOKEN(state, token){
-			console.log('SET_TOKEN',token);
+			// console.log('SET_TOKEN',token);
 			state.token = token
 		},
 	},

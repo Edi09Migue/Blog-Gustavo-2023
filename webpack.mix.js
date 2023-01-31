@@ -11,7 +11,11 @@ const mix = require('laravel-mix')
  |
 */
   // este el front 
-  //  .js('front_ce/app.js', 'public/front/js'); 
+  // .js('front_ce/app.js', 'public/front/js').webpackConfig({
+  //     output: {
+  //     chunkFilename: 'front/js/chunks/[name].js'
+  //   }
+  // })
 
   // este el admin
   .js('resources/js/app.js', 'public/js')

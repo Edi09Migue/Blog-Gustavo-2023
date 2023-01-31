@@ -1,8 +1,9 @@
 <template>
 <div class="grid place-items-center h-screen box-main">
     <div class="max-w-lg sm:w-[90%] md:w-[40%] lg:w-[25%] mx-auto h=1/2 shadow-xl rounded my-8 bg-[#21212196] box-login">
-        <div class="text-center text-blanco py-4 uppercase text-xl">
-            <strong>Control Electoral Ec</strong>
+        <div class="text-center text-blanco py-4 uppercase text-xl flex justify-center">
+            <!-- <strong>Control Electoral Ec</strong> -->
+            <img src="/images/login/ceec.png" alt="Control Electoral">
         </div>
         <div class="pt-6 pb-10">
             <form @submit.prevent="login">

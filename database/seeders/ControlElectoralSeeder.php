@@ -20,7 +20,7 @@ class ControlElectoralSeeder extends Seeder
             RecintoSeeder::class,
             CandidatoSeeder::class,
             // ActaSeeder::class,
-            CandidatoActaSeeder::class,
+            // CandidatoActaSeeder::class,
             
         ]);
     }
