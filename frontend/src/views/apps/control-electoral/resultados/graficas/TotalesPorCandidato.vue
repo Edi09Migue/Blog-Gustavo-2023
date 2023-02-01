@@ -28,6 +28,7 @@ export default {
     methods:{
         initGraph(){
             const ROOT_PATH = 'https://ceec.ec/';
+            //const ROOT_PATH = 'http://controlelectoral.local/';
             const weatherIcons = {
                 0: ROOT_PATH + '/images/candidatos/sebastian_davalos.png',
                 1: ROOT_PATH + '/images/candidatos/xavier_vilcacundo.png',
@@ -67,6 +68,7 @@ export default {
             });
             //let resultados = this.series.map(r => r.total_votos);
             let resultados = this.series.map(r => r.total_votos);
+            let total_votos = this.series.reduce((a,b) => a + parseFloat(b.total_votos), 0);
             let validos = this.series.map(r => r.total_validos);
             let inconsistentes = this.series.map(r => r.total_inconsistentes);
             let graphOptions = {
@@ -96,13 +98,15 @@ export default {
                             name: "Total Votos",
                             type: "bar",
                             stack: "general",
-                            label: {
+                            label: {    
                                 show: true,
-                               // position: 'inside',
-                                // position: 'top',
-                                // formatter: function(data){
-                                //     return 'Bar #' + (data.dataIndex+1)
-                                // }
+                                position: 'inside',
+                                
+                                formatter: function(data){
+                                    console.log('data', data);
+                                    let porcentaje = (data.value/total_votos)*100;
+                                    return (data.value)+'\n '+ porcentaje.toFixed(1)+'%'
+                                }
                             },
                             data: resultados,                            
                             markPoint: {

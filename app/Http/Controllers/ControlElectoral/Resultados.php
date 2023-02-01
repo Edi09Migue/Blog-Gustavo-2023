@@ -216,15 +216,16 @@ class Resultados extends Controller
         $total_electores = Recinto::sum('cantidad_electores');
 
         $pesos = [
-            1   =>  5.3,  //sebastian davalos sanches
-            2   =>  6,  //xavier vilcacundo
-            3   =>  8,  //felipe bonilla
-            4   =>  2.2,  //carlos ortega
+            1   =>  3.4,  //sebastian davalos sanches
+            2   =>  5.8,  //xavier vilcacundo
+            3   =>  7.3,  //felipe bonilla
+            4   =>  6.5,  //carlos ortega
             5   =>  0.3,  //myrian auz
-            6   =>  21.4, //diana caiza,
+            6   =>  17.2, //diana caiza,
             7   =>  15.1, //salome Marin
-            8   =>  20.2, //amoros
-            9   =>  21.5 //altamirano
+            8   =>  16.5, //amoros
+            9   =>  17.8  //altamirano
+            //10  =>  11.1 //Blancos
         ];
 
         
@@ -232,7 +233,7 @@ class Resultados extends Controller
             $total->nombre_corto = $total->nombreCorto;
 
             $votos = $total_electores * ($pesos[$total->id]/100);
-            $total->total_votos = $votos;
+            $total->total_votos = (int)$votos;
             $total->total_validos = $votos;
             $total->total_inconsistentes = $votos;
         }
