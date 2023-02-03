@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "" + ({}[chunkId]||chunkId) + ".js"
+/******/ 		return __webpack_require__.p + "front/js/chunks/" + ({}[chunkId]||chunkId) + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -33532,7 +33532,8 @@ __webpack_require__.r(__webpack_exports__);
 // var token = 
 
 var http = axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
-  baseURL: "http://controlelectoral.local/api/"
+  // baseURL: `http://controlelectoral.local/api/`,
+  baseURL: "https://ceec.ec/api"
 }); // Vue.prototype.$http = http;
 // export default http;
 // export const httpFrmData = axios.create({

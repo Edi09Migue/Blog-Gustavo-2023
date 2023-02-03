@@ -316,6 +316,8 @@ export default {
             this.infoVotosValidos = ''
             
         },
+
+        
         fetchJunta(){
 
             this.processing = true
@@ -508,8 +510,8 @@ export default {
                     timerInterval = setInterval(() => {
                         let m = (this.$swal.getTimerLeft() / 60000).toFixed(0) 
                         let s = (this.$swal.getTimerLeft() / 1000).toFixed(0)
-                        minutos.textContent = m
-                        segundos.textContent = s
+                        // minutos.textContent = m
+                        // segundos.textContent = s
                         if(m==0 && this.stop == 1){
                             this.fetchJunta()
                         }
@@ -517,7 +519,19 @@ export default {
                 },
                 willClose: () => {
                     clearInterval(timerInterval)
-                }
+                },
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar',
+                footer: `<div>
+                            <button @click="fetchJunta()"  class="flex justify-center w-32 border-solid border border-negro rounded-xl bg-negro hover:bg-plomo"  type="button">
+                                            <span class="py-1 text-blanco"> GUARDAR </span>
+                                            <span class="py-1 px-2 text-blanco" v-if="processing">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                                </svg>
+                                            </span>
+                                        </button>
+                    </div>`,
             }).then((result) => {
                 /* Read more about handling dismissals below */
                 if (result.dismiss === this.$swal.DismissReason.timer) {
