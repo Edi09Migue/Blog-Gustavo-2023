@@ -670,8 +670,8 @@ __webpack_require__.r(__webpack_exports__);
       var timerInterval;
       this.$swal({
         title: '¡Aún no existen actas para digitalizar los votos!',
-        html: "".concat(this.stop == 1 ? '<p> Por favor espere. estamos buscando actas</p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>'),
-        footer: "<div class=\"flex\">\n                            <button id=\"buscar_ahora\" class=\"flex justify-center w-32 border-solid border border-negro rounded bg-negro hover:bg-plomo\">\n                                <span class=\"py-2 text-blanco\"> Buscar Ahora </span>\n                            </button>\n                            <button id=\"cancelar_timer\" class=\"ml-2 flex justify-center w-32 border-solid border border-red-500 rounded bg-red-500 hover:bg-red-400\">\n                                <span class=\"py-2 text-blanco\"> Cancelar </span>\n                            </button>\n                        </div>\n                        ",
+        html: "".concat(this.stop == 1 ? '<p> Por favor espere, estamos buscando actas</p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>'),
+        footer: "<div class=\"flex\">\n                            <button id=\"buscar_ahora\" class=\"flex justify-center w-32 border-solid border border-negro rounded bg-negro hover:bg-plomo\">\n                                <span class=\"py-2 text-blanco\"> Buscar Ahora</span>\n                            </button>\n                            <button id=\"cancelar_timer\" class=\"ml-2 flex justify-center w-32 border-solid border border-red-500 rounded bg-red-500 hover:bg-red-400\">\n                                <span class=\"py-2 text-blanco\"> Cancelar </span>\n                            </button>\n                        </div>\n                        ",
         timer: 60000,
         timerProgressBar: true,
         didOpen: function didOpen() {
@@ -714,20 +714,11 @@ __webpack_require__.r(__webpack_exports__);
 
             if (s == 30 && _this4.stop == 1) _this4.fetchJunta();
             if (s == 5 && _this4.stop == 2) _this4.fetchJunta();
-<<<<<<< HEAD
-=======
             if (_this4.acta.id) _this4.$swal.close();
->>>>>>> ec10504f42aefd81e204a6fcc3ed9e07c84eb8ed
           }, 5000);
         },
         willClose: function willClose() {
           clearInterval(timerInterval);
-        },
-        onClose: function onClose() {
-          clearInterval(timerInterval);
-        }
-      }).then(function (result) {
-        /* Read more about handling dismissals below */
           console.log('willClose');
         }
       }).then(function (result) {
@@ -1599,11 +1590,7 @@ var render = function() {
                                   "button",
                                   {
                                     class:
-<<<<<<< HEAD
-                                      "flex justify-center w-32 border-solid border border-negro rounded-xl bg-negro hover:bg-plomo" +
-=======
                                       "flex justify-center w-32 border-solid border border-negro rounded bg-negro hover:bg-plomo" +
->>>>>>> ec10504f42aefd81e204a6fcc3ed9e07c84eb8ed
                                       (_vm.processing
                                         ? " bg-plomo"
                                         : " bg-negro"),
@@ -1615,11 +1602,7 @@ var render = function() {
                                   [
                                     _c(
                                       "span",
-<<<<<<< HEAD
-                                      { staticClass: "py-1 text-blanco" },
-=======
                                       { staticClass: "py-2 px-3 text-blanco" },
->>>>>>> ec10504f42aefd81e204a6fcc3ed9e07c84eb8ed
                                       [_vm._v(" GUARDAR ")]
                                     ),
                                     _vm._v(" "),
@@ -1627,11 +1610,7 @@ var render = function() {
                                       ? _c(
                                           "span",
                                           {
-<<<<<<< HEAD
-                                            staticClass: "py-1 px-2 text-blanco"
-=======
                                             staticClass: "py-2 px-3 text-blanco"
->>>>>>> ec10504f42aefd81e204a6fcc3ed9e07c84eb8ed
                                           },
                                           [
                                             _c(

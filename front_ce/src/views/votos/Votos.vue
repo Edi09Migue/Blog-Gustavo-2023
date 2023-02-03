@@ -503,10 +503,10 @@ export default {
             let timerInterval
             this.$swal({
                 title: '¡Aún no existen actas para digitalizar los votos!',
-                html: `${this.stop==1 ? '<p> Por favor espere. estamos buscando actas</p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>'}`,
+                html: `${this.stop==1 ? '<p> Por favor espere, estamos buscando actas</p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>'}`,
                 footer: `<div class="flex">
                             <button id="buscar_ahora" class="flex justify-center w-32 border-solid border border-negro rounded bg-negro hover:bg-plomo">
-                                <span class="py-2 text-blanco"> Buscar Ahora </span>
+                                <span class="py-2 text-blanco"> Buscar Ahora</span>
                             </button>
                             <button id="cancelar_timer" class="ml-2 flex justify-center w-32 border-solid border border-red-500 rounded bg-red-500 hover:bg-red-400">
                                 <span class="py-2 text-blanco"> Cancelar </span>

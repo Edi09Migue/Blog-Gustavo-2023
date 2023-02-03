@@ -390,12 +390,15 @@ export default {
     }
 
     const userData = ref(JSON.parse(JSON.stringify(blankUserData)))
+    const isButtonDisabled = ref(false);
+
     const resetuserData = () => {
       userData.value = JSON.parse(JSON.stringify(blankUserData))
       errorServer.value = null
+      isButtonDisabled.value=false 
     }
 
-    const isButtonDisabled = ref(false);
+  
 
 
     const onSubmit = () => {
@@ -411,7 +414,7 @@ export default {
                 position: 'top-right',
                 props: {
                   title: `Creado!`,
-                  icon: 'CoffeeIcon',
+                  icon: 'CheckIcon',
                   variant: 'success',
                   text: `Usuario ${response.data.data.username}. Creado correctamente!`,
                 },
