@@ -14,9 +14,9 @@ use App\Http\Controllers\ApplicationController;
 |
 */
 
-// Route::get('/login/{any}', [ApplicationController::class, 'index'])->where('any', '.*');
-Route::get('/admin', [ApplicationController::class, 'index'])->where('any', '.*')->name('admin');
-Route::get('/', [ApplicationController::class, 'index'])->where('any', '.*');
+Route::get('/{any}', [ApplicationController::class, 'index'])->where('any', '.*');
+// Route::get('/admin', [ApplicationController::class, 'index'])->where('any', '.*')->name('admin');
+// Route::get('/', [ApplicationController::class, 'index'])->where('any', '.*');
 
 Route::get('/registro', [ApplicationController::class, 'front_ce'])->name('front.home');
 
