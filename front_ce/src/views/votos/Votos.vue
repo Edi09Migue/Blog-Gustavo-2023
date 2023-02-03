@@ -193,9 +193,9 @@
                                 <!-- options  -->
                                 <div class="flex justify-center pt-5 w-full">
                                     <template v-if="acta.id">
-                                        <button :class=" 'flex justify-center w-32 border-solid border border-negro rounded-xl bg-negro hover:bg-plomo' + (processing ? ' bg-plomo' : ' bg-negro') "  type="submit" :disabled="processing">
-                                            <span class="py-1 text-blanco"> GUARDAR </span>
-                                            <span class="py-1 px-2 text-blanco" v-if="processing">
+                                        <button :class=" 'flex justify-center w-32 border-solid border border-negro rounded bg-negro hover:bg-plomo' + (processing ? ' bg-plomo' : ' bg-negro') "  type="submit" :disabled="processing">
+                                            <span class="py-2 px-3 text-blanco"> GUARDAR </span>
+                                            <span class="py-2 px-3 text-blanco" v-if="processing">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                                 </svg>
@@ -336,7 +336,7 @@ export default {
                     this.acta = response.data.acta
                     actaId = this.acta.id;
                     procesadaPor = this.user.id;
-                    
+                    this.stop = 0
                 }else{
                     this.stop++
                     this.showNoActas()
@@ -503,11 +503,43 @@ export default {
             let timerInterval
             this.$swal({
                 title: '¡Aún no existen actas para digitalizar los votos!',
-                html: `${this.stop==1 ? '<p> Por favor espere. </p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>'} `,
+                html: `${this.stop==1 ? '<p> Por favor espere. estamos buscando actas</p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>'}`,
+                footer: `<div class="flex">
+                            <button id="buscar_ahora" class="flex justify-center w-32 border-solid border border-negro rounded bg-negro hover:bg-plomo">
+                                <span class="py-2 text-blanco"> Buscar Ahora </span>
+                            </button>
+                            <button id="cancelar_timer" class="ml-2 flex justify-center w-32 border-solid border border-red-500 rounded bg-red-500 hover:bg-red-400">
+                                <span class="py-2 text-blanco"> Cancelar </span>
+                            </button>
+                        </div>
+                        `,
                 timer: 60000,
                 timerProgressBar: true,
                 didOpen: () => {
+
+                    const content = this.$swal.getFooter()
+                    console.log(content, this.$swal);
+                    const $ = content.querySelector.bind(content)
+                    
                     this.$swal.showLoading()
+
+                    const buscar_ahora = $('#buscar_ahora')
+                    buscar_ahora.addEventListener('click', () => {
+                        this.$swal.stopTimer()
+                        clearInterval(timerInterval)
+                        this.$swal.close()
+                        this.stop = 0
+                        this.fetchJunta()
+                    })
+
+                    const cancelar_timer = $('#cancelar_timer')
+                    cancelar_timer.addEventListener('click', () => {
+                        this.$swal.stopTimer()
+                        clearInterval(timerInterval)
+                        this.$swal.close()
+                        this.stop = 0
+                    })
+
                     // const minutos = this.$swal.getHtmlContainer().querySelector('b')
                     // const segundos = this.$swal.getHtmlContainer().querySelector('strong')
                     timerInterval = setInterval(() => {
@@ -521,17 +553,17 @@ export default {
 
                         if(s==5 && this.stop == 2)
                             this.fetchJunta()
-                        
+                        if(this.acta.id)
+                            this.$swal.close()
 
                     }, 5000)
                 },
                 willClose: () => {
                     clearInterval(timerInterval)
-                },
-                onClose: () => {
-                    clearInterval(timerInterval)
+                    console.log('willClose')
                 }
             }).then((result) => {
+                    console.log('result')
                 
                 /* Read more about handling dismissals below */
                 if (result.dismiss === this.$swal.DismissReason.timer && this.acta.id==null) {

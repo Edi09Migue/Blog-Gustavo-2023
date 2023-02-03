@@ -539,6 +539,7 @@ __webpack_require__.r(__webpack_exports__);
           _this.acta = response.data.acta;
           actaId = _this.acta.id;
           procesadaPor = _this.user.id;
+          _this.stop = 0;
         } else {
           _this.stop++;
 
@@ -669,13 +670,41 @@ __webpack_require__.r(__webpack_exports__);
       var timerInterval;
       this.$swal({
         title: '¡Aún no existen actas para digitalizar los votos!',
-        html: "".concat(this.stop == 1 ? '<p> Por favor espere. </p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>', " "),
+        html: "".concat(this.stop == 1 ? '<p> Por favor espere. estamos buscando actas</p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>'),
+        footer: "<div class=\"flex\">\n                            <button id=\"buscar_ahora\" class=\"flex justify-center w-32 border-solid border border-negro rounded bg-negro hover:bg-plomo\">\n                                <span class=\"py-2 text-blanco\"> Buscar Ahora </span>\n                            </button>\n                            <button id=\"cancelar_timer\" class=\"ml-2 flex justify-center w-32 border-solid border border-red-500 rounded bg-red-500 hover:bg-red-400\">\n                                <span class=\"py-2 text-blanco\"> Cancelar </span>\n                            </button>\n                        </div>\n                        ",
         timer: 60000,
         timerProgressBar: true,
         didOpen: function didOpen() {
-          _this4.$swal.showLoading(); // const minutos = this.$swal.getHtmlContainer().querySelector('b')
-          // const segundos = this.$swal.getHtmlContainer().querySelector('strong')
+          var content = _this4.$swal.getFooter();
 
+          console.log(content, _this4.$swal);
+          var $ = content.querySelector.bind(content);
+
+          _this4.$swal.showLoading();
+
+          var buscar_ahora = $('#buscar_ahora');
+          buscar_ahora.addEventListener('click', function () {
+            _this4.$swal.stopTimer();
+
+            clearInterval(timerInterval);
+
+            _this4.$swal.close();
+
+            _this4.stop = 0;
+
+            _this4.fetchJunta();
+          });
+          var cancelar_timer = $('#cancelar_timer');
+          cancelar_timer.addEventListener('click', function () {
+            _this4.$swal.stopTimer();
+
+            clearInterval(timerInterval);
+
+            _this4.$swal.close();
+
+            _this4.stop = 0;
+          }); // const minutos = this.$swal.getHtmlContainer().querySelector('b')
+          // const segundos = this.$swal.getHtmlContainer().querySelector('strong')
 
           timerInterval = setInterval(function () {
             var m = (_this4.$swal.getTimerLeft() / 60000).toFixed(0);
@@ -685,6 +714,10 @@ __webpack_require__.r(__webpack_exports__);
 
             if (s == 30 && _this4.stop == 1) _this4.fetchJunta();
             if (s == 5 && _this4.stop == 2) _this4.fetchJunta();
+<<<<<<< HEAD
+=======
+            if (_this4.acta.id) _this4.$swal.close();
+>>>>>>> ec10504f42aefd81e204a6fcc3ed9e07c84eb8ed
           }, 5000);
         },
         willClose: function willClose() {
@@ -695,6 +728,12 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (result) {
         /* Read more about handling dismissals below */
+          console.log('willClose');
+        }
+      }).then(function (result) {
+        console.log('result');
+        /* Read more about handling dismissals below */
+
         if (result.dismiss === _this4.$swal.DismissReason.timer && _this4.acta.id == null) {
           _this4.$swal({
             icon: 'info',
@@ -1560,7 +1599,11 @@ var render = function() {
                                   "button",
                                   {
                                     class:
+<<<<<<< HEAD
                                       "flex justify-center w-32 border-solid border border-negro rounded-xl bg-negro hover:bg-plomo" +
+=======
+                                      "flex justify-center w-32 border-solid border border-negro rounded bg-negro hover:bg-plomo" +
+>>>>>>> ec10504f42aefd81e204a6fcc3ed9e07c84eb8ed
                                       (_vm.processing
                                         ? " bg-plomo"
                                         : " bg-negro"),
@@ -1572,7 +1615,11 @@ var render = function() {
                                   [
                                     _c(
                                       "span",
+<<<<<<< HEAD
                                       { staticClass: "py-1 text-blanco" },
+=======
+                                      { staticClass: "py-2 px-3 text-blanco" },
+>>>>>>> ec10504f42aefd81e204a6fcc3ed9e07c84eb8ed
                                       [_vm._v(" GUARDAR ")]
                                     ),
                                     _vm._v(" "),
@@ -1580,7 +1627,11 @@ var render = function() {
                                       ? _c(
                                           "span",
                                           {
+<<<<<<< HEAD
                                             staticClass: "py-1 px-2 text-blanco"
+=======
+                                            staticClass: "py-2 px-3 text-blanco"
+>>>>>>> ec10504f42aefd81e204a6fcc3ed9e07c84eb8ed
                                           },
                                           [
                                             _c(

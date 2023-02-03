@@ -104,9 +104,9 @@
                                 <!-- option save  -->
                                 <div class="pt-5 w-full flex justify-center">
                                     <template v-if="recintos.length>0">
-                                        <button :class=" 'flex justify-center border-solid border border-negro rounded-xl bg-negro hover:bg-plomo' + (processing ? ' bg-plomo' : ' bg-negro') "  type="submit" :disabled="processing">
-                                            <span class="py-1 px-2 text-blanco"> GUARDAR </span>
-                                            <span class="py-1 px-2 text-blanco" v-if="processing">
+                                        <button :class=" 'flex justify-center border-solid border border-negro rounded bg-negro hover:bg-plomo' + (processing ? ' bg-plomo' : ' bg-negro') "  type="submit" :disabled="processing">
+                                            <span class="py-2 px-3 text-blanco"> GUARDAR </span>
+                                            <span class="py-2 px-3 text-blanco" v-if="processing">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                                 </svg>
