@@ -8,7 +8,6 @@ const axiosIns = axios.create({
     // ================================
     baseURL: "http://controlelectoral.local/"
     // baseURL: "https://ceec.ec/"
-    //baseURL: "https://api.todo63.com/"
     // timeout: 1000,
     // headers: {'X-Custom-Header': 'foobar'}
 });

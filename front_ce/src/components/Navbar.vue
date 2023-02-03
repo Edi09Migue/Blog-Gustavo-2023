@@ -3,8 +3,8 @@
     <nav class="top-0 absolute z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 navbar-expand-lg bg-negro">
         <div class="container px-4 mx-auto flex  items-center justify-between">
             <div class="w-full sm:w-[10%] relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start ">
-                <a class="text-sm font-bold leading-relaxed inline-block py-2 whitespace-nowrap uppercase text-white" href="#">
-                    Control Electoral Ec
+                <a class="text-lg font-bold leading-relaxed inline-block py-2 whitespace-nowrap text-white" href="#">
+                    ceec
                 </a>
             </div>
             <div class="lg:flex flex-grow items-center bg-white lg:bg-opacity-0 lg:shadow-none hidden bg-negro" id="example-collapse-navbar">

@@ -212,7 +212,7 @@
 
                         <b-dropdown-item
                             v-if="$can('editar', 'actas') && !data.item.deleted_at"
-                            :to="{ name: 'infomar-actas-edit', params: { id: data.item.id } }"
+                            :to="{ name: 'control-actas-edit', params: { id: data.item.id } }"
                         >
                             <feather-icon icon="EditIcon" />
                             <span class="align-middle ml-50">{{

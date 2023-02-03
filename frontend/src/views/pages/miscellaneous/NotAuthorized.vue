@@ -1,29 +1,32 @@
 <template>
   <div class="misc-wrapper">
-    <b-link class="brand-logo">
+    <!-- <b-link class="brand-logo">
       <vuexy-logo />
       <h2 class="brand-text text-primary ml-1">
-        Vuexy
+        ceec
       </h2>
-    </b-link>
+    </b-link> -->
 
     <div class="misc-inner p-2 p-sm-3">
       <div class="w-100 text-center">
         <h2 class="mb-1">
-          You are not authorized! 🔐
+         ¡No estas autorizado! 🔐
         </h2>
         <p class="mb-2">
-          You don’t have permission to access this page. Go Home!!
+          No tienes permiso para acceder a esta página.
         </p>
         <b-button
           variant="primary"
           class="mb-1 btn-sm-block"
           :to="loginRoute()"
-        >Back to Home</b-button>
+        >Regresar al Inicio</b-button>
+        <br>
         <b-img
+        class="mt-4"
           fluid
-          :src="imgUrl"
-          alt="Not authorized page"
+          :src="('/images/login/ceec.png')" 
+          rounded
+          alt="Página no autorizada"
         />
       </div>
     </div>

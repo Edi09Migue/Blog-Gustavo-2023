@@ -59,6 +59,36 @@ export default [
         }
     },
 
+
+    // *===============================================---*
+	// *--------- EDITAR ACTA ----------------------------------*
+	// *===============================================---*
+
+	{
+		path: '/control/actas/edit/:id',
+		name: 'control-actas-edit',
+        component: () => import('@/views/apps/control-electoral/actas/actas-edit/ActasEdit.vue'),
+        meta:{
+        navActiveLink: "control-actas-list",
+        action: 'editar',
+        resource: 'actas',
+        pageTitle: 'Editar Acta',
+        breadcrumb: [
+            {
+                text: "Proceedings",
+                to: { name: "control-actas-list" }
+            },
+            {
+                text: 'Edit',
+                active: true,
+            },
+        
+        
+        ],
+        }
+    },
+
+
     {
         path: "/control/actas/view/:id",
         name: "control-actas-view",

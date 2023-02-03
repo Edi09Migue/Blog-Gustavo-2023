@@ -80,15 +80,7 @@
                 <!-- Column: Fecha  -->
                 <template #cell(created_at)="data">
                     <span class="text-nowrap">
-                        {{
-                            formatDate(data.item.created_at, {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                                hour:  "numeric",
-                                minute:  "numeric",
-                            })
-                        }}
+                        {{ formatearDateTime(data.item.created_at)}}
                     </span>
                 </template>
                 <template #row-details="row">
@@ -215,7 +207,6 @@ import {
 import vSelect from "vue-select";
 import store from "@/store";
 import { ref, onUnmounted } from "@vue/composition-api";
-import { formatDate } from "@core/utils/filter";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 import { useToast } from "vue-toastification/composition";
 
@@ -223,6 +214,8 @@ import useAuditsList from "./useAuditsList";
 import AuditListFilters from "./AuditListFilters.vue";
 import auditStoreModule from "./auditStoreModule";
 import CeldaUsuario from "@/views/apps/staff/user/componentes/CeldaUsuario";
+
+import moment from 'moment';
 
 export default {
     components: {
@@ -270,6 +263,12 @@ export default {
             isAddNewItemSidebarActive.value = true;
         };
 
+        const formatearDateTime = (item) =>{
+			moment.locale('es')
+			let date = moment(item).format("dddd, LLL");
+			return date
+		}
+
         const {
             fetchAudits,
             tableColumns,
@@ -294,7 +293,8 @@ export default {
             usuariosFilter,
 
             //Extra filter
-            groupFilter
+            groupFilter,
+
         } = useAuditsList();
 
         return {
@@ -314,7 +314,6 @@ export default {
             refItemsListTable,
 
             //Filter
-            formatDate,
             
             entidadesOptions,
             accionesOptions,
@@ -328,6 +327,8 @@ export default {
             groupFilter,
 
           //  permissionData,
+
+            formatearDateTime,
         };
     }
 };

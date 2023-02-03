@@ -132,6 +132,19 @@ export default {
             });
         },
 
+        updateActa(ctx, actaData) {
+            return new Promise((resolve, reject) => {
+                axios
+                    .put(
+                        `/api/control-electoral/actas/${actaData.acta.id}`,
+                        actaData
+                    )
+                    .then(response => resolve(response))
+                    .catch(error => reject(error));
+            });
+        },
+
+
 
 
 

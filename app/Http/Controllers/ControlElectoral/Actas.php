@@ -258,6 +258,7 @@ class Actas extends Controller
      */
     public function update(Request $request, Acta $acta)
     {
+        // dd($request->all());
 
         DB::beginTransaction();
         try {

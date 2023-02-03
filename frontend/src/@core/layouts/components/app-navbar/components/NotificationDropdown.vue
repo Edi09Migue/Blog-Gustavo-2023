@@ -115,25 +115,25 @@ export default {
     },
     methods: {
         fetchNotifications() {
-            this.$http.get("/api/auth/notifications").then(response => {
-                this.notifications = response.data;
-            });
+            // this.$http.get("/api/auth/notifications").then(response => {
+            //     this.notifications = response.data;
+            // });
         },
         markAsRead(notifyId) {
-            this.$store
-                .dispatch("app-ecommerce/markAsRead", { notifyId })
-                .then(() => {});
+            // this.$store
+            //     .dispatch("app-ecommerce/markAsRead", { notifyId })
+            //     .then(() => {});
         }
     },
     created() {
         if (typeof Echo === "object") {
-            Echo.private("users." + this.userData.id).notification(
-                notification => {
-                    console.log(notification);
-                    console.log(notification.type);
-                    this.notifications.push(notification);
-                }
-            );
+            // Echo.private("users." + this.userData.id).notification(
+            //     notification => {
+            //         console.log(notification);
+            //         console.log(notification.type);
+            //         this.notifications.push(notification);
+            //     }
+            // );
         }
     }
 };

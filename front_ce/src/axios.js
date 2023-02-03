@@ -15,8 +15,8 @@ import axios from "axios"
 
 // var token = 
 export const http = axios.create({
-    // baseURL: `http://controlelectoral.local/api/`,
-    baseURL: `https://ceec.ec/api`,
+    baseURL: `http://controlelectoral.local/api/`,
+    // baseURL: `https://ceec.ec/api`,
 })
 
 // Vue.prototype.$http = http;

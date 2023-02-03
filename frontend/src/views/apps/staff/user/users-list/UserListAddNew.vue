@@ -42,7 +42,7 @@
           <!-- Full Name -->
           <validation-provider
             #default="validationContext"
-            name="Full Name"
+            :name="$t('Full Name')"
             rules="required"
           >
             <b-form-group
@@ -55,7 +55,7 @@
                 autofocus
                 :state="getValidationState(validationContext)"
                 trim
-                placeholder="Ej: John Doe"
+                placeholder="Ej: Edisson Ibarra"
               />
 
               <b-form-invalid-feedback>
@@ -78,7 +78,7 @@
                 id="username"
                 v-model="userData.username"
                 :state="getValidationState(validationContext)"
-                placeholder="Ej: jhonDoe90"
+                placeholder="Ej: edisson"
                 trim
               />
 
@@ -92,7 +92,7 @@
           <validation-provider
             #default="validationContext"
             name="Password"
-            rules="required|min:8"
+            rules="required|min:6"
           >
             <b-form-group
               :label="$t('Password')"
@@ -126,7 +126,7 @@
                 id="email"
                 v-model="userData.email"
                 :state="getValidationState(validationContext)"
-                placeholder='Ej: jhondoe@gmail.com'
+                placeholder='Ej: edi09migue@gmail.com'
                 trim
               />
 
@@ -140,7 +140,6 @@
           <validation-provider
             #default="validationContext"
             name="Contact"
-            rules="required"
           >
             <b-form-group
               :label="$t('Phone')"
@@ -153,7 +152,7 @@
                 class="form-control"
                 :raw="false"
                 :options="clevePhone"
-                placeholder="Ej: 09812345678"
+                placeholder="Ej: 0984773251"
               />
 
               <b-form-invalid-feedback>
@@ -163,7 +162,7 @@
           </validation-provider>
 
           <!-- Company -->
-          <validation-provider
+          <!-- <validation-provider
             #default="validationContext"
             name="Company"
           >
@@ -175,7 +174,7 @@
                 id="company"
                 v-model="userData.company"
                 :state="getValidationState(validationContext)"
-                placeholder='Ej: SANTANA eCORP'
+                placeholder='Ej: ceec'
                 trim
               />
 
@@ -183,13 +182,12 @@
                 {{ validationContext.errors[0] }}
               </b-form-invalid-feedback>
             </b-form-group>
-          </validation-provider>
+          </validation-provider> -->
 
           <!-- Country -->
-          <validation-provider
+          <!-- <validation-provider
             #default="validationContext"
             name="Country"
-            rules="required"
           >
             <b-form-group
               :label="$t('Country')"
@@ -208,7 +206,7 @@
                 {{ validationContext.errors[0] }}
               </b-form-invalid-feedback>
             </b-form-group>
-          </validation-provider>
+          </validation-provider> -->
 
           <!-- User Role -->
           <validation-provider
@@ -255,7 +253,9 @@
               variant="primary"
               class="mr-2"
               type="submit"
+              :disabled="isButtonDisabled"
             >
+            <b-spinner small v-show="isButtonDisabled"/>
             {{ userData.id ? $t('Edit') : $t('Add') }}
             </b-button>
             <b-button
@@ -276,7 +276,7 @@
 
 <script>
 import {
-  BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton, BAlert
+  BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton, BAlert, BSpinner
 } from 'bootstrap-vue'
 import { extend, ValidationProvider, ValidationObserver } from 'vee-validate'
 import { ref } from '@vue/composition-api'
@@ -305,6 +305,7 @@ export default {
     BAlert,
     vSelect,
     Cleave,
+    BSpinner,
 
     // Form Validation
     ValidationProvider,
@@ -389,12 +390,19 @@ export default {
     }
 
     const userData = ref(JSON.parse(JSON.stringify(blankUserData)))
+    const isButtonDisabled = ref(false);
+
     const resetuserData = () => {
       userData.value = JSON.parse(JSON.stringify(blankUserData))
       errorServer.value = null
+      isButtonDisabled.value=false 
     }
 
+  
+
+
     const onSubmit = () => {
+      isButtonDisabled.value=true
       store.dispatch('app-user/addUser', userData.value)
         .then((response) => {
           if(response.data.status){
@@ -406,18 +414,22 @@ export default {
                 position: 'top-right',
                 props: {
                   title: `Creado!`,
-                  icon: 'CoffeeIcon',
+                  icon: 'CheckIcon',
                   variant: 'success',
                   text: `Usuario ${response.data.data.username}. Creado correctamente!`,
                 },
               })
           }else{
             errorServer.value = response.data.msg
+            isButtonDisabled.value=false
+
           }
         })
         .catch((error) => {
           console.log('error');
           console.log(error);
+          isButtonDisabled.value=false
+
         })
     }
 
@@ -434,7 +446,8 @@ export default {
       refFormObserver,
       getValidationState,
       resetForm,
-      errorServer
+      errorServer,
+      isButtonDisabled
     }
   },
 }
