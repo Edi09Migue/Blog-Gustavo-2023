@@ -24,6 +24,10 @@ class RecintosImport implements ToCollection
                             # Ejemplo la 6 una sola vez, 
         $pAnterior = null;
 
+
+        $topeM = 0;
+        $secuenciaJuntaM = 0;
+
         foreach($collection as $index => $dato){
           
             if($index!=0 && $index>=1 && $index<=171  ){
@@ -90,7 +94,35 @@ class RecintosImport implements ToCollection
                                 echo "Guardado  {$x}, secuencia = {$secuenciaJunta}   codigo = {$j->codigo}  parroquia {$parroquiaN}, zona = {$zona},\n";
                             }
 
+                            //Masculino
+                            $topeM = $dato[11];
+
+                            if($collection[$index][2] != null && $collection[$index][3] != null){
+                                if(  $parroquiaN != $zona){
+                                    $secuenciaJuntaM = 0;
+                                    echo "Aqui secuencias  {$secuenciaJuntaM} \n";
+                                }
+                            }else if($parroquiaN != null && $pAnterior){
+                                $secuenciaJuntaM = 0;
+                            }
+
+
+                            for ($y = 1; $y <= $topeM; $y++) {
+
+                                $secuenciaJuntaM = $secuenciaJuntaM + 1;
+
+                                
+                                $j = Junta::create([
+                                    "codigo"=> str_pad($secuenciaJuntaM, 3, "0", STR_PAD_LEFT),
+                                    "recinto_id"=>$recinto->id,
+                                    "tipo"=>'masculino',
+                                ]);
+                                
+                                echo "Guardado  {$y}, secuencia = {$secuenciaJuntaM}   codigo = {$j->codigo}  parroquia {$parroquiaN}, zona = {$zona},\n";
+                            }
+
                             
+
                             
                         }
 

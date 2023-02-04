@@ -77,7 +77,7 @@ class PermisosSeeder extends Seeder
 
         //permisos para todos los roles
         $permisos_globales = [
-            $p_dashboard_user,
+            // $p_dashboard_user,
             $p_read_auth,
             $p_ver_perfil_user,
             $p_editar_perfil_user
@@ -94,7 +94,12 @@ class PermisosSeeder extends Seeder
             $admin->givePermissionTo('ver-dashboard_user');
             $admin->givePermissionTo($permiso);
 
-      }
+        }
+
+        //Permisos para imágenes y digitalizador
+
+        $imagenes->givePermissionTo('listar-recintos');
+        $digitalizador->givePermissionTo('listar-recintos');
 
 
         //USER 1 con rol de superadmin

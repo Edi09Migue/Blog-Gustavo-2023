@@ -746,11 +746,7 @@ var render = function() {
                                   id: "recintos",
                                   label: "nombre",
                                   options: _vm.recintos,
-<<<<<<< HEAD
-                                  placeholder: "Buscar el recinto",
-=======
                                   placeholder: "Seleccione el recinto",
->>>>>>> 646416fd4d0593eb45f05a59ed2a1f0981649149
                                   loading: _vm.loadingRecintos
                                 },
                                 on: { input: _vm.selectJuntasXRecinto },
@@ -797,14 +793,7 @@ var render = function() {
                                                   _vm._s(search) +
                                                     "\r\n                                            "
                                                 )
-<<<<<<< HEAD
-                                              ]),
-                                              _vm._v(
-                                                ".\r\n                                            "
-                                              )
-=======
                                               ])
->>>>>>> 646416fd4d0593eb45f05a59ed2a1f0981649149
                                             ]
                                           : _c(
                                               "em",
@@ -813,11 +802,7 @@ var render = function() {
                                               },
                                               [
                                                 _vm._v(
-<<<<<<< HEAD
-                                                  "Comience a escribir para buscar un recinto."
-=======
                                                   "Comience a escribir para buscar un recinto"
->>>>>>> 646416fd4d0593eb45f05a59ed2a1f0981649149
                                                 )
                                               ]
                                             )
@@ -885,11 +870,7 @@ var render = function() {
                                   id: "juntas",
                                   label: "para_select",
                                   options: _vm.juntas,
-<<<<<<< HEAD
-                                  placeholder: "Buscar la junta",
-=======
                                   placeholder: "Seleccione la junta",
->>>>>>> 646416fd4d0593eb45f05a59ed2a1f0981649149
                                   loading: _vm.loadingJuntas
                                 },
                                 on: { input: _vm.selectJunta },
@@ -934,14 +915,7 @@ var render = function() {
                                                   _vm._s(search) +
                                                     "\r\n                                            "
                                                 )
-<<<<<<< HEAD
-                                              ]),
-                                              _vm._v(
-                                                ".\r\n                                            "
-                                              )
-=======
                                               ])
->>>>>>> 646416fd4d0593eb45f05a59ed2a1f0981649149
                                             ]
                                           : _c(
                                               "em",
@@ -950,11 +924,7 @@ var render = function() {
                                               },
                                               [
                                                 _vm._v(
-<<<<<<< HEAD
-                                                  "Comience a escribir para buscar una junta."
-=======
                                                   "Comience a escribir para buscar una junta"
->>>>>>> 646416fd4d0593eb45f05a59ed2a1f0981649149
                                                 )
                                               ]
                                             )
@@ -1013,11 +983,7 @@ var render = function() {
                                 "block mb-2 text-sm font-medium text-gray-900",
                               attrs: { for: "multiple_files" }
                             },
-<<<<<<< HEAD
-                            [_vm._v("Seleccionar la imagen de la acta")]
-=======
                             [_vm._v("Seleccione la imágen del acta")]
->>>>>>> 646416fd4d0593eb45f05a59ed2a1f0981649149
                           ),
                           _vm._v(" "),
                           _c("div", { staticClass: "block" }, [
@@ -1048,11 +1014,7 @@ var render = function() {
                                     "button",
                                     {
                                       class:
-<<<<<<< HEAD
-                                        "flex justify-center border-solid border border-negro rounded-xl bg-negro hover:bg-plomo" +
-=======
                                         "flex justify-center border-solid border border-negro rounded bg-negro hover:bg-plomo" +
->>>>>>> 646416fd4d0593eb45f05a59ed2a1f0981649149
                                         (_vm.processing
                                           ? " bg-plomo"
                                           : " bg-negro"),
@@ -1065,11 +1027,7 @@ var render = function() {
                                       _c(
                                         "span",
                                         {
-<<<<<<< HEAD
-                                          staticClass: "py-1 px-2 text-blanco"
-=======
                                           staticClass: "py-2 px-3 text-blanco"
->>>>>>> 646416fd4d0593eb45f05a59ed2a1f0981649149
                                         },
                                         [_vm._v(" GUARDAR ")]
                                       ),
@@ -1079,11 +1037,7 @@ var render = function() {
                                             "span",
                                             {
                                               staticClass:
-<<<<<<< HEAD
-                                                "py-1 px-2 text-blanco"
-=======
                                                 "py-2 px-3 text-blanco"
->>>>>>> 646416fd4d0593eb45f05a59ed2a1f0981649149
                                             },
                                             [
                                               _c(
@@ -1123,11 +1077,7 @@ var render = function() {
                                     attrs: {
                                       type: "info",
                                       description:
-<<<<<<< HEAD
-                                        "No existe ningun recinto para registar actas! Gracias por tu trabajo"
-=======
                                         "¡No existe ningún recinto para registar actas! Gracias por tu trabajo"
->>>>>>> 646416fd4d0593eb45f05a59ed2a1f0981649149
                                     }
                                   })
                                 ]
@@ -1154,11 +1104,7 @@ var render = function() {
                                 staticClass:
                                   "mt-2 text-sm text-center text-gray-500 dark:text-gray-400"
                               },
-<<<<<<< HEAD
-                              [_vm._v("Vista previa de la imagen del acta")]
-=======
                               [_vm._v("Vista previa del acta")]
->>>>>>> 646416fd4d0593eb45f05a59ed2a1f0981649149
                             ),
                             _vm._v(" "),
                             _c("img", {
@@ -1197,11 +1143,7 @@ var staticRenderFns = [
         _c(
           "h1",
           { staticClass: "text-negro underline font-bold decoration-negro" },
-<<<<<<< HEAD
-          [_vm._v("\r\n                REGISTRO DE VOTOS\r\n            ")]
-=======
           [_vm._v("\r\n                IMÁGENES\r\n            ")]
->>>>>>> 646416fd4d0593eb45f05a59ed2a1f0981649149
         )
       ]
     )

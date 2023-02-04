@@ -505,7 +505,7 @@ __webpack_require__.r(__webpack_exports__);
       this.infoVotosValidos = '';
 
       if (this.sumaTotal != this.acta.total_votantes) {
-        this.infoVotosValidos = 'Esta acta puede estar inconsistente, revisar que todo este correcto, dar click en Guardar, y luego Guardar acta inconsistente.';
+        this.infoVotosValidos = 'Esta acta puede estar inconsistente, por favor revisar que todo este correcto y dar click en Guardar Acta Inconsistente.';
         return false;
       } else {
         return true;
@@ -536,27 +536,32 @@ __webpack_require__.r(__webpack_exports__);
         var procesadaPor = null;
 
         if (response.data.status) {
-          _this.acta = response.data.acta; // Celdas para total votantes
-
-          _this.acta.tv_1 = 0;
-          _this.acta.tv_2 = 0;
-          _this.acta.tv_3 = 0; // Celdas para botos blancos
-
-          _this.acta.vb_1 = 0;
-          _this.acta.vb_2 = 0;
-          _this.acta.vb_3 = 0; // Celdas para votos nulos
-
-          _this.acta.vn_1 = 0;
-          _this.acta.vn_2 = 0;
-          _this.acta.vn_3 = 0;
+          _this.acta = response.data.acta;
           actaId = _this.acta.id;
           procesadaPor = _this.user.id;
+          _this.stop = 0;
         } else {
           _this.stop++;
 
           _this.showNoActas();
-        }
 
+          _this.acta.imagenOriginalURL = null;
+          _this.acta.id = null;
+          _this.acta.codigo = null;
+        } // Celdas para total votantes
+
+
+        _this.acta.tv_1 = 0;
+        _this.acta.tv_2 = 0;
+        _this.acta.tv_3 = 0; // Celdas para botos blancos
+
+        _this.acta.vb_1 = 0;
+        _this.acta.vb_2 = 0;
+        _this.acta.vb_3 = 0; // Celdas para votos nulos
+
+        _this.acta.vn_1 = 0;
+        _this.acta.vn_2 = 0;
+        _this.acta.vn_3 = 0;
         _this.candidatos = response.data.candidatos;
         _this.candidatos_votos = response.data.candidatos.map(function (candidato) {
           return {
@@ -579,13 +584,13 @@ __webpack_require__.r(__webpack_exports__);
     addVoto: function addVoto(event) {
       var _this2 = this;
 
-      var buttonText = 'Ok Guardar'; // Verificar si todo esta bien
+      var buttonText = 'Guardar'; // Verificar si todo esta bien
 
       var infromacion = '';
 
       if (!this.calcularSumaTotal()) {
-        infromacion = "<p class=\"text-red-500\">Esta es una Acta Inconsistente porque el el Total de Votantes no coincide con el Total votos, por favor revisar. </p>\n                <p class=\"text-blue-900\"> Si ya lo hizo, puede dar click en Guardar acta inconsistente</p>";
-        buttonText = 'Guardar acta inconsistente';
+        infromacion = "<p class=\"text-red-500\">Esta es una Acta Inconsistente porque el Total de Votantes no coincide con el Total de Votos BNC, por favor revisar. </p>\n                <p class=\"text-blue-900\"> Si ya lo hizo, puede dar click en Guardar Acta Inconsistente</p>";
+        buttonText = 'Guardar Acta Inconsistente';
         this.acta.inconsistente = true;
       }
 
@@ -594,7 +599,7 @@ __webpack_require__.r(__webpack_exports__);
         position: 'top-end',
         allowOutsideClick: false,
         text: 'POR FAVOR INFORMA ÉSTE PROBLEMA A UN ADMINISTRADOR',
-        html: "<div class=\"text-negro\">\n                        <table class=\"w-full text-sm text-left\">\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700 text-center\">\n                                <th class=\"border border-curren text-lg\" colspan=\"2\">ACTA ".concat(this.acta.codigo, " </th>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700 ").concat(this.sumaTotal != this.acta.total_votantes ? 'bg-red-50' : 'bg-lime-50', " \">\n                                <td class=\"border border-curren text-lg\">Total de Votantes</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.acta.total_votantes, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700\">\n                                <td class=\"border border-curren text-lg\">Votos Blancos</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.acta.votos_blancos, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700\">\n                                <td class=\"border border-curren text-lg\">Votos Nulos</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.acta.votos_nulos, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700\">\n                                <td class=\"border border-curren text-lg\">Votos Candidatos</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.votos_candidatos, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700 ").concat(this.sumaTotal != this.acta.total_votantes ? 'bg-red-50' : 'bg-lime-50', "\">\n                                <td class=\"border border-curren text-lg\">Total Votos</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.sumaTotal, " </td>\n                            </tr>\n                        </table>\n                        <div class=\"text-sm text-justify w-full\">\n                            ").concat(infromacion, "\n                        </div>\n                <div>"),
+        html: "<div class=\"text-negro\">\n                        <table class=\"w-full text-sm text-left\">\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700 text-center\">\n                                <th class=\"border border-curren text-lg\" colspan=\"2\">ACTA ".concat(this.acta.codigo, " </th>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700 ").concat(this.sumaTotal != this.acta.total_votantes ? 'bg-red-50' : 'bg-lime-50', " \">\n                                <td class=\"border border-curren text-lg\">Total de Votantes</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.acta.total_votantes, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700\">\n                                <td class=\"border border-curren text-lg\">Votos Blancos</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.acta.votos_blancos, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700\">\n                                <td class=\"border border-curren text-lg\">Votos Nulos</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.acta.votos_nulos, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700\">\n                                <td class=\"border border-curren text-lg\">Votos Candidatos</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.votos_candidatos, " </td>\n                            </tr>\n                            <tr class=\"border-blanco dark:bg-blanco dark:border-gray-700 ").concat(this.sumaTotal != this.acta.total_votantes ? 'bg-red-50' : 'bg-lime-50', "\">\n                                <td class=\"border border-curren text-lg\">Total Votos BNC</td>\n                                <td class=\"border border-curren text-lg\"> ").concat(this.sumaTotal, " </td>\n                            </tr>\n                        </table>\n                        <div class=\"text-sm text-justify w-full\">\n                            ").concat(infromacion, "\n                        </div>\n                <div>"),
         confirmButtonText: buttonText,
         showCancelButton: true,
         cancelButtonText: 'Cancelar'
@@ -643,6 +648,7 @@ __webpack_require__.r(__webpack_exports__);
 
           _this3.sumaTotal = 0;
           _this3.infoVotosValidos = '';
+          _this3.acta.imagenOriginalURL = null;
         } else {
           event.target.reset();
           _this3.infoVotosValidos = '';
@@ -663,38 +669,68 @@ __webpack_require__.r(__webpack_exports__);
       // <p> <b></b> Minuto. <strong></strong> Segundos </p>
       var timerInterval;
       this.$swal({
-        title: 'Aun no existe actas para revisar los votos!',
-        html: "".concat(this.stop == 1 ? '<p> Por favor espere </p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>', " "),
+        title: '¡Aún no existen actas para digitalizar los votos!',
+        html: "".concat(this.stop == 1 ? '<p> Por favor espere, estamos buscando actas</p>' : '<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>'),
+        footer: "<div class=\"flex\">\n                            <button id=\"buscar_ahora\" class=\"flex justify-center w-32 border-solid border border-negro rounded bg-negro hover:bg-plomo\">\n                                <span class=\"py-2 text-blanco\"> Buscar Ahora</span>\n                            </button>\n                            <button id=\"cancelar_timer\" class=\"ml-2 flex justify-center w-32 border-solid border border-red-500 rounded bg-red-500 hover:bg-red-400\">\n                                <span class=\"py-2 text-blanco\"> Cancelar </span>\n                            </button>\n                        </div>\n                        ",
         timer: 60000,
         timerProgressBar: true,
         didOpen: function didOpen() {
-          _this4.$swal.showLoading(); // const minutos = this.$swal.getHtmlContainer().querySelector('b')
-          // const segundos = this.$swal.getHtmlContainer().querySelector('strong')
+          var content = _this4.$swal.getFooter();
 
+          console.log(content, _this4.$swal);
+          var $ = content.querySelector.bind(content);
+
+          _this4.$swal.showLoading();
+
+          var buscar_ahora = $('#buscar_ahora');
+          buscar_ahora.addEventListener('click', function () {
+            _this4.$swal.stopTimer();
+
+            clearInterval(timerInterval);
+
+            _this4.$swal.close();
+
+            _this4.stop = 0;
+
+            _this4.fetchJunta();
+          });
+          var cancelar_timer = $('#cancelar_timer');
+          cancelar_timer.addEventListener('click', function () {
+            _this4.$swal.stopTimer();
+
+            clearInterval(timerInterval);
+
+            _this4.$swal.close();
+
+            _this4.stop = 0;
+          }); // const minutos = this.$swal.getHtmlContainer().querySelector('b')
+          // const segundos = this.$swal.getHtmlContainer().querySelector('strong')
 
           timerInterval = setInterval(function () {
             var m = (_this4.$swal.getTimerLeft() / 60000).toFixed(0);
-            var s = (_this4.$swal.getTimerLeft() / 1000).toFixed(0); // minutos.textContent = m
+            var s = (_this4.$swal.getTimerLeft() / 1000).toFixed(0);
+            console.log(s); // minutos.textContent = m
             // segundos.textContent = s
 
-            if (m == 0 && _this4.stop == 1) {
-              _this4.fetchJunta();
-            }
-          }, 1000);
+            if (s == 30 && _this4.stop == 1) _this4.fetchJunta();
+            if (s == 5 && _this4.stop == 2) _this4.fetchJunta();
+            if (_this4.acta.id) _this4.$swal.close();
+          }, 5000);
         },
         willClose: function willClose() {
           clearInterval(timerInterval);
-        },
-        showCancelButton: true,
-        cancelButtonText: 'Cancelar',
-        footer: "<div>\n                            <button @click=\"fetchJunta()\"  class=\"flex justify-center w-32 border-solid border border-negro rounded-xl bg-negro hover:bg-plomo\"  type=\"button\">\n                                            <span class=\"py-1 text-blanco\"> GUARDAR </span>\n                                            <span class=\"py-1 px-2 text-blanco\" v-if=\"processing\">\n                                                <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-6 w-6 text-white animate-spin\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\">\n                                                    <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15\" />\n                                                </svg>\n                                            </span>\n                                        </button>\n                    </div>"
+          console.log('willClose');
+        }
       }).then(function (result) {
+        console.log('result');
         /* Read more about handling dismissals below */
-        if (result.dismiss === _this4.$swal.DismissReason.timer) {
+
+        if (result.dismiss === _this4.$swal.DismissReason.timer && _this4.acta.id == null) {
           _this4.$swal({
             icon: 'info',
             title: 'Gracias por tu trabajo',
-            text: 'Ya no existe ninguna acta para registar los votos!'
+            text: '¡Ya no existen actas para digitalizar los votos!',
+            confirmButtonText: 'Aceptar'
           });
         }
       });
@@ -708,7 +744,7 @@ __webpack_require__.r(__webpack_exports__);
         allowOutsideClick: false,
         text: 'POR FAVOR INFORMA ÉSTE PROBLEMA A UN ADMINISTRADOR',
         footer: 'Por favor informa éste problema a un administrador ',
-        confirmButtonText: 'Ok'
+        confirmButtonText: 'Aceptar'
       }).then(function (result) {
         if (result.isConfirmed) {
           _this5.$refs.frmVotos.reset();
@@ -717,6 +753,16 @@ __webpack_require__.r(__webpack_exports__);
         } else if (result.isDenied) {
           _this5.$swal('Changes are not saved', '', 'info');
         }
+      });
+    },
+    showSucces: function showSucces() {
+      this.$toast.success("¡Dados guardados correctamente!", {
+        position: "top-right",
+        timeout: 1500,
+        draggablePercent: 0.6,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true
       });
     }
   }
@@ -848,17 +894,6 @@ var render = function() {
                           "figure",
                           { staticClass: "max-w-lg m-auto w-full" },
                           [
-                            _c("img", {
-                              staticClass: "rounded-lg max-h-[500px]",
-                              attrs: {
-                                src: _vm.acta
-                                  ? _vm.acta.imagenOriginalURL
-                                  : "no-imagen-acta.jpg",
-                                height: "224px",
-                                alt: ""
-                              }
-                            }),
-                            _vm._v(" "),
                             !_vm.acta.imagenOriginalURL
                               ? _c(
                                   "figcaption",
@@ -868,7 +903,18 @@ var render = function() {
                                   },
                                   [_vm._v("Vista previa de la imagen del acta")]
                                 )
-                              : _vm._e()
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _c("img", {
+                              staticClass: "rounded-lg max-h-[500px]",
+                              attrs: {
+                                src: _vm.acta.imagenOriginalURL
+                                  ? _vm.acta.imagenOriginalURL
+                                  : "images/control_electoral/no-imagen-acta.png",
+                                height: "224px",
+                                alt: ""
+                              }
+                            })
                           ]
                         )
                       ]
@@ -884,7 +930,7 @@ var render = function() {
                         [
                           _c("h2", {}, [
                             _vm._v(
-                              "\r\n                                        ACTA  "
+                              "\n                                        ACTA  "
                             ),
                             _vm.acta
                               ? _c("span", [_vm._v(_vm._s(_vm.acta.codigo))])
@@ -1338,16 +1384,6 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "grid" }, [
-                        _c("div", { staticClass: "text-red-700" }, [
-                          _vm.infoVotosValidos
-                            ? _c(
-                                "h3",
-                                { staticClass: "text-red-700 text-sm" },
-                                [_vm._v(_vm._s(_vm.infoVotosValidos))]
-                              )
-                            : _vm._e()
-                        ]),
-                        _vm._v(" "),
                         _c(
                           "table",
                           { staticClass: "w-full text-sm text-left" },
@@ -1554,7 +1590,7 @@ var render = function() {
                                   "button",
                                   {
                                     class:
-                                      "flex justify-center w-32 border-solid border border-negro rounded-xl bg-negro hover:bg-plomo" +
+                                      "flex justify-center w-32 border-solid border border-negro rounded bg-negro hover:bg-plomo" +
                                       (_vm.processing
                                         ? " bg-plomo"
                                         : " bg-negro"),
@@ -1566,7 +1602,7 @@ var render = function() {
                                   [
                                     _c(
                                       "span",
-                                      { staticClass: "py-1 text-blanco" },
+                                      { staticClass: "py-2 px-3 text-blanco" },
                                       [_vm._v(" GUARDAR ")]
                                     ),
                                     _vm._v(" "),
@@ -1574,7 +1610,7 @@ var render = function() {
                                       ? _c(
                                           "span",
                                           {
-                                            staticClass: "py-1 px-2 text-blanco"
+                                            staticClass: "py-2 px-3 text-blanco"
                                           },
                                           [
                                             _c(
@@ -1613,7 +1649,7 @@ var render = function() {
                                   attrs: {
                                     type: "info",
                                     description:
-                                      "No existe ninguna acta para registar los votos! Gracias por tu trabajo"
+                                      "No existe ninguna acta para registar los votos!"
                                   }
                                 })
                               ]
@@ -1643,7 +1679,7 @@ var staticRenderFns = [
         _c(
           "h1",
           { staticClass: "text-negro underline font-bold decoration-negro" },
-          [_vm._v("\r\n                REGISTRO DE VOTOS\r\n            ")]
+          [_vm._v("\n                DIGITALIZAR\n            ")]
         )
       ]
     )

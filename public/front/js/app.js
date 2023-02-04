@@ -33532,13 +33532,8 @@ __webpack_require__.r(__webpack_exports__);
 // var token = 
 
 var http = axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
-<<<<<<< HEAD
-  // baseURL: `http://controlelectoral.local/api/`,
-  baseURL: "https://ceec.ec/api"
-=======
   baseURL: "http://controlelectoral.local/api/" // baseURL: `https://ceec.ec/api`,
 
->>>>>>> 646416fd4d0593eb45f05a59ed2a1f0981649149
 }); // Vue.prototype.$http = http;
 // export default http;
 // export const httpFrmData = axios.create({
