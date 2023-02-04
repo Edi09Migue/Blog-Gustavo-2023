@@ -59,71 +59,34 @@ class RecintosImport implements ToCollection
                             "cda_destino" => $dato[19],
                         ]);
 
-                        if($recinto!=null){
-                            
-                            $topeF = $dato[10];
-                            $parroquiaN = trim(strtoupper($parroquia->nombre));
-                            
-                            $zona = trim(strtoupper($dato[3] == null ? $parroquiaN : $dato[3]));
-                            // echo "tope = {$topeF} zona = {$zona} parroquia = {$parroquiaN}\n";
+                        $inicio_femenino = $dato[13];
+                        $inicio_masculino = $dato[15];
 
-                            $pAnterior = $collection[$index-1][2];
-                            
-                            echo "pAnterior = {$pAnterior} pActual = {$parroquiaN} tope = {$topeF} zona = {$zona} \n";
+                        //dd($inicio_femenino, $inicio_masculino);
 
-                            if($collection[$index][2] != null && $collection[$index][3] != null){
-                                if(  $parroquiaN != $zona){
-                                    $secuenciaJunta = 0;
-                                    echo "Aqui secuencias  {$secuenciaJunta} \n";
-                                }
-                            }else if($parroquiaN != null && $pAnterior){
-                                $secuenciaJunta = 0;
-                            }
+                        if($recinto->juntas_femeninas > 0){
+                            $i = $inicio_femenino;
+                            for ($x = 1; $x <= $recinto->juntas_femeninas; $x++) {
 
-                            for ($x = 1; $x <= $topeF; $x++) {
-
-                                $secuenciaJunta = $secuenciaJunta + 1;
-
-                                
-                                $j = Junta::create([
-                                    "codigo"=> str_pad($secuenciaJunta, 3, "0", STR_PAD_LEFT),
+                                Junta::create([
+                                    "codigo"=> str_pad($i++, 3, "0", STR_PAD_LEFT),
                                     "recinto_id"=>$recinto->id,
                                     "tipo"=>'femenino',
                                 ]);
-                                
-                                echo "Guardado  {$x}, secuencia = {$secuenciaJunta}   codigo = {$j->codigo}  parroquia {$parroquiaN}, zona = {$zona},\n";
+                        
                             }
-
-                            //Masculino
-                            $topeM = $dato[11];
-
-                            if($collection[$index][2] != null && $collection[$index][3] != null){
-                                if(  $parroquiaN != $zona){
-                                    $secuenciaJuntaM = 0;
-                                    echo "Aqui secuencias  {$secuenciaJuntaM} \n";
-                                }
-                            }else if($parroquiaN != null && $pAnterior){
-                                $secuenciaJuntaM = 0;
-                            }
-
-
-                            for ($y = 1; $y <= $topeM; $y++) {
-
-                                $secuenciaJuntaM = $secuenciaJuntaM + 1;
-
-                                
-                                $j = Junta::create([
-                                    "codigo"=> str_pad($secuenciaJuntaM, 3, "0", STR_PAD_LEFT),
+                        }
+        
+                        if($recinto->juntas_masculinas > 0){
+                            $i = $inicio_masculino;
+                            for ($y = 1; $y <= $recinto->juntas_masculinas; $y++) {
+                                Junta::create([
+                                    "codigo"=>str_pad($i++, 3, "0", STR_PAD_LEFT),
                                     "recinto_id"=>$recinto->id,
                                     "tipo"=>'masculino',
                                 ]);
-                                
-                                echo "Guardado  {$y}, secuencia = {$secuenciaJuntaM}   codigo = {$j->codigo}  parroquia {$parroquiaN}, zona = {$zona},\n";
+                        
                             }
-
-                            
-
-                            
                         }
 
                     }
