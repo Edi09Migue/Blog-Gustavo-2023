@@ -1,1 +1,774 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[4],{"8yaA":function(t,a,e){"use strict";e.r(a);var o=e("3fBN"),s={components:{Alert:e("z80y").a},data:function(){return{acta:{id:null,codigo:null,junta_id:null,total_votantes:0,tv_1:0,tv_2:0,tv_3:0,votos_blancos:0,vb_1:0,vb_2:0,vb_3:0,votos_nulos:0,vn_1:0,vn_2:0,vn_3:0,estado:0,ingresada_por:!0},candidatos_votos:[],image:null,processing:!1,errorMessage:null,infoVotosValidos:null,candidatos:[],sumaTotal:0,votos_candidatos:0,alert:!0,stop:0}},created:function(){this.fetchJunta()},computed:{user:function(){var t=window.localStorage.getItem("user");return JSON.parse(t)},token:function(){return window.localStorage.getItem("token")}},methods:{calcularTotalVotantes:function(t){var a=this.acta.tv_1+this.acta.tv_2+this.acta.tv_3;this.acta.total_votantes=parseInt(a)},calcularTotalBlancos:function(t){var a=this.acta.vb_1+this.acta.vb_2+this.acta.vb_3;this.acta.votos_blancos=parseInt(a)},calcularTotalNulos:function(t){var a=this.acta.vn_1+this.acta.vn_2+this.acta.vn_3;this.acta.votos_nulos=parseInt(a)},calcularSumaTotal:function(){return this.votos_candidatos=this.candidatos_votos.reduce((function(t,a){return t+a.votos}),0),this.sumaTotal=this.votos_candidatos+(this.acta.votos_blancos+this.acta.votos_nulos),this.infoVotosValidos="",this.sumaTotal==this.acta.total_votantes||(this.infoVotosValidos="Esta acta puede estar inconsistente, por favor revisar que todo este correcto y dar click en Guardar Acta Inconsistente.",!1)},calcularVotoCandidato:function(t){var a=this.candidatos_votos[t].v_1+this.candidatos_votos[t].v_2+this.candidatos_votos[t].v_3;this.candidatos_votos[t].votos=parseInt(a),this.infoVotosValidos=""},fetchJunta:function(){var t=this;this.processing=!0,o.a.get("control-electoral/last-acta",{params:{user:this.user.id},headers:{Authorization:"Bearer ".concat(this.token),"Content-Type":"application/json"}}).then((function(a){var e=null,o=null;a.data.status?(t.acta=a.data.acta,e=t.acta.id,o=t.user.id,t.stop=0):(t.stop++,t.showNoActas(),t.acta.imagenOriginalURL=null,t.acta.id=null,t.acta.codigo=null),t.acta.tv_1=0,t.acta.tv_2=0,t.acta.tv_3=0,t.acta.vb_1=0,t.acta.vb_2=0,t.acta.vb_3=0,t.acta.vn_1=0,t.acta.vn_2=0,t.acta.vn_3=0,t.candidatos=a.data.candidatos,t.candidatos_votos=a.data.candidatos.map((function(t){return{candidato_id:t.id,acta_id:e,v_1:0,v_2:0,v_3:0,votos:0,procesada_por:o}})),t.processing=!1})).catch((function(a){console.log(a),t.errorMessage=a,t.processing=!1}))},addVoto:function(t){var a=this,e="Guardar",o="";this.calcularSumaTotal()||(o='<p class="text-red-500">Esta es una Acta Inconsistente porque el Total de Votantes no coincide con el Total de Votos BNC, por favor revisar. </p>\n                <p class="text-blue-900"> Si ya lo hizo, puede dar click en Guardar Acta Inconsistente</p>',e="Guardar Acta Inconsistente",this.acta.inconsistente=!0),this.$swal({title:"Resumen",position:"top-end",allowOutsideClick:!1,text:"POR FAVOR INFORMA ÉSTE PROBLEMA A UN ADMINISTRADOR",html:'<div class="text-negro">\n                        <table class="w-full text-sm text-left">\n                            <tr class="border-blanco dark:bg-blanco dark:border-gray-700 text-center">\n                                <th class="border border-curren text-lg" colspan="2">ACTA '.concat(this.acta.codigo,' </th>\n                            </tr>\n                            <tr class="border-blanco dark:bg-blanco dark:border-gray-700 ').concat(this.sumaTotal!=this.acta.total_votantes?"bg-red-50":"bg-lime-50",' ">\n                                <td class="border border-curren text-lg">Total de Votantes</td>\n                                <td class="border border-curren text-lg"> ').concat(this.acta.total_votantes,' </td>\n                            </tr>\n                            <tr class="border-blanco dark:bg-blanco dark:border-gray-700">\n                                <td class="border border-curren text-lg">Votos Blancos</td>\n                                <td class="border border-curren text-lg"> ').concat(this.acta.votos_blancos,' </td>\n                            </tr>\n                            <tr class="border-blanco dark:bg-blanco dark:border-gray-700">\n                                <td class="border border-curren text-lg">Votos Nulos</td>\n                                <td class="border border-curren text-lg"> ').concat(this.acta.votos_nulos,' </td>\n                            </tr>\n                            <tr class="border-blanco dark:bg-blanco dark:border-gray-700">\n                                <td class="border border-curren text-lg">Votos Candidatos</td>\n                                <td class="border border-curren text-lg"> ').concat(this.votos_candidatos,' </td>\n                            </tr>\n                            <tr class="border-blanco dark:bg-blanco dark:border-gray-700 ').concat(this.sumaTotal!=this.acta.total_votantes?"bg-red-50":"bg-lime-50",'">\n                                <td class="border border-curren text-lg">Total Votos BNC</td>\n                                <td class="border border-curren text-lg"> ').concat(this.sumaTotal,' </td>\n                            </tr>\n                        </table>\n                        <div class="text-sm text-justify w-full">\n                            ').concat(o,"\n                        </div>\n                <div>"),confirmButtonText:e,showCancelButton:!0,cancelButtonText:"Cancelar"}).then((function(e){e.isConfirmed?a.save(t):e.isDenied&&a.$swal("Changes are not saved","","info")}))},save:function(t){var a=this;this.processing=!0,delete this.acta.imagenURL,delete this.acta.media,this.candidatos_votos=this.candidatos_votos.map((function(t){return{candidato_id:t.candidato_id,acta_id:t.acta_id,votos:t.votos,procesada_por:t.procesada_por}}));var e={acta:this.acta,candidatos_votos:this.candidatos_votos};o.a.put("control-electoral/actas/".concat(this.acta.id),e,{headers:{Authorization:"Bearer ".concat(this.token),"Content-Type":"application/json"}}).then((function(e){e.data.status?(t.target.reset(),a.fetchJunta(),a.showSucces(),a.sumaTotal=0,a.infoVotosValidos="",a.acta.imagenOriginalURL=null):(t.target.reset(),a.infoVotosValidos="",a.showWarning(e.data.msg)),a.processing=!1})).catch((function(t){console.log(t),a.errorMessage=t,a.processing=!1}))},showNoActas:function(){var t,a=this;this.$swal({title:"¡Aún no existen actas para digitalizar los votos!",html:"".concat(1==this.stop?"<p> Por favor espere, estamos buscando actas</p>":'<p class="text-blue-900"> Por favor espere, intentaremos buscar actas una vez más </p>'),footer:'<div class="flex">\n                            <button id="buscar_ahora" class="flex justify-center w-32 border-solid border border-negro rounded bg-negro hover:bg-plomo">\n                                <span class="py-2 text-blanco"> Buscar Ahora</span>\n                            </button>\n                            <button id="cancelar_timer" class="ml-2 flex justify-center w-32 border-solid border border-red-500 rounded bg-red-500 hover:bg-red-400">\n                                <span class="py-2 text-blanco"> Cancelar </span>\n                            </button>\n                        </div>\n                        ',timer:6e4,timerProgressBar:!0,didOpen:function(){var e=a.$swal.getFooter();console.log(e,a.$swal);var o=e.querySelector.bind(e);a.$swal.showLoading(),o("#buscar_ahora").addEventListener("click",(function(){a.$swal.stopTimer(),clearInterval(t),a.$swal.close(),a.stop=0,a.fetchJunta()})),o("#cancelar_timer").addEventListener("click",(function(){a.$swal.stopTimer(),clearInterval(t),a.$swal.close(),a.stop=0})),t=setInterval((function(){(a.$swal.getTimerLeft()/6e4).toFixed(0);var t=(a.$swal.getTimerLeft()/1e3).toFixed(0);console.log(t),30==t&&1==a.stop&&a.fetchJunta(),5==t&&2==a.stop&&a.fetchJunta(),a.acta.id&&a.$swal.close()}),5e3)},willClose:function(){clearInterval(t),console.log("willClose")}}).then((function(t){console.log("result"),t.dismiss===a.$swal.DismissReason.timer&&null==a.acta.id&&a.$swal({icon:"info",title:"Gracias por tu trabajo",text:"¡Ya no existen actas para digitalizar los votos!",confirmButtonText:"Aceptar"})}))},showWarning:function(t){var a=this;this.$swal({icon:"warning",title:t,allowOutsideClick:!1,text:"POR FAVOR INFORMA ÉSTE PROBLEMA A UN ADMINISTRADOR",footer:"Por favor informa éste problema a un administrador ",confirmButtonText:"Aceptar"}).then((function(t){t.isConfirmed?(a.$refs.frmVotos.reset(),a.fetchJunta()):t.isDenied&&a.$swal("Changes are not saved","","info")}))},showSucces:function(){this.$toast.success("¡Dados guardados correctamente!",{position:"top-right",timeout:1500,draggablePercent:.6,hideProgressBar:!0,closeButton:"button",icon:!0})}}},r=e("KHd+"),n=Object(r.a)(s,(function(){var t=this,a=t.$createElement,e=t._self._c||a;return e("div",{staticClass:"grid place-items-center box-main "},[e("div",{staticClass:"container mx-auto"},[t._m(0),t._v(" "),e("div",{staticClass:"container max-auto "},[e("div",{staticClass:"bg-blanco rounded overflow-hidden shadow-lg min-w-[80%]"},[e("div",{staticClass:"pt-4 pb-10"},[e("form",{ref:"frmVotos",staticClass:"w-full",on:{submit:function(a){return a.preventDefault(),t.addVoto(a)}}},[e("div",{staticClass:"grid lg:grid-cols-2 gap-4"},[e("div",{staticClass:"min-w-[50%] pl-2 flex items-center"},[e("figure",{staticClass:"max-w-lg m-auto w-full"},[t.acta.imagenOriginalURL?t._e():e("figcaption",{staticClass:"mt-2 text-sm text-center text-gray-500 dark:text-gray-400"},[t._v("Vista previa de la imagen del acta")]),t._v(" "),e("img",{staticClass:"rounded-lg max-h-[500px]",attrs:{src:t.acta.imagenOriginalURL?t.acta.imagenOriginalURL:"images/control_electoral/no-imagen-acta.png",height:"224px",alt:""}})])]),t._v(" "),e("div",{staticClass:"min-w-[50%] pr-2 px-2"},[e("div",{staticClass:"text-negro underline font-bold decoration-negro pb-4"},[e("h2",{},[t._v("\n                                        ACTA  "),t.acta?e("span",[t._v(t._s(t.acta.codigo))]):t._e()])]),t._v(" "),e("div",{staticClass:"container mx-auto pb-4"},[e("table",{staticClass:"w-full text-sm text-left"},[t._m(1),t._v(" "),e("tbody",[e("tr",{staticClass:"bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-[#bdbdbd40] dark:hover:text-negro"},[e("td",{staticClass:"border border-curren"},[t._v("Total de Votantes")]),t._v(" "),e("td",{staticClass:"border border-curren w-8"},[e("input",{directives:[{name:"model",rawName:"v-model",value:t.acta.tv_1,expression:"acta.tv_1"}],staticClass:"w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",attrs:{type:"text",min:"0",max:"1",oninput:"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",placeholder:"0"},domProps:{value:t.acta.tv_1},on:{input:[function(a){a.target.composing||t.$set(t.acta,"tv_1",a.target.value)},t.calcularTotalVotantes]}})]),t._v(" "),e("td",{staticClass:"border border-curren w-8"},[e("input",{directives:[{name:"model",rawName:"v-model",value:t.acta.tv_2,expression:"acta.tv_2"}],staticClass:"w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",attrs:{type:"text",min:"0",max:"1",oninput:"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",placeholder:"0"},domProps:{value:t.acta.tv_2},on:{input:[function(a){a.target.composing||t.$set(t.acta,"tv_2",a.target.value)},t.calcularTotalVotantes]}})]),t._v(" "),e("td",{staticClass:"border border-curren w-8"},[e("input",{directives:[{name:"model",rawName:"v-model",value:t.acta.tv_3,expression:"acta.tv_3"}],staticClass:"w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",attrs:{type:"text",min:"0",max:"1",oninput:"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",placeholder:"0"},domProps:{value:t.acta.tv_3},on:{input:[function(a){a.target.composing||t.$set(t.acta,"tv_3",a.target.value)},t.calcularTotalVotantes]}})])]),t._v(" "),e("tr",{staticClass:"bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-[#bdbdbd40] dark:hover:text-blanco"},[e("td",{staticClass:"border border-curren"},[t._v("Votos Blancos")]),t._v(" "),e("td",{staticClass:"border border-curren w-8"},[e("input",{directives:[{name:"model",rawName:"v-model",value:t.acta.vb_1,expression:"acta.vb_1"}],staticClass:"w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",attrs:{type:"text",min:"0",max:"1",oninput:"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",placeholder:"0"},domProps:{value:t.acta.vb_1},on:{input:[function(a){a.target.composing||t.$set(t.acta,"vb_1",a.target.value)},t.calcularTotalBlancos]}})]),t._v(" "),e("td",{staticClass:"border border-curren w-8"},[e("input",{directives:[{name:"model",rawName:"v-model",value:t.acta.vb_2,expression:"acta.vb_2"}],staticClass:"w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",attrs:{type:"text",min:"0",max:"1",oninput:"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",placeholder:"0"},domProps:{value:t.acta.vb_2},on:{input:[function(a){a.target.composing||t.$set(t.acta,"vb_2",a.target.value)},t.calcularTotalBlancos]}})]),t._v(" "),e("td",{staticClass:"border border-curren w-8"},[e("input",{directives:[{name:"model",rawName:"v-model",value:t.acta.vb_3,expression:"acta.vb_3"}],staticClass:"w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",attrs:{type:"text",min:"0",max:"1",oninput:"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",placeholder:"0"},domProps:{value:t.acta.vb_3},on:{input:[function(a){a.target.composing||t.$set(t.acta,"vb_3",a.target.value)},t.calcularTotalBlancos]}})])]),t._v(" "),e("tr",{staticClass:"bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-[#bdbdbd40] dark:hover:text-blanco"},[e("td",{staticClass:"border border-curren"},[t._v("Votos Nulos")]),t._v(" "),e("td",{staticClass:"border border-curren w-8"},[e("input",{directives:[{name:"model",rawName:"v-model",value:t.acta.vn_1,expression:"acta.vn_1"}],staticClass:"w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",attrs:{type:"text",min:"0",max:"1",oninput:"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",placeholder:"0"},domProps:{value:t.acta.vn_1},on:{input:[function(a){a.target.composing||t.$set(t.acta,"vn_1",a.target.value)},t.calcularTotalNulos]}})]),t._v(" "),e("td",{staticClass:"border border-curren w-8"},[e("input",{directives:[{name:"model",rawName:"v-model",value:t.acta.vn_2,expression:"acta.vn_2"}],staticClass:"w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",attrs:{type:"text",min:"0",max:"1",oninput:"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",placeholder:"0"},domProps:{value:t.acta.vn_2},on:{input:[function(a){a.target.composing||t.$set(t.acta,"vn_2",a.target.value)},t.calcularTotalNulos]}})]),t._v(" "),e("td",{staticClass:"border border-curren w-8"},[e("input",{directives:[{name:"model",rawName:"v-model",value:t.acta.vn_3,expression:"acta.vn_3"}],staticClass:"w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",attrs:{type:"text",min:"0",max:"1",oninput:"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",placeholder:"0"},domProps:{value:t.acta.vn_3},on:{input:[function(a){a.target.composing||t.$set(t.acta,"vn_3",a.target.value)},t.calcularTotalNulos]}})])])])])]),t._v(" "),e("div",{staticClass:"grid"},[e("table",{staticClass:"w-full text-sm text-left"},[t._m(2),t._v(" "),e("tbody",t._l(t.candidatos,(function(a,o){return e("tr",{key:a.id,staticClass:"bg-white border-blanco dark:bg-blanco dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 hover:bg-[#bdbdbd40] dark:hover:text-negro"},[e("td",{staticClass:"border border-curren"},[t._v(t._s(a.nombre))]),t._v(" "),e("td",{staticClass:"border border-curren w-8"},[e("input",{directives:[{name:"model",rawName:"v-model",value:t.candidatos_votos[o].v_1,expression:"candidatos_votos[index].v_1"}],staticClass:"w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",attrs:{type:"text",min:"0",max:"1",oninput:"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",placeholder:"0"},domProps:{value:t.candidatos_votos[o].v_1},on:{input:[function(a){a.target.composing||t.$set(t.candidatos_votos[o],"v_1",a.target.value)},function(a){return t.calcularVotoCandidato(o)}]}})]),t._v(" "),e("td",{staticClass:"border border-curren w-8"},[e("input",{directives:[{name:"model",rawName:"v-model",value:t.candidatos_votos[o].v_2,expression:"candidatos_votos[index].v_2"}],staticClass:"w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",attrs:{type:"text",min:"0",max:"1",oninput:"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",placeholder:"0"},domProps:{value:t.candidatos_votos[o].v_2},on:{input:[function(a){a.target.composing||t.$set(t.candidatos_votos[o],"v_2",a.target.value)},function(a){return t.calcularVotoCandidato(o)}]}})]),t._v(" "),e("td",{staticClass:"border border-curren w-8"},[e("input",{directives:[{name:"model",rawName:"v-model",value:t.candidatos_votos[o].v_3,expression:"candidatos_votos[index].v_3"}],staticClass:"w-full border border-[#ffffff] bg-white px py-1 text-base font-medium text-negro outline-none focus:border-plomo-light focus:shadow-md",attrs:{type:"text",min:"0",max:"1",oninput:"this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*)\\./g, '$1');",placeholder:"0"},domProps:{value:t.candidatos_votos[o].v_3},on:{input:[function(a){a.target.composing||t.$set(t.candidatos_votos[o],"v_3",a.target.value)},function(a){return t.calcularVotoCandidato(o)}]}})])])})),0)])]),t._v(" "),e("div",{staticClass:"flex justify-center pt-5 w-full"},[t.acta.id?[e("button",{class:"flex justify-center w-32 border-solid border border-negro rounded bg-negro hover:bg-plomo"+(t.processing?" bg-plomo":" bg-negro"),attrs:{type:"submit",disabled:t.processing}},[e("span",{staticClass:"py-2 px-3 text-blanco"},[t._v(" GUARDAR ")]),t._v(" "),t.processing?e("span",{staticClass:"py-2 px-3 text-blanco"},[e("svg",{staticClass:"h-6 w-6 text-white animate-spin",attrs:{xmlns:"http://www.w3.org/2000/svg",fill:"none",viewBox:"0 0 24 24",stroke:"currentColor"}},[e("path",{attrs:{"stroke-linecap":"round","stroke-linejoin":"round","stroke-width":"2",d:"M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"}})])]):t._e()])]:[e("alert",{attrs:{type:"info",description:"No existe ninguna acta para registar los votos!"}})]],2)])])])])])])])])}),[function(){var t=this.$createElement,a=this._self._c||t;return a("div",{staticClass:"container max-auto text-negro text-xl pt-[78px] pl-4"},[a("h1",{staticClass:"text-negro underline font-bold decoration-negro"},[this._v("\n                DIGITALIZAR\n            ")])])},function(){var t=this.$createElement,a=this._self._c||t;return a("thead",{staticClass:"text-xs text-negro uppercase bg-plomo-light"},[a("tr",{staticClass:"bg-plomo-light"},[a("th",{staticClass:"py-1"}),this._v(" "),a("th",{staticClass:"py-1 text-center whitespace-nowrap",attrs:{colspan:"3"}},[this._v("TOTAL EN NÚMEROS")])])])},function(){var t=this.$createElement,a=this._self._c||t;return a("thead",{staticClass:"text-xs text-negro uppercase bg-plomo-light"},[a("tr",{staticClass:"bg-plomo-light"},[a("th",{staticClass:"py-1"},[this._v("CANDIDATO")]),this._v(" "),a("th",{staticClass:"py-1 text-center whitespace-nowrap",attrs:{colspan:"3"}},[this._v("TOTAL EN NÚMEROS")])])])}],!1,null,null,null);a.default=n.exports},z80y:function(t,a,e){"use strict";var o={components:{},props:{type:{type:String,requiere:!0},description:{type:String,requiere:!0}},data:function(){return{color:""}},computed:{title:function(){var t="";switch(this.type){case"error":this.color="error",t="Error";break;case"info":this.color="info",t="Info";break;default:this.color="warning",t="Warning"}return t}}},s=e("KHd+"),r=Object(s.a)(o,(function(){var t=this,a=t.$createElement,e=t._self._c||a;return e("div",{class:"bg-"+t.color+" border border-"+t.color+" text-"+t.color+"-700 px-4 py-3 rounded relative",attrs:{role:"alert"}},[e("strong",{staticClass:"font-bold"},[t._v(t._s(t.title)+"!")]),t._v(" "),e("input",{staticClass:"bg-error bg-info bg-warning",attrs:{type:"hidden"}}),t._v(" "),e("span",{staticClass:"block sm:inline"},[t._v(t._s(t.description))]),t._v(" "),e("span",{staticClass:"absolute top-0 bottom-0 right-0 px-4 py-3"},[e("svg",{class:"fill-current h-6 w-6 text-"+t.color+"-500",attrs:{role:"button",xmlns:"http://www.w3.org/2000/svg",viewBox:"0 0 20 20"}},[e("title",[t._v("Close")]),e("path",{attrs:{d:"M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"}})])])])}),[],!1,null,null,null);a.a=r.exports}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[4],{
+
+/***/ "./node_modules/@babel/runtime/regenerator/index.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/regenerator-runtime/runtime.js");
+
+
+/***/ }),
+
+/***/ "./node_modules/regenerator-runtime/runtime.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/regenerator-runtime/runtime.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+var runtime = (function (exports) {
+  "use strict";
+
+  var Op = Object.prototype;
+  var hasOwn = Op.hasOwnProperty;
+  var undefined; // More compressible than void 0.
+  var $Symbol = typeof Symbol === "function" ? Symbol : {};
+  var iteratorSymbol = $Symbol.iterator || "@@iterator";
+  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
+  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+
+  function define(obj, key, value) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+    return obj[key];
+  }
+  try {
+    // IE 8 has a broken Object.defineProperty that only works on DOM objects.
+    define({}, "");
+  } catch (err) {
+    define = function(obj, key, value) {
+      return obj[key] = value;
+    };
+  }
+
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
+    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
+    var generator = Object.create(protoGenerator.prototype);
+    var context = new Context(tryLocsList || []);
+
+    // The ._invoke method unifies the implementations of the .next,
+    // .throw, and .return methods.
+    generator._invoke = makeInvokeMethod(innerFn, self, context);
+
+    return generator;
+  }
+  exports.wrap = wrap;
+
+  // Try/catch helper to minimize deoptimizations. Returns a completion
+  // record like context.tryEntries[i].completion. This interface could
+  // have been (and was previously) designed to take a closure to be
+  // invoked without arguments, but in all the cases we care about we
+  // already have an existing method we want to call, so there's no need
+  // to create a new function object. We can even get away with assuming
+  // the method takes exactly one argument, since that happens to be true
+  // in every case, so we don't have to touch the arguments object. The
+  // only additional allocation required is the completion record, which
+  // has a stable shape and so hopefully should be cheap to allocate.
+  function tryCatch(fn, obj, arg) {
+    try {
+      return { type: "normal", arg: fn.call(obj, arg) };
+    } catch (err) {
+      return { type: "throw", arg: err };
+    }
+  }
+
+  var GenStateSuspendedStart = "suspendedStart";
+  var GenStateSuspendedYield = "suspendedYield";
+  var GenStateExecuting = "executing";
+  var GenStateCompleted = "completed";
+
+  // Returning this object from the innerFn has the same effect as
+  // breaking out of the dispatch switch statement.
+  var ContinueSentinel = {};
+
+  // Dummy constructor functions that we use as the .constructor and
+  // .constructor.prototype properties for functions that return Generator
+  // objects. For full spec compliance, you may wish to configure your
+  // minifier not to mangle the names of these two functions.
+  function Generator() {}
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
+
+  // This is a polyfill for %IteratorPrototype% for environments that
+  // don't natively support it.
+  var IteratorPrototype = {};
+  IteratorPrototype[iteratorSymbol] = function () {
+    return this;
+  };
+
+  var getProto = Object.getPrototypeOf;
+  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+  if (NativeIteratorPrototype &&
+      NativeIteratorPrototype !== Op &&
+      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+    // This environment has a native %IteratorPrototype%; use it instead
+    // of the polyfill.
+    IteratorPrototype = NativeIteratorPrototype;
+  }
+
+  var Gp = GeneratorFunctionPrototype.prototype =
+    Generator.prototype = Object.create(IteratorPrototype);
+  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+  GeneratorFunctionPrototype.constructor = GeneratorFunction;
+  GeneratorFunction.displayName = define(
+    GeneratorFunctionPrototype,
+    toStringTagSymbol,
+    "GeneratorFunction"
+  );
+
+  // Helper for defining the .next, .throw, and .return methods of the
+  // Iterator interface in terms of a single ._invoke method.
+  function defineIteratorMethods(prototype) {
+    ["next", "throw", "return"].forEach(function(method) {
+      define(prototype, method, function(arg) {
+        return this._invoke(method, arg);
+      });
+    });
+  }
+
+  exports.isGeneratorFunction = function(genFun) {
+    var ctor = typeof genFun === "function" && genFun.constructor;
+    return ctor
+      ? ctor === GeneratorFunction ||
+        // For the native GeneratorFunction constructor, the best we can
+        // do is to check its .name property.
+        (ctor.displayName || ctor.name) === "GeneratorFunction"
+      : false;
+  };
+
+  exports.mark = function(genFun) {
+    if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
+    } else {
+      genFun.__proto__ = GeneratorFunctionPrototype;
+      define(genFun, toStringTagSymbol, "GeneratorFunction");
+    }
+    genFun.prototype = Object.create(Gp);
+    return genFun;
+  };
+
+  // Within the body of any async function, `await x` is transformed to
+  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
+  // `hasOwn.call(value, "__await")` to determine if the yielded value is
+  // meant to be awaited.
+  exports.awrap = function(arg) {
+    return { __await: arg };
+  };
+
+  function AsyncIterator(generator, PromiseImpl) {
+    function invoke(method, arg, resolve, reject) {
+      var record = tryCatch(generator[method], generator, arg);
+      if (record.type === "throw") {
+        reject(record.arg);
+      } else {
+        var result = record.arg;
+        var value = result.value;
+        if (value &&
+            typeof value === "object" &&
+            hasOwn.call(value, "__await")) {
+          return PromiseImpl.resolve(value.__await).then(function(value) {
+            invoke("next", value, resolve, reject);
+          }, function(err) {
+            invoke("throw", err, resolve, reject);
+          });
+        }
+
+        return PromiseImpl.resolve(value).then(function(unwrapped) {
+          // When a yielded Promise is resolved, its final value becomes
+          // the .value of the Promise<{value,done}> result for the
+          // current iteration.
+          result.value = unwrapped;
+          resolve(result);
+        }, function(error) {
+          // If a rejected Promise was yielded, throw the rejection back
+          // into the async generator function so it can be handled there.
+          return invoke("throw", error, resolve, reject);
+        });
+      }
+    }
+
+    var previousPromise;
+
+    function enqueue(method, arg) {
+      function callInvokeWithMethodAndArg() {
+        return new PromiseImpl(function(resolve, reject) {
+          invoke(method, arg, resolve, reject);
+        });
+      }
+
+      return previousPromise =
+        // If enqueue has been called before, then we want to wait until
+        // all previous Promises have been resolved before calling invoke,
+        // so that results are always delivered in the correct order. If
+        // enqueue has not been called before, then it is important to
+        // call invoke immediately, without waiting on a callback to fire,
+        // so that the async generator function has the opportunity to do
+        // any necessary setup in a predictable way. This predictability
+        // is why the Promise constructor synchronously invokes its
+        // executor callback, and why async functions synchronously
+        // execute code before the first await. Since we implement simple
+        // async functions in terms of async generators, it is especially
+        // important to get this right, even though it requires care.
+        previousPromise ? previousPromise.then(
+          callInvokeWithMethodAndArg,
+          // Avoid propagating failures to Promises returned by later
+          // invocations of the iterator.
+          callInvokeWithMethodAndArg
+        ) : callInvokeWithMethodAndArg();
+    }
+
+    // Define the unified helper method that is used to implement .next,
+    // .throw, and .return (see defineIteratorMethods).
+    this._invoke = enqueue;
+  }
+
+  defineIteratorMethods(AsyncIterator.prototype);
+  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
+    return this;
+  };
+  exports.AsyncIterator = AsyncIterator;
+
+  // Note that simple async functions are implemented on top of
+  // AsyncIterator objects; they just return a Promise for the value of
+  // the final result produced by the iterator.
+  exports.async = function(innerFn, outerFn, self, tryLocsList, PromiseImpl) {
+    if (PromiseImpl === void 0) PromiseImpl = Promise;
+
+    var iter = new AsyncIterator(
+      wrap(innerFn, outerFn, self, tryLocsList),
+      PromiseImpl
+    );
+
+    return exports.isGeneratorFunction(outerFn)
+      ? iter // If outerFn is a generator, return the full iterator.
+      : iter.next().then(function(result) {
+          return result.done ? result.value : iter.next();
+        });
+  };
+
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = GenStateSuspendedStart;
+
+    return function invoke(method, arg) {
+      if (state === GenStateExecuting) {
+        throw new Error("Generator is already running");
+      }
+
+      if (state === GenStateCompleted) {
+        if (method === "throw") {
+          throw arg;
+        }
+
+        // Be forgiving, per 25.3.3.3.3 of the spec:
+        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+        return doneResult();
+      }
+
+      context.method = method;
+      context.arg = arg;
+
+      while (true) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+
+        if (context.method === "next") {
+          // Setting context._sent for legacy support of Babel's
+          // function.sent implementation.
+          context.sent = context._sent = context.arg;
+
+        } else if (context.method === "throw") {
+          if (state === GenStateSuspendedStart) {
+            state = GenStateCompleted;
+            throw context.arg;
+          }
+
+          context.dispatchException(context.arg);
+
+        } else if (context.method === "return") {
+          context.abrupt("return", context.arg);
+        }
+
+        state = GenStateExecuting;
+
+        var record = tryCatch(innerFn, self, context);
+        if (record.type === "normal") {
+          // If an exception is thrown from innerFn, we leave state ===
+          // GenStateExecuting and loop back for another invocation.
+          state = context.done
+            ? GenStateCompleted
+            : GenStateSuspendedYield;
+
+          if (record.arg === ContinueSentinel) {
+            continue;
+          }
+
+          return {
+            value: record.arg,
+            done: context.done
+          };
+
+        } else if (record.type === "throw") {
+          state = GenStateCompleted;
+          // Dispatch the exception by looping back around to the
+          // context.dispatchException(context.arg) call above.
+          context.method = "throw";
+          context.arg = record.arg;
+        }
+      }
+    };
+  }
+
+  // Call delegate.iterator[context.method](context.arg) and handle the
+  // result, either by returning a { value, done } result from the
+  // delegate iterator, or by modifying context.method and context.arg,
+  // setting context.delegate to null, and returning the ContinueSentinel.
+  function maybeInvokeDelegate(delegate, context) {
+    var method = delegate.iterator[context.method];
+    if (method === undefined) {
+      // A .throw or .return when the delegate iterator has no .throw
+      // method always terminates the yield* loop.
+      context.delegate = null;
+
+      if (context.method === "throw") {
+        // Note: ["return"] must be used for ES3 parsing compatibility.
+        if (delegate.iterator["return"]) {
+          // If the delegate iterator has a return method, give it a
+          // chance to clean up.
+          context.method = "return";
+          context.arg = undefined;
+          maybeInvokeDelegate(delegate, context);
+
+          if (context.method === "throw") {
+            // If maybeInvokeDelegate(context) changed context.method from
+            // "return" to "throw", let that override the TypeError below.
+            return ContinueSentinel;
+          }
+        }
+
+        context.method = "throw";
+        context.arg = new TypeError(
+          "The iterator does not provide a 'throw' method");
+      }
+
+      return ContinueSentinel;
+    }
+
+    var record = tryCatch(method, delegate.iterator, context.arg);
+
+    if (record.type === "throw") {
+      context.method = "throw";
+      context.arg = record.arg;
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    var info = record.arg;
+
+    if (! info) {
+      context.method = "throw";
+      context.arg = new TypeError("iterator result is not an object");
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    if (info.done) {
+      // Assign the result of the finished delegate to the temporary
+      // variable specified by delegate.resultName (see delegateYield).
+      context[delegate.resultName] = info.value;
+
+      // Resume execution at the desired location (see delegateYield).
+      context.next = delegate.nextLoc;
+
+      // If context.method was "throw" but the delegate handled the
+      // exception, let the outer generator proceed normally. If
+      // context.method was "next", forget context.arg since it has been
+      // "consumed" by the delegate iterator. If context.method was
+      // "return", allow the original .return call to continue in the
+      // outer generator.
+      if (context.method !== "return") {
+        context.method = "next";
+        context.arg = undefined;
+      }
+
+    } else {
+      // Re-yield the result returned by the delegate method.
+      return info;
+    }
+
+    // The delegate iterator is finished, so forget it and continue with
+    // the outer generator.
+    context.delegate = null;
+    return ContinueSentinel;
+  }
+
+  // Define Generator.prototype.{next,throw,return} in terms of the
+  // unified ._invoke helper method.
+  defineIteratorMethods(Gp);
+
+  define(Gp, toStringTagSymbol, "Generator");
+
+  // A Generator should always return itself as the iterator object when the
+  // @@iterator function is called on it. Some browsers' implementations of the
+  // iterator prototype chain incorrectly implement this, causing the Generator
+  // object to not be returned from this call. This ensures that doesn't happen.
+  // See https://github.com/facebook/regenerator/issues/274 for more details.
+  Gp[iteratorSymbol] = function() {
+    return this;
+  };
+
+  Gp.toString = function() {
+    return "[object Generator]";
+  };
+
+  function pushTryEntry(locs) {
+    var entry = { tryLoc: locs[0] };
+
+    if (1 in locs) {
+      entry.catchLoc = locs[1];
+    }
+
+    if (2 in locs) {
+      entry.finallyLoc = locs[2];
+      entry.afterLoc = locs[3];
+    }
+
+    this.tryEntries.push(entry);
+  }
+
+  function resetTryEntry(entry) {
+    var record = entry.completion || {};
+    record.type = "normal";
+    delete record.arg;
+    entry.completion = record;
+  }
+
+  function Context(tryLocsList) {
+    // The root entry object (effectively a try statement without a catch
+    // or a finally block) gives us a place to store values thrown from
+    // locations where there is no enclosing try statement.
+    this.tryEntries = [{ tryLoc: "root" }];
+    tryLocsList.forEach(pushTryEntry, this);
+    this.reset(true);
+  }
+
+  exports.keys = function(object) {
+    var keys = [];
+    for (var key in object) {
+      keys.push(key);
+    }
+    keys.reverse();
+
+    // Rather than returning an object with a next method, we keep
+    // things simple and return the next function itself.
+    return function next() {
+      while (keys.length) {
+        var key = keys.pop();
+        if (key in object) {
+          next.value = key;
+          next.done = false;
+          return next;
+        }
+      }
+
+      // To avoid creating an additional object, we just hang the .value
+      // and .done properties off the next function object itself. This
+      // also ensures that the minifier will not anonymize the function.
+      next.done = true;
+      return next;
+    };
+  };
+
+  function values(iterable) {
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+      if (iteratorMethod) {
+        return iteratorMethod.call(iterable);
+      }
+
+      if (typeof iterable.next === "function") {
+        return iterable;
+      }
+
+      if (!isNaN(iterable.length)) {
+        var i = -1, next = function next() {
+          while (++i < iterable.length) {
+            if (hasOwn.call(iterable, i)) {
+              next.value = iterable[i];
+              next.done = false;
+              return next;
+            }
+          }
+
+          next.value = undefined;
+          next.done = true;
+
+          return next;
+        };
+
+        return next.next = next;
+      }
+    }
+
+    // Return an iterator with no values.
+    return { next: doneResult };
+  }
+  exports.values = values;
+
+  function doneResult() {
+    return { value: undefined, done: true };
+  }
+
+  Context.prototype = {
+    constructor: Context,
+
+    reset: function(skipTempReset) {
+      this.prev = 0;
+      this.next = 0;
+      // Resetting context._sent for legacy support of Babel's
+      // function.sent implementation.
+      this.sent = this._sent = undefined;
+      this.done = false;
+      this.delegate = null;
+
+      this.method = "next";
+      this.arg = undefined;
+
+      this.tryEntries.forEach(resetTryEntry);
+
+      if (!skipTempReset) {
+        for (var name in this) {
+          // Not sure about the optimal order of these conditions:
+          if (name.charAt(0) === "t" &&
+              hasOwn.call(this, name) &&
+              !isNaN(+name.slice(1))) {
+            this[name] = undefined;
+          }
+        }
+      }
+    },
+
+    stop: function() {
+      this.done = true;
+
+      var rootEntry = this.tryEntries[0];
+      var rootRecord = rootEntry.completion;
+      if (rootRecord.type === "throw") {
+        throw rootRecord.arg;
+      }
+
+      return this.rval;
+    },
+
+    dispatchException: function(exception) {
+      if (this.done) {
+        throw exception;
+      }
+
+      var context = this;
+      function handle(loc, caught) {
+        record.type = "throw";
+        record.arg = exception;
+        context.next = loc;
+
+        if (caught) {
+          // If the dispatched exception was caught by a catch block,
+          // then let that catch block handle the exception normally.
+          context.method = "next";
+          context.arg = undefined;
+        }
+
+        return !! caught;
+      }
+
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        var record = entry.completion;
+
+        if (entry.tryLoc === "root") {
+          // Exception thrown outside of any try block that could handle
+          // it, so set the completion value of the entire function to
+          // throw the exception.
+          return handle("end");
+        }
+
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc");
+          var hasFinally = hasOwn.call(entry, "finallyLoc");
+
+          if (hasCatch && hasFinally) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            } else if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else if (hasCatch) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            }
+
+          } else if (hasFinally) {
+            if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else {
+            throw new Error("try statement without catch or finally");
+          }
+        }
+      }
+    },
+
+    abrupt: function(type, arg) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc <= this.prev &&
+            hasOwn.call(entry, "finallyLoc") &&
+            this.prev < entry.finallyLoc) {
+          var finallyEntry = entry;
+          break;
+        }
+      }
+
+      if (finallyEntry &&
+          (type === "break" ||
+           type === "continue") &&
+          finallyEntry.tryLoc <= arg &&
+          arg <= finallyEntry.finallyLoc) {
+        // Ignore the finally entry if control is not jumping to a
+        // location outside the try/catch block.
+        finallyEntry = null;
+      }
+
+      var record = finallyEntry ? finallyEntry.completion : {};
+      record.type = type;
+      record.arg = arg;
+
+      if (finallyEntry) {
+        this.method = "next";
+        this.next = finallyEntry.finallyLoc;
+        return ContinueSentinel;
+      }
+
+      return this.complete(record);
+    },
+
+    complete: function(record, afterLoc) {
+      if (record.type === "throw") {
+        throw record.arg;
+      }
+
+      if (record.type === "break" ||
+          record.type === "continue") {
+        this.next = record.arg;
+      } else if (record.type === "return") {
+        this.rval = this.arg = record.arg;
+        this.method = "return";
+        this.next = "end";
+      } else if (record.type === "normal" && afterLoc) {
+        this.next = afterLoc;
+      }
+
+      return ContinueSentinel;
+    },
+
+    finish: function(finallyLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.finallyLoc === finallyLoc) {
+          this.complete(entry.completion, entry.afterLoc);
+          resetTryEntry(entry);
+          return ContinueSentinel;
+        }
+      }
+    },
+
+    "catch": function(tryLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc === tryLoc) {
+          var record = entry.completion;
+          if (record.type === "throw") {
+            var thrown = record.arg;
+            resetTryEntry(entry);
+          }
+          return thrown;
+        }
+      }
+
+      // The context.catch method must only be called with a location
+      // argument that corresponds to a known catch block.
+      throw new Error("illegal catch attempt");
+    },
+
+    delegateYield: function(iterable, resultName, nextLoc) {
+      this.delegate = {
+        iterator: values(iterable),
+        resultName: resultName,
+        nextLoc: nextLoc
+      };
+
+      if (this.method === "next") {
+        // Deliberately forget the last sent value so that we don't
+        // accidentally pass it on to the delegate.
+        this.arg = undefined;
+      }
+
+      return ContinueSentinel;
+    }
+  };
+
+  // Regardless of whether this script is executing as a CommonJS module
+  // or not, return the runtime object so that we can declare the variable
+  // regeneratorRuntime in the outer scope, which allows this module to be
+  // injected easily by `bin/regenerator --include-runtime script.js`.
+  return exports;
+
+}(
+  // If this script is executing as a CommonJS module, use module.exports
+  // as the regeneratorRuntime namespace. Otherwise create a new empty
+  // object. Either way, the resulting object will be used to initialize
+  // the regeneratorRuntime variable at the top of this file.
+   true ? module.exports : undefined
+));
+
+try {
+  regeneratorRuntime = runtime;
+} catch (accidentalStrictMode) {
+  // This module should not be running in strict mode, so the above
+  // assignment should always work unless something is misconfigured. Just
+  // in case runtime.js accidentally runs in strict mode, we can escape
+  // strict mode using a global Function call. This could conceivably fail
+  // if a Content Security Policy forbids using Function, but in that case
+  // the proper solution is to fix the accidental strict mode problem. If
+  // you've misconfigured your bundler to force strict mode and applied a
+  // CSP to forbid Function, and you're not willing to fix either of those
+  // problems, please detail your unique predicament in a GitHub issue.
+  Function("r", "regeneratorRuntime = r")(runtime);
+}
+
+
+/***/ })
+
+}]);

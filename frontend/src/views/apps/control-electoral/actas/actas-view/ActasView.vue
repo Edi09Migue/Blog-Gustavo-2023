@@ -48,7 +48,7 @@
                     xl="4"
                 >
                     <b-img
-                        :src="actaData.imagenURL"
+                        :src="actaData.imagenOriginalURL"
                         width="500"
                         fluid
                         rounded
@@ -59,7 +59,7 @@
                         :target="`invoice-row-${actaData.id}`" 
                         triggers="hover"
                     >
-                        <b-link :href="actaData.imagenURL" :download="actaData.codigo" class="d-flex justify-content-center text-white">
+                        <b-link :href="actaData.imagenOriginalURL" :download="actaData.codigo" class="d-flex justify-content-center text-white">
                             Descargar
                         </b-link>
                     </b-tooltip>  

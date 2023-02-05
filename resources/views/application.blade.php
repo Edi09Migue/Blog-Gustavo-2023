@@ -14,10 +14,19 @@
 
     <!-- Favicon -->
 
-
-
-
     <link rel="shortcut icon" type="image/x-icon"  href="{{asset('favicon/favicon.ico')}}">
+
+
+   <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9Q86XLRR9C"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-9Q86XLRR9C');
+    </script>
+
 
     {{-- <link rel="apple-touch-icon" sizes="57x57" href="{{asset('favicon/apple-icon-57x57.png')}}">
     <link rel="apple-touch-icon" sizes="60x60" href="{{asset('favicon/apple-icon-60x60.png')}}">
