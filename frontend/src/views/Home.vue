@@ -12,18 +12,18 @@
                     :to="{ name: 'control-resultados'}"
                 >
                     <feather-icon
-                        icon="BarChart2Icon"
+                        icon="BookIcon"
                         size="100"
                        
                     />
                     <h1 class="text-white">
-                        Resultados 
+                        Artículos 
                     </h1>
                 </b-button>
                 </div>
             </b-col>
 
-            <b-col md="6">
+            <!-- <b-col md="6">
             <div class="demo-inline-spacing">
                 <b-button
                     v-ripple.400="'rgba(113, 102, 240, 0.15)'"
@@ -43,7 +43,7 @@
                        
                 </b-button>
             </div>
-            </b-col>
+            </b-col> -->
         </b-row>
     </b-card>
   </div>

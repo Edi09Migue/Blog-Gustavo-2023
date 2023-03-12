@@ -109,31 +109,3 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:api'], function () {
   
 
 });
-
-
-Route::group(['prefix' => 'control-electoral', 'middleware' => 'auth:api'], function () {
-
-  Route::get('counters', [DashboardAdmin::class, 'counters']);
-  
-  Route::get('actas/dropdownOptions', [Actas::class, 'dropdownOptions']);
-  Route::get('actas/estadosOptions', [Actas::class, 'estadosOptions']);
-  Route::get('last-acta', [Actas::class, 'lastActa']);
-  Route::apiResource('actas', Actas::class, ['parameters' => ['actas' => 'acta']]);
-  Route::post('actas/{acta}/restore', [Actas::class,'restore']);
-  Route::post('actas/reportes', [Actas::class, 'reportes']);
-
-
-  Route::get('recintos/dropdownOptions', [Recintos::class, 'dropdownOptions']);
-  Route::apiResource('recintos', Recintos::class, ['parameters' => ['recintos' => 'recinto']]);
-
-  Route::get('juntas/dropdownOptions', [Juntas::class, 'dropdownOptions']);
-  
-  //rutas para resultados
-  Route::get('resultados/totales-por-candidato', [Resultados::class, 'totalesPorCandidato']);
-  //Route::get('resultados/totales-por-candidato', [Resultados::class, 'totalesPorCandidatoFake']);
-  Route::get('resultados/totales-por-candidato-parroquia', [Resultados::class, 'totalesPorCandidatoParroquia']);
-  Route::get('resultados/totales-por-tipo-voto', [Resultados::class, 'totalesPorTipoVoto']);
-  Route::get('resultados/totales-escrutados', [Resultados::class, 'totalesEscrutados']);
-
-  
-});

@@ -15,33 +15,10 @@ export default [
     resource: 'dashboard_admin'
   },
 
-  {
-    title: 'Results',
-    route: 'control-resultados',
-    icon: 'BarChart2Icon',
-    action: 'listar',
-    resource: 'resultados'
-  },
-
-  {
-    title: 'Proceedings',
-    route: 'control-actas-list',
-    icon: 'FileIcon',
-    action: 'listar',
-    resource: 'actas'
-  },
-
+ 
 
   {
     header: 'Territory',
-  },
-
-  {
-    title: 'Premises',
-    route: 'control-recintos-list',
-    icon: 'ListIcon',
-    action: 'listar',
-    resource: 'recintos'
   },
 
   {

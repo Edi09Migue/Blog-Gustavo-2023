@@ -38,7 +38,7 @@
               </b-img> -->
 
               <h2 class="brand-text">
-                ceec
+                Menú
               </h2>
             </b-link>
           </li>

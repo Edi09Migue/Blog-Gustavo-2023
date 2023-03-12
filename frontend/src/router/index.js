@@ -6,14 +6,13 @@ import { canNavigate } from '@/libs/acl/routeProtection'
 import { isUserLoggedIn, getUserData, getHomeRouteForLoggedInUser } from '@/auth/utils'
 import pages from './routes/pages'
 import geo from './routes/geo'
-import controlElectoral from './routes/controlElectoral'
 
 Vue.use(VueRouter)
 
 const router = new VueRouter({
   mode: 'history',
   // base: process.env.BASE_URL,
-  base: '/',
+  base: '/admin',
   scrollBehavior() {
     return { x: 0, y: 0 }
   },
@@ -36,7 +35,6 @@ const router = new VueRouter({
     },
     ...pages,
     ...geo,
-    ...controlElectoral,
     {
       path: '*',
       redirect: 'error-404',

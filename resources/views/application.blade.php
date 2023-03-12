@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- <link rel="icon" href="<%= BASE_URL %>favicon.ico"> -->
 
-  <title>Control Electoral EC</title>
+  <title>Gestor</title>
   <!-- Styles -->
   <link rel="stylesheet" href="{{ asset(mix('css/app.css')) }}">
 
