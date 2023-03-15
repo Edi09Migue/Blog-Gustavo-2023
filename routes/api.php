@@ -7,6 +7,9 @@ use App\Http\Controllers\Admin\Roles;
 use App\Http\Controllers\Admin\UserProfileCtrl;
 use App\Http\Controllers\Admin\Usuarios;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Cms\CategoriasBlog;
+use App\Http\Controllers\Cms\Paginas;
+use App\Http\Controllers\Cms\Sliders;
 use App\Http\Controllers\ControlElectoral\Actas;
 use App\Http\Controllers\ControlElectoral\DashboardAdmin;
 use App\Http\Controllers\ControlElectoral\Juntas;
@@ -16,6 +19,8 @@ use App\Http\Controllers\Geo\Cantones;
 use App\Http\Controllers\Geo\Paises;
 use App\Http\Controllers\Geo\Parroquias;
 use App\Http\Controllers\Geo\Provincias;
+use App\Http\Controllers\Web\Contactos;
+use App\Http\Controllers\Web\Suscriptores;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -108,4 +113,28 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:api'], function () {
   Route::post('audit/reportes', [Auditoria::class,'reportes']);
   
 
+});
+
+
+//Rutas blog
+Route::group(['prefix' => 'blog', 'middleware' => 'auth:api'], function () {
+  
+  Route::get('paginas/dropdownOptions', [Paginas::class, 'dropdownOptions']);
+  Route::apiResource('paginas', Paginas::class);
+  // Route::post('paginas/validate/{field}', [Paginas::class, 'isUniqueField']);
+  
+  Route::get('categorias-blog/dropdownOptions', [CategoriasBlog::class, 'dropdownOptions']);
+  Route::apiResource('categorias-blog', CategoriasBlog::class, ['parameters' => ['categorias-blog' => 'categoria']]);
+  
+  Route::get('sliders/dropdownOptions', [Sliders::class, 'dropdownOptions']);
+  Route::apiResource('sliders', Sliders::class);
+  
+  
+});
+
+
+//Rutas web
+Route::group(['prefix' => 'web','middleware' => 'auth:api'], function () {
+  Route::apiResource('suscriptores', Suscriptores::class, ['parameters' => ['suscriptores' => 'suscriptor']]);
+  Route::apiResource('contactos', Contactos::class);
 });

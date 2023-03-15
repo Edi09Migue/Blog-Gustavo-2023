@@ -5,8 +5,11 @@ set -e
 #borramos todas las tablas y creamos 
 php artisan migrate:fresh
 
-#Correr migraciones de control_electoral
-php artisan migrate --path=database/migrations/control-electoral
+#Correr migraciones de cms
+php artisan migrate --path=database/migrations/cms
+
+#Correr migraciones de web
+php artisan migrate --path=database/migrations/web
 
 # # # # #corremos las migraciones
 php artisan db:seed

@@ -15,6 +15,62 @@ export default [
     resource: 'dashboard_admin'
   },
 
+  //Web
+  {
+    header: 'Web',
+    action: "listar",
+    resource: "suscriptores",
+  },
+
+  {
+    title: "Subscribers",
+    route: "web-suscriptores-list",
+    icon: 'BellIcon',
+    action: "listar",
+    resource: "suscriptores"
+  },
+
+  {
+    title: "Contacts",
+    route: "web-contactos-list",
+    icon: 'MailIcon',
+    action: "listar",
+    resource: "contactos"
+  },
+
+
+   
+ //Blog
+ {
+  header: "Cms"
+    },
+  
+{
+  title: "Sliders",
+  route: "blog-sliders-list",
+  // action: "listar",
+  // resource: "sliders",
+  icon: "ImageIcon"
+},
+
+
+  {
+      title: "Pages",
+      route: "blog-paginas-list",
+      action: "listar",
+      resource: "paginas",
+      icon: "BookIcon"
+  },
+
+  {
+      title: "Categories",
+      route: "blog-categorias-list",
+      action: "listar",
+      resource: "categorias_blog",
+      icon: "ListIcon"
+  },
+
+
  
 
   {

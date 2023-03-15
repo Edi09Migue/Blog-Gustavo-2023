@@ -37,9 +37,9 @@ class AppServiceProvider extends ServiceProvider
             return $image->fit(500, 500);
         });
 
-        // fotos_cel
-        Conversion::register('acta', function (Image $image) {
-            return $image->fit(1000, 1600);
+        // artículos
+        Conversion::register('perfil', function (Image $image) {
+            return $image->fit(700, 467);
         });
 
     }

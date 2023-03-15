@@ -6,6 +6,8 @@ import { canNavigate } from '@/libs/acl/routeProtection'
 import { isUserLoggedIn, getUserData, getHomeRouteForLoggedInUser } from '@/auth/utils'
 import pages from './routes/pages'
 import geo from './routes/geo'
+import blog from './routes/blog'
+import web from './routes/web'
 
 Vue.use(VueRouter)
 
@@ -35,6 +37,8 @@ const router = new VueRouter({
     },
     ...pages,
     ...geo,
+    ...blog,
+    ...web,
     {
       path: '*',
       redirect: 'error-404',

@@ -25,7 +25,6 @@ export const getHomeRouteForLoggedInUser = userRole => {
   console.log(userRole);
   if (userRole === 'superadmin') return '/'
   if (userRole === 'admin') return '/'
-  if (userRole === 'digitalizador') return '/control/recintos/list'
-  if (userRole === 'imagenes') return '/control/recintos/list'
+  if (userRole === 'editor') return '/'
   return { name: 'auth-login' }
 }

@@ -7,7 +7,7 @@
         <b-link class="brand-logo">
           <vuexy-logo />
 
-          <h2 class="brand-text text-primary ml-1">
+          <h2 class="brand-text text-secondary ml-1">
             Gestor de contenido
           </h2>
           <!-- <b-img   

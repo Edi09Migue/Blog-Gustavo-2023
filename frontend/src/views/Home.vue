@@ -9,7 +9,7 @@
                     block
                     variant="primary"
                     size="lg"
-                    :to="{ name: 'control-resultados'}"
+                    :to="{ name: 'blog-paginas-list'}"
                 >
                     <feather-icon
                         icon="BookIcon"
@@ -23,27 +23,27 @@
                 </div>
             </b-col>
 
-            <!-- <b-col md="6">
+            <b-col md="6">
             <div class="demo-inline-spacing">
                 <b-button
                     v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                     block
                     variant="outline-primary"
                     size="lg"
-                    :to="{ name: 'control-actas-list'}"
+                    :to="{ name: 'blog-categorias-list'}"
                 >
                     <feather-icon
-                        icon="FileIcon"
+                        icon="ListIcon"
                         size="100"
                        
                     />
                     <h1 class="text-primary">
-                        Actas Escrutadas
+                        Categorías
                     </h1>
                        
                 </b-button>
             </div>
-            </b-col> -->
+            </b-col>
         </b-row>
     </b-card>
   </div>

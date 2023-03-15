@@ -18,8 +18,7 @@ class PermisosSeeder extends Seeder
     {
         $superadmin = Role::create(['name' => 'superadmin']);
         $admin = Role::create(['name' => 'admin']);
-        $digitalizador = Role::create(['name' => 'digitalizador']);
-        $imagenes = Role::create(['name' => 'imagenes']);
+        $editor = Role::create(['name' => 'editor']);
 
         //
         $p_manage_all = Permission::create(['name' => 'manage-all', 'group_key' => 'Generales']);
@@ -55,14 +54,18 @@ class PermisosSeeder extends Seeder
         $p_editar_permisos = Permission::create(['name' => 'editar-permisos', 'group_key' => 'Seguridad']);
         $p_eliminar_permisos = Permission::create(['name' => 'eliminar-permisos', 'group_key' => 'Seguridad']);
 
-        //Actas
-        $p_listar_actas = Permission::create(['name' => 'listar-actas', 'group_key' => 'Admin']);
-        $p_ver_actas = Permission::create(['name' => 'ver-actas', 'group_key' => 'Admin']);
+        //Blog
+        $p_listar_paginas = Permission::create(['name' => 'listar-paginas', 'group_key' => 'Blog']);
+        $p_crear_paginas = Permission::create(['name' => 'crear-paginas', 'group_key' => 'Blog']);
+        $p_editar_paginas = Permission::create(['name' => 'editar-paginas', 'group_key' => 'Blog']);
+        $p_eliminar_paginas = Permission::create(['name' => 'eliminar-paginas', 'group_key' => 'Blog']);
 
-        //Resultados
-        $p_listar_resultados = Permission::create(['name' => 'listar-resultados', 'group_key' => 'Admin']);
+        $p_listar_categorias_blog = Permission::create(['name' => 'listar-categorias_blog', 'group_key' => 'Blog']);
+        $p_crear_categorias_blog = Permission::create(['name' => 'crear-categorias_blog', 'group_key' => 'Blog']);
+        $p_editar_categorias_blog = Permission::create(['name' => 'editar-categorias_blog', 'group_key' => 'Blog']);
+        $p_eliminar_categorias_blog = Permission::create(['name' => 'eliminar-categorias_blog', 'group_key' => 'Blog']);
 
-        $p_listar_recintos = Permission::create(['name' => 'listar-recintos', 'group_key' => 'Admin']);
+
 
 
 
@@ -85,8 +88,7 @@ class PermisosSeeder extends Seeder
         
         foreach ($permisos_globales as $p) {
             $admin->givePermissionTo($p);
-            $imagenes->givePermissionTo($p);
-            $digitalizador->givePermissionTo($p);
+            $editor->givePermissionTo($p);
         }
         //Permisos para admin
         $permisos_admin = Permission::where('group_key','Admin')->get();
@@ -97,25 +99,17 @@ class PermisosSeeder extends Seeder
         }
 
         //Permisos para imágenes y digitalizador
-
-        $imagenes->givePermissionTo('listar-recintos');
-        $digitalizador->givePermissionTo('listar-recintos');
+        // $imagenes->givePermissionTo('listar-recintos');
+ 
 
 
         //USER 1 con rol de superadmin
         $user_superadmin_1 = User::find(1);
-        $user_superadmin_1->assignRole('digitalizador');
+        $user_superadmin_1->assignRole('superadmin');
 
-        //USER 2 con rol de superadmin
-        $user_superadmin_2  = User::find(2);
-        $user_superadmin_2->assignRole('superadmin');
+        //USER 3 con rol de editor
+        $user_imagenes = User::find(2);
+        $user_imagenes->assignRole('editor');
 
-        //USER 3 con rol de imagenes
-        $user_imagenes = User::find(3);
-        $user_imagenes->assignRole('imagenes');
-
-        //USER 4 con rol de admin
-        $user_admin  = User::find(4);
-        $user_admin->assignRole('admin');
     }
 }

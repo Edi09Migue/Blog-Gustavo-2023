@@ -159,7 +159,18 @@
   "User": "User",
   "Action": "Action",
   "Event":"Event",
-  "Entity":"Entity"
+  "Entity":"Entity",
+  
+  "Cms": "Cms",
+  "Blog": "Blog",
+  "Sliders": "Sliders",
+  "Pages": "Pages",
+  "Categories":"Categories",
+  "Categorie":"Categorie",
+
+  "Web": "Web",
+  "Subscribers": "Subscribers",
+  "Contacts": "Contacts"
 
 
 
