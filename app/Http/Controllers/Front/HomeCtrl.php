@@ -47,10 +47,31 @@ class HomeCtrl extends Controller
 
 
     /**
-     * Página de inicio
+     * Página de home
     */
     public function home(){    
-        return view('front.home');
+        $articulos = Pagina::where('estado', 'publicada')->get();
+        $this->data['articulos'] = $articulos;
+        return view('front.home', $this->data);
+    }
+
+     /**
+     * Página de receta
+    */
+    public function articulo($articulo){
+
+        $articulo = Pagina::where('slug',$articulo)->first();
+
+        $otros_articulos = Pagina::where('id','!=', $articulo->id)->where('estado', 'publicada')->get()->take(3);
+        $this->data['otros_articulos'] = $otros_articulos;
+
+        if($articulo){
+            $this->data['articulo'] = $articulo;
+            return view('front.articulo', $this->data);
+        }else{
+            return view('front.pages.no_encontrada');
+        }       
+   
     }
 
 

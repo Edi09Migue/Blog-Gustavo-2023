@@ -1,11 +1,14 @@
-@extends('front.layouts.blog')
+@extends('front.layouts.plantilla')
 
 @section('title','Inicio')
-@section('description', 'nformar es un emprendimiento que busca dar a conocer las especies que tienen valor comercial en la reserva marina de Galápagos a través de la difusion de información sobre estas especies y recetas para incentivar su consumo')
+@section('description', 'Gustavo Ibarra comunicador político')
 
 @section('contenido')
-
-   <h1>A</h1>
-
-
+   @include('front.pages.home.about')
+   <hr class="le-hr">
+   @include('front.pages.home.academia')
+   <hr class="le-hr">
+   @include('front.pages.home.articulos')
+   <hr class="le-hr">
+   @include('front.pages.home.contacto')
 @endsection

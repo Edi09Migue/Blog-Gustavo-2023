@@ -1,41 +1,83 @@
+<header id="home">
 
-	<!-- top bar frame -->
-	<div class="tst-menu-frame">
-		<!-- top bar -->
-		<div class="tst-dynamic-menu" id="tst-dynamic-menu">
-		<div class="tst-menu tst-onepage">
-			<!-- logo -->
-			<a href="{{ route('front.home') }}">
-				<img src="{{ asset('tastyc/img/infomar/logo-sin-slogan.png')}}" class="tst-logo d-none d-sm-block img-logo" alt="infomar">
-				<img src="{{ asset('tastyc/img/infomar/logo-con-slogan.png')}}" class="tst-logo d-block d-sm-none img-logo" alt="infomar">
-			</a>
-			<!-- menu -->
-			<nav>
-				<ul>
-					<li class="@if($control_menu == 'home') current-menu-item @endif"><a data-no-swup href="{{ route('front.home') }}">Inicio</a></li>
-					<li class="@if($control_menu == 'about') current-menu-item @endif"><a data-no-swup href="{{ route('front.about') }}">Acerca de</a></li>
-					<li class="@if($control_menu == 'recetas') current-menu-item @endif"><a data-no-swup href="{{ route('front.recetas') }}">Recetas</a></li>
-					<li class="@if($control_menu == 'especies') current-menu-item @endif"><a data-no-swup href="{{ route('front.especies') }}">Especies</a></li>
-					<li class="@if($control_menu == 'blog') current-menu-item @endif"><a data-no-swup href="{{ route('front.noticias') }}">Noticias</a></li>
-					<li class="@if($control_menu == 'contacto') current-menu-item @endif"><a data-no-swup href={{ route('front.contacto')}}>Contacto</a></li>
-				</ul>
-			</nav>
-			<!-- menu end -->
-			<!-- top bar right -->
-			<div class="tst-menu-right">
-			<!-- menu button -->
-			<div class="tst-menu-button-frame">
-				<div class="tst-menu-btn">
-				<div class="tst-burger">
-					<span></span>
-				</div>
-				</div>
-			</div>
-			<!-- menu button end -->
-			</div>
-			<!-- top bar right end  -->
-		</div>
-		</div>
-		<!-- top bar end -->
+	<div class="bg-image" data-bg-image="{{ asset('blog/images/1.jpg') }}" style="background-position: center center; background-image: url(&quot;blog/images/head-image-4.jpg&quot;); background-size: cover; background-repeat: no-repeat; height: 535px;">
+	  <div class="avatar wow bounceInDown animated" style="visibility: visible; animation-name: bounceInDown;">
+		<img alt="avatar" src="{{ asset('blog/images/profile.jpeg') }}">
+	  </div>
 	</div>
-	<!-- top bar frame -->
+
+	<div class="sticky-paper-head has-shadow">
+	  <div class="content">
+		<div class="social-icons">
+		  <h1>Gustavo Ibarra Nuñez</h1>
+		  <ul style="text-align: center; margin-top: 8px;">
+			<li>
+			  <a class="fa fa-facebook" href="http://temsool.com/demo/papyrus/#"></a>
+			</li>
+			<li>
+			  <a class="fa fa-twitter" href="http://temsool.com/demo/papyrus/#"></a>
+			</li>
+			<li>
+			  <a class="fa fa-instagram" href="http://temsool.com/demo/papyrus/#"></a>
+			</li>
+		  </ul>
+
+		</div>
+	  </div>
+	<div class="shadow"></div></div>
+
+	<div class="col-xs-12  nav-menu top-menu-holder">
+	  <nav class="hidden-xs visible-lg ">
+		<ul class="nav">
+			<li class="active">
+			<a href="#home" address="true">COMPOL</a>
+		  </li>
+		  <li class="">
+			<a href="#info" address="true">SOBRE GUSTAVO</a>
+		  </li>
+		  <li class="">
+			<a href="#education" address="true">Vida Académica</a>
+		  </li>
+		  <li>
+			<a href="#blog" address="true">Artículos</a>
+		  </li>
+		  <li>
+			<a href="#contact" address="true">Contacto</a>
+		  </li>
+
+
+		</ul>
+
+	  </nav>
+
+	  <select class="top-drop-menu nav visible-md visible-sm visible-xs hidden-lg">
+		<option value="#home" selected="selected">
+		  Home
+		</option>
+
+		<option value="#profile">
+		  Profile
+		</option>
+		<option value="#education">
+		  Education
+		</option>
+		<option value="#experiences">
+		  Experiences
+		</option>
+
+		<option value="#skills">
+		  Skills
+		</option>
+
+		<option value="#portfolio">
+		  Portfolio
+		</option>
+
+		<option value="#contact">
+		  Contact
+		</option>
+
+	  </select>
+	</div>
+
+  </header>

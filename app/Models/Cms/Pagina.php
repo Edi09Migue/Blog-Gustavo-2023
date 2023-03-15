@@ -65,8 +65,8 @@ class Pagina extends Model implements Auditable
      */
     public function getImagenURLAttribute()
     {
-        return $this->getFirstMediaUrl('main', 'perfil')
-            ? $this->getFirstMediaUrl('main', 'perfil')
+        return $this->getFirstMediaUrl('main', 'articulo')
+            ? $this->getFirstMediaUrl('main', 'articulo')
             : asset('images/cms/articulos/no-image.png');
     }
 
@@ -77,7 +77,7 @@ class Pagina extends Model implements Auditable
     public function registerMediaGroups()
     {
         $this->addMediaGroup('main')
-            ->performConversions('perfil');
+            ->performConversions('articulo');
     }
 
       /**

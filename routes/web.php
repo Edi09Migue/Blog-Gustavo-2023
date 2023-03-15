@@ -18,7 +18,7 @@ Route::get('/admin/{any}', [ApplicationController::class, 'index'])->where('any'
 Route::get('/admin', [ApplicationController::class, 'index'])->where('any', '.*')->name('admin');
 
 Route::get('/', [HomeCtrl::class, 'home'])->name('front.home');
-
+Route::get('/articulo/{articulo}', [HomeCtrl::class, 'articulo'])->name('front.articulo');
 
 Route::get('/reset-password/{token}', function ($token) {
     return  $token;

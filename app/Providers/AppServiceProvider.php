@@ -38,8 +38,8 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // artículos
-        Conversion::register('perfil', function (Image $image) {
-            return $image->fit(700, 467);
+        Conversion::register('articulo', function (Image $image) {
+            return $image->fit(1130, 753);
         });
 
     }
